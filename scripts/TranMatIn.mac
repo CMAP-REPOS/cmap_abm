@@ -1,0 +1,12 @@
+~o=295
+reports=nul
+~/Input transit trip tables for time period
+/ Directory
+~t1=../../inputs/
+~x=%1%
+~+|batchin=%t1%Conv%x%_%x%467.txt|3.11|2
+~+|batchin=%t1%Prem%x%_%x%468.txt|3.11|2
+~/TOD Period %x% done!
+batchin=
+reports=
+q

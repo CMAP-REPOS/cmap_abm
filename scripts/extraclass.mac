@@ -1,0 +1,88 @@
+~o=295
+reports=nul
+~/# set scenario
+s=%1%
+~/### Create extra attributes for CT_RAMP_skim
+/Delete extra attributes if exist
+2.42
+3
+~+|@vso1n|~?e|~$>SKIP01|y|3
+~:SKIP01
+~+|@vso1t|~?e|~$>SKIP02|y|3
+~:SKIP02
+~+|@vho2n|~?e|~$>SKIP03|y|3
+~:SKIP03
+~+|@vho2t|~?e|~$>SKIP04|y|3
+~:SKIP04
+~+|@vho3n|~?e|~$>SKIP05|y|3
+~:SKIP05
+~+|@vho3t|~?e|~$>SKIP06|y|3
+~:SKIP06
+~+|@vltrn|~?e|~$>SKIP07|y|3
+~:SKIP07
+~+|@vltrt|~?e|~$>SKIP08|y|3
+~:SKIP08
+~+|@vmtrn|~?e|~$>SKIP09|y|3
+~:SKIP09
+~+|@vmtrt|~?e|~$>SKIP10|y|3
+~:SKIP10
+~+|@vhtrn|~?e|~$>SKIP11|y|3
+~:SKIP11
+~+|@vhtrt|~?e|~$>SKIP12|y|3
+~:SKIP12
+~+|@vbplt|~?e|~$>SKIP13|y|3
+~:SKIP13
+~+|@vlght|~?e|~$>SKIP14|y|3
+~:SKIP14
+~+|@ftime|~?e|~$>SKIP15|y|3
+~:SKIP15
+~+|@tollv|~?e|~$>SKIP16|y|3
+~:SKIP16
+~+|@zone|~?e|~$>SKIP17|y|3
+~:SKIP17
+~+||q 
+/Create extra attributes
+2.42
+~+|2|1|@zone |CMAP Zone                 |0
+~+|2|2|@ftime|Free-flow time            |0
+~+|2|2|@tollv|Toll facility flag        |0
+~+|2|2|@vso1n|Volume SOV1 non-toll users|0
+~+|2|2|@vso1t|Volume SOV1 toll users    |0
+~+|2|2|@vho2n|Volume HOV2 non-toll users|0
+~+|2|2|@vho2t|Volume HOV2 toll users    |0
+~+|2|2|@vho3n|Volume HOV3 non-toll users|0
+~+|2|2|@vho3t|Volume HOV3 toll users    |0
+~+|2|2|@vltrn|Volume ltrk non-toll users|0
+~+|2|2|@vltrt|Volume ltrk toll users    |0
+~+|2|2|@vmtrn|Volume mtrk non-toll users|0
+~+|2|2|@vmtrt|Volume mtrk toll users    |0
+~+|2|2|@vhtrn|Volume htrk non-toll users|0
+~+|2|2|@vhtrt|Volume htrk toll users    |0
+q
+~/### Implement auxiliary assignment with zero demand to get free-flow time 
+3.21 / zero matrix for free-flow time skimming
+~+|1|y|ms99|~?q=1|y|Zero|Zero demand|~?q=1|y||0|||2
+q
+5.11
+~+|1|~?e|/|~?q=2|2|~?e|/|1|1|ms99||||10|0.0001|0.0001
+5.21
+2
+2.41  /Free-flow auto time in extra attribute @ftime (generic across classes)
+~+|1|y|@ftime|~?q=1|n|timau||mod=SHbmh|and timau=0,999    ||4
+~+|1|y|@ftime|~?q=1|n|999  ||mod=SHbmh|and not timau=0,999||4
+q
+~/### Impute toll facility flag
+batchin=../../inputs/TollSys.flag
+2.41
+~+|3|@tollv|n|all|1,2,3|n|y
+q
+~/### Impute node zones
+~# Added by NMP, 4/16/15
+batchin=../../inputs/hwy_node_zones.csv
+2.41
+~+|3|@zone|n|all|1,2|n|y
+q
+reports=
+batchin=
+~o=0
+9

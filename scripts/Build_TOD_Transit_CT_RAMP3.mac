@@ -1,0 +1,378 @@
+~o=295
+~# BUILD_TOD_TRANSIT_CT_RAMP
+~#   Based on BUILD_TOD_TRANSIT of Craig Heither, last revised 02/13/2012
+~#   Adjusted for CT-RAMP by Peter Vovsha, last revised 12/15/2012
+~#   Modifications by Noel Peterson for Transit Modernization Model, 4/16/15
+~#  ************************************************************************************************
+~#    Macro used to create time-of-day-specific transit network for assignment & skimming
+~#    Segment variable @hwytm is populated with congested travel time
+~#
+~#    Must provide 3 arguments:
+~#         - 3-digit transit scenario (100 for 2010)
+~#         - TOD period (1-8) to indicate which TOD transit networks wil be built and
+~#           which highway scenario to import auto times from (must exist in EMME bank and be assigned)
+~#         - Folder where the input files are stored
+~#           (e.g. "~<build_tod_transit_CT_RAMP 100 1 2 \CMAP\Transit_ABM\EMME\TOD_transit\transit")
+~#
+~#  ************************************************************************************************
+~z=%0%
+~+;~?!z=3;~$>error
+~z=%2%
+~# ################################
+~# -- SET PATH TO BATCHIN FILES --
+~t2=%3%
+~/%t2%
+~/ -- SET TRANSIT SCENARIO --
+on=25                       /set to 4-digit date
+~/ -- SET VARIABLES --
+~x=%1%
+~t1=2010
+~+;~?x=200;~t1=2015
+~+;~?x=300;~t1=2020
+~+;~?x=400;~t1=2025
+~+;~?x=500;~t1=2030
+~+;~?x=600;~t1=2040
+~/ -- Highway scenario from which to bring congested auto times
+~t5=transit skim network - %d%
+~y=%2%
+~+;~?y=1;~t1=p1. 8pm-6am
+~+;~?y=2;~t1=p2. 6am-7am
+~+;~?y=3;~t1=p3. 7am-9am
+~+;~?y=4;~t1=p4. 9am-10am
+~+;~?y=5;~t1=p5. 10am-2pm
+~+;~?y=6;~t1=p6. 2pm-4pm
+~+;~?y=7;~t1=p7. 4pm-6pm
+~+;~?y=8;~t1=p8. 6pm-8pm
+~z=%x%
+~z+%y%
+~/ -- SET REPORT --
+~t3=..\..\outputs\Build_%z%transit.rpt
+~!if exist %t3% (del %t3%)
+reports=%t3%
+~/ -- BUILD TRANSIT NETWORK %t5% --
+s=%z%
+~+;~?e;~$>new
+~+;1.22; 2; %z%; y; q
+~:new
+~+;1.22; 1; %z%; %t1% %t5%; y; q
+~/ -- Network --
+batchin=%t2%\tranmodes.txt
+~+;2.01; 1; 2; q
+batchin=%t2%\transveh.txt
+~+;2.02; 1; 2; q
+batchin=%t2%\%1%\bus.network_%y%
+~+;2.11; 2;
+batchin=%t2%\%1%\rail.network_%y%
+~+;2.11; 2;
+batchin=%t2%\%1%\access.network_%y%
+~+;2.11; 2;
+~/ -- Transit Lines --
+batchin=%t2%\%1%\rail.itinerary_%y%
+~+;2.21; 2
+batchin=%t2%\%1%\bus.itinerary_%y%
+~+;2.21; 2
+~/ -- CREATE EXTRA ATTRIBUTES --
+2.42
+~+; 1; y
+~+; 2; 1; @pcost; avg. daily parking cost at station; 0
+~+; 2; 1; @atype; area type for on-street parking; 0
+~+; 2; 1; @pspac; off-street parking spaces at station; 0
+~+; 2; 1; @rspac; parking spaces at rail station; 0
+~+; 2; 1; @rpcos; rail parking cost at station; 0
+~+; 2; 1; @zone;  CMAP zone; 0
+~+; 2; 1; @bstyp; bus stop type 1-6; 0
+~+; 2; 1; @bsinf; bus stop info 1=no, 2=yes; 0
+~+; 2; 1; @rstyp; rail stat type 1-6; 0
+~+; 2; 1; @rsinf; rail stat info 1=no, 2=yes; 0
+~+; 2; 1; @wconv; Base wait convenience factor; 1
+~+; 2; 1; @wcona; Wait convenience addition factor; 0
+~+; 2; 1; @wconf; Wait convenience final factor; 0
+~+; 2; 1; @timbo; Base boarding time by station type, min; 0
+~+; 2; 1; @timba; Additional boarding time, min; 0
+~+; 2; 1; @timbf; Final boarding time, min; 0
+~+; 2; 1; @perbo; Base boarding time perception factor; 1
+~+; 2; 1; @perba; Additional board time perception factor; 0
+~+; 2; 1; @perbf; Final boarding time perception factor; 1
+~+; 2; 1; @pef13; Pedestr Environ Factor 1=best, 3=worst; 0
+~+; 2; 1; @clnsf; Station cleanliness fixed index 0-1; 1
+~+; 2; 1; @clnsv; Station cleanliness variable index 0-1; 0
+~+; 2; 1; @clnim; Station cleanliness policy impact 0-1; 1
+~+; 2; 1; @clnst; Station cleanliness total index 0-1; 1
+~+; 2; 1; @toboa; Total boardings at station; 0
+~+; 2; 1; @toali; Total alightings at station; 0
+~+; 2; 2; @pefli; Pedestr Environ Factor 1=best, 3=worst; 0
+~+; 2; 3; @lpas1; Number of passengers class 1; 0
+~+; 2; 3; @lpas2; Number of passengers class 2; 0
+~+; 2; 3; @lpas3; Number of passengers class 3; 0
+~+; 2; 3; @lcaps; Line seating capacity; 0
+~+; 2; 3; @lcapt; Line total capacity; 0
+~+; 2; 3; @ldist; Line total distance; 0
+~+; 2; 3; @hfrac; Wait time function as fraction of hdwy; 0.5
+~+; 2; 3; @relim; Reliability policy impact; 1
+~+; 2; 3; @easeb; Ease of boarding 1=worst, 4=best; 0
+~+; 2; 3; @easbp; Ease of boarding penalty; 0
+~+; 2; 3; @hdway; Line headway; 0
+~+; 2; 4; @ivtpf; Line in-vehicle time perception factor; 1
+~+; 2; 4; @hdwef; Effective hdwy for capacity constraint; 0
+~+; 2; 4; @hdwem; Effective hdwy multiplier; 1
+~+; 2; 4; @crowf; Crowding inconvenience factor; 0
+~+; 2; 4; @ltime; line service time in minutes; 0
+~+; 2; 4; @hwytm; per. %y% congested hwy time from %y%; 0
+~+; 2; 4; @zfare; incremental zone fare; 0
+~+; 2; 4; @pass1; number of passengers class 1; 0
+~+; 2; 4; @pass2; number of passengers class 2; 0
+~+; 2; 4; @pass3; number of passengers class 3; 0
+~+; 2; 4; @soba1; social baggage weight class 1; 0
+~+; 2; 4; @soba2; social baggage weight class 2; 0
+~+; 2; 4; @soba3; social baggage weight class 3; 0
+~+; 2; 4; @ivtc1; Proportion of class 1 multiplied by IVT; 0.33
+~+; 2; 4; @ivtc2; Proportion of class 2 multiplied by IVT; 0.33
+~+; 2; 4; @ivtc3; Proportion of class 3 multiplied by IVT; 0.33
+~+; 2; 4; @boar1; number of boardings class 1; 0
+~+; 2; 4; @boar2; number of boardings class 2; 0
+~+; 2; 4; @boar3; number of boardings class 3; 0
+~+; 2; 4; @ivtf1; IVT perception factor class 1; 1
+~+; 2; 4; @ivtf2; IVT perception factor class 2; 1
+~+; 2; 4; @ivtf3; IVT perception factor class 3; 1
+~+; 2; 4; @pseat; Number of seating passengers; 0
+~+; 2; 4; @pstan; Number of standing passengers; 0
+~+; 2; 4; @stpro; Probability of having a seat; 1
+~+; 2; 4; @ivtsp; Prob of having a seat multiplied by IVT; 1
+~+; 2; 4; @trvav; Transit volume averaged; 0
+~+; 2; 4; @borav; Boardings averaged; 0
+~+; 2; 4; @cudis; Cumulative distance from line start; 0
+~+; 2; 4; @eavwt; Extra average wait due to unreliability; 0
+~+; 2; 4; @cumbo; Cumulative boardings from line start; 0
+~+; 2; 4; @clnob; Cleanliness on board IVT factor; 0
+~+; 2; 4; @ivtcl; Clean on board factor multiplied by IVT; 0
+~+; 2; 4; @prof1; Productivity bonus factor 0-1 class 1; 0
+~+; 2; 4; @prof2; Productivity bonus factor 0-1 class 2; 0
+~+; 2; 4; @prof3; Productivity bonus factor 0-1 class 3; 0
+~+; 2; 4; @ivpr1; Product bonus multiplied by IVT class 1; 0
+~+; 2; 4; @ivpr2; Product bonus multiplied by IVT class 2; 0
+~+; 2; 4; @ivpr3; Product bonus multiplied by IVT class 3; 0
+~+; 2; 4; @easb1; Ease of board 1=worst stair indicator; 0
+~+; 2; 4; @easb2; Ease of board 2=low floor indicator; 0
+~+; 2; 4; @easb3; Ease of board 3=best leveled indicator; 0
+q
+~/ -- BATCHIN EXTRA ATTRIBUTE VALUES --
+batchin=%t2%\%1%\busnode.extatt_%y%
+2.41
+~+; 3; @atype; n; all; 1,2; n; y
+~+; 3; @zone; n; all; 1,3; n; y; q
+batchin=%t2%\%1%\railnode.extatt_%y%
+2.41
+~+; 3; @pspac; n; all; 1,2; n; y
+~+; 3; @pcost; n; all; 1,3; n; y
+~+; 3; @zone; n; all; 1,4; n; y; q
+~# IGNORE REDUNDANT INPUTS BELOW: @ltime & @zfare in itineraries (us1 & us2) -- NMP, 8/24/15
+~#batchin=%t2%\%1%\busseg.extatt_%y%
+~#/2.41
+~#/~+; 3; @ltime; n; all; all; 1,2,3,4; n; y
+~#/~+; 3; @zfare; n; all; all; 1,2,3,5; n; y; q
+~#batchin=%t2%\%1%\railseg.extatt_%y%
+~#2.41
+~#~+; 3; @ltime; n; all; all; 1,2,3,4; n; y
+~#~+; 3; @zfare; n; all; all; 1,2,3,5; n; y; q
+~# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+~# BATCHIN 17-12-0001 PARK-N-RIDE PARKING FILE BEGINNING C12Q1 scenario 200
+~+;~?x=100;~$>skip
+batchin=%t2%\17120001_parking.csv
+2.41
+~+; 3; @pspac; n; all; 1,2; n; y
+~+; 3; @pcost; n; all; 1,3; n; y; q
+~:skip
+~# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+~# BATCHIN CERMAK ROAD BRT PARKING FILE FROM C03 (NO LONGER USED)
+~$>skip
+batchin=%t2%\cermakbrt_parking.csv
+2.41
+~+; 3; @pspac; n; all; 1,2; n; y
+~+; 3; @pcost; n; all; 1,3; n; y; q
+~:skip
+~# BATCHIN BUS STOP TYPE, REAL-TIME INFO & BASE BOARDING TIME
+batchin=%t2%\bus_node_extra_attributes.csv
+2.41
+~+; 3; @bstyp; n; all; 1,8; n; y
+~+; 3; @bsinf; n; all; 1,9; n; y
+~+; 3; @timbo; n; all; 1,10; n; y; q
+~# BATCHIN RAIL STATION PARKING SPACES, PARKING COST, TYPE, REAL-TIME INFO & BASE BOARDING TIME
+batchin=%t2%\rail_node_extra_attributes.csv
+2.41
+~+; 3; @rspac; n; all; 1,2; n; y
+~+; 3; @rpcos; n; all; 1,3; n; y
+~+; 3; @rstyp; n; all; 1,5; n; y
+~+; 3; @rsinf; n; all; 1,6; n; y
+~+; 3; @timbo; n; all; 1,7; n; y; q
+~# BATCHIN PEDESTRIAN ENVIRONMENT FACTOR
+batchin=%t2%\hwy_node_pef.csv
+2.41
+~+; 3; @pef13; n; all; 1,2; n; y; q
+batchin=%t2%\rail_node_pef.csv
+2.41
+~+; 3; @pef13; n; @pef13=0,0; ; 1,2; n; y; q
+~# CALCULATE LINK PEDESTRIAN ENVIRONMENT FACTOR
+2.41
+~+; 1; y; @pefli; n; (@pef13+@pef13j)/2; ; all; 4; q
+~/ BRING IN CONGESTED HIGHWAY TIME --
+2.41
+~+|2|%y%|timau|ul1|all
+~+|1|y|@hwytm|n|ul1||all|all|4|q
+~/ SET TRANSIT TIME FUNCTION (ft1=normal, ft2-BRT)
+/ Delete existing functions
+4.12
+~+; 4; ft1,ft2;
+~?e
+~+|q|~$>ADD FUNCTIONS
+~+|y|q
+/ Add ft1 and ft2 both reference us1
+~:ADD FUNCTIONS
+4.12
+~+; 2; ft1; us1; ; ft2; us1; ; ; q
+/ SET LINE-HAUL TIMES (us1)
+/ THIS IS WHERE BRT IS DIFFERENTIATED FROM REGULAR TRANSIT
+2.41
+~+|1|y|@ltime|n|us1||all|all|4
+~+|1|y|@zfare|n|us2||all|all|4
+~+|1|y|us1|0||all|all|4
+~+|1|y|us1|(@ltime*(ttf.eq.2))+((@ltime.max.@hwytm)*(ttf.eq.1))||all|all|4
+q
+~/ CALCULATE SEATING AND TOTAL CAPACITY BY LINE FOR PERIOD LENGTH
+~+;~?y=1;~r1=4
+~+;~?y=2;~r1=1
+~+;~?y=3;~r1=2
+~+;~?y=4;~r1=1
+~+;~?y=5;~r1=4
+~+;~?y=6;~r1=2
+~+;~?y=7;~r1=2
+~+;~?y=8;~r1=2
+2.41
+~+|1|y|@lcaps|n|%r1%*vcaps*60/hdw||all|4
+~+|1|y|@lcapt|n|%r1%*vcapt*60/hdw||all|4
+~+|1|y|@lcaps|n|vcaps||mode=M||4
+~+|1|y|@lcapt|n|vcapt||mode=M||4
+~+|1|y|@hdway|n|hdwy||all|4
+q
+~/ CALCULATE CUMULATIVE & TOTAL DISTANCE FOR EACH LINE
+2.41
+~+|1|y|@cudis|n|put(len+get(1)*(index2>1))||all|all|4
+~+|1|y|@ldist|n|len||4|all|all|4
+q
+~/ INPUT LINE-SPECIFIC CAPACITIES FOR METRA
+/batchin=%t2%\Line_capacity%y%.csv
+/2.41
+/~+|3|@lcaps|n|mode=M||1,2|n|y
+/~+|1|y|@lcapt|n|@lcaps*1.10||mode=M||4
+/q
+~/ INPUT EASE OF BOARDING CATEGORY
+/  1=staircase (worst) is default
+/  2=low floor/kneeling
+/  3=level w/platform (best)
+~# Modified input file specifies @easeb for each vehicle, not just by mode/line (NMP 5/28/14):
+batchin=%t2%\boarding_ease_by_line_id.csv
+2.41
+~+|3|@easeb|n|all|1,2|n|y
+q
+2.41
+~# Modified @easb1/2/3 calculations to allow continuous @easeb values (NMP 5/28/14):
+~+|1|y|@easb1|n|1||@easeb=1.00,1.49||all|4
+~+|1|y|@easb2|n|1||@easeb=1.50,2.49||all|4
+~+|1|y|@easb3|n|1||@easeb=2.50,4.00||all|4
+q
+~/ INPUT RELIABILITY POLICY IMPACT
+/ 1.00=baseline
+/ 0.00=fully reliable
+~# Previously hardcoded by mode in Transit_assignment_skimming_CT_RAMP3.mac (NMP 4/16/15):
+batchin=%t2%\relim_by_line_id.csv
+2.41
+~+|3|@relim|n|all|1,2|n|y
+q
+~/ INPUT PRODUCTIVITY BONUS FACTORS
+batchin=%t2%\productivity_bonus_by_line_id.csv
+2.42
+~+|2|3|@prot1|Temp transit line prof1 value|0
+~+|2|3|@prot2|Temp transit line prof2 value|0
+~+|2|3|@prot3|Temp transit line prof3 value|0
+q
+2.41
+~+|3|@prot1|n|all|1,2|n|y
+~+|3|@prot2|n|all|1,3|n|y
+~+|3|@prot3|n|all|1,4|n|y
+~+|1|y|@prof1|n|@prot1||all|all|4
+~+|1|y|@prof2|n|@prot2||all|all|4
+~+|1|y|@prof3|n|@prot3||all|all|4
+q
+2.42
+~+|3|@prot1|y
+~+|3|@prot2|y
+~+|3|@prot3|y
+q
+~<<
+~/ -- WRITE NETWORK STATISTICS REPORT --
+~>>%t3%
+~" =============================================================================================
+~" * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+~"   -- NETWORK %t5%: DIRECTIONAL MILES BY SERVICE TYPE --
+~" * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+~>>
+~#
+2.41
+~+; 1; n; len; ; mod=BE; ; 2; 2
+~+; 1; n; len; ; mod=LPQ; ; 2; 2
+~+; 1; n; len; ; mod=C; ; 2; 2
+~+; 1; n; len; ; mod=M; ; 2; 2; q
+~>>%t3%
+~" * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+~"   -- NETWORK %t4%: SERVICE MILES BY SERVICE TYPE --
+~" * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+~>>
+~#
+2.41
+~+; 1; y; us2; 0; ; *; *; 4
+~+; 1; y; us2; 120/hdwy*len; ; mod=BE; ; mod=BE; ;2; 2
+~+; 1; y; us2; 0; ; *; *; 4
+~+; 1; y; us2; 120/hdwy*len; ; mod=LPQ; ; mod=LPQ; ;2; 2
+~+; 1; y; us2; 0; ; *; *; 4
+~+; 1; y; us2; 120/hdwy*len; ; mod=C; ; mod=C; ;2; 2
+~+; 1; y; us2; 0; ; *; *; 4
+~+; 1; y; us2; len; ; mod=M; ; mod=M; ;2; 2
+~+; 1; y; us2; 0; ; *; *; 4; q
+~>>%t3%
+~" * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+~"   -- NETWORK %t4%: SERVICE HOURS BY SERVICE TYPE --
+~" * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+~>>
+2.41
+~+; 1; y; us2; (120/hdwy*@ltime)/60; ; mod=BE; ; mod=BE; ;2; 2
+~+; 1; y; us2; 0; ; *; *; 4
+~+; 1; y; us2; (120/hdwy*@ltime)/60; ; mod=LPQ; ; mod=LPQ; ;2; 2
+~+; 1; y; us2; 0; ; *; *; 4
+~+; 1; y; us2; (120/hdwy*@ltime)/60; ; mod=C; ; mod=C; ;2; 2
+~+; 1; y; us2; 0; ; *; *; 4
+~+; 1; y; us2; @ltime/60; ; mod=M; ; mod=M; ;2; 2
+~+; 1; y; us2; 0; ; *; *; 4; q
+~>>%t3%
+~" =============================================================================================
+~>>
+~/ -- REPORT BUS ROUTE VMT --
+2.41
+~+; 1; y; us2; len; ; *; mod=BEPLQ; ; 2; 2
+~+; 1; y; us2; 0; ; *; *; 4
+~/ -- REPORT PARKING DATA --
+~+; 1; n; @pcost; ; all; 2; 2
+~+; 1; n; @pspac; ; all; 2; 2; q
+~/ -- REPORT NETWORK SUMMARY --
+~+;2.14; 3; 2; q
+~+;2.41; 1; n; lan*len; ; mod=BEPLQb; ; 2; 2; q
+~/ -- END TOD%y% NETWORK PROCESSING --
+~# =============================================================================================
+~$>end
+~:error
+~/ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+~/   SUBMIT WITH TRANSIT SCENARIO AND PROCESSING CODE!!!!!!
+~/ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+~#
+~:end
+batchin=
+reports=
+q
