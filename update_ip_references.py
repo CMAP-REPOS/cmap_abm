@@ -5,7 +5,7 @@
     Revised: 8/21/15
     ---------------------------------------------------------------------------
     This script grabs the IP address of the localhost and updates IP references
-	in the specified text files
+        in the specified text files
 
 '''
 import fileinput
@@ -17,13 +17,13 @@ ip_address = socket.gethostbyname(socket.gethostname())
 
 # Define helper function for IP replacement
 def update_ip(target_file, phrase):
-	''' Replace lines in file beginning with phrase, using new IP. '''
-	updated_line = '{0}{1}\n'.format(phrase, ip_address)
-	for line in fileinput.FileInput(target_file, inplace=1):
-		if phrase in line:
-			line = updated_line
-		sys.stdout.write(line)
-	return None
+    ''' Replace lines in file beginning with phrase, using new IP. '''
+    updated_line = '{0}{1}\n'.format(phrase, ip_address)
+    for line in fileinput.FileInput(target_file, inplace=1):
+        if phrase in line:
+            line = updated_line
+        sys.stdout.write(line)
+    return None
 
 # Replace IP references in specified files
 update_ip('cmap.properties', 'RunModel.MatrixServerAddress= ')

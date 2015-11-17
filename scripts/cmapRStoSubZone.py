@@ -1,7 +1,7 @@
 #############################################################################
 # Shortest Path code for CMAP non-motorized modes
 # Roshan Kumar, kumarr1@pbworld.com, 12/20/2012
-############################################################################# 
+#############################################################################
 
 #Should always be placed in the same folder as SPwrapper.py
 
@@ -21,7 +21,7 @@ from array import *
 import shapefile
 import parameters
 
-############################################################################# 
+#############################################################################
 
 def rsToSubZone():
     output = open(parameters.spMAZ2TAP, "w")
@@ -32,7 +32,7 @@ def rsToSubZone():
         tap_id = int(fields["tap_id"])
         sz09 = int(fields["maz09"])
         szForTap[tap_id] = sz09
-    count_ = 1    
+    count_ = 1
     for fields in csv.DictReader(open(parameters.outputSPFile, "r")):
         origin = int(fields["Origin"])
         destin = int(fields["Destin"])
@@ -40,17 +40,17 @@ def rsToSubZone():
         euclid = float(fields["Euclid"])
         ratio = float(fields["Ratio"])
         if destin > parameters.minTAPID:
-           try:
-               if origin == szForTap[destin]:
-                  sp = euclid
-                  count_ = count_+1
-           except KeyError:
-               pass
-  
-    
-        
+            try:
+                if origin == szForTap[destin]:
+                    sp = euclid
+                    count_ = count_+1
+            except KeyError:
+                pass
+
+
+
         if (origin+destin<parameters.minTAPid):
-           output.write("%d,%d,%f,%f,%f\n" % (origin, destin, sp, euclid, ratio))
+            output.write("%d,%d,%f,%f,%f\n" % (origin, destin, sp, euclid, ratio))
     print count_
     output.close()
 

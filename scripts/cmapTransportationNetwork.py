@@ -1,7 +1,7 @@
 #############################################################################
 # Shortest Path code for CMAP non-motorized modes
 # Roshan Kumar, kumarr1@pbworld.com, 12/20/2012
-############################################################################# 
+#############################################################################
 
 #Should always be placed in the same folder as SPwrapper.py
 
@@ -22,14 +22,14 @@ fields = sf.fields
 #pdb.set_trace()
 
 #pdb.set_trace()
-#print "done reading the shapefiles" 
+#print "done reading the shapefiles"
 linksDict = {}
 #generates links csv file
-def getLinkDirectionality(): 
+def getLinkDirectionality():
     linksDict = {}
-    travel = set() 
+    travel = set()
 
-    output = open(parameters.linkFile_int, "w") 
+    output = open(parameters.linkFile_int, "w")
     output.write('"FNODE_","TNODE_","LENGTH"\n')
     w = shapefile.Writer(shapefile.POLYLINE)
     #w.field("ID", "N", 10)
@@ -37,14 +37,14 @@ def getLinkDirectionality():
     w.field("End", "N", 10)
 
     for shape, record in izip(shapes, records):
-        
+
         #pdb.set_trace()
         firstPoint = shape.points[0]
         lastPoint = shape.points[-1]
         referenceNode = record[21]
         nreferenceNode = record[22]
         linkid = record[1]
-                
+
         #ref = fields[21]
         #nref = fields[22]
         #pdb.set_trace()
@@ -55,26 +55,26 @@ def getLinkDirectionality():
         speed_cat = record[25]
         flag = 0
         try:
-           if linksDict[linkid] > []:
-              flag = 0
-           
-              
+            if linksDict[linkid] > []:
+                flag = 0
+
+
         except KeyError:
-              linksDict[linkid] = [referenceNode,nreferenceNode]
-              flag = 1
-              
+            linksDict[linkid] = [referenceNode,nreferenceNode]
+            flag = 1
+
         #print dir_travel
         #if func_class == "1":
-           #print func_class
+            #print func_class
         #length = float(record[-1])
         length = math.sqrt(((firstPoint[0]-lastPoint[0])*(firstPoint[0]-lastPoint[0])) + ((firstPoint[1]-lastPoint[1])*(firstPoint[1]-lastPoint[1])))
         ifholder = 1
-        if func_class == "3" or func_class == "4" or func_class == "5": 
+        if func_class == "3" or func_class == "4" or func_class == "5":
         #if ar_pedest == "Y" and plot_road == "N" and speed_cat != "2" and speed_cat != "3":
-           if flag == 1:
-              output.write("%d,%d,%f\n" % (referenceNode, nreferenceNode, length))
-              output.write("%d,%d,%f\n" % (nreferenceNode, referenceNode, length))
-                            
+            if flag == 1:
+                output.write("%d,%d,%f\n" % (referenceNode, nreferenceNode, length))
+                output.write("%d,%d,%f\n" % (nreferenceNode, referenceNode, length))
+
     output.close()
     #w.save("E:\CMAP\cmap_NavTechLinks_no_freeway_pedest_v2")
 
@@ -82,41 +82,41 @@ def getLinkDirectionality():
 
 #generates nodes csv file
 def createAllPoints():
-    
+
     allPoints = {}
-    
+
     #pdb.set_trace()
-    
-    output = open(parameters.nodeFile_int , "w") 
+
+    output = open(parameters.nodeFile_int , "w")
     output.write('"ID","X","Y"\n')
     for shape, record in izip(shapes, records):
-	func_class = record[24]
-	ar_pedest = record[45]
-	plot_road = record[88]
+        func_class = record[24]
+        ar_pedest = record[45]
+        plot_road = record[88]
         speed_cat = record[25]
-	fromNode = record[21]
-	#print fromNode
+        fromNode = record[21]
+        #print fromNode
         toNode = record[22]
         ifholder = 1
         #print toNode
         if func_class == "3" or func_class == "4" or func_class == "5":
-           #if ar_pedest == "Y" and plot_road == "N" and speed_cat != "2" and speed_cat != "3":
-           if ifholder == 1:
-              firstPoint = shape.points[0]
-              lastPoint = shape.points[-1]
-              allPoints[fromNode] = firstPoint
-              allPoints[toNode] = lastPoint 
+            #if ar_pedest == "Y" and plot_road == "N" and speed_cat != "2" and speed_cat != "3":
+            if ifholder == 1:
+                firstPoint = shape.points[0]
+                lastPoint = shape.points[-1]
+                allPoints[fromNode] = firstPoint
+                allPoints[toNode] = lastPoint
 
-    
+
     #pdb.set_trace()
-    
+
     w = shapefile.Writer(shapefile.POINT)
     w.field("ID")
     for id_, point in allPoints.iteritems():
         w.point(point[0], point[1])
         w.record(id_)
         output.write("%d,%f,%f\n" % (id_, point[0], point[1]))
-    
+
     output.close()
     #w.save(r"E:\CMAP\cmap_NavTechNodes_no_freeway_pedest_v3")
     #output.close()
@@ -124,4 +124,3 @@ def createAllPoints():
 
 createAllPoints()
 getLinkDirectionality()
-

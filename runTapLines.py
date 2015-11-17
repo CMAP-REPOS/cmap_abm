@@ -26,7 +26,7 @@ import inro.emme.prompt as p
 import os, csv, math, pickle, datetime, sys
 
 #start EMME desktop and attach a modeller session
-desktop = d.start_dedicated(True, "bts", empFile) 
+desktop = d.start_dedicated(True, "bts", empFile)
 m = m.Modeller(desktop)
 
 ############################################################################
@@ -34,17 +34,17 @@ m = m.Modeller(desktop)
 #create tap virtual zones
 taps = []
 with open(tapFile, 'rb') as csvfile:
-	tapreader = csv.reader(csvfile, skipinitialspace=True)
-	for row in tapreader:
-		taps.append(row)
+    tapreader = csv.reader(csvfile, skipinitialspace=True)
+    for row in tapreader:
+        taps.append(row)
 taps_col_names = taps.pop(0)
 
 #create access links
 access_links = []
 with open(tapLinks, 'rb') as csvfile:
-	tapreader = csv.reader(csvfile, skipinitialspace=True)
-	for row in tapreader:
-		access_links.append(row)
+    tapreader = csv.reader(csvfile, skipinitialspace=True)
+    for row in tapreader:
+        access_links.append(row)
 access_links_col_names = access_links.pop(0)
 
 ############################################################################
@@ -55,56 +55,56 @@ access_links_col_names = access_links.pop(0)
 linesByNode = dict()
 for tranScen in transitScenarios:
 
-  #get transit segments for scenario
-  network = m.emmebank.scenario(tranScen).get_network()
-  tsegs = network.transit_segments()
+    #get transit segments for scenario
+    network = m.emmebank.scenario(tranScen).get_network()
+    tsegs = network.transit_segments()
 
-  for tseg in tsegs:
-    line = tseg.line.id
-    from_node = tseg.i_node.id
-  
-    if from_node not in linesByNode:
-      linesByNode[from_node] = set()
-    linesByNode[from_node].add(line)
-  
-    to_node = tseg.j_node
-    if to_node != None:
-      to_node = tseg.j_node.id
-      if to_node not in linesByNode:
-        linesByNode[to_node] = set()
-      linesByNode[to_node].add(line)
+    for tseg in tsegs:
+        line = tseg.line.id
+        from_node = tseg.i_node.id
+
+        if from_node not in linesByNode:
+            linesByNode[from_node] = set()
+        linesByNode[from_node].add(line)
+
+        to_node = tseg.j_node
+        if to_node != None:
+            to_node = tseg.j_node.id
+            if to_node not in linesByNode:
+                linesByNode[to_node] = set()
+            linesByNode[to_node].add(line)
 
 #get nodes connected to each tap
 nodesByTap = dict()
 for linkRow in access_links:
-  tap = linkRow[0]
-  node = linkRow[1]
-  
-  if tap not in nodesByTap:
-    nodesByTap[tap] = set()
-  nodesByTap[tap].add(node)
+    tap = linkRow[0]
+    node = linkRow[1]
+
+    if tap not in nodesByTap:
+        nodesByTap[tap] = set()
+    nodesByTap[tap].add(node)
 
 #get lines for each tap
 linesByTap = dict()
 for tapRow in taps:
-  tap = tapRow[0]
-  nodes = nodesByTap[tap]
-    
-  if tap not in linesByTap:
-    linesByTap[tap] = set()
-  for node in nodes:
-    if node in linesByNode:
-      lines = linesByNode[node]
-      for line in lines:
-        linesByTap[tap].add(line)
+    tap = tapRow[0]
+    nodes = nodesByTap[tap]
+
+    if tap not in linesByTap:
+        linesByTap[tap] = set()
+    for node in nodes:
+        if node in linesByNode:
+            lines = linesByNode[node]
+            for line in lines:
+                linesByTap[tap].add(line)
 
 #write out tapLines file for CT-RAMP
 f = file(tapLinesOutFileName,"wt")
 f.write("TAP,LINES\n")
 for tap in linesByTap.keys():
-  lines = " ".join(list(linesByTap[tap]))
-  if lines != "":
-    f.write("%s,%s\n" % (tap,lines))
+    lines = " ".join(list(linesByTap[tap]))
+    if lines != "":
+        f.write("%s,%s\n" % (tap,lines))
 f.close()
 
 #log results
