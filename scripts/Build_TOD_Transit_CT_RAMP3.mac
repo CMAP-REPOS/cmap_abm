@@ -2,7 +2,7 @@
 ~# BUILD_TOD_TRANSIT_CT_RAMP
 ~#   Based on BUILD_TOD_TRANSIT of Craig Heither, last revised 02/13/2012
 ~#   Adjusted for CT-RAMP by Peter Vovsha, last revised 12/15/2012
-~#   Modifications by Noel Peterson for Transit Modernization Model, 4/16/15
+~#   Modifications by Noel Peterson for Transit Modernization Model, 9/9/15
 ~#  ************************************************************************************************
 ~#    Macro used to create time-of-day-specific transit network for assignment & skimming
 ~#    Segment variable @hwytm is populated with congested travel time
@@ -165,7 +165,8 @@ batchin=%t2%\%1%\railnode.extatt_%y%
 ~+; 3; @pspac; n; all; 1,2; n; y
 ~+; 3; @pcost; n; all; 1,3; n; y
 ~+; 3; @zone; n; all; 1,4; n; y; q
-~# IGNORE REDUNDANT INPUTS BELOW: @ltime & @zfare in itineraries (us1 & us2) -- NMP, 8/24/15
+~# IGNORE REDUNDANT INPUTS BELOW
+~# @ltime & @zfare already in us1 & us2 from itineraries -- NMP, 8/24/15
 ~#batchin=%t2%\%1%\busseg.extatt_%y%
 ~#/2.41
 ~#/~+; 3; @ltime; n; all; all; 1,2,3,4; n; y
@@ -193,24 +194,28 @@ batchin=%t2%\cermakbrt_parking.csv
 ~# BATCHIN BUS STOP TYPE, REAL-TIME INFO & BASE BOARDING TIME
 batchin=%t2%\bus_node_extra_attributes.csv
 2.41
-~+; 3; @bstyp; n; all; 1,8; n; y
-~+; 3; @bsinf; n; all; 1,9; n; y
-~+; 3; @timbo; n; all; 1,10; n; y; q
+~+; 3; @bstyp; n; all; 1,2; n; y
+~+; 3; @bsinf; n; all; 1,3; n; y
+~+; 3; @timbo; n; all; 1,4; n; y; q
 ~# BATCHIN RAIL STATION PARKING SPACES, PARKING COST, TYPE, REAL-TIME INFO & BASE BOARDING TIME
 batchin=%t2%\rail_node_extra_attributes.csv
 2.41
 ~+; 3; @rspac; n; all; 1,2; n; y
 ~+; 3; @rpcos; n; all; 1,3; n; y
-~+; 3; @rstyp; n; all; 1,5; n; y
-~+; 3; @rsinf; n; all; 1,6; n; y
-~+; 3; @timbo; n; all; 1,7; n; y; q
+~+; 3; @rstyp; n; all; 1,4; n; y
+~+; 3; @rsinf; n; all; 1,5; n; y
+~+; 3; @timbo; n; all; 1,6; n; y; q
 ~# BATCHIN PEDESTRIAN ENVIRONMENT FACTOR
-batchin=%t2%\hwy_node_pef.csv
+~# Updated to include all nodes in single input CSV -- NMP, 8/24/15
+~#batchin=%t2%\hwy_node_pef.csv
+~#2.41
+~#~+; 3; @pef13; n; all; 1,2; n; y; q
+~#batchin=%t2%\rail_node_pef.csv
+~#2.41
+~#~+; 3; @pef13; n; @pef13=0,0; ; 1,2; n; y; q
+batchin=%t2%\transit_node_pef.csv
 2.41
 ~+; 3; @pef13; n; all; 1,2; n; y; q
-batchin=%t2%\rail_node_pef.csv
-2.41
-~+; 3; @pef13; n; @pef13=0,0; ; 1,2; n; y; q
 ~# CALCULATE LINK PEDESTRIAN ENVIRONMENT FACTOR
 2.41
 ~+; 1; y; @pefli; n; (@pef13+@pef13j)/2; ; all; 4; q

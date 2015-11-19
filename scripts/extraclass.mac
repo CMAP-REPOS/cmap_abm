@@ -72,9 +72,9 @@ q
 ~+|1|y|@ftime|~?q=1|n|999  ||mod=SHbmh|and not timau=0,999||4
 q
 ~/### Impute toll facility flag
-batchin=../../inputs/TollSys.flag
+~# Modified by NMP, 8/10/15
 2.41
-~+|3|@tollv|n|all|1,2,3|n|y
+~+|1|y|@tollv|n|1||~<../../inputs/tollsys.flag||4
 q
 ~/### Impute node zones
 ~# Added by NMP, 4/16/15
