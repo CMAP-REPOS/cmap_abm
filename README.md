@@ -8,7 +8,7 @@ CMAP's Activity Based Model
 4. Update cmap\.classpath references to external required jars
 5. Update ctrampIf\.classpath references to external required jars
 6. Make sure jxl jar referenced before common-base jar in the .classpath files (in order to avoid Worksheet GC disabled inconsistency error)
-7. Change Cicrular dependencies from errors to warnings: Windows + Preferences + Java + Compiler + Building + Circular Dependencies
-8. Export ctrampIf.jar via File + Export and use the ctrampIf\build.jardesc
-9. Export camp.jar via File + Export and use the cmap\build.jardesc
+7. Change circular dependencies from errors to warnings: Window -> Preferences -> Java -> Compiler -> Building -> Circular Dependencies
+8. Export ctrampIf.jar via File -> Export and use the ctrampIf\build.jardesc
+9. Export cmap.jar via File -> Export and use the cmap\build.jardesc
 10. Copy ctrampIf.jar and cmap.jar into the EXEC folder when running the model
