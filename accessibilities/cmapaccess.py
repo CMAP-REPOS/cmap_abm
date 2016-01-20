@@ -299,6 +299,7 @@ if __name__== "__main__":
     data.index = pd.MultiIndex.from_product([mazs.index,mazs.index])
 
     measures = meas_table['measure'].tolist()
+    columnsToWrite = []
     for m in measures:
         size = meas_table.loc[m]['size']
         imp = meas_table.loc[m]['impedance']
@@ -307,6 +308,7 @@ if __name__== "__main__":
         #create field
         fieldName = meas_table.loc[m]['model']
         mazs[fieldName] = 0
+        columnsToWrite.append(fieldName)
         print("calculate accessibility: " + fieldName)
 
         #measure = log( sum_over_dests[ size * exp(logsum) ] )
