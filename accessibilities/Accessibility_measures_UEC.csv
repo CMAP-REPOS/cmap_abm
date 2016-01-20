@@ -1,0 +1,13 @@
+measure,size,impedance,period,model
+60,27,22,peak,autoPeakRetail
+61,28,22,peak,autoPeakTotal
+62,27,23,offpeak,autoOffPeakRetail
+63,28,23,offpeak,autoOffPeakTotal
+64,27,24,offpeak,nonMotorizedRetail
+65,28,24,offpeak,nonMotorizedTotal
+66,27,25,peak,transitPeakRetail
+67,28,25,peak,transitPeakTotal
+68,27,26,offpeak,transitOffPeakRetail
+69,28,26,offpeak,transitOffPeakTotal
+17,11,5,daily,access17
+18,11,6,daily,access18

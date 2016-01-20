@@ -1,0 +1,8 @@
+Impedance,Description,Purpose,Period,Offpeak,SOV,WT,NM
+22,AM SOV Time,20,peak,,1,,
+23,OP SOV Time,20,offpeak,,1,,
+24,OP SOV Distance for Non-Motorized Modes,21,offpeak,,,,1
+25,Walk to AM Transit Time,22,peak,,,1,
+26,Walk to OP Transit Time,22,offpeak,,,1,
+5,Non-work accessibility by WT ,4,daily,0.5,,1,
+6,Non-work accessibility by NM ,4,daily,0.5,,,1
