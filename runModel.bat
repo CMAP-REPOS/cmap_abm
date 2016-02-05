@@ -9,7 +9,7 @@
 :: e.g "runmodel npeterson P@ssw0rd > blog.txt"
 
 :: Parameters
-SET projDir=Y:/{{{TEMPLATE}}}/model
+SET projDir=Y:/{{{TEMPLATE}}}/cmap_abm
 SET sampleRate=0.05
 
 @SET user=%1

@@ -1,6 +1,6 @@
 
 rem ############  PARAMETERS  ############
-set RUNTIME=Y:/{{{TEMPLATE}}}/model
+set RUNTIME=Y:/{{{TEMPLATE}}}/cmap_abm
 set JAVA_PATH=C:/Program Files/Java/jdk1.7.0_13
 set HOST_IP=10.10.1.52
 
