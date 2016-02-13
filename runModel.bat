@@ -9,7 +9,7 @@
 :: e.g "runmodel npeterson P@ssw0rd > blog.txt"
 
 :: Parameters
-SET projDir=Y:/{{{TEMPLATE}}}/model
+SET projDir=Y:/{{{TEMPLATE}}}/cmap_abm
 SET sampleRate=0.05
 
 @SET user=%1
@@ -46,7 +46,7 @@ if exist model_run_timestamp.txt (del model_run_timestamp.txt /Q)
 @ECHO Create TAP lines: %date% %time% >> model_run_timestamp.txt
 %emmepy% runTapLines.py
 @ECHO Run CT-RAMP: %date% %time% >> model_run_timestamp.txt
-CALL runCTRAMP.bat %sampleRate%
+CALL runCTRAMP-SingleProcess.bat %sampleRate%
 
 :: Final skimming and assignments
 @ECHO Run final assignments: %date% %time% >> model_run_timestamp.txt
