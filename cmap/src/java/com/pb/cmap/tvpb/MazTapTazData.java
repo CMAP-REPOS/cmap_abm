@@ -4,30 +4,26 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.ResourceBundle;
-import java.util.Set;
 import java.util.TreeSet;
 
 import com.pb.common.datafile.CSVFileReader;
 import com.pb.common.datafile.TableDataSet;
-import com.pb.common.util.ResourceUtil;
 import com.pb.common.matrix.Matrix;
+import com.pb.common.newmodel.UtilityExpressionCalculator;
 
 import org.apache.log4j.Logger;
 
 public class MazTapTazData implements Serializable {
 	
-	private static Logger logger = Logger.getLogger(TransitVirtualPathBuilder.class);
-    private transient Logger tvpbLogger = Logger.getLogger("tvpbLog");
+	private static Logger logger = Logger.getLogger(BestTransitPathCalculator.class);
 	
     private TableDataSet maz2tapTable;
     private TableDataSet tapTable;
     private TableDataSet tapLinesTable;
     private TableDataSet mazTable;
-    
+       
     private HashMap<Integer,HashMap<Integer,Float>> omazWalkTapsDist;
     private HashMap<Integer,HashMap<Integer,Float>> dmazWalkTapsDist;
     private HashMap<Integer,HashMap<Integer,Float>> mazPnrTapsDist;
@@ -42,12 +38,13 @@ public class MazTapTazData implements Serializable {
     private HashMap<Integer,Integer> mazclosestPnrTap;
     private HashMap<Integer,Integer> maztransit;
     
+    private double maxPnrDist;
+    
     private int[] uniqTazs;
     private int[] mazs;
     private int[] tazs;
     private String tapid;
     private Matrix tazDistanceMatrix;
-    private Matrix mazDistanceMatrix; //very big but not currently used
     
     private HashMap<Integer,TapDist[]> omazWalkTapsDistSorted = new HashMap<Integer,TapDist[]>();
     private HashMap<Integer,TapDist[]> dmazWalkTapsDistSorted = new HashMap<Integer,TapDist[]>();
@@ -55,8 +52,10 @@ public class MazTapTazData implements Serializable {
     
     private int maxTransitStopWalkDist = 5280;
     
+    private static MazTapTazData instance;
+    
     public MazTapTazData(HashMap<String, String> propertyMap) throws IOException {
-    	
+    	        
     	//----------------------------------------------
     	//read maz table
     	//----------------------------------------------
@@ -341,8 +340,8 @@ public class MazTapTazData implements Serializable {
     		
 	    }
 
-	    tvpbLogger.info("Removed " + trimmedOTaps + " of " + omazToOTaps + " Omaz Otap pairs since servesNewLines=false");
-	    tvpbLogger.info("Removed " + trimmedDTaps + " of " + dmazToDTaps + " Dmaz Dtap pairs since servesNewLines=false");
+	    logger.info("Removed " + trimmedOTaps + " of " + omazToOTaps + " Omaz Otap pairs since servesNewLines=false");
+	    logger.info("Removed " + trimmedDTaps + " of " + dmazToDTaps + " Dmaz Dtap pairs since servesNewLines=false");
 	    
 	    //create sorted taps by distance from maz
 	    createSortedTapDists(omazWalkTapsDist, omazWalkTapsDistSorted);
@@ -350,7 +349,37 @@ public class MazTapTazData implements Serializable {
 	    
 	    //populate maz has transit vector
 	    calculateMazHasTransit();
-    	
+	    
+    	//----------------------------------------------
+    	//read TAZ distance matrix
+    	//----------------------------------------------
+  		logger.info("Get taz distance matrix");
+  				
+  		//setup uec
+  		String projectDirectory = propertyMap.get("Project.Directory");
+  		String uecFile = propertyMap.get("utility.bestTransitPath.uec.file");
+  		maxPnrDist = Double.parseDouble(propertyMap.get("tvpb.maxpnrdist"));
+  		TransitWalkAccessDMU twaDmu = new TransitWalkAccessDMU();
+        UtilityExpressionCalculator uecDistance = new UtilityExpressionCalculator(
+        			new File(projectDirectory + uecFile), 6, 0, propertyMap, twaDmu );
+  		
+  		//solve uec
+        int[] nAlts = {0,1};
+    	int[] tazs = getTazs();
+  		Matrix tazDistance = new Matrix(tazs.length, tazs.length);
+  		tazDistance.setExternalNumbersZeroBased(tazs);
+  		for(int i=0; i<tazs.length; i++) {
+  			for(int j=0; j<tazs.length; j++) {
+  				twaDmu.setDmuIndexValues(-1, tazs[i], tazs[j]);
+  				double value = uecDistance.solve(twaDmu.getDmuIndexValues(), twaDmu, nAlts)[0];
+  				tazDistance.setValueAt(tazs[i], tazs[j], (float) value);
+  			}
+  		}
+  		
+  		//create pnr distance matrix
+  		logger.info("Calculate pnr tap data for later use");
+  		setDistanceMatrix(tazDistance);
+  		calculatePnrTapData(maxPnrDist);
     }
     
     public void calculatePnrTapData(double maxPnrDist) {
@@ -494,28 +523,13 @@ public class MazTapTazData implements Serializable {
     		
 	    }
 	    
-	    tvpbLogger.info("Removed " + trimmedPnrTaps + " of " + mazToPnrTaps + " maz pnr tap pairs since servesNewLines=false");
+	    logger.info("Removed " + trimmedPnrTaps + " of " + mazToPnrTaps + " maz pnr tap pairs since servesNewLines=false");
 	    
 	    //create sorted taps by distance from maz
 	    createSortedTapDists(mazPnrTapsDist, mazPnrTapsDistSorted);
 
     }
-
-    public void createMazDistanceMatrix() {
-
-    	//create maz distance matrix
-    	Matrix mat = new Matrix("mazDistance", "mazDistance", mazs.length, mazs.length);
-    	for(int i=0; i<mazs.length; i++) {
-			for(int j=0; j<mazs.length; j++) {
-				mat.setValueAt(mazs[i], mazs[j], getOMazDMazDistanceFromParts(mazs[i], mazs[j]));
-			}
-    	}
-    	
-    	//set class attribute, need to use the correct getOMazDMazDistance method below as well
-    	//mazDistanceMatrix = mat;
-    	
-    }
-    
+   
     public void calculateMazHasTransit() {
     	
     	maztransit = new HashMap<Integer,Integer>();
@@ -601,8 +615,47 @@ public class MazTapTazData implements Serializable {
     	return(getNearTaps(dmazWalkTapsDistSorted, dmaz, maxDist));
     }
     
+    public int[] getOmazWalkTapIds(int omaz, double maxDist) {
+    	TapDist[] tapsDist = getOmazWalkTaps(omaz, maxDist);
+    	if(tapsDist != null) {
+    		int taps[] = new int[tapsDist.length];
+        	for(int i=0; i<tapsDist.length; i++) {
+        		taps[i] = tapsDist[i].tap;
+        	}
+        	return(taps);
+    	} else {
+    		return(null);
+    	}
+    }
+    
+    public int[] getDmazWalkTapIds(int dmaz, double maxDist) {
+    	TapDist[] tapsDist = getDmazWalkTaps(dmaz, maxDist);
+    	if(tapsDist != null) {
+	    	int taps[] = new int[tapsDist.length];
+	    	for(int i=0; i<tapsDist.length; i++) {
+	    		taps[i] = tapsDist[i].tap;
+	    	}
+	    	return(taps);
+    	} else {
+    		return(null);
+    	}
+    }
+    
     public TapDist[] getPnrTaps(int maz, double maxDist) {
     	return(getNearTaps(mazPnrTapsDistSorted, maz, maxDist));
+    }
+    
+    public int[] getPnrTapIds(int maz, double maxDist) {
+    	TapDist[] tapsDist = getPnrTaps(maz, maxDist);
+    	if(tapsDist != null) {
+    		int taps[] = new int[tapsDist.length];
+    		for(int i=0; i<tapsDist.length; i++) {
+        		taps[i] = tapsDist[i].tap;
+        	}
+        	return(taps);
+    	} else {
+    		return(null);
+    	}
     }
     
     public int getTazForTap(int tap) {
@@ -682,11 +735,6 @@ public class MazTapTazData implements Serializable {
     	return(dist);
     }
     
-    //gets the maz to maz distance from the maz distance matrix
-    //public float getOMazDMazDistance(int omaz, int dmaz) {    	
-    //	return(mazDistanceMatrix.getValueAt(omaz, dmaz));
-    //}
-
     //gets the maz to maz distance from parts
     public float getOMazDMazDistance(int omaz, int dmaz) {    	
     	return(getOMazDMazDistanceFromParts(omaz, dmaz));
@@ -724,6 +772,20 @@ public class MazTapTazData implements Serializable {
     	return(tapid);
     }
     
+    public static MazTapTazData getInstance(HashMap<String, String> rbMap)
+    {
+        if (instance == null)
+        {
+            try {
+				instance = new MazTapTazData(rbMap);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+            return instance;
+        } else return instance;
+    }
+    
     public class Maz2Tap implements Comparable<Maz2Tap>, Serializable
     {
         public int maz;
@@ -751,4 +813,19 @@ public class MazTapTazData implements Serializable {
 
     }
     
+    public int getNumMazs() {
+    	return(mazs.length);
+    }
+    
+    public int getNumTazs() {
+    	return(uniqTazs.length);
+    }
+    
+    public int getNumTaps() {
+    	return(tapTable.getRowCount());
+    }
+    
+    public int[] getTapIds() {
+    	return(tapTable.getColumnAsInt(tapid));
+    }
 }

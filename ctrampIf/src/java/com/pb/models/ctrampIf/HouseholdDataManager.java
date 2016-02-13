@@ -1939,7 +1939,11 @@ public abstract class HouseholdDataManager implements HouseholdDataManagerIf, Se
     	float maxMaxWalk        = (float) 3.0;
     	int minZscore = -3;
         int maxZscore = 3;
-    	
+        
+        //for binning people by walk propensity
+        float walk_prop_cl_max  = (float) 0.3;
+        float walk_prop_c2_max  = (float) 0.6;
+        
         // read in walk preferences values from file
         TableDataSet walkPreferences;
     	String WALK_PREFERENCES_FILE_NAME = "HouseholdManager.WalkPreferences.FileName";
@@ -1990,9 +1994,18 @@ public abstract class HouseholdDataManager implements HouseholdDataManagerIf, Se
                 float maxWalk = propensity * maxMaxWalk + (1 - propensity) * minMaxWalk;
                 
                 //set values
+                if (propensity < walk_prop_cl_max) {
+                	person.setWalkPropClass(1);
+                } else if(propensity < walk_prop_c2_max) {
+                	person.setWalkPropClass(2);
+                } else {
+                	person.setWalkPropClass(3);
+                }
+                
                 person.setWalkTimeWeight(walkTime);
                 person.setWalkSpeed(walkSpeed);
                 person.setMaxWalk(maxWalk);
+                
                 
             }
         }

@@ -365,6 +365,10 @@ public interface PersonIf
     
     public abstract int getUserClass(String type);
     
-    public abstract void setUserClass(String type, int userClass);    
+    public abstract void setUserClass(String type, int userClass);
+    
+    public abstract int getWalkPropClass();
+    
+    public abstract void setWalkPropClass(int walkPropClass);    
 
 }

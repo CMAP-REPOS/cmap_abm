@@ -1365,7 +1365,7 @@ public class HouseholdIndividualMandatoryTourDepartureAndDurationTime implements
         mcDmuObject.setDmuIndexValues(household.getHhId(), household.getHhTaz(), t.getTourOrigTaz(), t.getTourDestTaz(), household.getDebugChoiceModels());
         
         //create TVPB for tour mode choice model
-        mcModel.setTVPBValues(mcDmuObject, t.getTourPrimaryPurpose());
+        mcModel.setTVPBValues(mcDmuObject, t.getTourPrimaryPurpose(), false, household.getDebugChoiceModels());
         
     }
     

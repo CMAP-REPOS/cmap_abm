@@ -422,7 +422,7 @@ public class MandatoryDestChoiceModel implements Serializable {
             mcDmuObject.setDmuIndexValues( household.getHhId(), d, origTaz, d, household.getDebugChoiceModels() );
 
             //create TVPB for tour mode choice model
-            mcModel.setTVPBValues(mcDmuObject, tourPrimaryPurpose);
+            mcModel.setTVPBValues(mcDmuObject, tourPrimaryPurpose, false, household.getDebugChoiceModels());
             
             if ( household.getDebugChoiceModels() ) {
                 household.logTourObject( loggingHeader, modelLogger, person, mcDmuObject.getTourObject() );

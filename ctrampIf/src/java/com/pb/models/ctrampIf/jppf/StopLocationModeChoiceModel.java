@@ -1,8 +1,8 @@
 package com.pb.models.ctrampIf.jppf;
 
-import com.pb.cmap.tvpb.TapPair;
-import com.pb.cmap.tvpb.TransitVirtualPathBuilder;
-import com.pb.cmap.tvpb.Trip;
+import com.pb.cmap.tvpb.BestTransitPathCalculator;
+import com.pb.cmap.tvpb.TransitDriveAccessDMU;
+import com.pb.cmap.tvpb.TransitWalkAccessDMU;
 import com.pb.common.calculator.VariableTable;
 import com.pb.common.datafile.CSVFileReader;
 import com.pb.common.datafile.TableDataSet;
@@ -105,7 +105,7 @@ public class StopLocationModeChoiceModel implements Serializable {
 
     private String loggerSeparator = "";
     
-    TransitVirtualPathBuilder tvpb;
+    BestTransitPathCalculator tvpb;
     
     /**
      * Constructor that will be used to set up the ChoiceModelApplications for each
@@ -127,16 +127,9 @@ public class StopLocationModeChoiceModel implements Serializable {
         setupParkingLocationModel( propertyMap, dmuFactory );
         
         //create TVPB for trip mode choice UEC 
-        tvpb = new TransitVirtualPathBuilder(propertyMap);
-		tvpb.setupTVPB();
-		tvpb.setupModels();
-		tvpb.setMTTData(tazDataManager.getMttData());
-
+        tvpb = new BestTransitPathCalculator(propertyMap);
     }
 
-
-    
-    
     private void setupStopLocationChoiceModels( HashMap<String, String> propertyMap, CtrampDmuFactoryIf dmuFactory ) {
         
         logger.info( String.format( "setting up stop location choice models." ) );
@@ -463,7 +456,7 @@ public class StopLocationModeChoiceModel implements Serializable {
                 tripModeChoiceDmuObj.setDmuIndexValues( household.getHhId(), origin, zone );
                 
                 //create TVPB for trip mode choice model
-                setTVPBValues(tripModeChoiceDmuObj, inbound, stop.getDestPurpose());
+                setTVPBValues(tripModeChoiceDmuObj, inbound, stop.getDestPurpose(), true, household.getDebugChoiceModels());
                 
                 //select mode
                 long check = System.nanoTime();
@@ -564,7 +557,7 @@ public class StopLocationModeChoiceModel implements Serializable {
             tripModeChoiceDmuObj.setDmuIndexValues( household.getHhId(), origin, zone );
             
             //create TVPB for trip mode choice model
-            setTVPBValues(tripModeChoiceDmuObj, inbound, stop.getDestPurpose());
+            setTVPBValues(tripModeChoiceDmuObj, inbound, stop.getDestPurpose(), true, household.getDebugChoiceModels());
             
             //select mode
             int choice = -1;
@@ -1374,40 +1367,33 @@ public class StopLocationModeChoiceModel implements Serializable {
         dcSoaModel.cleanUp();
     }
     
-    private void setTVPBValues(TripModeChoiceDMU tripModeChoiceDmuObj, int inbound, String purpose) {
+    private void setTVPBValues(TripModeChoiceDMU tripModeChoiceDmuObj, int inbound, String purpose, boolean recalcPersonUtil, boolean debug) {
     	
     	int NA_VALUE = 0;
-		final int WP_ALT = 10;
-    	final int DL_ALT = 11;
-    	final int DP_ALT = 12;
+
+    	//setup best path dmu variables
+    	TransitWalkAccessDMU walkDmu = new TransitWalkAccessDMU();
+    	TransitDriveAccessDMU driveDmu  = new TransitDriveAccessDMU();
+    	walkDmu.setTapTable(tvpb.getMttData().getTapTable(), tvpb.getMttData().getTapIdFieldName());
+    	driveDmu.setTapTable(tvpb.getMttData().getTapTable(), tvpb.getMttData().getTapIdFieldName());
     	
-    	Trip trip = new Trip();
-    	trip.setTripid(tripModeChoiceDmuObj.getTourObject().getHhId());
-    	trip.setOtaz(tvpb.getMTTData().getTazForMaz(tripModeChoiceDmuObj.getDmuIndexValues().getOriginZone()));
-		trip.setDtaz(tvpb.getMTTData().getTazForMaz(tripModeChoiceDmuObj.getDmuIndexValues().getDestZone()));
-		trip.setOmaz(tripModeChoiceDmuObj.getDmuIndexValues().getOriginZone());
-		trip.setDmaz(tripModeChoiceDmuObj.getDmuIndexValues().getDestZone());
-		trip.setAge(tripModeChoiceDmuObj.getTourObject().getPersonObject().getAge());
-		trip.setCars(tripModeChoiceDmuObj.getHouseholdObject().getAutoOwnershipModelResult());
-		trip.setTod(tripModeChoiceDmuObj.getTodOut());
-		trip.setHhincome(tripModeChoiceDmuObj.getHouseholdObject().getIncomeInDollars());
-		trip.setInbound(inbound);
-		trip.setDebugRecord(tripModeChoiceDmuObj.getHouseholdObject().getDebugChoiceModels());
-		
-		trip.setWalkTimeWeight(tripModeChoiceDmuObj.getTourObject().getPersonObject().getWalkTimeWeight());
-		trip.setWalkSpeed(tripModeChoiceDmuObj.getTourObject().getPersonObject().getWalkSpeed());
-		trip.setMaxWalk(tripModeChoiceDmuObj.getTourObject().getPersonObject().getMaxWalk());
-		trip.setValueOfTime(tripModeChoiceDmuObj.getTourObject().getPersonObject().getValueOfTime());
-		
-		trip.setPurpose(purpose.toLowerCase().startsWith("work") ? 1 : 0);
-		trip.setUserClassByType("user_class_work_walk", tripModeChoiceDmuObj.getTourObject().getPersonObject().getUserClass("user_class_work_walk"));
-		trip.setUserClassByType("user_class_work_pnr", tripModeChoiceDmuObj.getTourObject().getPersonObject().getUserClass("user_class_work_pnr"));
-	    trip.setUserClassByType("user_class_work_knr", tripModeChoiceDmuObj.getTourObject().getPersonObject().getUserClass("user_class_work_knr"));
-		trip.setUserClassByType("user_class_non_work_walk", tripModeChoiceDmuObj.getTourObject().getPersonObject().getUserClass("user_class_non_work_walk"));
-		trip.setUserClassByType("user_class_non_work_pnr", tripModeChoiceDmuObj.getTourObject().getPersonObject().getUserClass("user_class_non_work_pnr"));
-		trip.setUserClassByType("user_class_non_work_knr", tripModeChoiceDmuObj.getTourObject().getPersonObject().getUserClass("user_class_non_work_knr"));
-		
-		//only run TVPB for the tour mode    	
+    	if(purpose.toLowerCase().startsWith("work")) {
+    		walkDmu.setUserClass(tripModeChoiceDmuObj.getTourObject().getPersonObject().getUserClass("user_class_work_walk"));
+    		driveDmu.setUserClass(tripModeChoiceDmuObj.getTourObject().getPersonObject().getUserClass("user_class_work_pnr"));
+    	} else {
+    		walkDmu.setUserClass(tripModeChoiceDmuObj.getTourObject().getPersonObject().getUserClass("user_class_non_work_walk"));
+    		driveDmu.setUserClass(tripModeChoiceDmuObj.getTourObject().getPersonObject().getUserClass("user_class_non_work_pnr"));
+    	}    	
+    	
+    	walkDmu.setWalkPropClass(tripModeChoiceDmuObj.getTourObject().getPersonObject().getWalkPropClass());
+    	driveDmu.setWalkPropClass(walkDmu.getWalkPropClass());
+    	
+    	//check for existing best taps and calculate utilities if needed
+    	int omaz = tripModeChoiceDmuObj.getDmuIndexValues().getOriginZone();
+    	int dmaz = tripModeChoiceDmuObj.getDmuIndexValues().getDestZone();
+    	int tod = tripModeChoiceDmuObj.getTodOut();
+    	
+    	//run TVPB by tour mode    	
     	tripModeChoiceDmuObj.setGenCostWT( NA_VALUE );
     	tripModeChoiceDmuObj.setOtapWT( NA_VALUE );
     	tripModeChoiceDmuObj.setDtapWT( NA_VALUE );			
@@ -1417,53 +1403,135 @@ public class StopLocationModeChoiceModel implements Serializable {
     	tripModeChoiceDmuObj.setGenCostDP( NA_VALUE );
     	tripModeChoiceDmuObj.setOtapDP( NA_VALUE );
     	tripModeChoiceDmuObj.setDtapDP( NA_VALUE );
-		
-		if(tripModeChoiceDmuObj.getTourMode() == WP_ALT) {
-			tvpb.calculatePathsForATrip(trip, true, false, false);
-			if(trip.getWalkTapPairs().size()>0) {
-				TapPair bestWalkTapPair = trip.getWalkTapPairs().get(0); //get best
-				tripModeChoiceDmuObj.setGenCostWT( (float) bestWalkTapPair.getTotalUtils()[0] );
-				tripModeChoiceDmuObj.setOtapWT( bestWalkTapPair.otap );
-				tripModeChoiceDmuObj.setDtapWT( bestWalkTapPair.dtap );
-			} 
+    	
+    	//walk
+		if(tripModeChoiceDmuObj.getTourMode() == ModelStructure.WP_ALT) {
+			
+			double[][] bestWtwTapPairs = tvpb.getBestTapPairs(walkDmu, driveDmu, tvpb.WTW, omaz, dmaz, tod, debug, logger);    	
+	    	
+			if(recalcPersonUtil & bestWtwTapPairs[0] != null) {
+	    		walkDmu.setWalkTimeWeight(tripModeChoiceDmuObj.getTourObject().getPersonObject().getWalkTimeWeight());
+	    		walkDmu.setWalkSpeed(tripModeChoiceDmuObj.getTourObject().getPersonObject().getWalkSpeed());
+	    		walkDmu.setMaxWalk(tripModeChoiceDmuObj.getTourObject().getPersonObject().getMaxWalk());
+	    		walkDmu.setValueOfTime(tripModeChoiceDmuObj.getTourObject().getPersonObject().getValueOfTime());
+	    		
+	    		driveDmu.setAge(tripModeChoiceDmuObj.getTourObject().getPersonObject().getAge());
+	    		driveDmu.setCars(tripModeChoiceDmuObj.getHouseholdObject().getAutoOwnershipModelResult());
+	    		driveDmu.setWalkTimeWeight(walkDmu.getWalkTimeWeight());
+	    		driveDmu.setWalkSpeed(walkDmu.getWalkSpeed());
+	    		driveDmu.setMaxWalk(walkDmu.getMaxWalk());
+	    		driveDmu.setValueOfTime(walkDmu.getValueOfTime());
+	    		
+	    		bestWtwTapPairs = tvpb.calcPersonSpecificUtilities(bestWtwTapPairs, walkDmu, driveDmu, tvpb.WTW, omaz, dmaz, tod, false, debug, logger);
+			}
+			
+			if (bestWtwTapPairs[0] == null) {
+	    		tripModeChoiceDmuObj.setOtapWT( NA_VALUE );
+	    		tripModeChoiceDmuObj.setDtapWT( NA_VALUE );
+	    		tripModeChoiceDmuObj.setGenCostWT( NA_VALUE );
+	        } else {
+	        	tripModeChoiceDmuObj.setOtapWT( (int) bestWtwTapPairs[0][0] );
+	        	tripModeChoiceDmuObj.setDtapWT( (int) bestWtwTapPairs[0][1] );
+	        	tripModeChoiceDmuObj.setGenCostWT( (float) bestWtwTapPairs[0][3] );
+	        }
 		}
 		
-		if(tripModeChoiceDmuObj.getTourMode() == DL_ALT) {
-			tvpb.calculatePathsForATrip(trip, false, false, true);
-			if(trip.getKnrTapPairs().size()>0) {
-				TapPair bestKnrTapPair = trip.getKnrTapPairs().get(0); //get best
-				tripModeChoiceDmuObj.setGenCostDL( (float) bestKnrTapPair.getTotalUtils()[0] );
-				tripModeChoiceDmuObj.setOtapDL( bestKnrTapPair.otap );
-				tripModeChoiceDmuObj.setDtapDL( bestKnrTapPair.dtap );
-			} 
+		//knr uses pnr for now
+		if(tripModeChoiceDmuObj.getTourMode() == ModelStructure.DL_ALT) {
+			
+			double[][] bestDLTapPairs;
+			if(inbound==1) {
+				bestDLTapPairs = tvpb.getBestTapPairs(walkDmu, driveDmu, tvpb.WTD, omaz, dmaz, tod, debug, logger);	
+			} else {
+				bestDLTapPairs = tvpb.getBestTapPairs(walkDmu, driveDmu, tvpb.DTW, omaz, dmaz, tod, debug, logger);
+			}
+			
+			if(recalcPersonUtil & bestDLTapPairs[0] != null) {
+	    		walkDmu.setWalkTimeWeight(tripModeChoiceDmuObj.getTourObject().getPersonObject().getWalkTimeWeight());
+	    		walkDmu.setWalkSpeed(tripModeChoiceDmuObj.getTourObject().getPersonObject().getWalkSpeed());
+	    		walkDmu.setMaxWalk(tripModeChoiceDmuObj.getTourObject().getPersonObject().getMaxWalk());
+	    		walkDmu.setValueOfTime(tripModeChoiceDmuObj.getTourObject().getPersonObject().getValueOfTime());
+	    		
+	    		driveDmu.setAge(tripModeChoiceDmuObj.getTourObject().getPersonObject().getAge());
+	    		driveDmu.setCars(tripModeChoiceDmuObj.getHouseholdObject().getAutoOwnershipModelResult());
+	    		driveDmu.setWalkTimeWeight(walkDmu.getWalkTimeWeight());
+	    		driveDmu.setWalkSpeed(walkDmu.getWalkSpeed());
+	    		driveDmu.setMaxWalk(walkDmu.getMaxWalk());
+	    		driveDmu.setValueOfTime(walkDmu.getValueOfTime());
+	    		
+	    		if(inbound==1) {
+	    			bestDLTapPairs = tvpb.calcPersonSpecificUtilities(bestDLTapPairs, walkDmu, driveDmu, tvpb.WTD, omaz, dmaz, tod, false, debug, logger);
+				} else {					
+					bestDLTapPairs = tvpb.calcPersonSpecificUtilities(bestDLTapPairs, walkDmu, driveDmu, tvpb.DTW, omaz, dmaz, tod, false, debug, logger);
+				}	    		
+	    		
+			}
+			
+			if (bestDLTapPairs[0] == null) {
+	    		tripModeChoiceDmuObj.setOtapDL( NA_VALUE );
+	    		tripModeChoiceDmuObj.setDtapDL( NA_VALUE );
+	    		tripModeChoiceDmuObj.setGenCostDL( NA_VALUE );
+	        } else {
+	        	tripModeChoiceDmuObj.setOtapDL( (int) bestDLTapPairs[0][0] );
+	        	tripModeChoiceDmuObj.setDtapDL( (int) bestDLTapPairs[0][1] );
+	        	tripModeChoiceDmuObj.setGenCostDL( (float) bestDLTapPairs[0][3] );
+	        }
 		}
 		
-		if(tripModeChoiceDmuObj.getTourMode() == DP_ALT) {
-			tvpb.calculatePathsForATrip(trip, false, true, false);
-			if(trip.getPnrTapPairs().size()>0) {
-				TapPair bestPnrTapPair = trip.getPnrTapPairs().get(0); //get best
-				tripModeChoiceDmuObj.setGenCostDP( (float) bestPnrTapPair.getTotalUtils()[0] );
-				tripModeChoiceDmuObj.setOtapDP( bestPnrTapPair.otap );
-				tripModeChoiceDmuObj.setDtapDP( bestPnrTapPair.dtap );
-			} 
+		//pnr
+		if(tripModeChoiceDmuObj.getTourMode() == ModelStructure.DP_ALT) {
+			
+			double[][] bestDPTapPairs;
+			if(inbound==1) {
+				bestDPTapPairs = tvpb.getBestTapPairs(walkDmu, driveDmu, tvpb.WTD, omaz, dmaz, tod, debug, logger);	
+			} else {
+				bestDPTapPairs = tvpb.getBestTapPairs(walkDmu, driveDmu, tvpb.DTW, omaz, dmaz, tod, debug, logger);
+			}
+	    	
+			if(recalcPersonUtil & bestDPTapPairs[0] != null) {
+	    		walkDmu.setWalkTimeWeight(tripModeChoiceDmuObj.getTourObject().getPersonObject().getWalkTimeWeight());
+	    		walkDmu.setWalkSpeed(tripModeChoiceDmuObj.getTourObject().getPersonObject().getWalkSpeed());
+	    		walkDmu.setMaxWalk(tripModeChoiceDmuObj.getTourObject().getPersonObject().getMaxWalk());
+	    		walkDmu.setValueOfTime(tripModeChoiceDmuObj.getTourObject().getPersonObject().getValueOfTime());
+	    		
+	    		driveDmu.setAge(tripModeChoiceDmuObj.getTourObject().getPersonObject().getAge());
+	    		driveDmu.setCars(tripModeChoiceDmuObj.getHouseholdObject().getAutoOwnershipModelResult());
+	    		driveDmu.setWalkTimeWeight(walkDmu.getWalkTimeWeight());
+	    		driveDmu.setWalkSpeed(walkDmu.getWalkSpeed());
+	    		driveDmu.setMaxWalk(walkDmu.getMaxWalk());
+	    		driveDmu.setValueOfTime(walkDmu.getValueOfTime());
+	    		
+	    		if(inbound==1) {
+	    			bestDPTapPairs = tvpb.calcPersonSpecificUtilities(bestDPTapPairs, walkDmu, driveDmu, tvpb.WTD, omaz, dmaz, tod, false, debug, logger);
+				} else {					
+					bestDPTapPairs = tvpb.calcPersonSpecificUtilities(bestDPTapPairs, walkDmu, driveDmu, tvpb.DTW, omaz, dmaz, tod, false, debug, logger);
+				}	    		
+	    		
+			}
+			
+			if (bestDPTapPairs[0] == null) {
+	    		tripModeChoiceDmuObj.setOtapDP( NA_VALUE );
+	    		tripModeChoiceDmuObj.setDtapDP( NA_VALUE );
+	    		tripModeChoiceDmuObj.setGenCostDP( NA_VALUE );
+	        } else {
+	        	tripModeChoiceDmuObj.setOtapDP( (int) bestDPTapPairs[0][0] );
+	        	tripModeChoiceDmuObj.setDtapDP( (int) bestDPTapPairs[0][1] );
+	        	tripModeChoiceDmuObj.setGenCostDP( (float) bestDPTapPairs[0][3] );
+	        }
 		}
 		
 	}
     
     public void setStopTaps(StopIf stop, TripModeChoiceDMU tripModeChoiceDmuObj, int choice) {
     	
-    	final int WP_ALT = 10;
-    	final int DL_ALT = 11;
-    	final int DP_ALT = 12;
-    	
     	//set taps for transit tour mode
-        if(choice==WP_ALT) {
+        if(choice==ModelStructure.WP_ALT) {
         	stop.setBTap(tripModeChoiceDmuObj.getOtapWT());
         	stop.setATap(tripModeChoiceDmuObj.getDtapWT());
-        } else if (choice==DL_ALT) {
+        } else if (choice==ModelStructure.DL_ALT) {
         	stop.setBTap(tripModeChoiceDmuObj.getOtapDL());
         	stop.setATap(tripModeChoiceDmuObj.getDtapDL());
-        } else if (choice==DP_ALT) {
+        } else if (choice==ModelStructure.DP_ALT) {
         	stop.setBTap(tripModeChoiceDmuObj.getOtapDP());
         	stop.setATap(tripModeChoiceDmuObj.getDtapDP());
         }

@@ -2,10 +2,8 @@ package com.pb.models.ctrampIf.jppf;
 
 import java.io.File;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
-import java.util.ResourceBundle;
 
 import com.pb.common.calculator.VariableTable;
 import com.pb.models.ctrampIf.AutoOwnershipChoiceDMU;
@@ -16,13 +14,13 @@ import com.pb.models.ctrampIf.PersonIf;
 import com.pb.models.ctrampIf.TazDataIf;
 import com.pb.models.ctrampIf.TimeDMU;
 import com.pb.models.ctrampIf.TourModeChoiceDMU;
-import com.pb.common.newmodel.UtilityExpressionCalculator;
-import com.pb.common.util.ResourceUtil;
-import com.pb.common.newmodel.ChoiceModelApplication;
 
-import com.pb.cmap.tvpb.TapPair;
-import com.pb.cmap.tvpb.TransitVirtualPathBuilder;
-import com.pb.cmap.tvpb.Trip;
+import com.pb.common.newmodel.UtilityExpressionCalculator;
+import com.pb.common.newmodel.ChoiceModelApplication;
+import com.pb.cmap.tvpb.TransitDriveAccessDMU;
+import com.pb.cmap.tvpb.TransitWalkAccessDMU;
+
+import com.pb.cmap.tvpb.BestTransitPathCalculator;
 
 import org.apache.log4j.Logger;
 
@@ -51,7 +49,7 @@ public class HouseholdAutoOwnershipModel implements Serializable {
     
     UtilityExpressionCalculator[] timeUec;
 
-    TransitVirtualPathBuilder tvpb;
+    BestTransitPathCalculator tvpb;
 
     public HouseholdAutoOwnershipModel( HashMap<String, String> propertyMap, CtrampDmuFactoryIf dmuFactory, TazDataIf tazDataManager, ModelStructure modelStructure) {
 
@@ -59,7 +57,6 @@ public class HouseholdAutoOwnershipModel implements Serializable {
         setupAutoOwnershipChoiceModelApplication( propertyMap, dmuFactory, tazDataManager, modelStructure);
     	
     }
-
 
     private void setupAutoOwnershipChoiceModelApplication( HashMap<String, String> propertyMap, CtrampDmuFactoryIf dmuFactory, TazDataIf tazDataManager, ModelStructure modelStructure ) {
         
@@ -95,13 +92,9 @@ public class HouseholdAutoOwnershipModel implements Serializable {
 
         
         //create TVPB for auto dependency model 
-        tvpb = new TransitVirtualPathBuilder(propertyMap);
-		tvpb.setupTVPB();
-		tvpb.setupModels();
-		tvpb.setMTTData(tazDataManager.getMttData());
+        tvpb = new BestTransitPathCalculator(propertyMap);
     }
 
-    
     public void applyModel( HouseholdIf hhObject ){
 
         if ( hhObject.getDebugChoiceModels() )
@@ -198,7 +191,7 @@ public class HouseholdAutoOwnershipModel implements Serializable {
         availability[1] = 1;
 
         // determine the travel time savings from home to chosen work and school locations
-        // for workers ans sr=tudents by student category
+        // for workers and students by student category
         PersonIf[] personArray = hhObj.getPersons();
         for ( int i=1; i < personArray.length; i++ ) {
 
@@ -246,7 +239,7 @@ public class HouseholdAutoOwnershipModel implements Serializable {
         availability[1] = 1;
 
         // determine the travel time savings from home to chosen work and school locations
-        // for workers ans sr=tudents by student category
+        // for workers and students by student category
         PersonIf[] personArray = hhObj.getPersons();
         for ( int i=1; i < personArray.length; i++ ) {
 
@@ -295,7 +288,7 @@ public class HouseholdAutoOwnershipModel implements Serializable {
         availability[1] = 1;
 
         // determine the travel time savings from home to chosen work and school locations
-        // for workers ans sr=tudents by student category
+        // for workers and students by student category
         PersonIf[] personArray = hhObj.getPersons();
         for ( int i=1; i < personArray.length; i++ ) {
 
@@ -361,7 +354,7 @@ public class HouseholdAutoOwnershipModel implements Serializable {
 	            mcDmuObject.setDmuIndexValues( hhObj.getHhId(), hhObj.getHhTaz(), hhObj.getHhTaz(), p.getPersonWorkLocationZone(), hhObj.getDebugChoiceModels() );
 	
 	            //create TVPB for auto dependency model
-	            setTVPBValues(mcDmuObject, ModelStructure.WORK_PRIMARY_PURPOSE_NAME.toLowerCase());
+	            setTVPBValues(mcDmuObject, ModelStructure.WORK_PRIMARY_PURPOSE_NAME.toLowerCase(), hhObj.getDebugChoiceModels());
 	            
 		        // get the choice model application
 	            String choiceModelDescription = String.format ( "Auto Dependency Model for: Auto, primaryPurpose=%s, Orig=%d, OrigSubZ=%d, Dest=%d, DestSubZ=%d", 
@@ -424,7 +417,7 @@ public class HouseholdAutoOwnershipModel implements Serializable {
             mcDmuObject.setDmuIndexValues( hhObj.getHhId(), hhObj.getHhTaz(), hhObj.getHhTaz(), p.getPersonSchoolLocationZone(), hhObj.getDebugChoiceModels() );
 
             //create TVPB for auto dependency model
-            setTVPBValues(mcDmuObject, tourPrimaryPurpose);
+            setTVPBValues(mcDmuObject, tourPrimaryPurpose, hhObj.getDebugChoiceModels());
             
 	        // get the choice model application
             String choiceModelDescription = String.format ( "Auto Dependency Model for: Auto, primaryPurpose=%s, Orig=%d, OrigSubZ=%d, Dest=%d, DestSubZ=%d", 
@@ -445,97 +438,80 @@ public class HouseholdAutoOwnershipModel implements Serializable {
     }
 
 
-    public void setTVPBValues(TourModeChoiceDMU mcDmuObject, String purpose) {
+    public void setTVPBValues(TourModeChoiceDMU mcDmuObject, String purpose, boolean debug) {
     	
     	int NA_VALUE = 0;
     	
-    	//use inbound dmu label (_In) for peak outbound
-    	Trip trip = new Trip();
-    	trip.setTripid(mcDmuObject.getTourObject().getHhId());
-    	trip.setOtaz(tvpb.getMTTData().getTazForMaz(mcDmuObject.getDmuIndexValues().getOriginZone()));
-		trip.setDtaz(tvpb.getMTTData().getTazForMaz(mcDmuObject.getDmuIndexValues().getDestZone()));
-		trip.setOmaz(mcDmuObject.getDmuIndexValues().getOriginZone());
-		trip.setDmaz(mcDmuObject.getDmuIndexValues().getDestZone());
-		trip.setAge(mcDmuObject.getTourObject().getPersonObject().getAge());
-		trip.setCars(mcDmuObject.getAutos());
-		trip.setTod(mcDmuObject.getTodOut());
-		trip.setHhincome(mcDmuObject.getHouseholdObject().getIncomeInDollars());
-		trip.setInbound(0);
-		trip.setDebugRecord(mcDmuObject.getHouseholdObject().getDebugChoiceModels());
-		
-		trip.setWalkTimeWeight(mcDmuObject.getTourObject().getPersonObject().getWalkTimeWeight());
-		trip.setWalkSpeed(mcDmuObject.getTourObject().getPersonObject().getWalkSpeed());
-		trip.setMaxWalk(mcDmuObject.getTourObject().getPersonObject().getMaxWalk());
-		trip.setValueOfTime(mcDmuObject.getTourObject().getPersonObject().getValueOfTime());
-		
-		trip.setPurpose(purpose.toLowerCase().startsWith("work") ? 1 : 0);
-		trip.setUserClassByType("user_class_work_walk", mcDmuObject.getTourObject().getPersonObject().getUserClass("user_class_work_walk"));
-		trip.setUserClassByType("user_class_work_pnr", mcDmuObject.getTourObject().getPersonObject().getUserClass("user_class_work_pnr"));
-	    trip.setUserClassByType("user_class_work_knr", mcDmuObject.getTourObject().getPersonObject().getUserClass("user_class_work_knr"));
-		trip.setUserClassByType("user_class_non_work_walk", mcDmuObject.getTourObject().getPersonObject().getUserClass("user_class_non_work_walk"));
-		trip.setUserClassByType("user_class_non_work_pnr", mcDmuObject.getTourObject().getPersonObject().getUserClass("user_class_non_work_pnr"));
-		trip.setUserClassByType("user_class_non_work_knr", mcDmuObject.getTourObject().getPersonObject().getUserClass("user_class_non_work_knr"));
-				
-		tvpb.calculatePathsForATrip(trip, true, true, false);
-		
-		TapPair bestWalkTapPair;
-		TapPair bestPnrTapPair;
-		if(trip.getWalkTapPairs().size()>0) {
-			bestWalkTapPair = trip.getWalkTapPairs().get(0); //get best
-			mcDmuObject.setGenCostWT_In( (float) bestWalkTapPair.getTotalUtils()[0] );
-			mcDmuObject.setOtapWT_In( bestWalkTapPair.otap );
-			mcDmuObject.setDtapWT_In( bestWalkTapPair.dtap );
-		} else {
-			mcDmuObject.setGenCostWT_In( NA_VALUE );
+    	//setup best path dmu variables
+    	TransitWalkAccessDMU walkDmu = new TransitWalkAccessDMU();
+    	TransitDriveAccessDMU driveDmu  = new TransitDriveAccessDMU();
+    	walkDmu.setTapTable(tvpb.getMttData().getTapTable(), tvpb.getMttData().getTapIdFieldName());
+    	driveDmu.setTapTable(tvpb.getMttData().getTapTable(), tvpb.getMttData().getTapIdFieldName());
+    	
+    	if(purpose.toLowerCase().startsWith("work")) {
+    		walkDmu.setUserClass(mcDmuObject.getTourObject().getPersonObject().getUserClass("user_class_work_walk"));
+    		driveDmu.setUserClass(mcDmuObject.getTourObject().getPersonObject().getUserClass("user_class_work_pnr"));
+    	} else {
+    		walkDmu.setUserClass(mcDmuObject.getTourObject().getPersonObject().getUserClass("user_class_non_work_walk"));
+    		driveDmu.setUserClass(mcDmuObject.getTourObject().getPersonObject().getUserClass("user_class_non_work_pnr"));
+    	}
+    	
+    	walkDmu.setWalkPropClass(mcDmuObject.getTourObject().getPersonObject().getWalkPropClass());
+    	driveDmu.setWalkPropClass(walkDmu.getWalkPropClass());
+    	
+    	//check for existing best taps and calculate utilities if needed
+    	int omaz = mcDmuObject.getDmuIndexValues().getOriginZone();
+    	int dmaz = mcDmuObject.getDmuIndexValues().getDestZone();
+    	
+    	int tod = mcDmuObject.getTodOut();
+    	double[][] bestWtwTapPairsIn = tvpb.getBestTapPairs(walkDmu, driveDmu, tvpb.WTW, omaz, dmaz, tod, debug, aoLogger);
+        double[][] bestDtwTapPairsIn = tvpb.getBestTapPairs(walkDmu, driveDmu, tvpb.DTW, omaz, dmaz, tod, debug, aoLogger);
+        
+        tod = modelStructure.getTod(modelStructure.getNonMandatoryLocationDefaultDepartPeriod());
+        double[][] bestWtwTapPairsOut = tvpb.getBestTapPairs(walkDmu, driveDmu, tvpb.WTW, omaz, dmaz, tod, debug, aoLogger);
+        double[][] bestDtwTapPairsOut = tvpb.getBestTapPairs(walkDmu, driveDmu, tvpb.DTW, omaz, dmaz, tod, debug, aoLogger);
+        
+        //use _In dmu label for peak outbound measures
+        if (bestWtwTapPairsIn[0] == null) {
 			mcDmuObject.setOtapWT_In( NA_VALUE );
 			mcDmuObject.setDtapWT_In( NA_VALUE );
-		}
-		
-		if(trip.getPnrTapPairs().size()>0) {
-			bestPnrTapPair = trip.getPnrTapPairs().get(0); //get best
-			mcDmuObject.setGenCostDP_In( (float) bestPnrTapPair.getTotalUtils()[0] );
-			mcDmuObject.setOtapDP_In( bestPnrTapPair.otap );
-			mcDmuObject.setDtapDP_In( bestPnrTapPair.dtap );
-		} else {
-			mcDmuObject.setGenCostDP_In( NA_VALUE );
+			mcDmuObject.setGenCostWT_In( NA_VALUE );
+        } else {
+			mcDmuObject.setOtapWT_In( (int) bestWtwTapPairsIn[0][0] );
+			mcDmuObject.setDtapWT_In( (int) bestWtwTapPairsIn[0][1] );
+			mcDmuObject.setGenCostWT_In( (float) bestWtwTapPairsIn[0][3] );
+        }
+        
+        if (bestDtwTapPairsIn[0] == null) {
 			mcDmuObject.setOtapDP_In( NA_VALUE );
 			mcDmuObject.setDtapDP_In( NA_VALUE );
-		}
-		
-		mcDmuObject.setGenCostDL_In( NA_VALUE );
-		mcDmuObject.setOtapDL_In( NA_VALUE );
-		mcDmuObject.setDtapDL_In( NA_VALUE );
-		
-		//use outbound dmu label (_Out) for offpeak outbound
-    	trip.setTod(modelStructure.getTod(modelStructure.getNonMandatoryLocationDefaultDepartPeriod()));
-		
-    	tvpb.calculatePathsForATrip(trip, true, true, false);
-		
-		if(trip.getWalkTapPairs().size()>0) {
-			bestWalkTapPair = trip.getWalkTapPairs().get(0); //get best
-			mcDmuObject.setGenCostWT_Out( (float) bestWalkTapPair.getTotalUtils()[0] );
-			mcDmuObject.setOtapWT_Out( bestWalkTapPair.otap );
-			mcDmuObject.setDtapWT_Out( bestWalkTapPair.dtap );
-		} else {
-			mcDmuObject.setGenCostWT_Out( NA_VALUE );
+			mcDmuObject.setGenCostDP_In( NA_VALUE );
+        } else {
+			mcDmuObject.setOtapDP_In( (int) bestDtwTapPairsIn[0][0] );
+			mcDmuObject.setDtapDP_In( (int) bestDtwTapPairsIn[0][1] );
+			mcDmuObject.setGenCostDP_In( (float) bestDtwTapPairsIn[0][3] );
+        }
+        
+		//use _Out dmu label for offpeak outbound measures
+        if (bestWtwTapPairsOut[0] == null) {
 			mcDmuObject.setOtapWT_Out( NA_VALUE );
-			mcDmuObject.setDtapWT_Out( NA_VALUE );			
-		}
-		
-		if(trip.getPnrTapPairs().size()>0) {
-			bestPnrTapPair = trip.getPnrTapPairs().get(0); //get best
-			mcDmuObject.setGenCostDP_Out( (float) bestPnrTapPair.getTotalUtils()[0] );
-			mcDmuObject.setOtapDP_Out( bestPnrTapPair.otap );
-			mcDmuObject.setDtapDP_Out( bestPnrTapPair.dtap );
+			mcDmuObject.setDtapWT_Out( NA_VALUE );
+			mcDmuObject.setGenCostWT_Out( NA_VALUE );
 		} else {
-			mcDmuObject.setGenCostDP_Out( NA_VALUE );
+			mcDmuObject.setOtapWT_Out( (int) bestWtwTapPairsOut[0][0] );
+			mcDmuObject.setDtapWT_Out( (int) bestWtwTapPairsOut[0][1] );
+			mcDmuObject.setGenCostWT_Out( (float) bestWtwTapPairsOut[0][3] );
+		}
+        
+        if (bestDtwTapPairsOut[0] == null) {
 			mcDmuObject.setOtapDP_Out( NA_VALUE );
 			mcDmuObject.setDtapDP_Out( NA_VALUE );
-		}
-		
-		mcDmuObject.setGenCostDL_Out( NA_VALUE );
-		mcDmuObject.setOtapDL_Out( NA_VALUE );
-		mcDmuObject.setDtapDL_Out( NA_VALUE );
+			mcDmuObject.setGenCostDP_Out( NA_VALUE );
+        } else {
+			mcDmuObject.setOtapDP_Out( (int) bestDtwTapPairsOut[0][0] );
+			mcDmuObject.setDtapDP_Out( (int) bestDtwTapPairsOut[0][1] );
+			mcDmuObject.setGenCostDP_Out( (float) bestDtwTapPairsOut[0][3] );
+        }
 
     }
 }

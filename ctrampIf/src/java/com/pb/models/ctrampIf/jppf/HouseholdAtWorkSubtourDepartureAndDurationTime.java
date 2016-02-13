@@ -570,7 +570,7 @@ public class HouseholdAtWorkSubtourDepartureAndDurationTime implements Serializa
         mcDmuObject.setDmuIndexValues(household.getHhId(), t.getTourOrigTaz(), t.getTourOrigTaz(), t.getTourDestTaz(), household.getDebugChoiceModels());
         
         //create TVPB for tour mode choice model
-        mcModel.setTVPBValues(mcDmuObject, t.getTourPrimaryPurpose());
+        mcModel.setTVPBValues(mcDmuObject, t.getTourPrimaryPurpose(), false, household.getDebugChoiceModels());
         
     }
     

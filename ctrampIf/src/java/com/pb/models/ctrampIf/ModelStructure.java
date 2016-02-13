@@ -11,12 +11,6 @@ import java.io.Serializable;
 import com.pb.common.datafile.CSVFileReader;
 import com.pb.common.datafile.TableDataSet;
 
-/**
- * Holds the tour purpose list as well as the market segments for each tour.
- * 
- * @author D. Ory
- * 
- */
 public abstract class ModelStructure implements Serializable
 {
 
@@ -37,6 +31,10 @@ public abstract class ModelStructure implements Serializable
     public static final int INDIVIDUAL_NON_MANDATORY_CATEGORY_INDEX = 3;
     public static final int AT_WORK_CATEGORY_INDEX = 4;
     
+    public static final int WP_ALT = 10; //walk premium (all)
+    public static final int DL_ALT = 11; //drive local  (KNR)
+    public static final int DP_ALT = 12; //drive premium (PNR)
+	
     public static final String                          MANDATORY_PATTERN                 = "M";
     public static final String                          NONMANDATORY_PATTERN              = "N";
     public static final String                          HOME_PATTERN                      = "H";

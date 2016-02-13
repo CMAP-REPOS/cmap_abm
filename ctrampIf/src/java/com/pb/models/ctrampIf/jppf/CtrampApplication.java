@@ -901,11 +901,7 @@ public class CtrampApplication implements Serializable {
                      if ( fp >= 0 ) {
                          personsByFreeParking[fp]++;
                      }
-                     else {
-                         logger.error( "invalid result = " + fp + " for personid = " + person[j].getPersonId() );
-                         throw new RuntimeException();
-                     }
-        
+                     
                  }
              }
     

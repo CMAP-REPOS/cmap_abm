@@ -1,6 +1,7 @@
 package com.pb.cmap.tourBased;
 
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 import java.util.MissingResourceException;
@@ -8,7 +9,8 @@ import java.util.MissingResourceException;
 import org.apache.log4j.Logger;
 
 import com.pb.cmap.synpop.ARCPopulationSynthesizer;
-import com.pb.cmap.tvpb.TransitVirtualPathBuilder;
+import com.pb.cmap.tvpb.BestTransitPathCalculator;
+import com.pb.cmap.tvpb.MazTapTazData;
 import com.pb.common.util.ResourceUtil;
 import com.pb.models.ctrampIf.HouseholdDataManager;
 import com.pb.models.ctrampIf.HouseholdDataManagerIf;
@@ -27,6 +29,8 @@ public class CmapTourBasedModel {
     private static final int DEFAULT_SAMPLE_SEED = 0;
     
     public static final int DEBUG_CHOICE_MODEL_HHID = 740151;
+    
+    private MazTapTazData                 mttData;
 
     private ResourceBundle rb;
     private String propertiesFileBaseName;
@@ -91,16 +95,20 @@ public class CmapTourBasedModel {
 
         HashMap<String, String> propertyMap = ResourceUtil.changeResourceBundleIntoHashMap(rb);        
         
-        //create TVPB in order to get mttData (maz, tap, taz) data manager 
-        TransitVirtualPathBuilder tvpb = new TransitVirtualPathBuilder(propertyMap);
-		tvpb.setupTVPB();
-		tvpb.createMazTapTazData();
+        //create mttData (maz, tap, taz) data manager 
+        try {
+        	logger.info("create mttData (maz, tap, taz) data manager");
+			mttData = new MazTapTazData(propertyMap);
+		} catch (IOException e1) {
+			logger.info("Maz Tap Taz Data Manager Failed to Start");
+		}
         
         //create zone data manager and add mttData
-        TazDataIf tazDataHandler;
-        tazDataHandler = new CmapTazDataHandler(rb, projectDirectory, tvpb.getMTTData());
-        logger.info ( "Check getOMazDMazDistance(1,2): " + tazDataHandler.getOMazDMazDistance(1, 2));
-        logger.info ( "Check getOMazDMazDistance(1,1000): " + tazDataHandler.getOMazDMazDistance(1, 1000));
+        TazDataIf tazDataHandler = new CmapTazDataHandler(rb, projectDirectory, mttData);
+        
+        //create Best Transit Path Calculator
+        logger.info("create BestTransitPathCalculator");
+        BestTransitPathCalculator tvpb = new BestTransitPathCalculator(propertyMap);
         
         // setup the ctramp application
         ctrampApplication.setupModels( modelStructure, tazDataHandler );

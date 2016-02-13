@@ -132,6 +132,7 @@ public class Person implements PersonIf, java.io.Serializable
     private float walkTimeWeight;
     private float walkSpeed;
     private float maxWalk;
+    private int   walkPropClass;
     
     private HashMap<String,Integer> userClass = new HashMap<String,Integer>();
     
@@ -1920,6 +1921,15 @@ public class Person implements PersonIf, java.io.Serializable
     public void setPersonWorkerOccupation(int workerOccupation) {
     	persWorkerOccupation = workerOccupation;
     }
+    
+    public int getWalkPropClass() {
+    	return walkPropClass;
+    }
+    
+    public void setWalkPropClass(int walkPropClass) {
+    	this.walkPropClass = walkPropClass;
+    }
+    
     
     public float getWalkTimeWeight() {
     	return walkTimeWeight;

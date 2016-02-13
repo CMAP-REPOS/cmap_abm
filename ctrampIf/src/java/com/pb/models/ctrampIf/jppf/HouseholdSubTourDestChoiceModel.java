@@ -315,7 +315,7 @@ public class HouseholdSubTourDestChoiceModel implements Serializable {
             mcDmuObject.setDmuIndexValues( household.getHhId(), household.getHhTaz(), origTaz, d, household.getDebugChoiceModels() );
 
             //create TVPB for trip mode choice model
-            mcModel.setTVPBValues(mcDmuObject, tour.getTourPrimaryPurpose());
+            mcModel.setTVPBValues(mcDmuObject, tour.getTourPrimaryPurpose(), false, household.getDebugChoiceModels());
             
             if ( household.getDebugChoiceModels() ) {
                 household.logTourObject( loggingHeader + ", sample " + i , modelLogger, person, mcDmuObject.getTourObject() );

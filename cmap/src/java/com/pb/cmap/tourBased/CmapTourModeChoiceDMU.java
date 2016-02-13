@@ -246,20 +246,26 @@ public class CmapTourModeChoiceDMU extends TourModeChoiceDMU {
         methodIndexMap.put( "getGenCostWT_In", 70 );
         methodIndexMap.put( "getGenCostDL_In", 71 );
         methodIndexMap.put( "getGenCostDP_In", 72 );
+        
         methodIndexMap.put( "getOtapWT_In", 73 );
         methodIndexMap.put( "getDtapWT_In", 74 );
+        
         methodIndexMap.put( "getOtapDL_In", 75 );
         methodIndexMap.put( "getDtapDL_In", 76 );
+        
         methodIndexMap.put( "getOtapDP_In", 77 );
         methodIndexMap.put( "getDtapDP_In", 78 );
         
         methodIndexMap.put( "getGenCostWT_Out", 80 );
         methodIndexMap.put( "getGenCostDL_Out", 81 );
         methodIndexMap.put( "getGenCostDP_Out", 82 );
+        
         methodIndexMap.put( "getOtapWT_Out", 83 );
         methodIndexMap.put( "getDtapWT_Out", 84 );
+        
         methodIndexMap.put( "getOtapDL_Out", 85 );
         methodIndexMap.put( "getDtapDL_Out", 86 );
+        
         methodIndexMap.put( "getOtapDP_Out", 87 );
         methodIndexMap.put( "getDtapDP_Out", 88 );
         
