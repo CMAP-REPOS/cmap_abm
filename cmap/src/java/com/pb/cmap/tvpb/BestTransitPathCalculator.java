@@ -239,7 +239,7 @@ public class BestTransitPathCalculator implements Serializable
                 // Calculate the pTap to aTap utility values
         		float tapTapUtil[] = new float[numSkimSets+1];
         		if(!storedDepartPeriodTapTapUtils.get(period).containsKey(storedDataObject.paTapKey(pTap, aTap))) {
-        			tapTapUtil[userClass] = calcUtilitiesForTapPair(walkDmu, period, pTap, aTap, pMgra, aMgra, writeCalculations, myLogger);
+        			tapTapUtil = calcUtilitiesForTapPair(walkDmu, period, pTap, aTap, pMgra, aMgra, writeCalculations, myLogger);
         			storedDepartPeriodTapTapUtils.get(period).putIfAbsent(storedDataObject.paTapKey(pTap, aTap), tapTapUtil);
         		} else {
 	                tapTapUtil = storedDepartPeriodTapTapUtils.get(period).get(storedDataObject.paTapKey(pTap, aTap));
@@ -313,7 +313,7 @@ public class BestTransitPathCalculator implements Serializable
                 // Calculate the pTap to aTap utility values
         		float tapTapUtil[] = new float[numSkimSets+1];
         		if(!storedDepartPeriodTapTapUtils.get(period).containsKey(storedDataObject.paTapKey(pTap, aTap))) {
-        			tapTapUtil[userClass] = calcUtilitiesForTapPair(walkDmu, period, pTap, aTap, pMgra, aMgra, writeCalculations, myLogger);
+        			tapTapUtil = calcUtilitiesForTapPair(walkDmu, period, pTap, aTap, pMgra, aMgra, writeCalculations, myLogger);
         			storedDepartPeriodTapTapUtils.get(period).putIfAbsent(storedDataObject.paTapKey(pTap, aTap), tapTapUtil);
         		} else {
 	                tapTapUtil = storedDepartPeriodTapTapUtils.get(period).get(storedDataObject.paTapKey(pTap, aTap));
@@ -389,7 +389,7 @@ public class BestTransitPathCalculator implements Serializable
         		if(!storedDepartPeriodTapTapUtils.get(period).containsKey(storedDataObject.paTapKey(pTap, aTap))) {
         			
         			//loop across number of skim sets  the pTap to aTap utility values 
-	            	tapTapUtil[userClass] = calcUtilitiesForTapPair(walkDmu, period, pTap, aTap, pMgra, aMgra, writeCalculations, myLogger);
+	            	tapTapUtil = calcUtilitiesForTapPair(walkDmu, period, pTap, aTap, pMgra, aMgra, writeCalculations, myLogger);
         			storedDepartPeriodTapTapUtils.get(period).putIfAbsent(storedDataObject.paTapKey(pTap, aTap), tapTapUtil);
         		} else {
 	                tapTapUtil = storedDepartPeriodTapTapUtils.get(period).get(storedDataObject.paTapKey(pTap, aTap));
@@ -472,21 +472,31 @@ public class BestTransitPathCalculator implements Serializable
         return(util);
     }
     
-    public float calcUtilitiesForTapPair(TransitWalkAccessDMU walkDmu, int period, int pTap, int aTap, int origMgra, int destMgra, boolean myTrace, Logger myLogger) {
+    public float[] calcUtilitiesForTapPair(TransitWalkAccessDMU walkDmu, int period, int pTap, int aTap, int origMgra, int destMgra, boolean myTrace, Logger myLogger) {
    	
         // set up the index and dmu objects
         walkDmu.setTOD(period);
         walkDmu.setDmuIndexValues(-1, pTap, aTap);
+        int oldUserClass = walkDmu.getUserClass();
         
-        // solve
-        float util = (float)tapToTapUEC.solve(walkDmu.getDmuIndexValues(), walkDmu, null)[0];  
-        
-        // logging
-        if (myTrace && tracer.isTraceZonePair( mttData.getTazForMaz(origMgra),  mttData.getTazForMaz(destMgra) )) {
-        	tapToTapUEC.logAnswersArray(myLogger, "Transit User Class: " + walkDmu.getUserClass() + " From Orig pTap=" + pTap + " (Origin MAZ:" + origMgra +") " +  " to Dest aTap=" + aTap + " (Dest MAZ:" + destMgra +") " + " Utility Piece");
-            tapToTapUEC.logResultsArray(myLogger, pTap, aTap);
+        // solve for all user classes so caching is easier
+        float tapTapUtil[] = new float[numSkimSets+1];
+        for (int i = 0; i < numSkimSets; i++)
+        {
+        	walkDmu.setUserClass(i+1);
+        	tapTapUtil[i+1] = (float)tapToTapUEC.solve(walkDmu.getDmuIndexValues(), walkDmu, null)[0];
+        	
+        	// logging
+            if (myTrace && tracer.isTraceZonePair( mttData.getTazForMaz(origMgra),  mttData.getTazForMaz(destMgra) )) {
+            	tapToTapUEC.logAnswersArray(myLogger, "Transit User Class: " + walkDmu.getUserClass() + " From Orig pTap=" + pTap + " (Origin MAZ:" + origMgra +") " +  " to Dest aTap=" + aTap + " (Dest MAZ:" + destMgra +") " + " Utility Piece");
+                tapToTapUEC.logResultsArray(myLogger, pTap, aTap);
+            }
         }
-        return(util);
+        
+        //return to existing user class
+        walkDmu.setUserClass(oldUserClass);
+        
+        return(tapTapUtil);
     }
 
     
@@ -535,7 +545,7 @@ public class BestTransitPathCalculator implements Serializable
     		accUtil = calcWalkAccessUtility(walkDmu, origMgra, pTap, myTrace, myLogger);
             egrUtil = calcWalkEgressUtility(walkDmu, aTap, destMgra, myTrace, myLogger);            
             if (calcTap2Tap) {
-            	tapTapUtil = calcUtilitiesForTapPair(walkDmu, period, pTap, aTap, origMgra, destMgra, myTrace, myLogger);
+            	tapTapUtil = calcUtilitiesForTapPair(walkDmu, period, pTap, aTap, origMgra, destMgra, myTrace, myLogger)[walkDmu.getUserClass()];
             } else {
             	tapTapUtil = storedDepartPeriodTapTapUtils.get(period).get(storedDataObject.paTapKey(pTap, aTap))[walkDmu.getUserClass()];
             }
@@ -545,7 +555,7 @@ public class BestTransitPathCalculator implements Serializable
     		accUtil = calcWalkAccessUtility(walkDmu, origMgra, pTap, myTrace, myLogger);
     		egrUtil = calcDriveEgressUtility(driveDmu, aTap, aTaz, destMgra, period, accMode, myTrace, myLogger);
     		if (calcTap2Tap) {
-    			tapTapUtil = calcUtilitiesForTapPair(walkDmu, period, pTap, aTap, origMgra, destMgra, myTrace, myLogger);
+    			tapTapUtil = calcUtilitiesForTapPair(walkDmu, period, pTap, aTap, origMgra, destMgra, myTrace, myLogger)[walkDmu.getUserClass()];
             } else {
             	tapTapUtil = storedDepartPeriodTapTapUtils.get(period).get(storedDataObject.paTapKey(pTap, aTap))[walkDmu.getUserClass()];
             }
@@ -555,7 +565,7 @@ public class BestTransitPathCalculator implements Serializable
     		accUtil = calcDriveAccessUtility(driveDmu, origMgra, pTaz, pTap, period, accMode, myTrace, myLogger);
     		egrUtil = calcWalkEgressUtility(walkDmu, aTap, destMgra, myTrace, myLogger);
     		if (calcTap2Tap) {
-    			tapTapUtil = calcUtilitiesForTapPair(walkDmu, period, pTap, aTap, origMgra, destMgra, myTrace, myLogger);
+    			tapTapUtil = calcUtilitiesForTapPair(walkDmu, period, pTap, aTap, origMgra, destMgra, myTrace, myLogger)[walkDmu.getUserClass()];
             } else {
             	tapTapUtil = storedDepartPeriodTapTapUtils.get(period).get(storedDataObject.paTapKey(pTap, aTap))[walkDmu.getUserClass()];
             }
