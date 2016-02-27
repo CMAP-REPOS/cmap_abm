@@ -27,6 +27,7 @@ public class MazTapTazData implements Serializable {
     private HashMap<Integer,HashMap<Integer,Float>> omazWalkTapsDist;
     private HashMap<Integer,HashMap<Integer,Float>> dmazWalkTapsDist;
     private HashMap<Integer,HashMap<Integer,Float>> mazPnrTapsDist;
+    private HashMap<Integer,HashMap<Integer,Float>> mazKnrTapsDist;
     private HashMap<Integer,HashMap<Integer,Float>> mazMazDist;
     
     private HashMap<Integer,Integer> taptaz;
@@ -39,6 +40,7 @@ public class MazTapTazData implements Serializable {
     private HashMap<Integer,Integer> maztransit;
     
     private double maxPnrDist;
+    private double maxKnrDist;
     
     private int[] uniqTazs;
     private int[] mazs;
@@ -49,8 +51,9 @@ public class MazTapTazData implements Serializable {
     private HashMap<Integer,TapDist[]> omazWalkTapsDistSorted = new HashMap<Integer,TapDist[]>();
     private HashMap<Integer,TapDist[]> dmazWalkTapsDistSorted = new HashMap<Integer,TapDist[]>();
     private HashMap<Integer,TapDist[]> mazPnrTapsDistSorted = new HashMap<Integer,TapDist[]>();
+    private HashMap<Integer,TapDist[]> mazKnrTapsDistSorted = new HashMap<Integer,TapDist[]>();
     
-    private int maxTransitStopWalkDist = 5280;
+    private int maxTransitStopWalkDist;
     
     private static MazTapTazData instance;
     
@@ -358,10 +361,14 @@ public class MazTapTazData implements Serializable {
   		//setup uec
   		String projectDirectory = propertyMap.get("Project.Directory");
   		String uecFile = propertyMap.get("utility.bestTransitPath.uec.file");
+  		int tazDistSheet = Integer.parseInt(propertyMap.get("utility.bestTransitPath.tazDist.page"));
+  		
   		maxPnrDist = Double.parseDouble(propertyMap.get("tvpb.maxpnrdist"));
+  		maxKnrDist = Double.parseDouble(propertyMap.get("tvpb.maxknrdist"));
+  		
   		TransitWalkAccessDMU twaDmu = new TransitWalkAccessDMU();
         UtilityExpressionCalculator uecDistance = new UtilityExpressionCalculator(
-        			new File(projectDirectory + uecFile), 6, 0, propertyMap, twaDmu );
+        			new File(projectDirectory + uecFile), tazDistSheet, 0, propertyMap, twaDmu );
   		
   		//solve uec
         int[] nAlts = {0,1};
@@ -376,10 +383,12 @@ public class MazTapTazData implements Serializable {
   			}
   		}
   		
-  		//create pnr distance matrix
+  		//create pnr and knr data
   		logger.info("Calculate pnr tap data for later use");
   		setDistanceMatrix(tazDistance);
-  		calculatePnrTapData(maxPnrDist);
+  		calculatePnrTapData(maxPnrDist);  		
+  		logger.info("Calculate knr tap data for later use");
+  		calculateKnrTapData(maxKnrDist);
     }
     
     public void calculatePnrTapData(double maxPnrDist) {
@@ -529,6 +538,145 @@ public class MazTapTazData implements Serializable {
 	    createSortedTapDists(mazPnrTapsDist, mazPnrTapsDistSorted);
 
     }
+    
+public void calculateKnrTapData(double maxKnrDist) {
+    	
+    	//get taz distance 2D array
+    	float[][] dist = tazDistanceMatrix.getValues();
+    	int[] tazNums = tazDistanceMatrix.getExternalColumnNumbersZeroBased();
+    	ArrayList<Integer> tazNumbers = new ArrayList<Integer>();
+    	for (Integer i : tazNums) {  
+    		tazNumbers.add(i);
+    	}
+    	
+    	//for each maz, get its taz, then all taps within threshold
+    	mazKnrTapsDist = new HashMap<Integer,HashMap<Integer,Float>>();
+    	for(Integer maz : maztaz.keySet()) {
+        	
+    		//get maz's taz
+    		int taz = maztaz.get(maz);
+    		
+    		//get the distance to each taz from the maz's taz
+        	float[] distToTazs = dist[tazNumbers.indexOf(taz)];
+
+        	double minDist = 999*5280;
+        	int minDistTap = 0;
+        	double minDistKnr = 999*5280;
+        	int minDistKnrTap = 0;
+        	for (int i=0; i<tazNums.length; i++) {
+        				
+    			//get taps in the taz if there are some
+    			ArrayList<Integer> tapsForTaz = taztaps.get(tazNums[i]);
+    			if(tapsForTaz!=null) {
+    				
+    				//skip unavailable tazs
+    				if(distToTazs[i] <= maxKnrDist) {
+    				
+	    				//@todo - for now take arbitrary tap in the taz since each tap has the same taz distance
+	        			if(distToTazs[i] < minDist) {
+	        				minDistTap = tapsForTaz.get(0); //index 0 since ArrayList
+	        				minDist = distToTazs[i];
+	        			}
+	        			
+	        			ArrayList<Integer> tapsForTazKnr = new ArrayList<Integer>();
+	        			HashMap<Integer,Float> tapsForTazKnrDist = new HashMap<Integer,Float>();
+	        	    	for (Integer tapId : tapsForTaz) {
+	        	    		tapsForTazKnr.add(tapId);
+	        	    		tapsForTazKnrDist.put(tapId, distToTazs[i]);
+	        	    	}
+	        			
+	        			//process knr taps if there are some
+	        			if(tapsForTazKnr.size()>0) {
+	        				
+	            			//put all taps in the knr tap set for the maz
+	            			if(mazKnrTapsDist.containsKey(maz)) {
+	            				
+	            				HashMap<Integer,Float> updatedTapsDist = mazKnrTapsDist.get(maz);
+	            				updatedTapsDist.putAll(tapsForTazKnrDist);
+	            				mazKnrTapsDist.put(maz, updatedTapsDist);
+	            				
+	            			} else {
+	            				
+	        	    			HashMap<Integer,Float> initTapDist = new HashMap<Integer,Float>();
+	        	    			initTapDist.putAll(tapsForTazKnrDist);
+	        	    			mazKnrTapsDist.put(maz, initTapDist);
+	        	    			
+	            			}
+	            			
+	            			//@todo - for now take arbitrary knr tap in the taz since each tap has the same taz distance
+	            			if(distToTazs[i] < minDistKnr) {
+	            				minDistKnrTap = tapsForTazKnr.get(0); //index 0 since ArrayList
+	            				minDistKnr = distToTazs[i];
+	            			}
+	        			
+	        			}
+	        			
+    				}
+        			
+    			}
+    			
+        	}
+        }
+    	
+    	//----------------------------------------------
+	    //trim the near tap set by origin/destination by only including the nearest tap 
+	    //when more than one tap serves the same line.
+	    //----------------------------------------------
+    	int mazToKnrTaps = 0;
+    	int trimmedKnrTaps = 0;
+	    for(Integer maz : mazKnrTapsDist.keySet()) {
+        	
+	    	//get taps and distance and lines
+	    	HashMap<Integer,Float> tapsForMazDist = mazKnrTapsDist.get(maz);
+	    	ArrayList<Maz2Tap> maz2TapData = new ArrayList<Maz2Tap>();
+	    	
+	    	for (Integer tapId : mazKnrTapsDist.get(maz).keySet()) {
+	    		
+	    		Maz2Tap m2t = new Maz2Tap();
+	    		m2t.tap = tapId;
+	    		m2t.dist = tapsForMazDist.get(tapId);
+	    		if(taplines.containsKey(tapId)) { //else drop tap from list
+	    			m2t.lines = taplines.get(tapId).split(" ");
+	    		}  
+	    		maz2TapData.add(m2t);
+	    		
+	    	}
+	    	
+	    	//sort by distance and check for new lines
+			Collections.sort(maz2TapData);
+			HashMap<String,String> linesServed = new HashMap<String,String>();
+			for (Maz2Tap m2t : maz2TapData) {
+				
+				//skip if no lines served
+				if(m2t.lines != null) {
+				
+					for (int i=0; i<m2t.lines.length; i++) {
+						if(linesServed.containsKey(m2t.lines[i]) == false) {
+							m2t.servesNewLines = true;
+							linesServed.put(m2t.lines[i], m2t.lines[i]);
+						}
+					}
+				}
+	    	}
+	    	
+			//remove unused taps
+			for (Maz2Tap m2t : maz2TapData) {
+				mazToKnrTaps = mazToKnrTaps + 1;
+				if( m2t.servesNewLines == false) {
+					tapsForMazDist.remove(m2t.tap);
+					trimmedKnrTaps = trimmedKnrTaps + 1;
+				}
+			}
+			mazKnrTapsDist.put(maz, tapsForMazDist);
+    		
+	    }
+	    
+	    logger.info("Removed " + trimmedKnrTaps + " of " + mazToKnrTaps + " maz knr tap pairs since servesNewLines=false");
+	    
+	    //create sorted taps by distance from maz
+	    createSortedTapDists(mazKnrTapsDist, mazKnrTapsDistSorted);
+
+    }
    
     public void calculateMazHasTransit() {
     	
@@ -606,6 +754,30 @@ public class MazTapTazData implements Serializable {
     	}
     	
     }
+    
+    public TapDist[] getNearTaps(HashMap<Integer,TapDist[]> tapsDistSorted, int maz, int maxTaps) {
+    	
+    	//get tap distances
+    	TapDist[] tapsDist = tapsDistSorted.get(maz);
+
+       	//return array
+    	if(tapsDist != null) {
+    		
+       		//filter on count
+    		if(tapsDist.length <= maxTaps) {
+    			return(tapsDist);
+    		} else {
+    			TapDist[] ret =  new TapDist[maxTaps];
+        		for(int i=0; i<maxTaps; i++) {
+            		ret[i] = tapsDist[i];
+        		}
+                return(ret);
+    		}
+    	} else {
+    		return(null);
+    	}
+    	
+    }
 
     public TapDist[] getOmazWalkTaps(int omaz, double maxDist) {
     	return(getNearTaps(omazWalkTapsDistSorted, omaz, maxDist));
@@ -613,6 +785,10 @@ public class MazTapTazData implements Serializable {
     
     public TapDist[] getDmazWalkTaps(int dmaz, double maxDist) {
     	return(getNearTaps(dmazWalkTapsDistSorted, dmaz, maxDist));
+    }
+    
+    public TapDist[] getMazKnrTaps(int omaz, int maxTaps) {
+    	return(getNearTaps(mazKnrTapsDistSorted, omaz, maxTaps));
     }
     
     public int[] getOmazWalkTapIds(int omaz, double maxDist) {
@@ -636,6 +812,19 @@ public class MazTapTazData implements Serializable {
 	    		taps[i] = tapsDist[i].tap;
 	    	}
 	    	return(taps);
+    	} else {
+    		return(null);
+    	}
+    }
+    
+    public int[] getMazKnrTapIds(int omaz, int maxTaps) {
+    	TapDist[] tapsDist = getMazKnrTaps(omaz, maxTaps);
+    	if(tapsDist != null) {
+    		int taps[] = new int[tapsDist.length];
+        	for(int i=0; i<tapsDist.length; i++) {
+        		taps[i] = tapsDist[i].tap;
+        	}
+        	return(taps);
     	} else {
     		return(null);
     	}

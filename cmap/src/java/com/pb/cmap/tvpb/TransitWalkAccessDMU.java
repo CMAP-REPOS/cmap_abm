@@ -34,7 +34,7 @@ public class TransitWalkAccessDMU
     private TableDataSet tapTable;
 	private HashMap<Integer,Integer> tapToRowIndex;
 	
-    //person specific defaults
+    //person specific and joint tour defaults
     int age = 35;
 	int cars = 1;
 
@@ -51,7 +51,8 @@ public class TransitWalkAccessDMU
     float[] persValueOfTimeWalkPropClass = {-1f,8f,10f,12f};
     
 	//trip zonal data and TOD
-	int closestPnrTapTaz;		
+	int closestPnrTapTaz;
+	int closestTapTaz;
 	double maz2tapDistance;
     int   tod;
     
@@ -134,6 +135,14 @@ public class TransitWalkAccessDMU
 
     public void setClosestPnrTapTaz(int closestPnrTapTaz) {
        this.closestPnrTapTaz = closestPnrTapTaz;
+    }
+    
+    public int getClosestTapTaz() {
+        return closestTapTaz;
+    }
+
+    public void setClosestTapTaz(int closestTapTaz) {
+       this.closestTapTaz = closestTapTaz;
     }
        
     public float getStop_type_btap() {
@@ -279,6 +288,7 @@ public class TransitWalkAccessDMU
         methodIndexMap.put( "getTOD", 3 );
         methodIndexMap.put( "getMaz2TapDistance", 8 );
         methodIndexMap.put( "getClosestPnrTapTaz", 9 );
+        methodIndexMap.put( "getClosestTapTaz", 10 );
         
         methodIndexMap.put( "getStop_type_btap", 20);
         methodIndexMap.put( "getReltime_if_btap", 21);
@@ -286,6 +296,7 @@ public class TransitWalkAccessDMU
         methodIndexMap.put( "getIf_pnr_sp_btap", 23);
         methodIndexMap.put( "getDpark_cost_btap", 24);
         methodIndexMap.put( "getLot_time_btap", 25);
+        methodIndexMap.put( "getKnr_convf_btap", 26);
         methodIndexMap.put( "getCrime_rate_btap", 27);
         methodIndexMap.put( "getRetail_den_btap", 28);
         methodIndexMap.put( "getFare_1brd_btap", 29);
@@ -296,6 +307,7 @@ public class TransitWalkAccessDMU
         methodIndexMap.put( "getIf_pnr_sp_atap", 43);
         methodIndexMap.put( "getDpark_cost_atap", 44);
         methodIndexMap.put( "getLot_time_atap", 45);
+        methodIndexMap.put( "getKnr_convf_atap", 46);
         methodIndexMap.put( "getCrime_rate_atap", 47);
         methodIndexMap.put( "getRetail_den_atap", 48);
         methodIndexMap.put( "getFare_1brd_atap", 49);
@@ -317,6 +329,7 @@ public class TransitWalkAccessDMU
             case 3: return getTOD();
             case 8: return getMaz2TapDistance();
             case 9: return getClosestPnrTapTaz();
+            case 10: return getClosestTapTaz();
 
             case 20: return getStop_type_btap();
             case 21: return getReltime_if_btap();
@@ -324,6 +337,7 @@ public class TransitWalkAccessDMU
             case 23: return getIf_pnr_sp_btap();
             case 24: return getDpark_cost_btap();
             case 25: return getLot_time_btap();
+            case 26: return getKnr_convf_btap();
             case 27: return getCrime_rate_btap();
             case 28: return getRetail_den_btap();
             case 29: return getFare_1brd_btap();
@@ -334,6 +348,7 @@ public class TransitWalkAccessDMU
             case 43: return getIf_pnr_sp_atap();
             case 44: return getDpark_cost_atap();
             case 45: return getLot_time_atap();
+            case 46: return getKnr_convf_atap();
             case 47: return getCrime_rate_atap();
             case 48: return getRetail_den_atap();
             case 49: return getFare_1brd_atap();

@@ -354,7 +354,7 @@ public class HouseholdAutoOwnershipModel implements Serializable {
 	            mcDmuObject.setDmuIndexValues( hhObj.getHhId(), hhObj.getHhTaz(), hhObj.getHhTaz(), p.getPersonWorkLocationZone(), hhObj.getDebugChoiceModels() );
 	
 	            //create TVPB for auto dependency model
-	            setTVPBValues(mcDmuObject, ModelStructure.WORK_PRIMARY_PURPOSE_NAME.toLowerCase(), hhObj.getDebugChoiceModels());
+	            setTVPBValues(mcDmuObject, ModelStructure.WORK_PRIMARY_PURPOSE_NAME.toLowerCase(), false, hhObj.getDebugChoiceModels());
 	            
 		        // get the choice model application
 	            String choiceModelDescription = String.format ( "Auto Dependency Model for: Auto, primaryPurpose=%s, Orig=%d, OrigSubZ=%d, Dest=%d, DestSubZ=%d", 
@@ -417,7 +417,7 @@ public class HouseholdAutoOwnershipModel implements Serializable {
             mcDmuObject.setDmuIndexValues( hhObj.getHhId(), hhObj.getHhTaz(), hhObj.getHhTaz(), p.getPersonSchoolLocationZone(), hhObj.getDebugChoiceModels() );
 
             //create TVPB for auto dependency model
-            setTVPBValues(mcDmuObject, tourPrimaryPurpose, hhObj.getDebugChoiceModels());
+            setTVPBValues(mcDmuObject, tourPrimaryPurpose, false, hhObj.getDebugChoiceModels());
             
 	        // get the choice model application
             String choiceModelDescription = String.format ( "Auto Dependency Model for: Auto, primaryPurpose=%s, Orig=%d, OrigSubZ=%d, Dest=%d, DestSubZ=%d", 
@@ -438,7 +438,7 @@ public class HouseholdAutoOwnershipModel implements Serializable {
     }
 
 
-    public void setTVPBValues(TourModeChoiceDMU mcDmuObject, String purpose, boolean debug) {
+    public void setTVPBValues(TourModeChoiceDMU mcDmuObject, String purpose, boolean recalcPersonUtil, boolean debug) {
     	
     	int NA_VALUE = 0;
     	

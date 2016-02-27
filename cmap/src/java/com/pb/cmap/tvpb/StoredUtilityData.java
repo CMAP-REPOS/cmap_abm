@@ -16,8 +16,11 @@ public class StoredUtilityData implements Serializable
     //in a distributed computing environment
     private float[][][] storedWalkAccessUtils;	// MAZ, TAP, WalkPropClass
     private float[][][] storedDriveAccessUtils; // TAZ, TAP, WalkPropClass
+    private float[][][] storedKnrAccessUtils; // TAZ, TAP, WalkPropClass
+    
     private float[][][] storedWalkEgressUtils; 	// TAP, MAZ, WalkPropClass
     private float[][][] storedDriveEgressUtils; // TAP, TAZ, WalkPropClass
+    private float[][][] storedKnrEgressUtils; // TAP, TAZ, WalkPropClass
     
     // TOD period number -> pTAP*100000+aTAP -> [util array for each skim set]
     private HashMap<Integer,ConcurrentHashMap<Long,float[]>> storedDepartPeriodTapTapUtils;
@@ -57,8 +60,11 @@ public class StoredUtilityData implements Serializable
     	// dimension the arrays - MAZ and TAZ are 1 to N      
     	storedWalkAccessUtils = new float[numMgra+1][numTap][numWalkPropClass+1];
         storedDriveAccessUtils = new float[numTaz+1][numTap][numWalkPropClass+1];
+        storedKnrAccessUtils = new float[numTaz+1][numTap][numWalkPropClass+1];
+        
         storedWalkEgressUtils = new float[numTap][numMgra+1][numWalkPropClass+1];
         storedDriveEgressUtils = new float[numTap][numTaz+1][numWalkPropClass+1];
+        storedKnrEgressUtils = new float[numTap][numTaz+1][numWalkPropClass+1];
         
         // assign default values to array elements
         for (int i=0; i<=numMgra; i++)
@@ -74,6 +80,8 @@ public class StoredUtilityData implements Serializable
         		for (int k=0; k<=numWalkPropClass; k++) {
         			storedDriveAccessUtils[i][j][k] = default_utility;
         			storedDriveEgressUtils[j][i][k] = default_utility;
+        			storedKnrAccessUtils[i][j][k] = default_utility;
+        			storedKnrEgressUtils[j][i][k] = default_utility;
         		}
         	}
         
@@ -92,12 +100,20 @@ public class StoredUtilityData implements Serializable
         return storedDriveAccessUtils;
     }
     
+    public float[][][] getStoredKnrAccessUtils() {
+        return storedKnrAccessUtils;
+    }
+    
     public float[][][] getStoredWalkEgressUtils() {
         return storedWalkEgressUtils;
     }
     
     public float[][][] getStoredDriveEgressUtils() {
         return storedDriveEgressUtils;
+    }
+    
+    public float[][][] getStoredKnrEgressUtils() {
+        return storedKnrEgressUtils;
     }
     
     public HashMap<Integer,ConcurrentHashMap<Long,float[]>> getStoredDepartPeriodTapTapUtils() {
