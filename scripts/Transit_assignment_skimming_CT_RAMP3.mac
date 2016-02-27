@@ -1007,7 +1007,7 @@ q
 ~+|1|y|mf"Pwlk%2%%y%"|n|0||mf"Pwlk%2%%y%"|0,9999,ex|n|2
 ~+|1|y|mf"Pwa1%2%%y%"|n|0||mf"Pwa1%2%%y%"|0,9999,ex|n|2
 ~+|1|y|mf"Pwa2%2%%y%"|n|0||mf"Pwa2%2%%y%"|0,9999,ex|n|2
-~+|1|y|mf"Pwa2%2%%y%"|n|(mf"Pwa2%2%%y%"-mf"Pwa2%2%%y%").max.0|||n|2
+~+|1|y|mf"Pwa2%2%%y%"|n|(mf"Pwa2%2%%y%"-mf"Pwa1%2%%y%").max.0|||n|2
 ~+|1|y|mf"Pboa%2%%y%"|n|0||mf"Pboa%2%%y%"|0,9999,ex|n|2
 ~+|1|y|mf"Pifa%2%%y%"|n|0||mf"Pifa%2%%y%"|0,9999,ex|n|2
 ~+|1|y|mf"Pzfa%2%%y%"|n|0||mf"Pzfa%2%%y%"|0,9999,ex|n|2
