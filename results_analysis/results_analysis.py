@@ -8,8 +8,7 @@
     for querying and summarization.
 
 '''
-import abm
-import comparison
+from abm import *
 
 def main(
         base_dir=r'X:\new_server_tests\test_5pct',
@@ -21,7 +20,7 @@ def main(
     ):
     print '\n{0:*^50}'.format(' P R O C E S S I N G ')
     print '\n{0:=^50}\n'.format(' BASE NETWORK ')
-    base = abm.ABM(base_dir, base_pct, base_build)
+    base = ABM(base_dir, base_pct, base_build)
     base.open_db()
     base.print_mode_share()
     base.print_transit_stats()
@@ -32,7 +31,7 @@ def main(
     print ' '
 
     print '\n{0:=^50}\n'.format(' TEST NETWORK ')
-    test = abm.ABM(test_dir, test_pct, test_build)
+    test = ABM(test_dir, test_pct, test_build)
     test.open_db()
     test.print_mode_share()
     test.print_transit_stats()
@@ -43,7 +42,7 @@ def main(
     print ' '
 
     print '\n{0:=^50}\n'.format(' COMPARISON ')
-    comp = comparison.Comparison(base, test)
+    comp = Comparison(base, test)
     print comp
     print ' '
 
