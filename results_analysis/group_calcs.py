@@ -1,4 +1,4 @@
-from results import *
+from abm import *
 
 GROUPS = 6
 FRACTION = 0.5

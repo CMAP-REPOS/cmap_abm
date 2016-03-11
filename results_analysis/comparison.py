@@ -7,7 +7,8 @@
     A class for comparing the contents of two ABM object databases.
 
 '''
-from abm import ABM
+import copy
+import abm
 
 
 class Comparison(object):
@@ -234,7 +235,7 @@ class Comparison(object):
         ''' Print the change in mode share, grouped into broader categories
             (default), or ungrouped. '''
         mode_share_diff = {}
-        for mode in sorted(ABM.modes.keys()):
+        for mode in sorted(abm.ABM.modes.keys()):
             mode_share_diff[mode] = self.test.mode_share[mode] - self.base.mode_share[mode]
         print ' '
         if grouped:
@@ -339,7 +340,7 @@ class Comparison(object):
             print '----------------------------'
             print ' {0:<20} | {1:<20} | {2:<20} | {3:<20} '.format('Mode', 'Boardings', 'Pass. Miles', 'Pass. Hours')
             print '{0:-<22}|{0:-<22}|{0:-<22}|{0:-<22}'.format('')
-            for mode_code, mode_desc in sorted(ABM.transit_modes.iteritems(), key=lambda x: x[1]):
+            for mode_code, mode_desc in sorted(abm.ABM.transit_modes.iteritems(), key=lambda x: x[1]):
                 brd_txt = stat_txt('BOARDINGS', mode_code)
                 pmt_txt = stat_txt('PMT', mode_code)
                 pht_txt = stat_txt('PHT', mode_code)
