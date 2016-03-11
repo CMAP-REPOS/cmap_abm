@@ -58,7 +58,7 @@ def main(
     comp.print_new_dtt()
     comp.print_new_wtt()
     comp.print_new_other()
-    comp.print_auto_trips_affected()
+    #comp.print_auto_trips_affected()  ### MAJOR MEMORY HOG
 
     comp.close_dbs()
 
