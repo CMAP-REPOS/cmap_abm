@@ -2,7 +2,7 @@
 '''
     results.py
     Author: npeterson
-    Revised: 12/8/15
+    Revised: 3/11/16
     ---------------------------------------------------------------------------
     A module for reading TMM output files and matrix data into an SQL database
     for querying and summarization.
@@ -163,7 +163,7 @@ class ABM(object):
                 hh_id INTEGER PRIMARY KEY,
                 sz INTEGER,
                 size INTEGER
-            )''')
+                )''')
             self._con.commit()
             self._insert_households(self._hh_data_csv)
 
@@ -186,7 +186,7 @@ class ABM(object):
                 class_o_pnr INTEGER,
                 class_o_knr INTEGER,
                 FOREIGN KEY (hh_id) REFERENCES Households(hh_id)
-            )''')
+                )''')
             self._con.commit()
             self._insert_people(self._pers_data_csv)
 
@@ -210,7 +210,7 @@ class ABM(object):
                 tod_a INTEGER,
                 mode INTEGER,
                 FOREIGN KEY (hh_id) REFERENCES Households(hh_id)
-            )''')
+                )''')
             self._con.execute('''CREATE TABLE PersonTours (
                 ptour_id TEXT PRIMARY KEY,
                 tour_id TEXT,
@@ -220,7 +220,7 @@ class ABM(object):
                 FOREIGN KEY (pers_id) REFERENCES People(pers_id),
                 FOREIGN KEY (tour_id) REFERENCES Tours(tour_id),
                 FOREIGN KEY (hh_id) REFERENCES Households(hh_id)
-            )''')
+                )''')
             self._con.commit()
             self._insert_tours(self._tours_indiv_csv, is_joint=False)
             self._insert_tours(self._tours_joint_csv, is_joint=True)
@@ -264,7 +264,7 @@ class ABM(object):
                 drive_speed REAL,
                 FOREIGN KEY (tour_id) REFERENCES Tours(tour_id),
                 FOREIGN KEY (hh_id) REFERENCES Households(hh_id)
-            )''')
+                )''')
             self._con.execute('''CREATE TABLE PersonTrips (
                 ptrip_id TEXT PRIMARY KEY,
                 ptour_id TEXT,
@@ -279,7 +279,7 @@ class ABM(object):
                 FOREIGN KEY (tour_id) REFERENCES Tours(tour_id),
                 FOREIGN KEY (ptour_id) REFERENCES PersonTours(ptour_id),
                 FOREIGN KEY (hh_id) REFERENCES Households(hh_id)
-            )''')
+                )''')
             self._con.commit()
             self._insert_trips(self._trips_indiv_csv, is_joint=False)
             self._insert_trips(self._trips_joint_csv, is_joint=True)
@@ -318,7 +318,7 @@ class ABM(object):
                 pass_hrs REAL,
                 pass_mi REAL,
                 PRIMARY KEY (tseg_id, tod)
-            )''')
+                )''')
             self._con.commit()
             self._insert_tsegs()
 
