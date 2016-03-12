@@ -24,24 +24,24 @@ public class TourModeChoiceDMU implements Serializable, VariableTable {
     private ModelStructure modelStructure;
     
 	float genCostWT_In;
-	float genCostDL_In;
-	float genCostDP_In;
+	float genCostKNR_In;
+	float genCostPNR_In;
 	int OtapWT_In;
 	int DtapWT_In;
-	int OtapDL_In;
-	int DtapDL_In;
-	int OtapDP_In;
-	int DtapDP_In;
+	int OtapKNR_In;
+	int DtapKNR_In;
+	int OtapPNR_In;
+	int DtapPNR_In;
 	
 	float genCostWT_Out;
-	float genCostDL_Out;
-	float genCostDP_Out;
+	float genCostKNR_Out;
+	float genCostPNR_Out;
 	int OtapWT_Out;
 	int DtapWT_Out;
-	int OtapDL_Out;
-	int DtapDL_Out;
-	int OtapDP_Out;
-	int DtapDP_Out;
+	int OtapKNR_Out;
+	int DtapKNR_Out;
+	int OtapPNR_Out;
+	int DtapPNR_Out;
 	
     public TourModeChoiceDMU( ModelStructure modelStructure ){
         this.modelStructure = modelStructure;
@@ -86,12 +86,12 @@ public class TourModeChoiceDMU implements Serializable, VariableTable {
     	return genCostWT_In;
     }
     
-    public float getGenCostDL_In() {
-    	return genCostDL_In;
+    public float getGenCostKNR_In() {
+    	return genCostKNR_In;
     }
     
-    public float getGenCostDP_In() {
-    	return genCostDP_In;
+    public float getGenCostPNR_In() {
+    	return genCostPNR_In;
     }
     
     public int getOtapWT_In() {
@@ -102,32 +102,32 @@ public class TourModeChoiceDMU implements Serializable, VariableTable {
     	return DtapWT_In;
     }
     
-    public int getOtapDL_In() {
-    	return OtapDL_In;
+    public int getOtapKNR_In() {
+    	return OtapKNR_In;
     }
     
-    public int getDtapDL_In() {
-    	return DtapDL_In;
+    public int getDtapKNR_In() {
+    	return DtapKNR_In;
     }
     
-    public int getOtapDP_In() {
-    	return OtapDP_In;
+    public int getOtapPNR_In() {
+    	return OtapPNR_In;
     }
     
-    public int getDtapDP_In() {
-    	return DtapDP_In;
+    public int getDtapPNR_In() {
+    	return DtapPNR_In;
     }
 
     public void setGenCostWT_In(float genCost) {
     	this.genCostWT_In = genCost;
     }
     
-    public void setGenCostDL_In(float genCost) {
-    	this.genCostDL_In = genCost;
+    public void setGenCostKNR_In(float genCost) {
+    	this.genCostKNR_In = genCost;
     }
     
-    public void setGenCostDP_In(float genCost) {
-    	this.genCostDP_In = genCost;
+    public void setGenCostPNR_In(float genCost) {
+    	this.genCostPNR_In = genCost;
     }
     
     public void setOtapWT_In(int Otap) {
@@ -138,32 +138,32 @@ public class TourModeChoiceDMU implements Serializable, VariableTable {
     	this.DtapWT_In = Dtap;
     }
     
-    public void setOtapDL_In(int Otap) {
-    	this.OtapDL_In = Otap;
+    public void setOtapKNR_In(int Otap) {
+    	this.OtapKNR_In = Otap;
     }
     
-    public void setDtapDL_In(int Dtap) {
-    	this.DtapDL_In = Dtap;
+    public void setDtapKNR_In(int Dtap) {
+    	this.DtapKNR_In = Dtap;
     }
     
-    public void setOtapDP_In(int Otap) {
-    	this.OtapDP_In = Otap;
+    public void setOtapPNR_In(int Otap) {
+    	this.OtapPNR_In = Otap;
     }
     
-    public void setDtapDP_In(int Dtap) {
-    	this.DtapDP_In = Dtap;
+    public void setDtapPNR_In(int Dtap) {
+    	this.DtapPNR_In = Dtap;
     }
     
     public float getGenCostWT_Out() {
     	return genCostWT_Out;
     }
     
-    public float getGenCostDL_Out() {
-    	return genCostDL_Out;
+    public float getGenCostKNR_Out() {
+    	return genCostKNR_Out;
     }
     
-    public float getGenCostDP_Out() {
-    	return genCostDP_Out;
+    public float getGenCostPNR_Out() {
+    	return genCostPNR_Out;
     }
     
     public int getOtapWT_Out() {
@@ -174,32 +174,32 @@ public class TourModeChoiceDMU implements Serializable, VariableTable {
     	return DtapWT_Out;
     }
     
-    public int getOtapDL_Out() {
-    	return OtapDL_Out;
+    public int getOtapKNR_Out() {
+    	return OtapKNR_Out;
     }
     
-    public int getDtapDL_Out() {
-    	return DtapDL_Out;
+    public int getDtapKNR_Out() {
+    	return DtapKNR_Out;
     }
     
-    public int getOtapDP_Out() {
-    	return OtapDP_Out;
+    public int getOtapPNR_Out() {
+    	return OtapPNR_Out;
     }
     
-    public int getDtapDP_Out() {
-    	return DtapDP_Out;
+    public int getDtapPNR_Out() {
+    	return DtapPNR_Out;
     }
 
     public void setGenCostWT_Out(float genCost) {
     	this.genCostWT_Out = genCost;
     }
     
-    public void setGenCostDL_Out(float genCost) {
-    	this.genCostDL_Out = genCost;
+    public void setGenCostKNR_Out(float genCost) {
+    	this.genCostKNR_Out = genCost;
     }
     
-    public void setGenCostDP_Out(float genCost) {
-    	this.genCostDP_Out = genCost;
+    public void setGenCostPNR_Out(float genCost) {
+    	this.genCostPNR_Out = genCost;
     }
     
     public void setOtapWT_Out(int Otap) {
@@ -210,20 +210,20 @@ public class TourModeChoiceDMU implements Serializable, VariableTable {
     	this.DtapWT_Out = Dtap;
     }
     
-    public void setOtapDL_Out(int Otap) {
-    	this.OtapDL_Out = Otap;
+    public void setOtapKNR_Out(int Otap) {
+    	this.OtapKNR_Out = Otap;
     }
     
-    public void setDtapDL_Out(int Dtap) {
-    	this.DtapDL_Out = Dtap;
+    public void setDtapKNR_Out(int Dtap) {
+    	this.DtapKNR_Out = Dtap;
     }   
     
-    public void setOtapDP_Out(int Otap) {
-    	this.OtapDP_Out = Otap;
+    public void setOtapPNR_Out(int Otap) {
+    	this.OtapPNR_Out = Otap;
     }
     
-    public void setDtapDP_Out(int Dtap) {
-    	this.DtapDP_Out = Dtap;
+    public void setDtapPNR_Out(int Dtap) {
+    	this.DtapPNR_Out = Dtap;
     }   
     
     /**

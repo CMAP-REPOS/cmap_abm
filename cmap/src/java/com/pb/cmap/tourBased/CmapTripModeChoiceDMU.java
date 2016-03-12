@@ -300,15 +300,14 @@ public class CmapTripModeChoiceDMU extends TripModeChoiceDMU {
         methodIndexMap.put( "getDmazDtaz", 61 );
         
         methodIndexMap.put( "getGenCostWT", 70 );
-        methodIndexMap.put( "getGenCostDL", 71 );
-        methodIndexMap.put( "getGenCostDP", 72 );
+        methodIndexMap.put( "getGenCostKNR", 71 );
+        methodIndexMap.put( "getGenCostPNR", 72 );
         methodIndexMap.put( "getOtapWT", 73 );
         methodIndexMap.put( "getDtapWT", 74 );
-        methodIndexMap.put( "getOtapDL", 75 );
-        methodIndexMap.put( "getDtapDL", 76 );
-        
-        methodIndexMap.put( "getOtapDP", 77 );
-        methodIndexMap.put( "getDtapDP", 78 );
+        methodIndexMap.put( "getOtapKNR", 75 );
+        methodIndexMap.put( "getDtapKNR", 76 );
+        methodIndexMap.put( "getOtapPNR", 77 );
+        methodIndexMap.put( "getDtapPNR", 78 );
         
         methodIndexMap.put( "getOMazDMazDistance", 88 );
     }
@@ -371,14 +370,14 @@ public class CmapTripModeChoiceDMU extends TripModeChoiceDMU {
             case 61: return getDmazDtaz();
                         
             case 70: return getGenCostWT();
-            case 71: return getGenCostDL();
-            case 72: return getGenCostDP();
+            case 71: return getGenCostKNR();
+            case 72: return getGenCostPNR();
             case 73: return getOtapWT();
             case 74: return getDtapWT();
-            case 75: return getOtapDL();
-            case 76: return getDtapDL();
-            case 77: return getOtapDP();
-            case 78: return getDtapDP();
+            case 75: return getOtapKNR();
+            case 76: return getDtapKNR();
+            case 77: return getOtapPNR();
+            case 78: return getDtapPNR();
             
             case 88: return getOMazDMazDistance();
 

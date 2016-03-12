@@ -52,9 +52,9 @@ public class CmapTripMatrixWriter implements TripMatrixWriterIf {
     private static final int tripModeCode_SHARED3PAY     = 6;
     
     private static final int tripModeCode_WALK_LOCAL	 = 9;
-    private static final int tripModeCode_WALK_PREMIUM   = 10;
-    private static final int tripModeCode_DRIVE_LOCAL	 = 11;
-    private static final int tripModeCode_DRIVE_PREMIUM  = 12;
+    private static final int tripModeCode_WALK_TRANSIT   = 10;
+    private static final int tripModeCode_KNR	         = 11;
+    private static final int tripModeCode_PNR            = 12;
 
     private ResourceBundle resourceBundle;
     private HouseholdDataManagerIf householdDataManager;
@@ -288,7 +288,7 @@ public class CmapTripMatrixWriter implements TripMatrixWriterIf {
 				
     			}
 				
-				if(trip_mode[i] == tripModeCode_WALK_PREMIUM) { 
+				if(trip_mode[i] == tripModeCode_WALK_TRANSIT) { 
     				
 					if(purpose[i].toLowerCase().startsWith("work")) { 
 					
@@ -327,7 +327,46 @@ public class CmapTripMatrixWriter implements TripMatrixWriterIf {
 					}
     			}
 				    			
-    			if(trip_mode[i] == tripModeCode_DRIVE_PREMIUM | trip_mode[i] == tripModeCode_DRIVE_LOCAL) { 
+    			if(trip_mode[i] == tripModeCode_KNR) { 
+    				
+    				if(purpose[i].startsWith("work")) { 
+					
+	    				if(user_class_work_knr.get(Integer.valueOf(person_id[i])) == 1) { 
+							float value = transitMatrices[3].getValueAt(btap[i], atap[i]);
+							transitMatrices[3].setValueAt(btap[i], atap[i], value + 1);
+						}
+						
+						if(user_class_work_knr.get(Integer.valueOf(person_id[i])) == 2) { 
+							float value = transitMatrices[4].getValueAt(btap[i], atap[i]);
+							transitMatrices[4].setValueAt(btap[i], atap[i], value + 1);
+						}
+						
+						if(user_class_work_knr.get(Integer.valueOf(person_id[i])) == 3) { 
+							float value = transitMatrices[5].getValueAt(btap[i], atap[i]);
+							transitMatrices[5].setValueAt(btap[i], atap[i], value + 1);
+						}
+						
+    				} else {
+    					
+    					if(user_class_non_work_knr.get(Integer.valueOf(person_id[i])) == 1) { 
+							float value = transitMatrices[3].getValueAt(btap[i], atap[i]);
+							transitMatrices[3].setValueAt(btap[i], atap[i], value + 1);
+						}
+						
+						if(user_class_non_work_knr.get(Integer.valueOf(person_id[i])) == 2) { 
+							float value = transitMatrices[4].getValueAt(btap[i], atap[i]);
+							transitMatrices[4].setValueAt(btap[i], atap[i], value + 1);
+						}
+						
+						if(user_class_non_work_knr.get(Integer.valueOf(person_id[i])) == 3) { 
+							float value = transitMatrices[5].getValueAt(btap[i], atap[i]);
+							transitMatrices[5].setValueAt(btap[i], atap[i], value + 1);
+						}
+    					
+    				}
+    			}
+    			
+    			if(trip_mode[i] == tripModeCode_PNR) { 
     				
     				if(purpose[i].startsWith("work")) { 
 					
@@ -484,7 +523,7 @@ public class CmapTripMatrixWriter implements TripMatrixWriterIf {
     				
     			}
     			
-    			if(trip_mode[i] == tripModeCode_WALK_PREMIUM ) { 
+    			if(trip_mode[i] == tripModeCode_WALK_TRANSIT ) { 
     				
 					if(hh_user_class_non_work_walk == 1) { 
 						float value = transitMatrices[3].getValueAt(btap[i], atap[i]);
@@ -503,7 +542,25 @@ public class CmapTripMatrixWriter implements TripMatrixWriterIf {
     				
     			}
     			    			
-    			if(trip_mode[i] == tripModeCode_DRIVE_PREMIUM | trip_mode[i] == tripModeCode_DRIVE_LOCAL) { 
+    			if(trip_mode[i] == tripModeCode_KNR) { 
+					
+    				if(hh_user_class_non_work_knr == 1) { 
+						float value = transitMatrices[3].getValueAt(btap[i], atap[i]);
+	    				transitMatrices[3].setValueAt(btap[i], atap[i], value + num_participants[i]);
+					}
+					
+					if(hh_user_class_non_work_knr == 2) { 
+						float value = transitMatrices[4].getValueAt(btap[i], atap[i]);
+	    				transitMatrices[4].setValueAt(btap[i], atap[i], value + num_participants[i]);
+					}
+					
+					if(hh_user_class_non_work_knr == 3) { 
+						float value = transitMatrices[5].getValueAt(btap[i], atap[i]);
+	    				transitMatrices[5].setValueAt(btap[i], atap[i], value + num_participants[i]);
+					}
+    			}
+    			
+    			if(trip_mode[i] == tripModeCode_PNR) { 
 					
     				if(hh_user_class_non_work_pnr == 1) { 
 						float value = transitMatrices[3].getValueAt(btap[i], atap[i]);

@@ -244,30 +244,30 @@ public class CmapTourModeChoiceDMU extends TourModeChoiceDMU {
         methodIndexMap.put( "getDmazDtaz", 61 );
         
         methodIndexMap.put( "getGenCostWT_In", 70 );
-        methodIndexMap.put( "getGenCostDL_In", 71 );
-        methodIndexMap.put( "getGenCostDP_In", 72 );
+        methodIndexMap.put( "getGenCostKNR_In", 71 );
+        methodIndexMap.put( "getGenCostPNR_In", 72 );
         
         methodIndexMap.put( "getOtapWT_In", 73 );
         methodIndexMap.put( "getDtapWT_In", 74 );
         
-        methodIndexMap.put( "getOtapDL_In", 75 );
-        methodIndexMap.put( "getDtapDL_In", 76 );
+        methodIndexMap.put( "getOtapKNR_In", 75 );
+        methodIndexMap.put( "getDtapKNR_In", 76 );
         
-        methodIndexMap.put( "getOtapDP_In", 77 );
-        methodIndexMap.put( "getDtapDP_In", 78 );
+        methodIndexMap.put( "getOtapPNR_In", 77 );
+        methodIndexMap.put( "getDtapPNR_In", 78 );
         
         methodIndexMap.put( "getGenCostWT_Out", 80 );
-        methodIndexMap.put( "getGenCostDL_Out", 81 );
-        methodIndexMap.put( "getGenCostDP_Out", 82 );
+        methodIndexMap.put( "getGenCostKNR_Out", 81 );
+        methodIndexMap.put( "getGenCostPNR_Out", 82 );
         
         methodIndexMap.put( "getOtapWT_Out", 83 );
         methodIndexMap.put( "getDtapWT_Out", 84 );
         
-        methodIndexMap.put( "getOtapDL_Out", 85 );
-        methodIndexMap.put( "getDtapDL_Out", 86 );
+        methodIndexMap.put( "getOtapKNR_Out", 85 );
+        methodIndexMap.put( "getDtapKNR_Out", 86 );
         
-        methodIndexMap.put( "getOtapDP_Out", 87 );
-        methodIndexMap.put( "getDtapDP_Out", 88 );
+        methodIndexMap.put( "getOtapPNR_Out", 87 );
+        methodIndexMap.put( "getDtapPNR_Out", 88 );
         
         methodIndexMap.put( "getOMazDMazDistance", 90 );
        
@@ -344,24 +344,24 @@ public class CmapTourModeChoiceDMU extends TourModeChoiceDMU {
             case 61: return getDmazDtaz();
                         
             case 70: return getGenCostWT_In();
-            case 71: return getGenCostDL_In();
-            case 72: return getGenCostDP_In();
+            case 71: return getGenCostKNR_In();
+            case 72: return getGenCostPNR_In();
             case 73: return getOtapWT_In();
             case 74: return getDtapWT_In();
-            case 75: return getOtapDL_In();
-            case 76: return getDtapDL_In();
-            case 77: return getOtapDP_In();
-            case 78: return getDtapDP_In();
+            case 75: return getOtapKNR_In();
+            case 76: return getDtapKNR_In();
+            case 77: return getOtapPNR_In();
+            case 78: return getDtapPNR_In();
             
             case 80: return getGenCostWT_Out();
-            case 81: return getGenCostDL_Out();
-            case 82: return getGenCostDP_Out();
+            case 81: return getGenCostKNR_Out();
+            case 82: return getGenCostPNR_Out();
             case 83: return getOtapWT_Out();
             case 84: return getDtapWT_Out();
-            case 85: return getOtapDL_Out();
-            case 86: return getDtapDL_Out();
-            case 87: return getOtapDP_Out();
-            case 88: return getDtapDP_Out();
+            case 85: return getOtapKNR_Out();
+            case 86: return getDtapKNR_Out();
+            case 87: return getOtapPNR_Out();
+            case 88: return getDtapPNR_Out();
             
             case 90: return getOMazDMazDistance();
             

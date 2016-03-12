@@ -1410,15 +1410,15 @@ public class StopLocationModeChoiceModel implements Serializable {
     	tripModeChoiceDmuObj.setGenCostWT( NA_VALUE );
     	tripModeChoiceDmuObj.setOtapWT( NA_VALUE );
     	tripModeChoiceDmuObj.setDtapWT( NA_VALUE );			
-    	tripModeChoiceDmuObj.setGenCostDL( NA_VALUE );
-    	tripModeChoiceDmuObj.setOtapDL( NA_VALUE );
-    	tripModeChoiceDmuObj.setDtapDL( NA_VALUE );
-    	tripModeChoiceDmuObj.setGenCostDP( NA_VALUE );
-    	tripModeChoiceDmuObj.setOtapDP( NA_VALUE );
-    	tripModeChoiceDmuObj.setDtapDP( NA_VALUE );
+    	tripModeChoiceDmuObj.setGenCostKNR( NA_VALUE );
+    	tripModeChoiceDmuObj.setOtapKNR( NA_VALUE );
+    	tripModeChoiceDmuObj.setDtapKNR( NA_VALUE );
+    	tripModeChoiceDmuObj.setGenCostPNR( NA_VALUE );
+    	tripModeChoiceDmuObj.setOtapPNR( NA_VALUE );
+    	tripModeChoiceDmuObj.setDtapPNR( NA_VALUE );
     	
     	//walk
-		if(tripModeChoiceDmuObj.getTourMode() == ModelStructure.WP_ALT) {
+		if(tripModeChoiceDmuObj.getTourMode() == ModelStructure.WT_ALT) {
 			
 			double[][] bestWtwTapPairs = tvpb.getBestTapPairs(walkDmu, driveDmu, tvpb.WTW, omaz, dmaz, tod, debug, logger);    	
 	    	
@@ -1453,7 +1453,7 @@ public class StopLocationModeChoiceModel implements Serializable {
 		}
 		
 		//knr
-		if(tripModeChoiceDmuObj.getTourMode() == ModelStructure.DL_ALT) {
+		if(tripModeChoiceDmuObj.getTourMode() == ModelStructure.KNR_ALT) {
 			
 			double[][] bestDLTapPairs;
 			if(inbound==1) {
@@ -1487,18 +1487,18 @@ public class StopLocationModeChoiceModel implements Serializable {
 			}
 			
 			if (bestDLTapPairs[0] == null) {
-	    		tripModeChoiceDmuObj.setOtapDL( NA_VALUE );
-	    		tripModeChoiceDmuObj.setDtapDL( NA_VALUE );
-	    		tripModeChoiceDmuObj.setGenCostDL( NA_VALUE );
+	    		tripModeChoiceDmuObj.setOtapKNR( NA_VALUE );
+	    		tripModeChoiceDmuObj.setDtapKNR( NA_VALUE );
+	    		tripModeChoiceDmuObj.setGenCostKNR( NA_VALUE );
 	        } else {
-	        	tripModeChoiceDmuObj.setOtapDL( (int) bestDLTapPairs[0][0] );
-	        	tripModeChoiceDmuObj.setDtapDL( (int) bestDLTapPairs[0][1] );
-	        	tripModeChoiceDmuObj.setGenCostDL( (float) bestDLTapPairs[0][3] );
+	        	tripModeChoiceDmuObj.setOtapKNR( (int) bestDLTapPairs[0][0] );
+	        	tripModeChoiceDmuObj.setDtapKNR( (int) bestDLTapPairs[0][1] );
+	        	tripModeChoiceDmuObj.setGenCostKNR( (float) bestDLTapPairs[0][3] );
 	        }
 		}
 		
 		//pnr
-		if(tripModeChoiceDmuObj.getTourMode() == ModelStructure.DP_ALT) {
+		if(tripModeChoiceDmuObj.getTourMode() == ModelStructure.PNR_ALT) {
 			
 			double[][] bestDPTapPairs;
 			if(inbound==1) {
@@ -1532,13 +1532,13 @@ public class StopLocationModeChoiceModel implements Serializable {
 			}
 			
 			if (bestDPTapPairs[0] == null) {
-	    		tripModeChoiceDmuObj.setOtapDP( NA_VALUE );
-	    		tripModeChoiceDmuObj.setDtapDP( NA_VALUE );
-	    		tripModeChoiceDmuObj.setGenCostDP( NA_VALUE );
+	    		tripModeChoiceDmuObj.setOtapPNR( NA_VALUE );
+	    		tripModeChoiceDmuObj.setDtapPNR( NA_VALUE );
+	    		tripModeChoiceDmuObj.setGenCostPNR( NA_VALUE );
 	        } else {
-	        	tripModeChoiceDmuObj.setOtapDP( (int) bestDPTapPairs[0][0] );
-	        	tripModeChoiceDmuObj.setDtapDP( (int) bestDPTapPairs[0][1] );
-	        	tripModeChoiceDmuObj.setGenCostDP( (float) bestDPTapPairs[0][3] );
+	        	tripModeChoiceDmuObj.setOtapPNR( (int) bestDPTapPairs[0][0] );
+	        	tripModeChoiceDmuObj.setDtapPNR( (int) bestDPTapPairs[0][1] );
+	        	tripModeChoiceDmuObj.setGenCostPNR( (float) bestDPTapPairs[0][3] );
 	        }
 		}
 		
@@ -1547,15 +1547,15 @@ public class StopLocationModeChoiceModel implements Serializable {
     public void setStopTaps(StopIf stop, TripModeChoiceDMU tripModeChoiceDmuObj, int choice) {
     	
     	//set taps for transit tour mode
-        if(choice==ModelStructure.WP_ALT) {
+        if(choice==ModelStructure.WT_ALT) {
         	stop.setBTap(tripModeChoiceDmuObj.getOtapWT());
         	stop.setATap(tripModeChoiceDmuObj.getDtapWT());
-        } else if (choice==ModelStructure.DL_ALT) {
-        	stop.setBTap(tripModeChoiceDmuObj.getOtapDL());
-        	stop.setATap(tripModeChoiceDmuObj.getDtapDL());
-        } else if (choice==ModelStructure.DP_ALT) {
-        	stop.setBTap(tripModeChoiceDmuObj.getOtapDP());
-        	stop.setATap(tripModeChoiceDmuObj.getDtapDP());
+        } else if (choice==ModelStructure.KNR_ALT) {
+        	stop.setBTap(tripModeChoiceDmuObj.getOtapKNR());
+        	stop.setATap(tripModeChoiceDmuObj.getDtapKNR());
+        } else if (choice==ModelStructure.PNR_ALT) {
+        	stop.setBTap(tripModeChoiceDmuObj.getOtapPNR());
+        	stop.setATap(tripModeChoiceDmuObj.getDtapPNR());
         }
     	
     }

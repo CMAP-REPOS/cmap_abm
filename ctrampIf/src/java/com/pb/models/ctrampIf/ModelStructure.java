@@ -31,9 +31,9 @@ public abstract class ModelStructure implements Serializable
     public static final int INDIVIDUAL_NON_MANDATORY_CATEGORY_INDEX = 3;
     public static final int AT_WORK_CATEGORY_INDEX = 4;
     
-    public static final int WP_ALT = 10; //walk premium (all)
-    public static final int DL_ALT = 11; //drive local  (KNR)
-    public static final int DP_ALT = 12; //drive premium (PNR)
+    public static final int WT_ALT = 10; //walk transit
+    public static final int KNR_ALT = 11; //KNR
+    public static final int PNR_ALT = 12; //PNR
 	
     public static final String                          MANDATORY_PATTERN                 = "M";
     public static final String                          NONMANDATORY_PATTERN              = "N";
@@ -434,139 +434,6 @@ public abstract class ModelStructure implements Serializable
         return AT_WORK_PURPOSE_INDEX_MAINT;
     }
 
-
-    /*
-     * // The following are used to navigate the dcSize array public int
-     * getDcSizeArrayCategoryIndexOffset(String category){ if (
-     * category.equalsIgnoreCase( MANDATORY_CATEGORY ) ) return
-     * getDcSizeArrayMandatoryCategoryIndexOffset(); else if (
-     * category.equalsIgnoreCase( JOINT_NON_MANDATORY_CATEGORY ) ) return
-     * getDcSizeArrayJointCategoryIndexOffset(); else if ( category.equalsIgnoreCase(
-     * INDIVIDUAL_NON_MANDATORY_CATEGORY ) ) return
-     * getDcSizeArrayIndivNonManCategoryIndexOffset(); else if (
-     * category.equalsIgnoreCase( AT_WORK_CATEGORY ) ) return
-     * getDcSizeArrayAtWorkCategoryIndexOffset(); else return -1; } public int
-     * getNumDcSizeArrayCategorySegments(String category){ if (
-     * category.equalsIgnoreCase( MANDATORY_CATEGORY ) ) return
-     * getNumDcSizeArrayMandatorySegments(); else if ( category.equalsIgnoreCase(
-     * JOINT_NON_MANDATORY_CATEGORY ) ) return getNumDcSizeArrayJointSegments(); else
-     * if ( category.equalsIgnoreCase( INDIVIDUAL_NON_MANDATORY_CATEGORY ) ) return
-     * getNumDcSizeArrayIndivNonManSegments(); else if ( category.equalsIgnoreCase(
-     * AT_WORK_CATEGORY ) ) return getNumDcSizeArrayAtWorkSegments(); else return -1;
-     * } private int getDcSizeArrayMandatoryCategoryIndexOffset() { return 0; }
-     * private int getNumDcSizeArrayMandatorySegments() { return
-     * mandatoryDcModelPurposeNames.length; } private int
-     * getDcSizeArrayJointCategoryIndexOffset() { return
-     * mandatoryDcModelPurposeNames.length + ESCORT_SEGMENT_NAMES.length; } private
-     * int getNumDcSizeArrayJointSegments() { return
-     * nonMandatoryDcModelPurposeNames.length - ESCORT_SEGMENT_NAMES.length; }
-     * private int getDcSizeArrayIndivNonManCategoryIndexOffset() { return
-     * mandatoryDcModelPurposeNames.length; } private int
-     * getNumDcSizeArrayIndivNonManSegments() { return
-     * nonMandatoryDcModelPurposeNames.length; } private int
-     * getDcSizeArrayAtWorkCategoryIndexOffset() { return
-     * mandatoryDcModelPurposeNames.length + nonMandatoryDcModelPurposeNames.length;
-     * } private int getNumDcSizeArrayAtWorkSegments() { return
-     * dcSizeArrayIndexPurposeMap.size() - getDcSizeArrayAtWorkCategoryIndexOffset();
-     * } // The following are used to navigate the dcSize segments calculated public
-     * int getDcSizeSegmentCategoryIndexOffset(String category){ if (
-     * category.equalsIgnoreCase( MANDATORY_CATEGORY ) ) return
-     * getDcSizeSegmentMandatoryCategoryIndexOffset(); else if (
-     * category.equalsIgnoreCase( JOINT_NON_MANDATORY_CATEGORY ) ) return
-     * getDcSizeSegmentJointCategoryIndexOffset(); else if (
-     * category.equalsIgnoreCase( INDIVIDUAL_NON_MANDATORY_CATEGORY ) ) return
-     * getDcSizeSegmentIndivNonManCategoryIndexOffset(); else if (
-     * category.equalsIgnoreCase( AT_WORK_CATEGORY ) ) return
-     * getDcSizeSegmentAtWorkCategoryIndexOffset(); else return -1; } public int
-     * getNumDcSizeSegmentCategorySegments(String category){ if (
-     * category.equalsIgnoreCase( MANDATORY_CATEGORY ) ) return
-     * getNumDcSizeSegmentMandatorySegments(); else if ( category.equalsIgnoreCase(
-     * JOINT_NON_MANDATORY_CATEGORY ) ) return getNumDcSizeSegmentJointSegments();
-     * else if ( category.equalsIgnoreCase( INDIVIDUAL_NON_MANDATORY_CATEGORY ) )
-     * return getNumDcSizeSegmentIndivNonManSegments(); else if (
-     * category.equalsIgnoreCase( AT_WORK_CATEGORY ) ) return
-     * getNumDcSizeSegmentAtWorkSegments(); else return -1; } private int
-     * getDcSizeSegmentMandatoryCategoryIndexOffset() { return 0; } private int
-     * getNumDcSizeSegmentMandatorySegments() { return
-     * mandatoryDcModelPurposeNames.length; } private int
-     * getDcSizeSegmentJointCategoryIndexOffset() { return
-     * mandatoryDcModelPurposeNames.length + ESCORT_SEGMENT_NAMES.length; } private
-     * int getNumDcSizeSegmentJointSegments() { return
-     * nonMandatoryDcModelPurposeNames.length - ESCORT_SEGMENT_NAMES.length; }
-     * private int getDcSizeSegmentIndivNonManCategoryIndexOffset() { return
-     * mandatoryDcModelPurposeNames.length; } private int
-     * getNumDcSizeSegmentIndivNonManSegments() { return
-     * nonMandatoryDcModelPurposeNames.length; } private int
-     * getDcSizeSegmentAtWorkCategoryIndexOffset() { return
-     * mandatoryDcModelPurposeNames.length + nonMandatoryDcModelPurposeNames.length;
-     * } private int getNumDcSizeSegmentAtWorkSegments() { return
-     * dcSizeIndexSegmentMap.size() - getDcSizeSegmentAtWorkCategoryIndexOffset(); }
-     * public boolean isValidDcSizePurposeSegment ( String purposeName, String
-     * segmentName ){ boolean returnValue = false; String purpKey =
-     * purposeName.toLowerCase(); if ( dcSizePurposeSegmentMap.containsKey( purpKey )
-     * ) { HashMap<String, Integer> segmentNamesMap = dcSizePurposeSegmentMap.get(
-     * purpKey ); if ( segmentNamesMap.size() > 0 ) { String segKey =
-     * segmentName.toLowerCase(); if ( segmentNamesMap.containsKey( segKey ) )
-     * returnValue = true; } } return returnValue; } public int
-     * getDcSizeArrayPurposeIndex( String purpose ) { return
-     * dcSizeArrayPurposeIndexMap.get(purpose); } public String
-     * getDcSizeArrayIndexPurpose( int index ) { return
-     * dcSizeArrayIndexPurposeMap.get(index); } public int getDcSizeSegmentIndex(
-     * String purpose ) { return dcSizeSegmentIndexMap.get(purpose); } public String
-     * getDcSizeIndexSegment( int index ) { return dcSizeIndexSegmentMap.get(index);
-     * } public String[] getDcSizeArrayPurposeStrings() { String[] names = new
-     * String[dcSizeArrayIndexPurposeMap.size()]; for ( Integer i :
-     * dcSizeArrayIndexPurposeMap.keySet() ) names[i] =
-     * dcSizeArrayIndexPurposeMap.get(i); return names; } public String[]
-     * getDcSizeSegmentStrings() { String[] names = new
-     * String[dcSizeIndexSegmentMap.size()]; for ( Integer i :
-     * dcSizeIndexSegmentMap.keySet() ) names[i] = dcSizeIndexSegmentMap.get(i);
-     * return names; } public int getDcModelPurposeIndex( String purposeName ) {
-     * return dcModelPurposeIndexMap.get( purposeName.toLowerCase() ); } public
-     * String getDcModelIndexPurpose( int purposeIndex ) { return
-     * dcModelIndexPurposeMap.get( purposeIndex ); } // determine if the purpose
-     * string is a work purpose public boolean getDcModelPurposeIsWorkPurpose( String
-     * purposeName ) { String purpose = getPurposeString( purposeName ); return
-     * purpose.equalsIgnoreCase( workPurposeName ); } // determine if the purpose
-     * string is a university purpose public boolean
-     * getDcModelPurposeIsUniversityPurpose( String purposeName ) { String purpose =
-     * getPurposeString( purposeName ); return purpose.equalsIgnoreCase(
-     * universityPurposeName ); } // determine if the purpose string is a school
-     * purpose public boolean getDcModelPurposeIsSchoolPurpose( String purposeName )
-     * { String purpose = getPurposeString( purposeName ); return
-     * purpose.equalsIgnoreCase( schoolPurposeName ); } // determine if the purpose
-     * string is a work purpose private String getPurposeString( String purposeName )
-     * { String purpose = ""; int index = purposeName.indexOf( '_' ); // if there's
-     * no '_', the purposeName has no segments. if ( index < 0 ) { purpose =
-     * purposeName; } // if there is a '_', the purpose is the substring preceding
-     * it. else { purpose = purposeName.substring(0, index); } return purpose; }
-     * public String getEscortPurposeName() { return ESCORT_PURPOSE_NAME; } public
-     * String[] getEscortSegmentNames() { return ESCORT_SEGMENT_NAMES; } public
-     * String getShoppingPurposeName() { return SHOPPING_PURPOSE_NAME; } public
-     * String getEatOutPurposeName() { return EAT_OUT_PURPOSE_NAME; } public String
-     * getOthMaintPurposeName() { return OTH_MAINT_PURPOSE_NAME; } public String
-     * getSocialPurposeName() { return SOCIAL_PURPOSE_NAME; } public String
-     * getOthDiscrPurposeName() { return OTH_DISCR_PURPOSE_NAME; } public int
-     * getStopFrequencyModelIndex( String tourPurposeName ){ return
-     * stopFreqUecIndexMap.get( tourPurposeName ); } public TreeSet<Integer>
-     * getStopFreqModelSheetIndices() { TreeSet<Integer> set = new
-     * TreeSet<Integer>(); for ( int el : stopFreqUecIndexMap.values() ) set.add( el
-     * ); return set; } public int getStopLocationModelIndex( String stopPurposeName
-     * ){ return stopLocUecIndexMap.get( stopPurposeName ); } public
-     * Collection<Integer> getStopLocModelSheetIndices() { return
-     * stopLocUecIndexMap.values(); } public int getTripModeChoiceModelIndex( String
-     * stopPurposeName ){ return tripModeChoiceUecIndexMap.get( stopPurposeName ); }
-     * public Collection<Integer> getTripModeChoiceModelSheetIndices() { return
-     * tripModeChoiceUecIndexMap.values(); } public Set<String>
-     * getTripModeChoiceModelPurposes() { return tripModeChoiceUecIndexMap.keySet();
-     * } public int getDcSizeArrayIndexFromDcModelIndex( int dcModelIndex ){ String
-     * dcModelPurposeString = dcModelIndexPurposeMap.get( dcModelIndex ); String
-     * dcSizePurposeString = dcModelDcSizePurposeMap.get(dcModelPurposeString); int
-     * dcSizeArrayIndex = getDcSizeArrayPurposeIndex( dcSizePurposeString ); return
-     * dcSizeArrayIndex; } public String[] getJtfAltLabels() { return jtfAltLabels; }
-     * public String[] getAwfAltLabels() { return awfAltLabels; }
-     */
-    
     public String getEscortPurposeName() {
         return ESCORT_PURPOSE_NAME;
     }

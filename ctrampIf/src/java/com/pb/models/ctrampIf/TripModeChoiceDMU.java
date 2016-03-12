@@ -35,14 +35,14 @@ public class TripModeChoiceDMU implements Serializable, VariableTable {
     int[] tazForMaz;
     
 	float genCostWT;
-	float genCostDL;
-	float genCostDP;
+	float genCostKNR;
+	float genCostPNR;
 	int OtapWT;
 	int DtapWT;
-	int OtapDL;
-	int DtapDL;
-	int OtapDP;
-	int DtapDP;
+	int OtapKNR;
+	int DtapKNR;
+	int OtapPNR;
+	int DtapPNR;
 	
 	TazDataIf tazDataManager;
     
@@ -107,12 +107,12 @@ public class TripModeChoiceDMU implements Serializable, VariableTable {
     	return genCostWT;
     }
     
-    public float getGenCostDL() {
-    	return genCostDL;
+    public float getGenCostKNR() {
+    	return genCostKNR;
     }
     
-    public float getGenCostDP() {
-    	return genCostDP;
+    public float getGenCostPNR() {
+    	return genCostPNR;
     }
     
     public int getOtapWT() {
@@ -123,32 +123,32 @@ public class TripModeChoiceDMU implements Serializable, VariableTable {
     	return DtapWT;
     }
     
-    public int getOtapDL() {
-    	return OtapDL;
+    public int getOtapKNR() {
+    	return OtapKNR;
     }
     
-    public int getDtapDL() {
-    	return DtapDL;
+    public int getDtapKNR() {
+    	return DtapKNR;
     }
     
-    public int getOtapDP() {
-    	return OtapDP;
+    public int getOtapPNR() {
+    	return OtapPNR;
     }
     
-    public int getDtapDP() {
-    	return DtapDP;
+    public int getDtapPNR() {
+    	return DtapPNR;
     }
 
     public void setGenCostWT(float genCost) {
     	this.genCostWT = genCost;
     }
     
-    public void setGenCostDL(float genCost) {
-    	this.genCostDL = genCost;
+    public void setGenCostKNR(float genCost) {
+    	this.genCostKNR = genCost;
     }
     
-    public void setGenCostDP(float genCost) {
-    	this.genCostDP = genCost;
+    public void setGenCostPNR(float genCost) {
+    	this.genCostPNR = genCost;
     }
     
     public void setOtapWT(int Otap) {
@@ -159,20 +159,20 @@ public class TripModeChoiceDMU implements Serializable, VariableTable {
     	this.DtapWT = Dtap;
     }
     
-    public void setOtapDL(int Otap) {
-    	this.OtapDL = Otap;
+    public void setOtapKNR(int Otap) {
+    	this.OtapKNR = Otap;
     }
     
-    public void setDtapDL(int Dtap) {
-    	this.DtapDL = Dtap;
+    public void setDtapKNR(int Dtap) {
+    	this.DtapKNR = Dtap;
     }
     
-    public void setOtapDP(int Otap) {
-    	this.OtapDP = Otap;
+    public void setOtapPNR(int Otap) {
+    	this.OtapPNR = Otap;
     }
     
-    public void setDtapDP(int Dtap) {
-    	this.DtapDP = Dtap;
+    public void setDtapPNR(int Dtap) {
+    	this.DtapPNR = Dtap;
     }
     
     public double getOMazDMazDistance() {

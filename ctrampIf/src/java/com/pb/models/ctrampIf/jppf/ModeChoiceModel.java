@@ -603,23 +603,23 @@ public class ModeChoiceModel implements Serializable {
         }
     	
     	if (bestWtdTapPairsIn[0] == null) {
-			mcDmuObject.setOtapDP_In( NA_VALUE );
-			mcDmuObject.setDtapDP_In( NA_VALUE );
-			mcDmuObject.setGenCostDP_In( NA_VALUE );
+			mcDmuObject.setOtapPNR_In( NA_VALUE );
+			mcDmuObject.setDtapPNR_In( NA_VALUE );
+			mcDmuObject.setGenCostPNR_In( NA_VALUE );
         } else {
-			mcDmuObject.setOtapDP_In( (int) bestWtdTapPairsIn[0][0] );
-			mcDmuObject.setDtapDP_In( (int) bestWtdTapPairsIn[0][1] );
-			mcDmuObject.setGenCostDP_In( (float) bestWtdTapPairsIn[0][3] );
+			mcDmuObject.setOtapPNR_In( (int) bestWtdTapPairsIn[0][0] );
+			mcDmuObject.setDtapPNR_In( (int) bestWtdTapPairsIn[0][1] );
+			mcDmuObject.setGenCostPNR_In( (float) bestWtdTapPairsIn[0][3] );
         }
     	
     	if (bestWtkTapPairsIn[0] == null) {
-			mcDmuObject.setOtapDL_In( NA_VALUE );
-			mcDmuObject.setDtapDL_In( NA_VALUE );
-			mcDmuObject.setGenCostDL_In( NA_VALUE );
+			mcDmuObject.setOtapKNR_In( NA_VALUE );
+			mcDmuObject.setDtapKNR_In( NA_VALUE );
+			mcDmuObject.setGenCostKNR_In( NA_VALUE );
         } else {
-			mcDmuObject.setOtapDL_In( (int) bestWtkTapPairsIn[0][0] );
-			mcDmuObject.setDtapDL_In( (int) bestWtkTapPairsIn[0][1] );
-			mcDmuObject.setGenCostDL_In( (float) bestWtkTapPairsIn[0][3] );
+			mcDmuObject.setOtapKNR_In( (int) bestWtkTapPairsIn[0][0] );
+			mcDmuObject.setDtapKNR_In( (int) bestWtkTapPairsIn[0][1] );
+			mcDmuObject.setGenCostKNR_In( (float) bestWtkTapPairsIn[0][3] );
         }
 
     	//update outbound dmu @variables
@@ -634,23 +634,23 @@ public class ModeChoiceModel implements Serializable {
         }
     	
     	if (bestDtwTapPairsOut[0] == null) {
-			mcDmuObject.setOtapDP_Out( NA_VALUE );
-			mcDmuObject.setDtapDP_Out( NA_VALUE );
-			mcDmuObject.setGenCostDP_Out( NA_VALUE );
+			mcDmuObject.setOtapPNR_Out( NA_VALUE );
+			mcDmuObject.setDtapPNR_Out( NA_VALUE );
+			mcDmuObject.setGenCostPNR_Out( NA_VALUE );
         } else {
-			mcDmuObject.setOtapDP_Out( (int) bestDtwTapPairsOut[0][0] );
-			mcDmuObject.setDtapDP_Out( (int) bestDtwTapPairsOut[0][1] );
-			mcDmuObject.setGenCostDP_Out( (float) bestDtwTapPairsOut[0][3] );
+			mcDmuObject.setOtapPNR_Out( (int) bestDtwTapPairsOut[0][0] );
+			mcDmuObject.setDtapPNR_Out( (int) bestDtwTapPairsOut[0][1] );
+			mcDmuObject.setGenCostPNR_Out( (float) bestDtwTapPairsOut[0][3] );
         }
     	
     	if (bestKtwTapPairsOut[0] == null) {
-			mcDmuObject.setOtapDL_Out( NA_VALUE );
-			mcDmuObject.setDtapDL_Out( NA_VALUE );
-			mcDmuObject.setGenCostDL_Out( NA_VALUE );
+			mcDmuObject.setOtapKNR_Out( NA_VALUE );
+			mcDmuObject.setDtapKNR_Out( NA_VALUE );
+			mcDmuObject.setGenCostKNR_Out( NA_VALUE );
         } else {
-			mcDmuObject.setOtapDL_Out( (int) bestKtwTapPairsOut[0][0] );
-			mcDmuObject.setDtapDL_Out( (int) bestKtwTapPairsOut[0][1] );
-			mcDmuObject.setGenCostDL_Out( (float) bestKtwTapPairsOut[0][3] );
+			mcDmuObject.setOtapKNR_Out( (int) bestKtwTapPairsOut[0][0] );
+			mcDmuObject.setDtapKNR_Out( (int) bestKtwTapPairsOut[0][1] );
+			mcDmuObject.setGenCostKNR_Out( (float) bestKtwTapPairsOut[0][3] );
         }
 
     }
@@ -658,21 +658,21 @@ public class ModeChoiceModel implements Serializable {
     public void setTourTaps(TourIf tour, TourModeChoiceDMU mcDmuObject, int chosenMode) {
     	
     	//set taps for transit tour mode
-        if(chosenMode==ModelStructure.WP_ALT) {
+        if(chosenMode==ModelStructure.WT_ALT) {
         	tour.setTourBTapIn(mcDmuObject.getOtapWT_In());
         	tour.setTourATapIn(mcDmuObject.getDtapWT_In());
         	tour.setTourBTapOut(mcDmuObject.getOtapWT_Out());
         	tour.setTourATapOut(mcDmuObject.getDtapWT_Out());
-        } else if (chosenMode==ModelStructure.DL_ALT) {
-        	tour.setTourBTapIn(mcDmuObject.getOtapDL_In());
-        	tour.setTourATapIn(mcDmuObject.getDtapDL_In());
-        	tour.setTourBTapOut(mcDmuObject.getOtapDL_Out());
-        	tour.setTourATapOut(mcDmuObject.getDtapDL_Out());
-        }  else if (chosenMode==ModelStructure.DP_ALT) {
-	    	tour.setTourBTapIn(mcDmuObject.getOtapDP_In());
-	    	tour.setTourATapIn(mcDmuObject.getDtapDP_In());
-	    	tour.setTourBTapOut(mcDmuObject.getOtapDP_Out());
-	    	tour.setTourATapOut(mcDmuObject.getDtapDP_Out());
+        } else if (chosenMode==ModelStructure.KNR_ALT) {
+        	tour.setTourBTapIn(mcDmuObject.getOtapKNR_In());
+        	tour.setTourATapIn(mcDmuObject.getDtapKNR_In());
+        	tour.setTourBTapOut(mcDmuObject.getOtapKNR_Out());
+        	tour.setTourATapOut(mcDmuObject.getDtapKNR_Out());
+        }  else if (chosenMode==ModelStructure.PNR_ALT) {
+	    	tour.setTourBTapIn(mcDmuObject.getOtapPNR_In());
+	    	tour.setTourATapIn(mcDmuObject.getDtapPNR_In());
+	    	tour.setTourBTapOut(mcDmuObject.getOtapPNR_Out());
+	    	tour.setTourATapOut(mcDmuObject.getDtapPNR_Out());
         }  
     }
     

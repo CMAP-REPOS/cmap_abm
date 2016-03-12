@@ -483,13 +483,13 @@ public class HouseholdAutoOwnershipModel implements Serializable {
         }
         
         if (bestDtwTapPairsIn[0] == null) {
-			mcDmuObject.setOtapDP_In( NA_VALUE );
-			mcDmuObject.setDtapDP_In( NA_VALUE );
-			mcDmuObject.setGenCostDP_In( NA_VALUE );
+			mcDmuObject.setOtapPNR_In( NA_VALUE );
+			mcDmuObject.setDtapPNR_In( NA_VALUE );
+			mcDmuObject.setGenCostPNR_In( NA_VALUE );
         } else {
-			mcDmuObject.setOtapDP_In( (int) bestDtwTapPairsIn[0][0] );
-			mcDmuObject.setDtapDP_In( (int) bestDtwTapPairsIn[0][1] );
-			mcDmuObject.setGenCostDP_In( (float) bestDtwTapPairsIn[0][3] );
+			mcDmuObject.setOtapPNR_In( (int) bestDtwTapPairsIn[0][0] );
+			mcDmuObject.setDtapPNR_In( (int) bestDtwTapPairsIn[0][1] );
+			mcDmuObject.setGenCostPNR_In( (float) bestDtwTapPairsIn[0][3] );
         }
         
 		//use _Out dmu label for offpeak outbound measures
@@ -504,13 +504,13 @@ public class HouseholdAutoOwnershipModel implements Serializable {
 		}
         
         if (bestDtwTapPairsOut[0] == null) {
-			mcDmuObject.setOtapDP_Out( NA_VALUE );
-			mcDmuObject.setDtapDP_Out( NA_VALUE );
-			mcDmuObject.setGenCostDP_Out( NA_VALUE );
+			mcDmuObject.setOtapPNR_Out( NA_VALUE );
+			mcDmuObject.setDtapPNR_Out( NA_VALUE );
+			mcDmuObject.setGenCostPNR_Out( NA_VALUE );
         } else {
-			mcDmuObject.setOtapDP_Out( (int) bestDtwTapPairsOut[0][0] );
-			mcDmuObject.setDtapDP_Out( (int) bestDtwTapPairsOut[0][1] );
-			mcDmuObject.setGenCostDP_Out( (float) bestDtwTapPairsOut[0][3] );
+			mcDmuObject.setOtapPNR_Out( (int) bestDtwTapPairsOut[0][0] );
+			mcDmuObject.setDtapPNR_Out( (int) bestDtwTapPairsOut[0][1] );
+			mcDmuObject.setGenCostPNR_Out( (float) bestDtwTapPairsOut[0][3] );
         }
 
     }
