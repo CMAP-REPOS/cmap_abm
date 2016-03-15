@@ -2,7 +2,7 @@
 '''
     comparison.py
     Author: npeterson
-    Revised: 3/11/16
+    Revised: 3/15/16
     ---------------------------------------------------------------------------
     A class for comparing the contents of two ABM object databases.
 
@@ -314,65 +314,3 @@ class Comparison(object):
         print '{0:<6}{1:>15,.2f} ({2:+.2%})'.format('Total', total_vmt_diff, total_pct_diff)
         print ' '
         return None
-
-    ### END OF Comparison CLASS ###
-
-
-# -----------------------------------------------------------------------------
-#  Define functions for exporting summaries to CSVs.
-# -----------------------------------------------------------------------------
-def export_persontrips_csv(comparison, csv_path, geography='zone', trip_end='origin'):
-    ''' Export a CSV file containing the mean base & test user classes for
-        person-trips originating/ending in each zone/subzone. '''
-    if trip_end not in ('origin', 'destination'):
-        print 'CSV not exported: trip_end must be "origin" or "destination"!'
-        return None
-    elif geography == 'zone':
-        group_field = 'Trips.zn_{0}'.format(trip_end[0])
-    elif geography == 'subzone':
-        group_field = 'Trips.sz_{0}'.format(trip_end[0])
-    else:
-        print 'CSV not exported: geography must be "zone" or "subzone"!'
-        return None
-
-    max_id = {
-        'zone': 1944,
-        'subzone': 16819
-    }
-
-    grouped_base_ptrips_by_class = comparison.base._get_ptrips_by_class(group_field)
-    grouped_test_ptrips_by_class = comparison.test._get_ptrips_by_class(group_field)
-
-    with open(csv_path, 'wb') as w:
-        w.write('{0}_{1},ptrips_base,mean_uclass_base,ptrips_test,mean_uclass_test,ptrips_diff,mean_uclass_diff\n'.format(geography, trip_end[0]))
-        for geog_id in xrange(1, max_id[geography]+1):
-            where_filter = '{0} = {1}'.format(group_field, geog_id)
-
-            if geog_id in grouped_base_ptrips_by_class:
-                base_ptrips_by_class = grouped_base_ptrips_by_class[geog_id]
-                base_ptrips_total = sum(base_ptrips_by_class.itervalues())
-                if base_ptrips_total > 0:
-                    mean_uclass_base = sum((uc * n for uc, n in base_ptrips_by_class.iteritems())) / base_ptrips_total
-                else:
-                    mean_uclass_base = 0
-            else:
-                mean_uclass_base = 0
-
-            if geog_id in grouped_test_ptrips_by_class:
-                test_ptrips_by_class = grouped_test_ptrips_by_class[geog_id]
-                test_ptrips_total = sum(test_ptrips_by_class.itervalues())
-                if test_ptrips_total > 0:
-                    mean_uclass_test = sum((uc * n for uc, n in test_ptrips_by_class.iteritems())) / test_ptrips_total
-                else:
-                    mean_uclass_test = 0
-            else:
-                mean_uclass_test = 0
-
-            ptrips_total_diff = test_ptrips_total - base_ptrips_total
-            mean_uclass_diff = mean_uclass_test - mean_uclass_base
-
-            row_template = '{0},{1:.0f},{2:.4f},{3:.0f},{4:.4f},{5:.0f},{6:.4f}\n'
-            w.write(row_template.format(geog_id, base_ptrips_total, mean_uclass_base, test_ptrips_total, mean_uclass_test, ptrips_total_diff, mean_uclass_diff))
-
-    print 'Person-trips and mean user class by {0} {1} have been exported to {2}.\n'.format(trip_end, geography, csv_path)
-    return None
