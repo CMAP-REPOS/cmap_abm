@@ -1,3 +1,13 @@
+#!/usr/bin/env python
+'''
+    quantile_calcs.py
+    Author: npeterson
+    Revised: 3/15/16
+    ---------------------------------------------------------------------------
+    A script that compares the change in boardings for transit nodes or lines
+    by base boarding quantile from several test ABM objects to a common base.
+
+'''
 from abm import *
 
 QUANTILES = 5

@@ -1,3 +1,16 @@
+#!/usr/bin/env python
+'''
+    group_calcs.py
+    Author: npeterson
+    Revised: 3/15/16
+    ---------------------------------------------------------------------------
+    A script that compares the change in boardings for transit nodes or lines
+    by base boarding group from several test ABM objects to a common base. The
+    groups are calculated by taking successive fractions of nodes or lines,
+    ordered by boardings (e.g. 50% of all boardings, 50% of remainder, and so
+    on) for a specified number of groupings.
+
+'''
 from abm import *
 
 GROUPS = 6
