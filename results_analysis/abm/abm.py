@@ -631,21 +631,21 @@ class ABM(object):
         return vmt_by_speed
 
 
-    def _guess_transit_ptrips_modes(self):
-        ''' Approximate the number of trips for each transit mode, based on '''
-        ''' the modeshare of tlines serving origin TAPs. '''
-        sql_select = 'SELECT Trips.tap_o'
-        sql_from = 'FROM PersonTrips LEFT JOIN Trips ON PersonTrips.trip_id=Trips.trip_id'
-        sql_where = 'WHERE Trips.tap_o > 0'
-        sql = ' '.join((sql_select, sql_from, sql_where))
-        mode_trips = {mode: 0.0 for mode in self.transit_modes.iterkeys()}
-        self.open_db()
-        for r in self.query(sql):
-            tap = r[0]
-            for mode, share in self.tap_modes[tap].iteritems():
-                mode_trips[mode] += self._unsample(share)
-        self.close_db()
-        return mode_trips
+    # def _guess_transit_ptrips_modes(self):
+    #     ''' Approximate the number of trips for each transit mode, based on '''
+    #     ''' the modeshare of tlines serving origin TAPs. '''
+    #     sql_select = 'SELECT Trips.tap_o'
+    #     sql_from = 'FROM PersonTrips LEFT JOIN Trips ON PersonTrips.trip_id=Trips.trip_id'
+    #     sql_where = 'WHERE Trips.tap_o > 0'
+    #     sql = ' '.join((sql_select, sql_from, sql_where))
+    #     mode_trips = {mode: 0.0 for mode in self.transit_modes.iterkeys()}
+    #     self.open_db()
+    #     for r in self.query(sql):
+    #         tap = r[0]
+    #         for mode, share in self.tap_modes[tap].iteritems():
+    #             mode_trips[mode] += self._unsample(share)
+    #     self.close_db()
+    #     return mode_trips
 
 
     def _insert_households(self, hh_csv):
