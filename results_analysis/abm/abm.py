@@ -20,7 +20,7 @@ from inro.emme.database import emmebank as _eb
 
 class ABM(object):
     ''' A class for loading ABM model run output data into a SQLite database.
-        Initialized with path (parent directory of 'model') and model run
+        Initialized with path (parent directory of 'cmap_abm') and model run
         sample rate (default 1.00). '''
 
     # --- Properties ---
