@@ -2,7 +2,7 @@
 '''
     results_analysis.py
     Author: npeterson
-    Revised: 3/14/16
+    Revised: 3/15/16
     ---------------------------------------------------------------------------
     A module for reading TMM output files and matrix data into an SQL database
     for querying and summarization.
@@ -63,5 +63,4 @@ comp.print_new_auto()
 comp.print_new_dtt()
 comp.print_new_wtt()
 comp.print_new_other()
-#comp.print_auto_trips_affected()  ### MAJOR MEMORY HOG
 comp.close_dbs()

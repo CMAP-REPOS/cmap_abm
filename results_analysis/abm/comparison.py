@@ -12,7 +12,8 @@ import abm
 
 
 class Comparison(object):
-    ''' A class for comparing two ABM objects. '''
+    ''' A class for comparing two ABM objects. Initialized with a base and a
+        test ABM object. All comparisons are relative to the base. '''
 
     # --- Init ---
     def __init__(self, base_abm, test_abm):
@@ -33,145 +34,11 @@ class Comparison(object):
         return None
 
 
-    def _get_trip_mode_diffs(self, trips_or_ptrips='TRIPS'):
-        ''' Calculate the change in trips, by mode, for each person. '''
-        if trips_or_ptrips == 'TRIPS':
-            sql_template = 'SELECT hh_id||"-"||pers_num AS hh_pers, COUNT(*) FROM Trips WHERE mode in ({0}) GROUP BY hh_pers'
-            unique_pers_query = 'SELECT DISTINCT hh_id||"-"||pers_num AS hh_pers FROM Trips'
-        elif trips_or_ptrips == 'PERSON-TRIPS':
-            sql_template = 'SELECT pers_id, COUNT(*) FROM PersonTrips WHERE mode in ({0}) GROUP BY pers_id'
-            unique_pers_query = 'SELECT DISTINCT pers_id FROM PersonTrips'
-        else:
-            raise ValueError('Argument trips_or_ptrips must be "TRIPS" or "PERSON-TRIPS".')
-
-        mode_groups = {
-            'auto': '1, 2, 3, 4, 5, 6',
-            'dtt': '11, 12',
-            'wtt': '9, 10',
-            'other': '7, 8, 13, 14'
-        }
-
-        # Find all unique person-IDs from both scenarios
-        unique_pers_base = set(r[0] for r in self.base.query(unique_pers_query))
-        unique_pers_test = set(r[0] for r in self.test.query(unique_pers_query))
-        unique_pers = unique_pers_base | unique_pers_test  # Union of the two
-
-        # Create base/test/diff trips dicts, initialized with 0's
-        trips_dict_template = {group_key: 0 for group_key in mode_groups.keys()}
-        trips_dict_base = {pers_id: trips_dict_template.copy() for pers_id in unique_pers}
-        trips_dict_test = copy.deepcopy(trips_dict_base)
-        trips_dict_diff = copy.deepcopy(trips_dict_base)
-
-        # Populate dicts
-        for group_key, mode_list in mode_groups.iteritems():
-            mode_sql = sql_template.format(mode_list)
-            for pers_id, count in self.base.query(mode_sql):
-                trips_dict_base[pers_id][group_key] = self.base._unsample(count)
-            for pers_id, count in self.test.query(mode_sql):
-                trips_dict_test[pers_id][group_key] = self.test._unsample(count)
-            for pers_id in trips_dict_diff.iterkeys():
-                trips_dict_diff[pers_id][group_key] = trips_dict_test[pers_id][group_key] - trips_dict_base[pers_id][group_key]
-
-        return trips_dict_diff
-
-    # Wrapper methods for _get_trip_mode_diffs():
-    def _get_ptrip_mode_diffs(self):
-        ''' Calculate the change in person-trips, by mode, for each person. '''
-        return self._get_trip_mode_diffs('PERSON-TRIPS')
-
-
     def open_dbs(self):
         ''' Open base & test ABM database connections. '''
         self.base.open_db()
         self.test.open_db()
         return None
-
-
-    def print_auto_trips_affected(self, trips_or_ptrips='TRIPS'):
-        ''' Print the estimated number of auto trips diverted or eliminated. '''
-        if trips_or_ptrips == 'TRIPS':
-            mode_diffs = self._get_trip_mode_diffs()
-        elif trips_or_ptrips == 'PERSON-TRIPS':
-            mode_diffs = self._get_ptrip_mode_diffs()
-        else:
-            raise ValueError('Argument trips_or_ptrips must be "TRIPS" or "PERSON-TRIPS".')
-
-        auto_trips_diverted = {}
-        auto_trips_eliminated = {}
-
-        # Estimate trips diverted/eliminated for each person individually.
-        for pers, trip_diff_dict in mode_diffs.iteritems():
-            diff_auto = trip_diff_dict['auto']
-            diff_dtt = trip_diff_dict['dtt']
-            diff_wtt_oth = trip_diff_dict['wtt'] + trip_diff_dict['other']
-
-            auto_trips_diverted[pers] = 0
-            auto_trips_eliminated[pers] = 0
-
-            # Account for all lost auto-only trips
-            if diff_auto < 0:
-                while diff_auto < 0:
-
-                    # First assume lost trips were diverted (drive-to-transit)
-                    if diff_dtt > 0:
-                        auto_trips_diverted[pers] += 1
-                        diff_dtt -= 1
-                        diff_auto += 1
-
-                    # Then assume lost trips were eliminated (walk-to-transit/other)
-                    elif diff_wtt_oth > 0:
-                        auto_trips_eliminated[pers] += 1
-                        diff_wtt_oth -= 1
-                        diff_auto += 1
-
-                    # Finally, add the remainder (auto trips completely eliminated,
-                    # not replaced/shortened with transit) to trips eliminated
-                    else:
-                        auto_trips_eliminated[pers] += abs(diff_auto)
-                        diff_auto = 0
-
-            # Account for all gained auto-only trips
-            elif diff_auto > 0:
-                while diff_auto > 0:
-
-                    # First assume gained trips were lengthened from drive-to-transit
-                    if diff_dtt < 0:
-                        auto_trips_diverted[pers] -= 1
-                        diff_dtt += 1
-                        diff_auto -= 1
-
-                    # Then assume gained trips replaced walk-to-transit/other
-                    elif diff_wtt_oth < 0:
-                        auto_trips_eliminated[pers] -= 1
-                        diff_wtt_oth += 1
-                        diff_auto -= 1
-
-                    # Finally, subtract the remainder (totally new auto trips)
-                    # from trips eliminated
-                    else:
-                        auto_trips_eliminated[pers] -= abs(diff_auto)
-                        diff_auto = 0
-
-            ## Account for auto portion of any new or eliminated drive-to-transit trips.
-            ## (Is it fair to count these as auto trips added/eliminated?)
-            #if diff_dtt != 0:
-            #    auto_trips_eliminated[pers] -= diff_dtt
-            #    diff_dtt = 0
-
-        auto_trips_diverted = sum(auto_trips_diverted.itervalues())
-        auto_trips_eliminated = sum(auto_trips_eliminated.itervalues())
-
-        print ' '
-        print '{0:<30}{1:>8,.0f}'.format('AUTO {0} DIVERTED:'.format(trips_or_ptrips), auto_trips_diverted)
-        print '{0:<30}{1:>8,.0f}'.format('AUTO {0} ELIMINATED:'.format(trips_or_ptrips), auto_trips_eliminated)
-        print ' '
-
-        return None
-
-    # Wrapper methods for print_auto_trips_affected():
-    def print_auto_ptrips_affected(self):
-        ''' Print the estimated number of auto person-trips diverted or eliminated. '''
-        return self.print_auto_trips_affected('PERSON-TRIPS')
 
 
     def print_mode_share_change(self, grouped=True):
@@ -202,8 +69,9 @@ class Comparison(object):
 
 
     def print_new_for_mode(self, mode_list, mode_description, table='Trips'):
-        ''' Identify the increase (or decrease) in trips/tours for a given set of modes. '''
-        sql_where = ' or '.join(('mode={0}'.format(mode) for mode in mode_list))
+        ''' Identify the increase (or decrease) in trips/tours for a given set
+            of modes. '''
+        sql_where = ' OR '.join(('mode={0}'.format(mode) for mode in mode_list))
         base_trips = self.base._unsample(self.base._count_rows(table, sql_where))
         test_trips = self.test._unsample(self.test._count_rows(table, sql_where))
         new_trips = test_trips - base_trips
