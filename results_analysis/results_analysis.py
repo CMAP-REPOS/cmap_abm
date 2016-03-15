@@ -4,8 +4,8 @@
     Author: npeterson
     Revised: 3/15/16
     ---------------------------------------------------------------------------
-    A module for reading TMM output files and matrix data into an SQL database
-    for querying and summarization.
+    A script for printing a series of summary statistics for base and test ABM
+    objects and a Comparison object created from them.
 
 '''
 from abm import *
