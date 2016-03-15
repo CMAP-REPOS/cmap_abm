@@ -81,8 +81,8 @@ def od_matrix(abm, csv_path):
         10: 'TRANSIT',  # Walk to premium transit
         11: 'TRANSIT',  # Drive to local transit
         12: 'TRANSIT',  # Drive to premium transit
-        13: None,     # Taxi
-        14: None,     # School bus
+        13: None,       # Taxi
+        14: None,       # School bus
     }
 
     # Initialize results matrices
