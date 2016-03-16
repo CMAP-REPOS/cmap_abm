@@ -8,7 +8,10 @@
     by base boarding group from several test ABM objects to a common base. The
     groups are calculated by taking successive fractions of nodes or lines,
     ordered by boardings (e.g. 50% of all boardings, 50% of remainder, and so
-    on) for a specified number of groupings.
+    on) for a specified number of groupings. This may be preferable to
+    quantiles because there are so many lines/nodes with 0 (or near-0)
+    boardings, and so few with many boardings, that quantile summaries may not
+    meaningfully represent the data.
 
 '''
 from abm import *
