@@ -2,7 +2,7 @@
 '''
     abm.py
     Author: npeterson
-    Revised: 3/15/16
+    Revised: 3/16/16
     ---------------------------------------------------------------------------
     A class for reading ABM output files and matrix data into an SQL database
     for querying and summarization.
@@ -21,9 +21,9 @@ from inro.emme.database import emmebank as _eb
 class ABM(object):
     ''' A class for loading ABM model run output data into a SQLite database.
         Initialized with path (parent directory of 'cmap_abm') and model run
-        sample rate (default 1.00). '''
+        sample rate (default 0.50). '''
 
-    # --- Properties ---
+    # --- Generic ABM variables ---
     facility_types = {
         'Arterial':   [1],
         'Expressway': [2, 4],
@@ -102,15 +102,15 @@ class ABM(object):
 
 
     # --- Init ---
-    def __init__(self, abm_dir, sample_rate=1.00, build_db=False):
+    def __init__(self, abm_dir, sample_rate=0.50, build_db=False):
         self.dir = abm_dir
         self.sample_rate = sample_rate
         self.name = os.path.basename(self.dir)
-        self._input_dir = os.path.join(self.dir, 'model', 'inputs')
-        self._output_dir = os.path.join(self.dir, 'model', 'outputs')
-        self._emmebank_path = os.path.join(self.dir, 'model', 'CMAP-ABM', 'Database', 'emmebank')
-        self._TEST_DIR = r'D:\workspace\Temp\ABM'                               ########## REMOVE LATER ##########
-        self._db = os.path.join(self._TEST_DIR, '{0}.db'.format(self.name))     ########## CHANGE LATER ##########
+        self._input_dir = os.path.join(self.dir, 'cmap_abm', 'inputs')
+        self._output_dir = os.path.join(self.dir, 'cmap_abm', 'outputs')
+        self._emmebank_path = os.path.join(self.dir, 'cmap_abm', 'CMAP-ABM', 'Database', 'emmebank')
+        self._db = os.path.join(self._output_dir, 'results.db')
+        #self._db = r'D:\workspace\Temp\ABM\results.db'
         if build_db and os.path.exists(self._db):
             print 'Removing existing database...'
             os.remove(self._db)
@@ -136,18 +136,6 @@ class ABM(object):
                 tap = int(d['tap_id'])
                 zone = int(d['taz09'])
                 self.tap_zones[tap] = zone
-
-        self.tap_modes = {}
-        with open(self._tap_lines_csv, 'rb') as csvfile:
-            r = csv.DictReader(csvfile)
-            for d in r:
-                tap = int(d['TAP'])
-                tlines = d['LINES'].strip().split()
-                tline_modes = [tline[0].upper() for tline in tlines]
-                mode_counts = Counter(tline_modes)
-                modeshare = {mode: count / float(len(tlines)) for mode, count in mode_counts.iteritems()}
-                self.tap_modes[tap] = modeshare
-                ### NOTE: not true modeshare, doesn't account for headway, tod, or actual rider choices
 
         # Create DB to store CT-RAMP output
         print 'Opening database ({0})...'.format(self._db)
@@ -257,9 +245,6 @@ class ABM(object):
                 tap_d INTEGER,
                 tod INTEGER,
                 mode INTEGER,
-                drive_time REAL,
-                drive_distance REAL,
-                drive_speed REAL,
                 FOREIGN KEY (tour_id) REFERENCES Tours(tour_id),
                 FOREIGN KEY (hh_id) REFERENCES Households(hh_id)
                 )''')
@@ -328,6 +313,7 @@ class ABM(object):
 
         self.mode_share = self._get_mode_share()
         self.ptrips_by_class = self._get_ptrips_by_class()
+        self.transit_stats = self._get_transit_stats()
         self.vmt_by_speed = self._get_vmt_by_speed()
 
         self.close_db()
@@ -353,27 +339,6 @@ class ABM(object):
 
 
     @classmethod
-    def _get_matrix_nums(cls, mode):
-        ''' Return the matrix numbers for congested time (t) and distance (d)
-            corresponding to driving mode (1-6). See ABM User Guide p.36. '''
-        if mode == 1:  # SOV, no toll
-            t, d = 175, 177
-        elif mode == 2:  # SOV, toll
-            t, d = 180, 183
-        elif mode == 3:  # HOV2, no toll
-            t, d = 185, 187
-        elif mode == 4:  # HOV2, toll
-            t, d = 190, 193
-        elif mode == 5:  # HOV3+, no toll
-            t, d = 195, 197
-        elif mode == 6:  # HOV3+, toll
-            t, d = 200, 203
-        else:
-            t, d = None, None
-        return (t, d)
-
-
-    @classmethod
     def _get_mode_str(cls, mode_num):
         ''' Return description of a mode code. '''
         return cls.modes[mode_num]
@@ -383,11 +348,6 @@ class ABM(object):
     def _clean_str(self, string):
         ''' Clean a string for database entry. '''
         return string.lower().replace('-', '').replace(' ', '')
-
-
-    def close_db(self):
-        ''' Close the database connection. '''
-        return self._con.close()
 
 
     def _count_rows(self, table, where_clause=None):
@@ -423,7 +383,7 @@ class ABM(object):
 
             if scale_runs:
                 # If 'LINE', scale multiple-run vehicles to average single-run boardings
-                if node_or_line == 'NODE' or r[4] == 99:  # Metra and CTA have headway=99, but every run is modeled (REALLY?)
+                if node_or_line == 'NODE' or r[4] == 99:  # Pre-C16Q2, Metra and CTA have headway=99, but every run is modeled
                     run_scaling = 1.0
                 else:
                     run_scaling = min(1.0, r[4] / self.tod_minutes[r[3]])  # headway / minutes in TOD period (ceiling of 1.0)
@@ -495,14 +455,6 @@ class ABM(object):
         return link_speeds
 
 
-    def _get_matrix_data(self, matrix, tod):
-        ''' Return an Emme Matrix Data object for a specified matrix. '''
-        emmebank = _eb.Emmebank(self._emmebank_path)
-        matrix_data = emmebank.matrix(matrix).get_data(tod)  ### At Emme 4.2, can get as numpy array with Matrix.get_numpy_data (or something like that) ###
-        emmebank.dispose()  # Close Emmebank, remove lock
-        return matrix_data
-
-
     def _get_mode_share(self, table='Trips'):
         ''' Return the mode share of trips (or tours). '''
         table_rows = self._count_rows(table)
@@ -568,6 +520,23 @@ class ABM(object):
             return ptrips_by_class[None]
 
 
+    def _get_transit_stats(self):
+        ''' Return the boardings, passenger miles traveled and passenger hours
+            traveled, by mode. '''
+        transit_stats = {
+            'BOARDINGS': {},
+            'PMT': {},
+            'PHT': {}
+        }
+        query = 'SELECT transit_mode, SUM(boardings), SUM(pass_mi), SUM(pass_hrs) FROM TransitSegs GROUP BY transit_mode'
+        for r in self._con.execute(query):
+            transit_mode, boardings, pass_mi, pass_hrs = r
+            transit_stats['BOARDINGS'][transit_mode] = boardings
+            transit_stats['PMT'][transit_mode] = pass_mi
+            transit_stats['PHT'][transit_mode] = pass_hrs
+        return transit_stats
+
+
     def _get_vmt_by_speed(self):
         ''' Sum daily VMT by vehicle speed within the CMAP region, using 5 mph
             bins. For each TOD, process highway network first, followed by
@@ -629,23 +598,6 @@ class ABM(object):
 
         emmebank.dispose()  # Close Emmebank, remove lock
         return vmt_by_speed
-
-
-    # def _guess_transit_ptrips_modes(self):
-    #     ''' Approximate the number of trips for each transit mode, based on '''
-    #     ''' the modeshare of tlines serving origin TAPs. '''
-    #     sql_select = 'SELECT Trips.tap_o'
-    #     sql_from = 'FROM PersonTrips LEFT JOIN Trips ON PersonTrips.trip_id=Trips.trip_id'
-    #     sql_where = 'WHERE Trips.tap_o > 0'
-    #     sql = ' '.join((sql_select, sql_from, sql_where))
-    #     mode_trips = {mode: 0.0 for mode in self.transit_modes.iterkeys()}
-    #     self.open_db()
-    #     for r in self.query(sql):
-    #         tap = r[0]
-    #         for mode, share in self.tap_modes[tap].iteritems():
-    #             mode_trips[mode] += self._unsample(share)
-    #     self.close_db()
-    #     return mode_trips
 
 
     def _insert_households(self, hh_csv):
@@ -749,14 +701,14 @@ class ABM(object):
         # Get people user-classes and tour categories for setting person-trip user-class.
         # (Shelve these dicts to free up a ton of memory.)
         people_uclasses_dict = {str(r[0]): list(r)[1:] for r in self.query("SELECT pers_id, class_w_wtt, class_w_pnr, class_w_knr, class_o_wtt, class_o_pnr, class_o_knr FROM People")}
-        people_uclasses_path = os.path.join(self._TEST_DIR, 'people_uclasses.shelve')
+        people_uclasses_path = os.path.join(self._output_dir, 'people_uclasses.shelve')
         people_uclasses = shelve.open(people_uclasses_path)
         people_uclasses.update(people_uclasses_dict)
         del people_uclasses_dict
         # print str(process.memory_info().rss / 1024.0**3) + ' GB memory used'  ### DEBUG ###
 
         tour_categories_dict = {str(r[0]): r[1] for r in self.query("SELECT tour_id, category FROM Tours")}
-        tour_categories_path = os.path.join(self._TEST_DIR, 'tour_categories.shelve')
+        tour_categories_path = os.path.join(self._output_dir, 'tour_categories.shelve')
         tour_categories = shelve.open(tour_categories_path)
         tour_categories.update(tour_categories_dict)
         del tour_categories_dict
@@ -768,115 +720,74 @@ class ABM(object):
         # Process chunk of trips by matrix mode
         for trips in chunked_trips:
             # print str(process.memory_info().rss / 1024.0**3) + ' GB memory used'  ### DEBUG ###
-            for matrix_mode in xrange(7):
-                # Filter trips by mode
-                if matrix_mode == 0:  # Walk, bike, walk-to-transit
-                    trip_modes = [7, 8, 9, 10]
-                elif matrix_mode == 1:  # Drive alone, free
-                    trip_modes = [1, 11, 12, 13, 14]  # Include drive-to-transit, taxis, school buses
-                else:  # Other driving modes
-                    trip_modes = [matrix_mode]
-                mode_trips = trips[trips.trip_mode.isin(trip_modes)]
 
-                # Filter trips further by time-of-day
-                for tod in xrange(1, 9):
+            # Copy data into database
+            for index, row in trips.iterrows():
+                # Get values
+                hh_id = int(row['hh_id'])
+                pers_num = 'J' if is_joint else str(row['person_num'])
+                tour_num = int(row['tour_id'])
+                purpose_t = self._clean_str(str(row['tour_purpose']))
+                inbound = int(row['inbound'])
+                stop_id = int(row['stop_id']) + 1  # to avoid all the -1's
+                purpose_o = self._clean_str(str(row['orig_purpose']))
+                purpose_d = self._clean_str(str(row['dest_purpose']))
+                sz_o = int(row['orig_maz'])
+                sz_d = int(row['dest_maz'])
+                zn_o = int(row['orig_taz'])
+                zn_d = int(row['dest_taz'])
+                tap_o = int(row['board_tap'])
+                tap_d = int(row['alight_tap'])
+                tod = self._convert_time_period(int(row['stop_period']))
+                mode = int(row['trip_mode'])
+                tour_id = '{0}-{1}-{2}-{3}'.format(hh_id, pers_num, tour_num, purpose_t)
+                trip_id = '{0}-{1}-{2}'.format(tour_id, inbound, stop_id)
 
-                    ctramp_periods = self._convert_time_period(tod, ctramp_to_emme=False)
-                    subset_trips = mode_trips[mode_trips.stop_period.isin(ctramp_periods)]
-                    matrix_ids = {}
-                    matrix_data = {}
-                    # if matrix_mode > 0:
-                    #     matrix_ids['t'] = 'mf{0}{1}'.format(tod, self._get_matrix_nums(matrix_mode)[0])
-                    #     matrix_ids['d'] = 'mf{0}{1}'.format(tod, self._get_matrix_nums(matrix_mode)[1])
-                    #     matrix_data['t'] = self._get_matrix_data(matrix_ids['t'], tod)
-                    #     matrix_data['d'] = self._get_matrix_data(matrix_ids['d'], tod)
+                # Insert into table
+                db_row = (
+                    trip_id, tour_id, hh_id, pers_num, is_joint,
+                    inbound, purpose_o, purpose_d, sz_o, sz_d,
+                    zn_o, zn_d, tap_o, tap_d, tod, mode
+                )
+                insert_sql = 'INSERT INTO Trips VALUES ({0})'.format(','.join(['?'] * len(db_row)))
+                self._con.execute(insert_sql, db_row)
 
-                    # Copy data into database
-                    for index, row in subset_trips.iterrows():
-                        # Get values
-                        hh_id = int(row['hh_id'])
-                        pers_num = 'J' if is_joint else str(row['person_num'])
-                        tour_num = int(row['tour_id'])
-                        purpose_t = self._clean_str(str(row['tour_purpose']))
-                        inbound = int(row['inbound'])
-                        stop_id = int(row['stop_id']) + 1  # to avoid all the -1's
-                        purpose_o = self._clean_str(str(row['orig_purpose']))
-                        purpose_d = self._clean_str(str(row['dest_purpose']))
-                        sz_o = int(row['orig_maz'])
-                        sz_d = int(row['dest_maz'])
-                        zn_o = int(row['orig_taz'])
-                        zn_d = int(row['dest_taz'])
-                        tap_o = int(row['board_tap'])
-                        tap_d = int(row['alight_tap'])
-                        tod = self._convert_time_period(int(row['stop_period']))
-                        mode = int(row['trip_mode'])
-                        tour_id = '{0}-{1}-{2}-{3}'.format(hh_id, pers_num, tour_num, purpose_t)
-                        trip_id = '{0}-{1}-{2}'.format(tour_id, inbound, stop_id)
+                # Split trips into person-trips
+                tour_participants = [r[0] for r in self.query("SELECT participants FROM Tours WHERE tour_id = '{0}'".format(tour_id))][0]
+                for participant in tour_participants.strip().split():
+                    # Get values
+                    pers_id = '{0}-{1}'.format(hh_id, participant)
+                    ptour_id = '{0}-{1}'.format(tour_id, participant)
+                    ptrip_id = '{0}-{1}'.format(trip_id, participant)
 
-                        # Estimate DRIVE time, distance, speed
-                        speed = time = distance = 0  ### DEBUG ###
-                        # if mode <= 6 or mode >= 13:  # Private autos, incl. taxis, school buses
-                        #     time = matrix_data['t'].get(zn_o, zn_d)
-                        #     distance = matrix_data['d'].get(zn_o, zn_d)
-                        # elif mode in (11, 12):  # Drive-to-transit (assume drive alone, free)
-                        #     from_zone = self.tap_zones[tap_d] if inbound else zn_o
-                        #     to_zone = zn_d if inbound else self.tap_zones[tap_o]
-                        #     time = matrix_data['t'].get(from_zone, to_zone)
-                        #     distance = matrix_data['d'].get(from_zone, to_zone)
-                        # else:  # Walk, bike, walk-to-transit
-                        #     time = 0
-                        #     distance = 0
-                        # speed = distance / (time / 60) if (time and distance) else 0
+                    # Assign each person-trip the appropriate user-class,
+                    # based on trip mode and category (mandatory or not).
+                    ptrip_category = tour_categories[tour_id]
+                    if ptrip_category == 'mandatory':  # Use "work" user classes
+                        wtt = people_uclasses[pers_id][0]
+                        pnr = people_uclasses[pers_id][1]
+                        knr = people_uclasses[pers_id][2]
+                    else:  # Use "non-work" user classes
+                        wtt = people_uclasses[pers_id][3]
+                        pnr = people_uclasses[pers_id][4]
+                        knr = people_uclasses[pers_id][5]
 
-                        # Insert into table
-                        db_row = (
-                            trip_id, tour_id, hh_id, pers_num, is_joint, inbound,
-                            purpose_o, purpose_d, sz_o, sz_d, zn_o, zn_d, tap_o, tap_d,
-                            tod, mode, time, distance, speed
-                        )
-                        insert_sql = 'INSERT INTO Trips VALUES ({0})'.format(','.join(['?'] * len(db_row)))
-                        self._con.execute(insert_sql, db_row)
+                    if mode in (9, 10):
+                        uclass = wtt
+                    elif mode in (11, 12):
+                        uclass = max(pnr, knr)  # Assume drive-to-transit users prefer premium service
+                        #uclass = (pnr, knr)[hh_id % 2]  # Assume 50/50 split between PNR & KNR trips (random, but deterministic)
+                    else:
+                        uclass = None
 
-                        # Split trips into person-trips
-                        tour_participants = [r[0] for r in self.query("SELECT participants FROM Tours WHERE tour_id = '{0}'".format(tour_id))][0]
-                        for participant in tour_participants.strip().split():
-                            # Get values
-                            pers_id = '{0}-{1}'.format(hh_id, participant)
-                            ptour_id = '{0}-{1}'.format(tour_id, participant)
-                            ptrip_id = '{0}-{1}'.format(trip_id, participant)
+                    # Insert into table
+                    db_row = (
+                        ptrip_id, ptour_id, trip_id, tour_id, hh_id, pers_id, mode, uclass
+                    )
+                    insert_sql = 'INSERT INTO PersonTrips VALUES ({0})'.format(','.join(['?'] * len(db_row)))
+                    self._con.execute(insert_sql, db_row)
 
-                            # Assign each person-trip the appropriate user-class,
-                            # based on trip mode and category (mandatory or not).
-                            ptrip_category = tour_categories[tour_id]
-                            if ptrip_category == 'mandatory':  # Use "work" user classes
-                                wtt = people_uclasses[pers_id][0]
-                                pnr = people_uclasses[pers_id][1]
-                                knr = people_uclasses[pers_id][2]
-                            else:  # Use "non-work" user classes
-                                wtt = people_uclasses[pers_id][3]
-                                pnr = people_uclasses[pers_id][4]
-                                knr = people_uclasses[pers_id][5]
-
-                            if mode in (9, 10):
-                                uclass = wtt
-                            elif mode in (11, 12):
-                                uclass = max(pnr, knr)  # Assume drive-to-transit users prefer premium service
-                                #uclass = (pnr, knr)[hh_id % 2]  # Assume 50/50 split between PNR & KNR trips (random, but deterministic)
-                            else:
-                                uclass = None
-
-                            # Insert into table
-                            db_row = (
-                                ptrip_id, ptour_id, trip_id, tour_id, hh_id, pers_id, mode, uclass
-                            )
-                            insert_sql = 'INSERT INTO PersonTrips VALUES ({0})'.format(','.join(['?'] * len(db_row)))
-                            self._con.execute(insert_sql, db_row)
-
-                    self._con.commit()
-                    del subset_trips, matrix_ids, matrix_data
-
-                del mode_trips
-
+            self._con.commit()
             del trips
 
         people_uclasses.close()
@@ -924,97 +835,17 @@ class ABM(object):
         return None
 
 
+    def _unsample(self, num, sample_rate=None):
+        ''' Divide a number by sample rate to approximate 100% sample. '''
+        if not sample_rate:
+            sample_rate = self.sample_rate
+        return num / sample_rate
+
+
     def open_db(self):
         ''' Open the database connection. '''
         self._con = sqlite3.connect(self._db)
         self._con.row_factory = sqlite3.Row
-        return None
-
-
-    def print_mode_share(self, grouped=True):
-        ''' Print the mode share of trips. '''
-        print ' '
-        if grouped:
-            mode_share_grouped = {
-                'Auto (Excl. Taxi)': sum(self.mode_share[m] for m in xrange(1, 7)),
-                'Drive-to-Transit': sum(self.mode_share[m] for m in (11, 12)),
-                'Walk-to-Transit': sum(self.mode_share[m] for m in (9, 10)),
-                'Walk/Bike/Taxi/School Bus': sum(self.mode_share[m] for m in (7, 8, 13, 14))
-            }
-            print 'MODE SHARE (GROUPED)'
-            print '--------------------'
-            for mode in sorted(mode_share_grouped.keys()):
-                print '{0:<25}{1:>10.2%}'.format(mode, mode_share_grouped[mode])
-        else:
-            print 'MODE SHARE'
-            print '----------'
-            for mode in sorted(self.modes.keys()):
-                print '{0:<25}{1:>10.2%}'.format(self._get_mode_str(mode), self.mode_share[mode])
-        print ' '
-        return None
-
-
-    def print_ptrips_by_class(self):
-        ''' Print the number and percentage of transit person-trips, stratified
-            by user class. '''
-        print ' '
-        print 'LINKED TRANSIT PERSON-TRIPS BY USER CLASS'
-        print '-----------------------------------------'
-        total_ptrips = sum(self.ptrips_by_class.itervalues())
-        for uclass in sorted(self.ptrips_by_class.keys()):
-            ptrips = self.ptrips_by_class[uclass]
-            ptrips_pct = ptrips / total_ptrips
-            print '{0:<25}{1:>10,.0f} ({2:.2%})'.format('User Class {0}'.format(uclass), ptrips, ptrips_pct)
-        print '{0:<25}{1:>10,.0f}'.format('All User Classes', total_ptrips)
-        print ' '
-        return None
-
-
-    def print_transit_stats(self, grouped=True):
-        ''' Print the boardings, passenger miles traveled and passenger hours
-            traveled, by mode or grouped. '''
-        print ' '
-        if grouped:
-            total_boardings = sum(self.transit_stats['BOARDINGS'].itervalues())
-            total_pmt = sum(self.transit_stats['PMT'].itervalues())
-            total_pht = sum(self.transit_stats['PHT'].itervalues())
-            print 'TRANSIT STATS'
-            print '-------------'
-            print ' {0:<15} | {1:<15} | {2:<15} '.format('Boardings', 'Pass. Miles', 'Pass. Hours')
-            print '{0:-<17}|{0:-<17}|{0:-<17}'.format('')
-            print ' {0:>15,.0f} | {1:>15,.0f} | {2:>15,.0f} '.format(total_boardings, total_pmt, total_pht)
-        else:
-            print 'TRANSIT STATS BY MODE'
-            print '---------------------'
-            print ' {0:<20} | {1:<15} | {2:<15} | {3:<15} '.format('Mode', 'Boardings', 'Pass. Miles', 'Pass. Hours')
-            print '{0:-<22}|{0:-<17}|{0:-<17}|{0:-<17}'.format('')
-            for mode_code, mode_desc in sorted(self.transit_modes.iteritems(), key=lambda (k, v): v):
-                boardings = self.transit_stats['BOARDINGS'][mode_code]
-                pmt = self.transit_stats['PMT'][mode_code]
-                pht = self.transit_stats['PHT'][mode_code]
-                print ' {0:<20} | {1:>15,.0f} | {2:>15,.0f} | {3:>15,.0f} '.format(mode_desc, boardings, pmt, pht)
-        print ' '
-        return None
-
-
-    def print_vmt_by_speed(self):
-        ''' Print the total daily VMT by 5-mph speed bin, including a crude
-            histogram. '''
-        print ' '
-        print 'DAILY VMT BY SPEED (MPH)'
-        print '------------------------'
-        total_vmt = sum(self.vmt_by_speed.itervalues())
-        for speed_bin in sorted(self.vmt_by_speed.keys()):
-            vmt = self.vmt_by_speed[speed_bin]
-            vmt_pct = vmt / total_vmt
-            if speed_bin <= 65:
-                bin_label = '{0}-{1}'.format(speed_bin, speed_bin+5)
-            else:
-                bin_label = '70+'
-            numbers = '{0:<6}{1:>15,.2f} ({2:.2%})'.format(bin_label, vmt, vmt_pct)
-            print '{0:<30}  {1}'.format(numbers, '|' * int(round(vmt_pct * 100)))
-        print '{0:<6}{1:>15,.2f}'.format('Total', total_vmt)
-        print ' '
         return None
 
 
@@ -1023,26 +854,7 @@ class ABM(object):
         return self._con.execute(sql_query)
 
 
-    @property
-    def transit_stats(self):
-        ''' Return the boardings, passenger miles traveled and passenger hours
-            traveled, by mode. '''
-        transit_stats = {
-            'BOARDINGS': {},
-            'PMT': {},
-            'PHT': {}
-        }
-        query = 'SELECT transit_mode, SUM(boardings), SUM(pass_mi), SUM(pass_hrs) FROM TransitSegs GROUP BY transit_mode'
-        for r in self._con.execute(query):
-            transit_mode, boardings, pass_mi, pass_hrs = r
-            transit_stats['BOARDINGS'][transit_mode] = boardings
-            transit_stats['PMT'][transit_mode] = pass_mi
-            transit_stats['PHT'][transit_mode] = pass_hrs
-        return transit_stats
+    def close_db(self):
+        ''' Close the database connection. '''
+        return self._con.close()
 
-
-    def _unsample(self, num, sample_rate=None):
-        ''' Divide a number by sample rate to approximate 100% sample. '''
-        if not sample_rate:
-            sample_rate = self.sample_rate
-        return num / sample_rate
