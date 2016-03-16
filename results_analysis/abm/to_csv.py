@@ -14,7 +14,7 @@ import comparison
 # -----------------------------------------------------------------------------
 #  Define functions for exporting ABM summaries to CSVs.
 # -----------------------------------------------------------------------------
-def line_boardings(abm, csv_path):
+def line_boardings(abm, csv_path=False):
     ''' Export a CSV file containing rail boardings by line, and total bus
         boardings. '''
     rail_codes = {
@@ -41,6 +41,10 @@ def line_boardings(abm, csv_path):
         'muw': 'Metra UP-W'
     }
 
+    # Use default output location if none specified
+    if not csv_path:
+        csv_path = os.path.join(abm._output_dir, 'results_line_boardings.csv')
+
     # Get boardings by line ID, split into rail and bus
     boardings_dict = abm._get_boardings('LINE', split_rail=True, scale_runs=False)
 
@@ -65,7 +69,7 @@ def line_boardings(abm, csv_path):
     return csv_path
 
 
-def od_matrix(abm, csv_path):
+def od_matrix(abm, csv_path=False):
     ''' Export a CSV containing two matrices of person-trip O-D zone
         groups: one for autos and one for transit. '''
     mode_groups = {
@@ -84,6 +88,10 @@ def od_matrix(abm, csv_path):
         13: None,       # Taxi
         14: None,       # School bus
     }
+
+    # Use default output location if none specified
+    if not csv_path:
+        csv_path = os.path.join(abm._output_dir, 'results_od_matrix.csv')
 
     # Initialize results matrices
     zngrp_order = ['Chicago', 'Cook Balance', 'DuPage', 'Kane', 'Kendall', 'Lake', 'McHenry', 'Will', 'IL Balance', 'Indiana', 'Wisconsin']
@@ -128,10 +136,14 @@ def od_matrix(abm, csv_path):
     return csv_path
 
 
-def trip_purpose(abm, csv_path):
+def trip_purpose(abm, csv_path=False):
     ''' Export a CSV file containing the number of tours made for each
         purpose and, within them, the purpose of the individual trips. '''
     abm.open_db()
+
+    # Use default output location if none specified
+    if not csv_path:
+        csv_path = os.path.join(abm._output_dir, 'results_trip_purpose.csv')
 
     # Count person-tours by tour purpose
     tour_sql = ''' SELECT purpose, participants FROM Tours '''
@@ -165,10 +177,14 @@ def trip_purpose(abm, csv_path):
     return csv_path
 
 
-def trip_tod(abm, csv_path):
+def trip_tod(abm, csv_path=False):
     ''' Export a CSV file containing the number of person-trips in each
         time-of-day period, by broad trip purpose. '''
     abm.open_db()
+
+    # Use default output location if none specified
+    if not csv_path:
+        csv_path = os.path.join(abm._output_dir, 'results_trip_tod.csv')
 
     # Count person-trips by TOD and purpose
     trips = {i: {'H-W': 0, 'W-H': 0, 'H-O': 0, 'O-H': 0, 'NH': 0} for i in xrange(1,9)}
@@ -202,9 +218,13 @@ def trip_tod(abm, csv_path):
     return csv_path
 
 
-def vmt_statistics(abm, csv_path):
+def vmt_statistics(abm, csv_path=False):
     ''' Export a CSV file containing VMT, stratified by zone group and
         facility type. '''
+    # Use default output location if none specified
+    if not csv_path:
+        csv_path = os.path.join(abm._output_dir, 'results_vmt_statistics.csv')
+
     # Initialize VMT dict
     vmt_subset = {g: {t: 0 for t in abm.facility_types} for g in abm.zone_groups}
 
