@@ -117,7 +117,7 @@ class ABM(object):
         if not build_db and not os.path.exists(self._db):
             #raise ValueError('SQLite database {0} does not yet exist. Please set build_db=True.'.format(self._db))
             build_db = True  # Force if not yet built
-            print 'Building results database ({0})...'.format(self._db)'
+            print 'Building results database ({0})...'.format(self._db)
 
         # Set CT-RAMP CSV paths
         self._tap_attr_csv = os.path.join(self._input_dir, 'tap_attributes.csv')
