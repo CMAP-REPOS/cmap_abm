@@ -14,7 +14,7 @@ import comparison
 # -----------------------------------------------------------------------------
 #  Define functions for printing ABM summaries to terminal.
 # -----------------------------------------------------------------------------
-def mode_share(abm, grouped=True):
+def mode_share(abm, grouped=False):
     ''' Print the mode share of trips. '''
     print ' '
     if grouped:
@@ -53,7 +53,7 @@ def ptrips_by_class(abm):
     return None
 
 
-def transit_stats(abm, grouped=True):
+def transit_stats(abm, grouped=False):
     ''' Print the boardings, passenger miles traveled and passenger hours
         traveled, by mode or grouped. '''
     print ' '
