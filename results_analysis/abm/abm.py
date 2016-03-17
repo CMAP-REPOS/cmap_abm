@@ -109,8 +109,8 @@ class ABM(object):
         self._input_dir = os.path.join(self.dir, 'cmap_abm', 'inputs')
         self._output_dir = os.path.join(self.dir, 'cmap_abm', 'outputs')
         self._emmebank_path = os.path.join(self.dir, 'cmap_abm', 'CMAP-ABM', 'Database', 'emmebank')
-        self._db = os.path.join(self._output_dir, 'results.db')
-        #self._db = r'D:\workspace\Temp\ABM\results_{0}.db'.format(self.name)
+        self._db = os.path.join(self._output_dir, 'results.sqlite')
+        #self._db = r'D:\workspace\Temp\ABM\results_{0}.sqlite'.format(self.name)
         if build_db and os.path.exists(self._db):
             print 'Rebuilding existing results database ({0})...'.format(self._db)
             os.remove(self._db)
