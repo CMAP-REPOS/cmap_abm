@@ -11,18 +11,17 @@
 from abm import *
 
 QUANTILES = 5
-REBUILD_DBS = False
 
 # Initialize ABM objects
-b = ABM(r'X:\CMAQ_ABM_Models\cmaq_base_20141204', 0.20, REBUILD_DBS)
+b = ABM(r'X:\CMAQ_ABM_Models\cmaq_base_20141204', 0.20)
 
-t_nd1 = ABM(r'X:\CMAQ_ABM_Models\cmaq_node_min_20141222', 0.20, REBUILD_DBS)
-t_nd2 = ABM(r'X:\CMAQ_ABM_Models\cmaq_node_mod_20150109', 0.20, REBUILD_DBS)
-t_nd3 = ABM(r'X:\CMAQ_ABM_Models\cmaq_node_max_20141215', 0.20, REBUILD_DBS)
+t_nd1 = ABM(r'X:\CMAQ_ABM_Models\cmaq_node_min_20141222', 0.20)
+t_nd2 = ABM(r'X:\CMAQ_ABM_Models\cmaq_node_mod_20150109', 0.20)
+t_nd3 = ABM(r'X:\CMAQ_ABM_Models\cmaq_node_max_20141215', 0.20)
 
-t_ln1 = ABM(r'X:\CMAQ_ABM_Models\cmaq_line_min_20150105', 0.20, REBUILD_DBS)
-t_ln2 = ABM(r'X:\CMAQ_ABM_Models\cmaq_line_mod_20150112', 0.20, REBUILD_DBS)
-t_ln3 = ABM(r'X:\CMAQ_ABM_Models\cmaq_line_max_20141208', 0.20, REBUILD_DBS)
+t_ln1 = ABM(r'X:\CMAQ_ABM_Models\cmaq_line_min_20150105', 0.20)
+t_ln2 = ABM(r'X:\CMAQ_ABM_Models\cmaq_line_mod_20150112', 0.20)
+t_ln3 = ABM(r'X:\CMAQ_ABM_Models\cmaq_line_max_20141208', 0.20)
 
 
 def get_boarding_quantiles(boardings, num_quantiles):

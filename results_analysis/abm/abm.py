@@ -2,7 +2,7 @@
 '''
     abm.py
     Author: npeterson
-    Revised: 3/16/16
+    Revised: 3/17/16
     ---------------------------------------------------------------------------
     A class for reading ABM output files and matrix data into an SQL database
     for querying and summarization.
@@ -110,12 +110,14 @@ class ABM(object):
         self._output_dir = os.path.join(self.dir, 'cmap_abm', 'outputs')
         self._emmebank_path = os.path.join(self.dir, 'cmap_abm', 'CMAP-ABM', 'Database', 'emmebank')
         self._db = os.path.join(self._output_dir, 'results.db')
-        #self._db = r'D:\workspace\Temp\ABM\results.db'
+        #self._db = r'D:\workspace\Temp\ABM\results_{0}.db'.format(self.name)
         if build_db and os.path.exists(self._db):
-            print 'Removing existing database...'
+            print 'Rebuilding existing results database ({0})...'.format(self._db)
             os.remove(self._db)
         if not build_db and not os.path.exists(self._db):
-            raise ValueError('SQLite database {0} does not yet exist. Please set build_db=True.'.format(self._db))
+            #raise ValueError('SQLite database {0} does not yet exist. Please set build_db=True.'.format(self._db))
+            build_db = True  # Force if not yet built
+            print 'Building results database ({0})...'.format(self._db)'
 
         # Set CT-RAMP CSV paths
         self._tap_attr_csv = os.path.join(self._input_dir, 'tap_attributes.csv')
@@ -857,4 +859,3 @@ class ABM(object):
     def close_db(self):
         ''' Close the database connection. '''
         return self._con.close()
-

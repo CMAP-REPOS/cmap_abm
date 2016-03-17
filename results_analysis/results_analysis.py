@@ -13,18 +13,16 @@ from abm import *
 # Set Base ABM parameters
 BASE_DIR = r'X:\new_server_tests\test_5pct'
 BASE_PCT = 0.05
-BASE_BUILD = False
 
 # Set Test ABM parameters
 TEST_DIR = r'X:\new_server_tests\test_50pct_newsocec_3sp'
 TEST_PCT = 0.5
-TEST_BUILD = False
 
 
 # Initialize Base ABM object & print summaries
 print '\n{0:*^50}'.format(' P R O C E S S I N G ')
 print '\n{0:=^50}\n'.format(' BASE NETWORK ')
-base = ABM(BASE_DIR, BASE_PCT, BASE_BUILD)
+base = ABM(BASE_DIR, BASE_PCT)
 print base
 print_summary.mode_share(base)
 print_summary.transit_stats(base)
@@ -35,7 +33,7 @@ print ' '
 
 # Initialize Test ABM object & print summaries
 print '\n{0:=^50}\n'.format(' TEST NETWORK ')
-test = ABM(TEST_DIR, TEST_PCT, TEST_BUILD)
+test = ABM(TEST_DIR, TEST_PCT)
 print test
 print_summary.mode_share(test)
 print_summary.transit_stats(test)
