@@ -2,7 +2,7 @@
 '''
     print_summary.py
     Author: npeterson
-    Revised: 3/16/16
+    Revised: 3/18/16
     ---------------------------------------------------------------------------
     A set of functions for printing summaries of ABM and Comparison objects
     to the terminal.
@@ -134,11 +134,9 @@ def mode_share_change(comparison, grouped=True):
 def new_trips_for_mode(comparison, mode_list, mode_description, table='Trips'):
     ''' Identify the increase (or decrease) in trips/tours for a given set
         of modes. '''
-    comparison.open_dbs()
     sql_where = ' OR '.join(('mode={0}'.format(mode) for mode in mode_list))
     base_trips = comparison.base._unsample(comparison.base._count_rows(table, sql_where))
     test_trips = comparison.test._unsample(comparison.test._count_rows(table, sql_where))
-    comparison.close_dbs()
     new_trips = test_trips - base_trips
     pct_new_trips = new_trips / base_trips
     print ' '

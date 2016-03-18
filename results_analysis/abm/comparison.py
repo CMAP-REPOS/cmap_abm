@@ -27,15 +27,15 @@ class Comparison(object):
 
 
     # --- Instance methods ---
-    def open_dbs(self):
+    def _open_dbs(self):
         ''' Open base & test ABM database connections. '''
-        self.base.open_db()
-        self.test.open_db()
+        self.base._open_db()
+        self.test._open_db()
         return None
 
 
-    def close_dbs(self):
+    def _close_dbs(self):
         ''' Close base & test ABM database connections. '''
-        self.base.close_db()
-        self.test.close_db()
+        self.base._close_db()
+        self.test._close_db()
         return None

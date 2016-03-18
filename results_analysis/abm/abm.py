@@ -2,7 +2,7 @@
 '''
     abm.py
     Author: npeterson
-    Revised: 3/17/16
+    Revised: 3/18/16
     ---------------------------------------------------------------------------
     A class for reading ABM output files and matrix data into an SQL database
     for querying and summarization.
@@ -87,17 +87,17 @@ class ABM(object):
     zones = xrange(1, 1945)
 
     zone_groups = {
-        'Chicago':      xrange(   1,  310),  # xrange upper-bounds are *exclusive*
-        'Cook Balance': xrange( 310,  855),
-        'McHenry':      xrange( 855,  959),
-        'Lake':         xrange( 959, 1134),
-        'Kane':         xrange(1134, 1279),
-        'DuPage':       xrange(1279, 1503),
-        'Will':         xrange(1503, 1691),
-        'Kendall':      xrange(1691, 1712),
-        'IL Balance':   xrange(1712, 1836),  # 1712 & 1752 are in CMAP MPO boundary
-        'Indiana':      xrange(1836, 1910),
-        'Wisconsin':    xrange(1910, 1945)
+        'Chicago':      set(xrange(   1,  310)),  # xrange upper-bounds are *exclusive*
+        'Cook Balance': set(xrange( 310,  855)),
+        'McHenry':      set(xrange( 855,  959)),
+        'Lake':         set(xrange( 959, 1134)),
+        'Kane':         set(xrange(1134, 1279)),
+        'DuPage':       set(xrange(1279, 1503)),
+        'Will':         set(xrange(1503, 1691)),
+        'Kendall':      set(xrange(1691, 1712)),
+        'IL Balance':   set(xrange(1712, 1836)),  # 1712 & 1752 are in CMAP MPO boundary
+        'Indiana':      set(xrange(1836, 1910)),
+        'Wisconsin':    set(xrange(1910, 1945))
     }
 
 
@@ -110,14 +110,14 @@ class ABM(object):
         self._output_dir = os.path.join(self.dir, 'cmap_abm', 'outputs')
         self._emmebank_path = os.path.join(self.dir, 'cmap_abm', 'CMAP-ABM', 'Database', 'emmebank')
         self._db = os.path.join(self._output_dir, 'results.sqlite')
-        #self._db = r'D:\workspace\Temp\ABM\results_{0}.sqlite'.format(self.name)
+        #self._db = r'D:\workspace\Temp\ABM\results_{0}.sqlite'.format(self.name)  ### DEBUG ###
         if build_db and os.path.exists(self._db):
-            print 'Rebuilding existing results database ({0})...'.format(self._db)
+            print 'Reinitializing existing results database...'.format(self._db)
             os.remove(self._db)
         if not build_db and not os.path.exists(self._db):
             #raise ValueError('SQLite database {0} does not yet exist. Please set build_db=True.'.format(self._db))
             build_db = True  # Force if not yet built
-            print 'Building results database ({0})...'.format(self._db)
+            print 'Initializing new results database...'.format(self._db)
 
         # Set CT-RAMP CSV paths
         self._tap_attr_csv = os.path.join(self._input_dir, 'tap_attributes.csv')
@@ -139,9 +139,9 @@ class ABM(object):
                 zone = int(d['taz09'])
                 self.tap_zones[tap] = zone
 
-        # Create DB to store CT-RAMP output
+        # Create DB to store CT-RAMP output (or open existing)
         print 'Opening database ({0})...'.format(self._db)
-        self.open_db()
+        self._open_db()
 
         # Load data from CSVs
         # -- Households table
@@ -318,7 +318,7 @@ class ABM(object):
         self.transit_stats = self._get_transit_stats()
         self.vmt_by_speed = self._get_vmt_by_speed()
 
-        self.close_db()
+        self._close_db()
 
         return None  ### End of ABM.__init__() ###
 
@@ -352,15 +352,6 @@ class ABM(object):
         return string.lower().replace('-', '').replace(' ', '')
 
 
-    def _count_rows(self, table, where_clause=None):
-        ''' Execute a SELECT COUNT(*) query on a table with optional where
-            clause and return the integer result. '''
-        query = 'SELECT COUNT(*) FROM {0}'.format(table)
-        if where_clause:
-            query += ' WHERE {0}'.format(where_clause)
-        return float(self._con.execute(query).fetchone()[0])
-
-
     def _get_boardings(self, node_or_line, split_rail=False, scale_runs=True):
         ''' Sum transit segment boardings by inode (for stations) or
             tline_id (for vehicles). Return results in a dict. '''
@@ -378,7 +369,6 @@ class ABM(object):
         else:
             boardings = {}
 
-        self.open_db()
         boarding_query = 'SELECT {0}, SUM(boardings), is_rail, tod, headway FROM TransitSegs WHERE allow_boardings=1 GROUP BY {0}'.format(group)
         for r in self.query(boarding_query):
             mode = 'RAIL' if r[2] else 'BUS'
@@ -397,7 +387,6 @@ class ABM(object):
                 boardings[mode][r[0]] = r[1] * run_scaling
             else:
                 boardings[r[0]] = r[1] * run_scaling
-        self.close_db()
 
         return boardings
 
@@ -530,8 +519,8 @@ class ABM(object):
             'PMT': {},
             'PHT': {}
         }
-        query = 'SELECT transit_mode, SUM(boardings), SUM(pass_mi), SUM(pass_hrs) FROM TransitSegs GROUP BY transit_mode'
-        for r in self._con.execute(query):
+        sql_query = 'SELECT transit_mode, SUM(boardings), SUM(pass_mi), SUM(pass_hrs) FROM TransitSegs GROUP BY transit_mode'
+        for r in self.query(sql_query):
             transit_mode, boardings, pass_mi, pass_hrs = r
             transit_stats['BOARDINGS'][transit_mode] = boardings
             transit_stats['PMT'][transit_mode] = pass_mi
@@ -844,18 +833,57 @@ class ABM(object):
         return num / sample_rate
 
 
-    def open_db(self):
+    def _db_is_closed(self):
+        ''' Check whether connection to SQLite DB is closed. '''
+        try:
+            self._con.execute('PRAGMA user_version')  # Quick, schema-independent query
+            return False  # Query worked => DB is *not* closed
+        except sqlite3.ProgrammingError:
+            return True
+
+    def _db_is_open(self):
+        ''' Check whether connection to SQLite DB is open. '''
+        return not self._db_is_closed()
+
+
+    def _open_db(self):
         ''' Open the database connection. '''
         self._con = sqlite3.connect(self._db)
         self._con.row_factory = sqlite3.Row
         return None
 
 
+    def _close_db(self):
+        ''' Close the database connection. '''
+        self._con.close()
+        return None
+
+
+    def _count_rows(self, table, where_clause=None):
+        ''' Execute a SELECT COUNT(*) query on a table with optional where
+            clause and return the integer result. '''
+        db_closed = self._db_is_closed()
+        if db_closed:
+            self._open_db()
+
+        sql_query = 'SELECT COUNT(*) FROM {0}'.format(table)
+        if where_clause:
+            sql_query += ' WHERE {0}'.format(where_clause)
+        count = float(self._con.execute(sql_query).fetchone()[0])
+
+        if db_closed:
+            self._close_db()
+        return count
+
+
     def query(self, sql_query):
         ''' Execute a SQL query and return the cursor object. '''
-        return self._con.execute(sql_query)
+        db_closed = self._db_is_closed()
+        if db_closed:
+            self._open_db()
 
+        for row in self._con.execute(sql_query):
+            yield row
 
-    def close_db(self):
-        ''' Close the database connection. '''
-        return self._con.close()
+        if db_closed:
+            self._close_db()

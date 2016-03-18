@@ -2,12 +2,15 @@
 '''
     to_csv.py
     Author: npeterson
-    Revised: 3/15/16
+    Revised: 3/18/16
     ---------------------------------------------------------------------------
     A set of functions for exporting summaries of ABM and Comparison objects
     to CSVs.
 
 '''
+import os
+from inro.emme.database import emmebank as _eb
+
 import abm
 import comparison
 
@@ -102,7 +105,6 @@ def od_matrix(abm, csv_path=False):
     }
 
     # Append person-trip counts to appropriate matrix cell
-    abm.open_db()
     trip_sql = (
         ''' SELECT Trips.zn_o, Trips.zn_d, Trips.mode, Tours.participants '''
         ''' FROM Trips LEFT JOIN Tours ON Trips.tour_id=Tours.tour_id '''
@@ -123,7 +125,6 @@ def od_matrix(abm, csv_path=False):
         i = zngrp_order.index(zngrp_o)
         j = zngrp_order.index(zngrp_d)
         od_mat[auto_or_transit][i][j] += n
-    abm.close_db()
 
     # Write results to CSV
     with open(csv_path, 'wb') as w:
@@ -139,8 +140,6 @@ def od_matrix(abm, csv_path=False):
 def trip_purpose(abm, csv_path=False):
     ''' Export a CSV file containing the number of tours made for each
         purpose and, within them, the purpose of the individual trips. '''
-    abm.open_db()
-
     # Use default output location if none specified
     if not csv_path:
         csv_path = os.path.join(abm._output_dir, 'results_trip_purpose.csv')
@@ -164,8 +163,6 @@ def trip_purpose(abm, csv_path=False):
         n = abm._unsample(len(participants.split()))
         trip_counts[tour_purpose][trip_purpose] = trip_counts[tour_purpose].get(trip_purpose, 0) + n
 
-    abm.close_db()
-
     # Write results to CSV
     with open(csv_path, 'wb') as w:
         w.write('PERSON-TOUR PURPOSE,PERSON-TRIP PURPOSE,COUNT\n')
@@ -180,8 +177,6 @@ def trip_purpose(abm, csv_path=False):
 def trip_tod(abm, csv_path=False):
     ''' Export a CSV file containing the number of person-trips in each
         time-of-day period, by broad trip purpose. '''
-    abm.open_db()
-
     # Use default output location if none specified
     if not csv_path:
         csv_path = os.path.join(abm._output_dir, 'results_trip_tod.csv')
@@ -206,8 +201,6 @@ def trip_tod(abm, csv_path=False):
         else:
             purpose = 'NH'
         trips[tod][purpose] += n
-
-    abm.close_db()
 
     # Write results to CSV
     with open(csv_path, 'wb') as w:
