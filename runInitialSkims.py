@@ -1,6 +1,7 @@
 #############################################################################
 # Run Initial Skimming
 # Ben Stabler, stabler@pbworld.com, 02/18/13
+# Revised by Noel Peterson, 3/28/16
 # "C:\Program Files (x86)\INRO\Emme\Emme 4\Emme-4.0.3\Python26\python.exe" runInitialSkims.py 1,1,1,1,1,1,1,1
 #############################################################################
 
@@ -75,22 +76,24 @@ for i in range(len(tods)):
             p.run_macro("~< %s %i %f %i %i %i %i" % (hwySkimMacro, 1, 0.50, 0, scen, 75, 0), m.emmebank.path, scen)
             p.run_macro("~< %s %i %f %i %i %i %i" % (hwySkimMacro, 1, 0.25, 0, scen, 100, 0), m.emmebank.path, scen)
 
-            #convert TAZ emx skim matrices to zmx for CT-RAMP
+            # Get list of IDs for low & high-income skim matrix pairs
             hwy_skims = []
             mfs_tod = []
-            hwy_skims.extend(["mf%i175","mf%i176","mf%i177","mf%i179"])           #sov
-            hwy_skims.extend(["mf%i185","mf%i186","mf%i187","mf%i189"])           #hov
-            hwy_skims.extend(["mf%i195","mf%i196","mf%i197","mf%i199"])           #hov3
-            hwy_skims.extend(["mf%i180","mf%i181","mf%i182","mf%i183","mf%i184"]) #sov pay
-            hwy_skims.extend(["mf%i190","mf%i191","mf%i192","mf%i193","mf%i194"]) #hov pay
-            hwy_skims.extend(["mf%i200","mf%i201","mf%i202","mf%i203","mf%i204"]) #hov3 pay
-            for aMat in hwy_skims:
-                mfs_tod.append(m.emmebank.matrix(aMat % (tod)).id)
+            hwy_skims.extend([("mf%i181","mf%i186"),("mf%i182","mf%i187"),("mf%i183","mf%i188"),("mf%i185","mf%i190")])  #sov
+            hwy_skims.extend([("mf%i201","mf%i206"),("mf%i202","mf%i207"),("mf%i203","mf%i208"),("mf%i205","mf%i210")])  #hov2
+            hwy_skims.extend([("mf%i221","mf%i226"),("mf%i222","mf%i227"),("mf%i223","mf%i228"),("mf%i225","mf%i230")])  #hov3+
+            hwy_skims.extend([("mf%i191","mf%i196"),("mf%i192","mf%i197"),("mf%i193","mf%i198"),("mf%i194","mf%i199"),("mf%i195","mf%i200")])  #sov pay
+            hwy_skims.extend([("mf%i211","mf%i216"),("mf%i212","mf%i217"),("mf%i213","mf%i218"),("mf%i214","mf%i219"),("mf%i215","mf%i220")])  #hov2 pay
+            hwy_skims.extend([("mf%i231","mf%i236"),("mf%i232","mf%i237"),("mf%i233","mf%i238"),("mf%i234","mf%i239"),("mf%i235","mf%i240")])  #hov3+ pay
+            for aMat_lo, aMat_hi in hwy_skims:
+                id_lo = m.emmebank.matrix(aMat_lo % (tod)).id
+                id_hi = m.emmebank.matrix(aMat_hi % (tod)).id
+                mfs_tod.append([id_lo, id_hi])
 
-            #get matrices and zone names and write to ZMX format
-            for mf in mfs_tod:
-                mat, zoneNames = EMXtoZMX.getMf(m.emmebank, mf, scen)
-                EMXtoZMX.writeZMX(emxFolder + "\\" + mf + ".zmx", zoneNames, mat)
+            # Calculate high/low averages and write to ZMX format (using ID of low-income matrix)
+            for mf_lo, mf_hi in mfs_tod:
+                mat_avg, zoneNames = EMXtoZMX.avgMf(m.emmebank, mf_lo, mf_hi, scen)
+                EMXtoZMX.writeZMX(emxFolder + "\\" + mf_lo + ".zmx", zoneNames, mat_avg)
 
         ##########################################################################
         # TRANSIT
