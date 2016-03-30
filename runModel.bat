@@ -10,7 +10,7 @@
 
 :: Parameters
 SET projDir=Y:/{{{TEMPLATE}}}/cmap_abm
-SET sampleRate=0.05
+SET sampleRate=0.50
 
 @SET user=%1
 @SET pwd=%2
