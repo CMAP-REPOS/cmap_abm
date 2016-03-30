@@ -11,9 +11,11 @@ s=%r100%
 ~r200=%3%
 ~r16=0.5 /MSA factor: 0=full update, 1=classic 1/n
 /Demand matrix numbers by class (1-3) for conventional transit
-~+|~r101=271|~r102=272|~r103=273
+~#+|~r101=271|~r102=272|~r103=273
+~+|~r101=359|~r102=360|~r103=361
 /Demand matrix numbers by class (1-3) for premium transit
-~+|~r104=274|~r105=275|~r106=276
+~#+|~r104=274|~r105=275|~r106=276
+~+|~r104=362|~r105=363|~r106=364
 /Bypass matrix segmentation by class if r204=1
 ~r204=%7%
 ~?r204=1

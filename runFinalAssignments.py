@@ -81,7 +81,8 @@ for i in range(len(tods)):
             p.run_macro("~< %s %i %f %i %i %i %i" % (hwySkimMacro, 1, 0.25, 1, scen, 100, 1), m.emmebank.path, scen)
 
         #read taz and tap demand matrices and write to bank
-        matNames = ["mf%i271","mf%i272","mf%i273","mf%i274","mf%i275","mf%i276"] #tap
+        #matNames = ["mf%i271","mf%i272","mf%i273","mf%i274","mf%i275","mf%i276"] #tap
+        matNames = ["mf%i359","mf%i360","mf%i361","mf%i362","mf%i363","mf%i364"] #tap
         mfs_tod = []
         for aMat in matNames:
             mfs_tod.append(aMat % (tod))
