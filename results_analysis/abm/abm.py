@@ -743,43 +743,58 @@ class ABM(object):
                 insert_sql = 'INSERT INTO Trips VALUES ({0})'.format(','.join(['?'] * len(db_row)))
                 self._con.execute(insert_sql, db_row)
 
-                # Split trips into person-trips
-                tour_participants = [r[0] for r in self.query("SELECT participants FROM Tours WHERE tour_id = '{0}'".format(tour_id))][0]
-                for participant in tour_participants.strip().split():
-                    # Get values
-                    pers_id = '{0}-{1}'.format(hh_id, participant)
-                    ptour_id = '{0}-{1}'.format(tour_id, participant)
-                    ptrip_id = '{0}-{1}'.format(trip_id, participant)
-
-                    # Assign each person-trip the appropriate user-class,
-                    # based on trip mode and category (mandatory or not).
-                    ptrip_category = tour_categories[tour_id]
-                    if ptrip_category == 'mandatory':  # Use "work" user classes
-                        wtt = people_uclasses[pers_id][0]
-                        pnr = people_uclasses[pers_id][1]
-                        knr = people_uclasses[pers_id][2]
-                    else:  # Use "non-work" user classes
-                        wtt = people_uclasses[pers_id][3]
-                        pnr = people_uclasses[pers_id][4]
-                        knr = people_uclasses[pers_id][5]
-
-                    if mode in (9, 10):
-                        uclass = wtt
-                    elif mode in (11, 12):
-                        uclass = max(pnr, knr)  # Assume drive-to-transit users prefer premium service
-                        #uclass = (pnr, knr)[hh_id % 2]  # Assume 50/50 split between PNR & KNR trips (random, but deterministic)
-                    else:
-                        uclass = None
-
-                    # Insert into table
-                    db_row = (
-                        ptrip_id, ptour_id, trip_id, tour_id, hh_id, pers_id, mode, uclass
-                    )
-                    insert_sql = 'INSERT INTO PersonTrips VALUES ({0})'.format(','.join(['?'] * len(db_row)))
-                    self._con.execute(insert_sql, db_row)
-
             self._con.commit()
             del trips
+
+        # Create person-trips from trips
+        sql_ptrips = (
+            'SELECT Trips.trip_id, Trips.tour_id, Trips.hh_id, Trips.mode,'
+            ' Tours.participants'
+            ' FROM Trips LEFT JOIN Tours ON Trips.tour_id=Tours.tour_id'
+            ' WHERE Trips.is_joint = {0}'
+        ).format(int(is_joint))
+
+        for r in self.query(sql_ptrips):
+            trip_id = str(r[0])
+            tour_id = str(r[1])
+            hh_id = int(r[2])
+            mode = int(r[3])
+            tour_participants = r[4].strip().split()
+
+            for participant in tour_participants:
+                # Get values
+                pers_id = '{0}-{1}'.format(hh_id, participant)
+                ptour_id = '{0}-{1}'.format(tour_id, participant)
+                ptrip_id = '{0}-{1}'.format(trip_id, participant)
+
+                # Assign each person-trip the appropriate user-class,
+                # based on trip mode and category (mandatory or not).
+                ptrip_category = tour_categories[tour_id]
+                if ptrip_category == 'mandatory':  # Use "work" user classes
+                    wtt = people_uclasses[pers_id][0]
+                    pnr = people_uclasses[pers_id][1]
+                    knr = people_uclasses[pers_id][2]
+                else:  # Use "non-work" user classes
+                    wtt = people_uclasses[pers_id][3]
+                    pnr = people_uclasses[pers_id][4]
+                    knr = people_uclasses[pers_id][5]
+
+                if mode in (9, 10):
+                    uclass = wtt
+                elif mode in (11, 12):
+                    uclass = max(pnr, knr)  # Assume drive-to-transit users prefer premium service
+                    #uclass = (pnr, knr)[hh_id % 2]  # Assume 50/50 split between PNR & KNR trips (random, but deterministic)
+                else:
+                    uclass = None
+
+                # Insert into table
+                db_row = (
+                    ptrip_id, ptour_id, trip_id, tour_id, hh_id, pers_id, mode, uclass
+                )
+                insert_sql = 'INSERT INTO PersonTrips VALUES ({0})'.format(','.join(['?'] * len(db_row)))
+                self._con.execute(insert_sql, db_row)
+
+        self._con.commit()
 
         people_uclasses.close()
         tour_categories.close()
