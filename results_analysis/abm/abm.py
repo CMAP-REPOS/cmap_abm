@@ -40,10 +40,10 @@ class ABM(object):
         6: 'Shared ride 3+ pay',
         7: 'Walk',
         8: 'Bike',
-        9: 'Walk to local transit',
-        10: 'Walk to premium transit',
-        11: 'Drive to local transit',
-        12: 'Drive to premium transit',
+        #9: 'N/A',              # formerly 'Walk to local transit'
+        10: 'Walk to transit',  # formerly 'Walk to premium transit'
+        11: 'Kiss-n-ride',      # formerly 'Drive to local transit'
+        12: 'Park-n-ride',      # formerly 'Drive to premium transit'
         13: 'Taxi',
         14: 'School bus'
     }
@@ -462,7 +462,7 @@ class ABM(object):
         # Initialize query components
         sql_select = 'SELECT PersonTrips.uclass'
         sql_from = 'FROM PersonTrips'
-        sql_where = 'WHERE PersonTrips.mode IN (9, 10, 11, 12)'
+        sql_where = 'WHERE PersonTrips.mode IN (10, 11, 12)'
 
         if stratify_by_field:
             # Update query to accommodate stratification field
@@ -779,13 +779,7 @@ class ABM(object):
                     pnr = people_uclasses[pers_id][4]
                     knr = people_uclasses[pers_id][5]
 
-                if mode in (9, 10):
-                    uclass = wtt
-                elif mode in (11, 12):
-                    uclass = max(pnr, knr)  # Assume drive-to-transit users prefer premium service
-                    #uclass = (pnr, knr)[hh_id % 2]  # Assume 50/50 split between PNR & KNR trips (random, but deterministic)
-                else:
-                    uclass = None
+                uclass = {10: wtt, 11: knr, 12: pnr}[mode]
 
                 # Insert into table
                 db_row = (
