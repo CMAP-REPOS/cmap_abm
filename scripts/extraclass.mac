@@ -1,4 +1,5 @@
 ~o=295
+~# ## - Revised for Dec. 2015 updates to class volume extra attributes
 reports=nul
 ~/# set scenario
 s=%1%
@@ -6,58 +7,76 @@ s=%1%
 /Delete extra attributes if exist
 2.42
 3
-~+|@vso1n|~?e|~$>SKIP01|y|3
+~+|@vso1ntlo|~?e|~$>SKIP01|y|3
 ~:SKIP01
-~+|@vso1t|~?e|~$>SKIP02|y|3
+~+|@vso1nthi|~?e|~$>SKIP02|y|3
 ~:SKIP02
-~+|@vho2n|~?e|~$>SKIP03|y|3
+~+|@vso1tllo|~?e|~$>SKIP03|y|3
 ~:SKIP03
-~+|@vho2t|~?e|~$>SKIP04|y|3
+~+|@vso1tlhi|~?e|~$>SKIP04|y|3
 ~:SKIP04
-~+|@vho3n|~?e|~$>SKIP05|y|3
+~+|@vho2ntlo|~?e|~$>SKIP05|y|3
 ~:SKIP05
-~+|@vho3t|~?e|~$>SKIP06|y|3
+~+|@vho2nthi|~?e|~$>SKIP06|y|3
 ~:SKIP06
-~+|@vltrn|~?e|~$>SKIP07|y|3
+~+|@vho2tllo|~?e|~$>SKIP07|y|3
 ~:SKIP07
-~+|@vltrt|~?e|~$>SKIP08|y|3
+~+|@vho2tlhi|~?e|~$>SKIP08|y|3
 ~:SKIP08
-~+|@vmtrn|~?e|~$>SKIP09|y|3
+~+|@vho3ntlo|~?e|~$>SKIP09|y|3
 ~:SKIP09
-~+|@vmtrt|~?e|~$>SKIP10|y|3
+~+|@vho3nthi|~?e|~$>SKIP10|y|3
 ~:SKIP10
-~+|@vhtrn|~?e|~$>SKIP11|y|3
+~+|@vho3tllo|~?e|~$>SKIP11|y|3
 ~:SKIP11
-~+|@vhtrt|~?e|~$>SKIP12|y|3
+~+|@vho3tlhi|~?e|~$>SKIP12|y|3
 ~:SKIP12
-~+|@vbplt|~?e|~$>SKIP13|y|3
+~+|@vltrnt|~?e|~$>SKIP13|y|3
 ~:SKIP13
-~+|@vlght|~?e|~$>SKIP14|y|3
+~+|@vltrtl|~?e|~$>SKIP14|y|3
 ~:SKIP14
-~+|@ftime|~?e|~$>SKIP15|y|3
+~+|@vmtrnt|~?e|~$>SKIP15|y|3
 ~:SKIP15
-~+|@tollv|~?e|~$>SKIP16|y|3
+~+|@vmtrtl|~?e|~$>SKIP16|y|3
 ~:SKIP16
-~+|@zone|~?e|~$>SKIP17|y|3
+~+|@vhtrnt|~?e|~$>SKIP17|y|3
 ~:SKIP17
+~+|@vhtrtl|~?e|~$>SKIP18|y|3
+~:SKIP18
+~+|@vbplt|~?e|~$>SKIP19|y|3
+~:SKIP19
+~+|@vlght|~?e|~$>SKIP20|y|3
+~:SKIP20
+~+|@ftime|~?e|~$>SKIP21|y|3
+~:SKIP21
+~+|@tollv|~?e|~$>SKIP22|y|3
+~:SKIP22
+~+|@zone|~?e|~$>SKIP23|y|3
+~:SKIP23
 ~+||q 
 /Create extra attributes
 2.42
-~+|2|1|@zone |CMAP Zone                 |0
-~+|2|2|@ftime|Free-flow time            |0
-~+|2|2|@tollv|Toll facility flag        |0
-~+|2|2|@vso1n|Volume SOV1 non-toll users|0
-~+|2|2|@vso1t|Volume SOV1 toll users    |0
-~+|2|2|@vho2n|Volume HOV2 non-toll users|0
-~+|2|2|@vho2t|Volume HOV2 toll users    |0
-~+|2|2|@vho3n|Volume HOV3 non-toll users|0
-~+|2|2|@vho3t|Volume HOV3 toll users    |0
-~+|2|2|@vltrn|Volume ltrk non-toll users|0
-~+|2|2|@vltrt|Volume ltrk toll users    |0
-~+|2|2|@vmtrn|Volume mtrk non-toll users|0
-~+|2|2|@vmtrt|Volume mtrk toll users    |0
-~+|2|2|@vhtrn|Volume htrk non-toll users|0
-~+|2|2|@vhtrt|Volume htrk toll users    |0
+~+|2|1|@zone    |CMAP Zone                             |0
+~+|2|2|@ftime   |Free-flow time                        |0
+~+|2|2|@tollv   |Toll facility flag                    |0
+~+|2|2|@vso1ntlo|Volume SOV1 low income non-toll users |0
+~+|2|2|@vso1nthi|Volume SOV1 high income non-toll users|0
+~+|2|2|@vso1tllo|Volume SOV1 low income toll users     |0
+~+|2|2|@vso1tlhi|Volume SOV1 high income toll users    |0
+~+|2|2|@vho2ntlo|Volume HOV2 low income non-toll users |0
+~+|2|2|@vho2nthi|Volume HOV2 high income non-toll users|0
+~+|2|2|@vho2tllo|Volume HOV2 low income toll users     |0
+~+|2|2|@vho2tlhi|Volume HOV2 high income toll users    |0
+~+|2|2|@vho3ntlo|Volume HOV3 low income non-toll users |0
+~+|2|2|@vho3nthi|Volume HOV3 high income non-toll users|0
+~+|2|2|@vho3tllo|Volume HOV3 low income toll users     |0
+~+|2|2|@vho3tlhi|Volume HOV3 high income toll users    |0
+~+|2|2|@vltrnt  |Volume ltrk non-toll users            |0
+~+|2|2|@vltrtl  |Volume ltrk toll users                |0
+~+|2|2|@vmtrnt  |Volume mtrk non-toll users            |0
+~+|2|2|@vmtrtl  |Volume mtrk toll users                |0
+~+|2|2|@vhtrnt  |Volume htrk non-toll users            |0
+~+|2|2|@vhtrtl  |Volume htrk toll users                |0
 q
 ~/### Implement auxiliary assignment with zero demand to get free-flow time 
 3.21 / zero matrix for free-flow time skimming
@@ -72,9 +91,9 @@ q
 ~+|1|y|@ftime|~?q=1|n|999  ||mod=SHbmh|and not timau=0,999||4
 q
 ~/### Impute toll facility flag
-~# Modified by NMP, 8/10/15
+batchin=../../inputs/TollSys.flag
 2.41
-~+|1|y|@tollv|n|1||~<../../inputs/tollsys.flag||4
+~+|3|@tollv|n|all|1,2,3|n|y
 q
 ~/### Impute node zones
 ~# Added by NMP, 4/16/15

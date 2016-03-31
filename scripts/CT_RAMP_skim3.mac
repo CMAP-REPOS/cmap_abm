@@ -1,5 +1,6 @@
 ~o=295
 ~#reports=nul
+~###  -- Macro updated Dec. 2015 to segment assignment into VOT classes --
 reports=../../outputs/report_hwyskim.txt
 ~r01=%1%       /0 - initialize split matrices mf%4%131-mf%4%174, 1 - start with the previous set 
 /~r01=0
@@ -48,7 +49,7 @@ reports=../../outputs/report_hwyskim.txt
 /mf%4%106 - total HOV3 High income (auto vehicle equivalent) 
 /mf%4%107 - total B-plate commercials (auto vehicle equivalent)
 /mf%4%108 - total light trucks (auto vehicle equivalent)
-/mf%4%109 - total light trucks (auto vehicle equivalent)
+/mf%4%109 - total medium trucks (auto vehicle equivalent)
 /mf%4%110 - total heavy trucks (auto vehicle equivalent)
 /mf%4%111 - total external SOV1 Low income (auto vehicle equivalent)
 /mf%4%112 - total external SOV1 High income (auto vehicle equivalent)
@@ -183,18 +184,24 @@ reports=../../outputs/report_hwyskim.txt
 /mf%4%233 - toll (managed lane) distance heavy truck toll
 /mf%4%234 - free-flow time heavy truck toll
 /Link extra attributes to save class-specific volumes
-/@vsovn - volumes for SOV1 non-toll users
-/@vsovt - volumes for SOV1 toll users
-/@vho2n - volumes for HOV2 non-toll users
-/@vho2t - volumes for HOV2 toll users
-/@vho3n - volumes for HOV3 non-toll users
-/@vho3t - volumes for HOV3 toll users
-/@vltrn - volumes for commercial/light truck non-toll users
-/@vltrt - volumes for commercial/light truck toll users
-/@vmtrn - volumes for medium truck non-toll users
-/@vmtrt - volumes for medium truck toll users
-/@vhtrn - volumes for heavy truck non-toll users
-/@vhtrt - volumes for heavy truck toll users
+/@vso1ntlo - volumes for SOV1 low income non-toll users
+/@vso1nthi - volumes for SOV1 high income non-toll users
+/@vso1tllo - volumes for SOV1 low income toll users
+/@vso1tlhi - volumes for SOV1 high income toll users
+/@vho2ntlo - volumes for HOV2 low income non-toll users
+/@vho2nthi - volumes for HOV2 high income non-toll users
+/@vho2tllo - volumes for HOV2 low income toll users
+/@vho2tlhi - volumes for HOV2 high income toll users
+/@vho3ntlo - volumes for HOV3 low income non-toll users
+/@vho3nthi - volumes for HOV3 high income non-toll users
+/@vho3tllo - volumes for HOV3 low income toll users
+/@vho3tlhi - volumes for HOV3 high income toll users
+/@vltrnt - volumes for commercial/light truck non-toll users
+/@vltrtl - volumes for commercial/light truck toll users
+/@vmtrnt - volumes for medium truck non-toll users
+/@vmtrtl - volumes for medium truck toll users
+/@vhtrnt - volumes for heavy truck non-toll users
+/@vhtrtl - volumes for heavy truck toll users
 /MODEL PARAMETERS:
 /VOT ($/hour)
 ~r011=06.00     /VOT for SOV1 low income vehicle
@@ -389,73 +396,96 @@ q
 ~/### 1.   BASE MULTI-CLASS ASSIGNMENT
 ~/### 1.1. Aggregation of trip tables for assignment
 3.21
-~+|1|y|mf%4%167|~?q=1|y|ASOV1n|SOV1 non-toll|~?q=1|y||mf%4%123+mf%4%125+mf%4%143+mf%4%145+mf%4%155+mf%4%157|||n|2
-~+|1|y|mf%4%168|~?q=1|y|ASOV1t|SOV1 toll    |~?q=1|y||mf%4%124+mf%4%126+mf%4%144+mf%4%146+mf%4%156+mf%4%158|||n|2
-~+|1|y|mf%4%169|~?q=1|y|AHOV2n|HOV2 non-toll|~?q=1|y||mf%4%127+mf%4%129+mf%4%147+mf%4%149+mf%4%159+mf%4%161|||n|2
-~+|1|y|mf%4%170|~?q=1|y|AHOV2t|HOV2 toll    |~?q=1|y||mf%4%128+mf%4%130+mf%4%148+mf%4%150+mf%4%160+mf%4%162|||n|2
-~+|1|y|mf%4%171|~?q=1|y|AHOV3n|HOV3 non-toll|~?q=1|y||mf%4%131+mf%4%133+mf%4%151+mf%4%153+mf%4%163+mf%4%165|||n|2
-~+|1|y|mf%4%172|~?q=1|y|AHOV3t|HOV3 toll    |~?q=1|y||mf%4%132+mf%4%134+mf%4%152+mf%4%154+mf%4%164+mf%4%166|||n|2
-~+|1|y|mf%4%173|~?q=1|y|ALtrkn|Light tr. nt |~?q=1|y||mf%4%135+mf%4%137|||n|2
-~+|1|y|mf%4%174|~?q=1|y|ALtrkt|Light tr. t  |~?q=1|y||mf%4%136+mf%4%138|||n|2
+~+|1|y|mf%4%167|~?q=1|y|ASV1nl|SOV1 non-toll low income |~?q=1|y||mf%4%123+mf%4%143+mf%4%155|||n|2
+~+|1|y|mf%4%168|~?q=1|y|ASV1nh|SOV1 non-toll high income|~?q=1|y||mf%4%125+mf%4%145+mf%4%157|||n|2
+~+|1|y|mf%4%169|~?q=1|y|ASV1tl|SOV1 toll low income     |~?q=1|y||mf%4%124+mf%4%144+mf%4%156|||n|2
+~+|1|y|mf%4%170|~?q=1|y|ASV1th|SOV1 toll high income    |~?q=1|y||mf%4%126+mf%4%146+mf%4%158|||n|2
+~+|1|y|mf%4%171|~?q=1|y|AHV2nl|HOV2 non-toll low income |~?q=1|y||mf%4%127+mf%4%147+mf%4%159|||n|2
+~+|1|y|mf%4%172|~?q=1|y|AHV2nh|HOV2 non-toll high income|~?q=1|y||mf%4%129+mf%4%149+mf%4%161|||n|2
+~+|1|y|mf%4%173|~?q=1|y|AHV2tl|HOV2 toll low income     |~?q=1|y||mf%4%128+mf%4%148+mf%4%160|||n|2
+~+|1|y|mf%4%174|~?q=1|y|AHV2th|HOV2 toll high income    |~?q=1|y||mf%4%130+mf%4%150+mf%4%162|||n|2
+~+|1|y|mf%4%175|~?q=1|y|AHV3nl|HOV3 non-toll low income |~?q=1|y||mf%4%131+mf%4%151+mf%4%163|||n|2
+~+|1|y|mf%4%176|~?q=1|y|AHV3nh|HOV3 non-toll high income|~?q=1|y||mf%4%133+mf%4%153+mf%4%165|||n|2
+~+|1|y|mf%4%177|~?q=1|y|AHV3tl|HOV3 toll low income     |~?q=1|y||mf%4%132+mf%4%152+mf%4%164|||n|2
+~+|1|y|mf%4%178|~?q=1|y|AHV3th|HOV3 toll high income    |~?q=1|y||mf%4%134+mf%4%154+mf%4%166|||n|2
+~+|1|y|mf%4%179|~?q=1|y|ALtrkn|Light tr. nt             |~?q=1|y||mf%4%135+mf%4%137|||n|2
+~+|1|y|mf%4%180|~?q=1|y|ALtrkt|Light tr. t              |~?q=1|y||mf%4%136+mf%4%138|||n|2
 q
 ~/### 1.2. Average toll equivalent multipliers for toll users (based on VOT)
 3.21
-~/###      SOV1 (high & low for auto, externals, and air passengers)
-~+|1|y|ms167|~?q=1|y|%mf%4%168.n%|%mf%4%168.d%|~?q=1|y|
-~+|mf%4%124*%r011%+mf%4%126*%r021%+mf%4%144*%r111%+mf%4%146*%r121%+mf%4%156*%r171%+mf%4%158*%r181%
-~+|||n|+|+|2
-~+|1|y|ms168|~?q=1|y|%mf%4%168.n%|%mf%4%168.d%|~?q=1|y||mf%4%168|||n|+|+|2
+~/###      SOV1 (low income for auto, externals, and air passengers)
+~+|1|y|ms167|~?q=1|y|%mf%4%169.n%|%mf%4%169.d%|~?q=1|y|
+~+|mf%4%124*%r011%+mf%4%144*%r111%+mf%4%156*%r171%|||n|+|+|2
+~+|1|y|ms168|~?q=1|y|%mf%4%169.n%|%mf%4%169.d%|~?q=1|y||mf%4%169|||n|+|+|2
 ~+|1|y|ms167|n|ms167/ms168||ms168|0,0,ex|2
-~/###      HOV2 (high & low for auto, externals, and air passengers)
+~/###      SOV1 (high income for auto, externals, and air passengers)
 ~+|1|y|ms169|~?q=1|y|%mf%4%170.n%|%mf%4%170.d%|~?q=1|y|
-~+|mf%4%128*%r031%+mf%4%130*%r041%+mf%4%148*%r131%+mf%4%150*%r141%+mf%4%160*%r191%+mf%4%162*%r201%
-~+|||n|+|+|2
+~+|mf%4%126*%r021%+mf%4%146*%r121%+mf%4%158*%r181%|||n|+|+|2
 ~+|1|y|ms170|~?q=1|y|%mf%4%170.n%|%mf%4%170.d%|~?q=1|y||mf%4%170|||n|+|+|2
 ~+|1|y|ms169|n|ms169/ms170||ms170|0,0,ex|2
-~/###      HOV3 (high & low for auto, externals, and air passengers)
-~+|1|y|ms171|~?q=1|y|%mf%4%172.n%|%mf%4%172.d%|~?q=1|y|
-~+|mf%4%132*%r051%+mf%4%134*%r061%+mf%4%152*%r151%+mf%4%154*%r161%+mf%4%164*%r211%+mf%4%166*%r221%
-~+|||n|+|+|2
-~+|1|y|ms172|~?q=1|y|%mf%4%172.n%|%mf%4%172.d%|~?q=1|y||mf%4%172|||n|+|+|2
+~/###      HOV2 (low income for auto, externals, and air passengers)
+~+|1|y|ms171|~?q=1|y|%mf%4%173.n%|%mf%4%173.d%|~?q=1|y|
+~+|mf%4%128*%r031%+mf%4%148*%r131%+mf%4%160*%r191%|||n|+|+|2
+~+|1|y|ms172|~?q=1|y|%mf%4%173.n%|%mf%4%173.d%|~?q=1|y||mf%4%173|||n|+|+|2
 ~+|1|y|ms171|n|ms171/ms172||ms172|0,0,ex|2
-~/###      B-plate & Light trucks
+~/###      HOV2 (high income for auto, externals, and air passengers)
 ~+|1|y|ms173|~?q=1|y|%mf%4%174.n%|%mf%4%174.d%|~?q=1|y|
-~+|mf%4%136*%r071%+mf%4%138*%r081%
-~+|||n|+|+|2
+~+|mf%4%130*%r041%+mf%4%150*%r141%+mf%4%162*%r201%|||n|+|+|2
 ~+|1|y|ms174|~?q=1|y|%mf%4%174.n%|%mf%4%174.d%|~?q=1|y||mf%4%174|||n|+|+|2
 ~+|1|y|ms173|n|ms173/ms174||ms174|0,0,ex|2
+~/###      HOV3 (low income for auto, externals, and air passengers)
+~+|1|y|ms175|~?q=1|y|%mf%4%177.n%|%mf%4%177.d%|~?q=1|y|
+~+|mf%4%132*%r051%+mf%4%152*%r151%+mf%4%164*%r211%|||n|+|+|2
+~+|1|y|ms176|~?q=1|y|%mf%4%177.n%|%mf%4%177.d%|~?q=1|y||mf%4%177|||n|+|+|2
+~+|1|y|ms175|n|ms175/ms176||ms176|0,0,ex|2
+~/###      HOV3 (high income for auto, externals, and air passengers)
+~+|1|y|ms177|~?q=1|y|%mf%4%178.n%|%mf%4%178.d%|~?q=1|y|
+~+|mf%4%134*%r061%+mf%4%154*%r161%+mf%4%166*%r221%|||n|+|+|2
+~+|1|y|ms178|~?q=1|y|%mf%4%178.n%|%mf%4%178.d%|~?q=1|y||mf%4%178|||n|+|+|2
+~+|1|y|ms177|n|ms177/ms178||ms178|0,0,ex|2
+~/###      B-plate & Light trucks
+~+|1|y|ms179|~?q=1|y|%mf%4%180.n%|%mf%4%180.d%|~?q=1|y|
+~+|mf%4%136*%r071%+mf%4%138*%r081%|||n|+|+|2
+~+|1|y|ms180|~?q=1|y|%mf%4%180.n%|%mf%4%180.d%|~?q=1|y||mf%4%180|||n|+|+|2
+~+|1|y|ms179|n|ms179/ms180||ms180|0,0,ex|2
 q
-~+|~r231=60|~r232=60|~r233=60|~r234=60|~r235=60|~r236=60
-~+|~r231/%ms167%|~r232/%ms169%|~r233/%ms171%|~r234/%ms173%|~r235/%r091%|~r236/%r101%
-~/###            VOT, $/h     Toll multiplier, min/$ 
-~/###      SOV1: %ms167.2_>6%     %r231.2_>6%
-~/###      HOV2: %ms169.2_>6%     %r232.2_>6% 
-~/###      HOV3: %ms171.2_>6%     %r233.2_>6%
-~/###      LTRK: %ms173.2_>6%     %r234.2_>6%
-~/###      MTRK: %r091.2_>6%     %r235.2_>6%
-~/###      HTRK: %r101.2_>6%     %r236.2_>6% 
+~+|~r230=60|~r231=60|~r232=60|~r233=60|~r234=60|~r235=60|~r236=60|~r237=60|~r238=60
+~+|~r230/%ms167%|~r231/%ms169%|~r232/%ms171%|~r233/%ms173%|~r234/%ms175%|~r235/%ms177%|~r236/%ms179%|~r237/%r091%|~r238/%r101%
+~/###                             VOT, $/h    Toll multiplier, min/$ 
+~/###      SOV1 low income:      %ms167.2_>6%       %r230.2_>6%
+~/###      SOV1 high income:     %ms169.2_>6%       %r231.2_>6%
+~/###      HOV2 low income:      %ms171.2_>6%       %r232.2_>6% 
+~/###      HOV2 high income:     %ms173.2_>6%       %r233.2_>6% 
+~/###      HOV3 low income:      %ms175.2_>6%       %r234.2_>6%
+~/###      HOV3 high income:     %ms177.2_>6%       %r235.2_>6% 
+~/###      LIGHT TRUCK:          %ms179.2_>6%       %r236.2_>6%
+~/###      MEDIUM TRUCK:         %r091.2_>6%       %r237.2_>6%
+~/###      HEAVY TRUCK:          %r101.2_>6%       %r238.2_>6% 
 s=%r04%
-~/### 1.3. Implement main assignment onto network scenario %s% %ts% 
+~/
+~/### 1.3. Implement main SOLA assignment onto network scenario %s% %ts% 
 /~$>BYPASS
-5.11
-~+|1|~?q=2|2|4
-~+|S|%t1%|100 |1|mf%4%167|||
-~+|S|%t1%|%r231%|mf%4%168|
-~+|H|%t2%|100   |mf%4%169|
-~+|H|%t2%|%r232%|mf%4%170|
-~+|H|%t3%|100   |mf%4%171|
-~+|H|%t3%|%r233%|mf%4%172|
-~+|b|%t4%|100   |mf%4%173|
-~+|b|%t4%|%r234%|mf%4%174|
-~+|m|%t5%|100   |mf%4%139|
-~+|m|%t5%|%r235%|mf%4%140|
-~+|h|%t6%|100   |mf%4%141|
-~+|h|%t6%|%r236%|mf%4%142|
-~+||%r03%|0.0001|0.0001
-~o=0
-5.22
-2
-2
+5.23
+1
+~+|S|%t1%|100   |mf%4%167|||||
+~+|S|%t1%|100   |mf%4%168|||||
+~+|S|%t1%|%r230%|mf%4%169|||||
+~+|S|%t1%|%r231%|mf%4%170|||||
+~+|H|%t2%|100   |mf%4%171|||||
+~+|H|%t2%|100   |mf%4%172|||||
+~+|H|%t2%|%r232%|mf%4%173|||||
+~+|H|%t2%|%r233%|mf%4%174|||||
+~+|H|%t3%|100   |mf%4%175|||||
+~+|H|%t3%|100   |mf%4%176|||||
+~+|H|%t3%|%r234%|mf%4%177|||||
+~+|H|%t3%|%r235%|mf%4%178|||||
+~+|b|%t4%|100   |mf%4%179|||||
+~+|b|%t4%|%r236%|mf%4%180|||||
+~+|m|%t5%|100   |mf%4%139|||||
+~+|m|%t5%|%r237%|mf%4%140|||||
+~+|h|%t6%|100   |mf%4%141|||||
+~+|h|%t6%|%r238%|mf%4%142||||||
+~+|%r03%|0.0001|0.0001|0.005|2|2
 ~o=295
 ~:BYPASS
 ~/### 2.   SKIMMING
@@ -490,20 +520,36 @@ q
 ~+|1|y|vdf|%r05%||mod=SHbmh||4
 q
 ~/### 2.2. Skimming procedure for each segment (vehicle class) 
-~r241=175 /start numbering skim matrices (this line is needed not for debugging!) 
+~r241=181 /start numbering skim matrices (this line is needed not for debugging!) 
 ~r241+%r239%
 ~x=1
 ~:NEXT SKIM SEGMENT
-/Create counters: x-class 1-12, y-vehicle type 1-6, z=0-toll,1-non-toll:
-~+|~y=%x%|~y+1|~y/2|~z=%x%|~z%2
-/Toll equivalent muliplier in r240
-~+|~?z=1|~r240=999|~?z=0|~r240=%%%r23%y%%%%
+/Create counters: x-class 1-18 (12 auto, 6 truck), y-vehicle type 1-6, z=0-toll,1-non-toll:
+~y=%x%
+~?x<13
+~+|~y+3|~y/4| / Account for four options for each auto occupancy level (toll/nontoll, low/high income)
+~?x>12
+~+|~y+1|~y/2|~y-3
+~z=1
+~+|~?x>2 |~z=0
+~+|~?x>4 |~z=1
+~+|~?x>6 |~z=0
+~+|~?x>8 |~z=1
+~+|~?x>10|~z=0
+~?x>12
+~+|~z=%x%|~z%2
 /Mode letters for vehicle classes in t8
 ~+|~?y=01|~t8=S|~?y=02|~t8=H|~?y=03|~t8=H|~?y=04|~t8=b|~?y=05|~t8=m|~?y=06|~t8=h
 /Skim matrix token for each vehicle class and TOD period
-~+|~?x=01|~t9=S%4%1n|~?x=02|~t9=S%4%1t|~?x=03|~t9=H%4%2n|~?x=04|~t9=H%4%2t
-~+|~?x=05|~t9=H%4%3n|~?x=06|~t9=H%4%3t|~?x=07|~t9=L%4%Rn|~?x=08|~t9=L%4%Rt
-~+|~?x=09|~t9=M%4%Rn|~?x=10|~t9=M%4%Rt|~?x=11|~t9=H%4%Rn|~?x=12|~t9=H%4%Rt
+~+|~?x=01|~t9=S%4%1lont|~?x=02|~t9=S%4%1hint|~?x=03|~t9=S%4%1lotl|~?x=04|~t9=S%4%1hitl
+~+|~?x=05|~t9=H%4%2lont|~?x=06|~t9=H%4%2hint|~?x=07|~t9=H%4%2lotl|~?x=08|~t9=H%4%2hitl
+~+|~?x=09|~t9=H%4%3lont|~?x=10|~t9=H%4%3hint|~?x=11|~t9=H%4%3lotl|~?x=12|~t9=H%4%3hitl
+~+|~?x=13|~t9=L%4%Rnt  |~?x=14|~t9=L%4%Rtl  |~?x=15|~t9=M%4%Rnt  |~?x=16|~t9=M%4%Rtl
+~+|~?x=17|~t9=H%4%Rnt  |~?x=18|~t9=H%4%Rtl
+/Toll equivalent muliplier in r240
+/ -- set r register pointer ones value
+~+|~r99=9|~?x=03|~r99=0|~?x=04|~r99=1|~?x=07|~r99=2|~?x=08|~r99=3|~?x=11|~r99=4|~?x=12|~r99=5|~?x=14|~r99=6|~?x=16|~r99=7|~?x=18|~r99=8
+~+|~?z=1|~r240=999|~?z=0|~r240=%%%r23%r99%%%%
 ~/###      Segment %x% - %t9% 
 /Create path-building attribute UL1 for flat VDF (time for non-toll users, generalized cost for toll users)
 2.41
@@ -514,46 +560,54 @@ q
 ~+|1|y|ul3|0    ||all                |4
 ~+|1|y|ul3|len*(%t7%>0)||mod=SHbmh  ||4
 q
+
 ~/###      Base skimming procedure (AON - single iteration)
 /Class-specific demand matrix in r240
 ~+|~?x=01|~r240=167|~?x=02|~r240=168|~?x=03|~r240=169|~?x=04|~r240=170
 ~+|~?x=05|~r240=171|~?x=06|~r240=172|~?x=07|~r240=173|~?x=08|~r240=174
-~+|~?x=09|~r240=139|~?x=10|~r240=140|~?x=11|~r240=141|~?x=12|~r240=142
+~+|~?x=09|~r240=175|~?x=10|~r240=176|~?x=11|~r240=177|~?x=12|~r240=178
+~+|~?x=13|~r240=179|~?x=14|~r240=180|~?x=15|~r240=139|~?x=16|~r240=140
+~+|~?x=17|~r240=141|~?x=18|~r240=142
 ~r240+%r239%
-5.11 /Get congested travel time skim using UL2
-~+|1|~?e|/|~?q=2|2|~?e|/|1|5|mf%r240%||||2|+|0,999999
+/Get congested travel time skim using UL2
+5.23
+~+|1|%t8%||mf%r240%||||ul2||+|0,999999|1|
 ~+|mf%r241%|~?q=1|y|%t9%1c|Congested time %t9%|~?q=1|y|
-~+|1|1|-1|-1|5.22|2|2
+~+||||1|-1|-1|-1|2|2
 3.21 /Impute intrazonal congested time
 ~+|1|y|mo100|~?q=1|y|Intra|Intrazonal|~?q=1|y|0|mf%r241%+(p.eq.q)*999|||n|.min.|2
 ~+|1|y|md100|~?q=1|y|Intra|Intrazonal|~?q=1|y|0|mf%r241%+(p.eq.q)*999|||n|.min.|2
 ~+|1|y|mf%r241%|n|mf%r241%+(p.eq.q)*(mo100.min.md100)/2|||n|2
 q
 ~r241+1
-5.11 /Get toll value using class-specific extra-attribute t1-t6
-~+|1|~?e|/|~?q=2|2|~?e|/|1|5|mf%r240%||||6|%%%t%y%%%%|+|0,999999
+/Get toll value using class-specific extra-attribute t1-t6
+5.23
+~+|1|%t8%||mf%r240%||||%%%t%y%%%%||+|0,999999|1|
 ~+|mf%r241%|~?q=1|y|%t9%2t|Toll %t9%|~?q=1|y|
-~+|1|1|-1|-1|5.22|2|2
+~+||||1|-1|-1|-1|2|2
 ~r241+1
-5.11 /Get total trip distance using LEN 
-~+|1|~?e|/|~?q=2|2|~?e|/|1|5|mf%r240%||||4|+|0,999999
+/Get total trip distance using LEN 
+5.23
+~+|1|%t8%||mf%r240%||||len||+|0,999999|1|
 ~+|mf%r241%|~?q=1|y|%t9%3d|Distance %t9%|~?q=1|y|
-~+|1|1|-1|-1|5.22|2|2
+~+||||1|-1|-1|-1|2|2
 3.21 /Impute intrazonal distance (truncated by 3 miles)
 ~+|1|y|mo100|~?q=1|y|Intra|Intrazonal|~?q=1|y|0|mf%r241%+(p.eq.q)*999|||n|.min.|2
 ~+|1|y|md100|~?q=1|y|Intra|Intrazonal|~?q=1|y|0|mf%r241%+(p.eq.q)*999|||n|.min.|2
 ~+|1|y|mf%r241%|n|mf%r241%+(p.eq.q)*(((mo100.min.md100)/2).min.2.99)|||n|2
 q
 ~r241+1
-5.11 /Get toll/managed lane distance using UL3
-~+|1|~?e|/|~?q=2|2|~?e|/|1|5|mf%r240%||||3|+|0,999999
+/Get toll/managed lane distance using UL3
+5.23
+~+|1|%t8%||mf%r240%||||ul3||+|0,999999|1|
 ~+|mf%r241%|~?q=1|y|%t9%4m|Toll distance %t9%|~?q=1|y|
-~+|1|1|-1|-1|5.22|2|2
+~+||||1|-1|-1|-1|2|2
 ~r241+1
-5.11 /Get free-flow time using @ftime
-~+|1|~?e|/|~?q=2|2|~?e|/|1|5|mf%r240%||||6|@ftime|+|0,999999
+/Get free-flow time using @ftime
+5.23
+~+|1|%t8%||mf%r240%||||@ftime||+|0,999999|1|
 ~+|mf%r241%|~?q=1|y|%t9%5f|Free-flow time %t9%|~?q=1|y|
-~+|1|1|-1|-1|5.22|2|2
+~+||||1|-1|-1|-1|2|2
 3.21 /Impute intrazonal free-flow time
 ~+|1|y|mo100|~?q=1|y|Intra|Intrazonal|~?q=1|y|0|mf%r241%+(p.eq.q)*999|||n|.min.|2
 ~+|1|y|md100|~?q=1|y|Intra|Intrazonal|~?q=1|y|0|mf%r241%+(p.eq.q)*999|||n|.min.|2
@@ -561,33 +615,38 @@ q
 q
 ~r241+1
 ~x+1
-~?!x>12
+~?!x>18
 ~$NEXT SKIM SEGMENT
+~#
 ~/###      Intrazonal time and distance 
 /~:DEBUG
-/~r241=235 /start utility matrix numbers independently for debugging
+/~r241=271 /start utility matrix numbers independently for debugging
 ~/### 3.   UTILITY CALCULATION
 3.21
 ~+|~x=1|~?r02=1|~x=7|~?r02=1|~r241+12
 ~:NEXT UTILITY SEGMENT
 ~/###      Create counters: x-segment 1-22, y=1-non-toll,2-toll:
 ~/###      Utility matrix token for each segment
-~+|~?x=01|~t9=S%4%1L|~?x=02|~t9=S%4%1H|~?x=03|~t9=H%4%2L|~?x=04|~t9=H%4%2H|~?x=05|~t9=H%4%3L|~?x=06|~t9=H%4%3H
-~+|~?x=07|~t9=B%4%RK|~?x=08|~t9=L%4%RK|~?x=09|~t9=M%4%RK|~?x=10|~t9=H%4%RK
-~+|~?x=11|~t9=E%4%1L|~?x=12|~t9=E%4%1H|~?x=13|~t9=E%4%2L|~?x=14|~t9=E%4%2H|~?x=15|~t9=E%4%3L|~?x=16|~t9=E%4%3H
-~+|~?x=17|~t9=A%4%1L|~?x=18|~t9=A%4%1H|~?x=19|~t9=A%4%2L|~?x=20|~t9=A%4%2H|~?x=21|~t9=A%4%3L|~?x=22|~t9=A%4%3H
+~+|~?x=01|~t9=S%4%1lo|~?x=02|~t9=S%4%1hi|~?x=03|~t9=H%4%2lo|~?x=04|~t9=H%4%2hi|~?x=05|~t9=H%4%3lo|~?x=06|~t9=H%4%3hi
+~+|~?x=07|~t9=B%4%RK |~?x=08|~t9=L%4%RK |~?x=09|~t9=M%4%RK |~?x=10|~t9=H%4%RK
+~+|~?x=11|~t9=E%4%1L |~?x=12|~t9=E%4%1H |~?x=13|~t9=E%4%2L |~?x=14|~t9=E%4%2H |~?x=15|~t9=E%4%3L |~?x=16|~t9=E%4%3H
+~+|~?x=17|~t9=A%4%1L |~?x=18|~t9=A%4%1H |~?x=19|~t9=A%4%2L |~?x=20|~t9=A%4%2H |~?x=21|~t9=A%4%3L |~?x=22|~t9=A%4%3H
 ~/###      Skim matrix token for each segment
-~+|~?x=01|~t8=S%4%1 |~?x=02|~t8=S%4%1 |~?x=03|~t8=H%4%2 |~?x=04|~t8=H%4%2 |~?x=05|~t8=H%4%3 |~?x=06|~t8=H%4%3 
-~+|~?x=07|~t8=L%4%R |~?x=08|~t8=L%4%R |~?x=09|~t8=M%4%R |~?x=10|~t8=H%4%R 
-~+|~?x=11|~t8=S%4%1 |~?x=12|~t8=S%4%1 |~?x=13|~t8=H%4%2 |~?x=14|~t8=H%4%2 |~?x=15|~t8=H%4%3 |~?x=16|~t8=H%4%3
-~+|~?x=17|~t8=S%4%1 |~?x=18|~t8=S%4%1 |~?x=19|~t8=H%4%2 |~?x=20|~t8=H%4%2 |~?x=21|~t8=H%4%3 |~?x=22|~t8=H%4%3
+~+|~?x=01|~t8=S%4%1lo|~?x=02|~t8=S%4%1hi|~?x=03|~t8=H%4%2lo|~?x=04|~t8=H%4%2hi|~?x=05|~t8=H%4%3lo|~?x=06|~t8=H%4%3hi 
+~+|~?x=07|~t8=L%4%R  |~?x=08|~t8=L%4%R  |~?x=09|~t8=M%4%R  |~?x=10|~t8=H%4%R 
+~+|~?x=11|~t8=S%4%1lo|~?x=12|~t8=S%4%1hi|~?x=13|~t8=H%4%2lo|~?x=14|~t8=H%4%2hi|~?x=15|~t8=H%4%3lo|~?x=16|~t8=H%4%3hi
+~+|~?x=17|~t8=S%4%1lo|~?x=18|~t8=S%4%1hi|~?x=19|~t8=H%4%2lo|~?x=20|~t8=H%4%2hi|~?x=21|~t8=H%4%3lo|~?x=22|~t8=H%4%3hi
 ~/###      Segment %x% - %t9%: 
 ~z=1
 ~:NEXT UTILITY ROUTE TYPE
 ~?z=1 /non-toll
-~+|~t9=U%t9%n|~t8=%t8%n
+~+|~t9=U%t9%nt|~t8=%t8%nt
 ~?z=2 /toll
-~+|~t9=%t9.5%t|~t8=%t8.3%t
+~+|~?x<7|~t9=%t9.6%tl|~?x>6|~t9=%t9.5%tl|~?x<7|~t8=%t8.5%tl|~?x>10|~t8=%t8.5%tl|~?x<7|~$>jump_7-10|~?x>10|~$>jump_7-10
+~?z=2 /toll
+~t8=%t8.3%tl
+~:jump_7-10
+~#
 ~+|1|y|mf%r241%|~?q=1|y|%t9%|%t9% utility|~?q=1|y|
 ~/###      - Toll bias
 ~?z=2
@@ -614,25 +673,25 @@ q
 ~$NEXT UTILITY SEGMENT
 q
 /~:DEBUG
-/~r241=279 / start numbering route type choice matrices independently for debugging
+/~r241=315 / start numbering route type choice matrices independently for debugging
 ~/### 4.   ROUTE TYPE CHOICE 
 3.21
 ~+|~x=1|~?r02=1|~x=7|~?r02=1|~r241+12
 ~:NEXT ROUTE TYPE CHOICE SEGMENT
 ~/###      Demand matrix token for each segment
-~+|~?x=01|~t9=S%4%1L|~?x=02|~t9=S%4%1H|~?x=03|~t9=H%4%2L|~?x=04|~t9=H%4%2H|~?x=05|~t9=H%4%3L|~?x=06|~t9=H%4%3H
-~+|~?x=07|~t9=B%4%RK|~?x=08|~t9=L%4%RK|~?x=09|~t9=M%4%RK|~?x=10|~t9=H%4%RK
-~+|~?x=11|~t9=E%4%1L|~?x=12|~t9=E%4%1H|~?x=13|~t9=E%4%2L|~?x=14|~t9=E%4%2H|~?x=15|~t9=E%4%3L|~?x=16|~t9=E%4%3H
-~+|~?x=17|~t9=A%4%1L|~?x=18|~t9=A%4%1H|~?x=19|~t9=A%4%2L|~?x=20|~t9=A%4%2H|~?x=21|~t9=A%4%3L|~?x=22|~t9=A%4%3H
+~+|~?x=01|~t9=S%4%1lo|~?x=02|~t9=S%4%1hi|~?x=03|~t9=H%4%2lo|~?x=04|~t9=H%4%2hi|~?x=05|~t9=H%4%3lo|~?x=06|~t9=H%4%3hi
+~+|~?x=07|~t9=B%4%RK |~?x=08|~t9=L%4%RK |~?x=09|~t9=M%4%RK |~?x=10|~t9=H%4%RK
+~+|~?x=11|~t9=E%4%1L |~?x=12|~t9=E%4%1H |~?x=13|~t9=E%4%2L |~?x=14|~t9=E%4%2H |~?x=15|~t9=E%4%3L |~?x=16|~t9=E%4%3H
+~+|~?x=17|~t9=A%4%1L |~?x=18|~t9=A%4%1H |~?x=19|~t9=A%4%2L |~?x=20|~t9=A%4%2H |~?x=21|~t9=A%4%3L |~?x=22|~t9=A%4%3H
 ~/###      Matrix number with total demand for segment %x% %t9%:
 ~+|~y=%x%|~y+100|~y+%r239%
 ~/###      - Number of non-toll users 
-~+|1|y|mf%r241%|~?q=1|y|R%t9%n|%t9% result non-toll|~?q=1|y|
-~+|mf%y%/(1+exp(mf"U%t9%t"-mf"U%t9%n"))|||n|2
+~+|1|y|mf%r241%|~?q=1|y|R%t9%nt|%t9% result non-toll|~?q=1|y|
+~+|mf%y%/(1+exp(mf"U%t9%tl"-mf"U%t9%nt"))|||n|2
 ~r241+1
 ~/###      - Number of toll users
-~+|1|y|mf%r241%|~?q=1|y|R%t9%t|%t9% result toll|~?q=1|y|
-~+|(mf%y%-mf"R%t9%n").max.0|||n|2
+~+|1|y|mf%r241%|~?q=1|y|R%t9%tl|%t9% result toll|~?q=1|y|
+~+|(mf%y%-mf"R%t9%nt").max.0|||n|2
 ~r241+1
 ~x+1
 ~?!x>22
@@ -644,17 +703,17 @@ q
 ~+|~x=1|~?r02=1|~x=7
 ~:NEXT DEMAND UPDATE SEGMENT
 ~/###      Demand matrix token for each segment
-~+|~?x=01|~t9=S%4%1L|~?x=02|~t9=S%4%1H|~?x=03|~t9=H%4%2L|~?x=04|~t9=H%4%2H|~?x=05|~t9=H%4%3L|~?x=06|~t9=H%4%3H
-~+|~?x=07|~t9=B%4%RK|~?x=08|~t9=L%4%RK|~?x=09|~t9=M%4%RK|~?x=10|~t9=H%4%RK
-~+|~?x=11|~t9=E%4%1L|~?x=12|~t9=E%4%1H|~?x=13|~t9=E%4%2L|~?x=14|~t9=E%4%2H|~?x=15|~t9=E%4%3L|~?x=16|~t9=E%4%3H
-~+|~?x=17|~t9=A%4%1L|~?x=18|~t9=A%4%1H|~?x=19|~t9=A%4%2L|~?x=20|~t9=A%4%2H|~?x=21|~t9=A%4%3L|~?x=22|~t9=A%4%3H
+~+|~?x=01|~t9=S%4%1lo|~?x=02|~t9=S%4%1hi|~?x=03|~t9=H%4%2lo|~?x=04|~t9=H%4%2hi|~?x=05|~t9=H%4%3lo|~?x=06|~t9=H%4%3hi
+~+|~?x=07|~t9=B%4%RK |~?x=08|~t9=L%4%RK |~?x=09|~t9=M%4%RK |~?x=10|~t9=H%4%RK
+~+|~?x=11|~t9=E%4%1L |~?x=12|~t9=E%4%1H |~?x=13|~t9=E%4%2L |~?x=14|~t9=E%4%2H |~?x=15|~t9=E%4%3L |~?x=16|~t9=E%4%3H
+~+|~?x=17|~t9=A%4%1L |~?x=18|~t9=A%4%1H |~?x=19|~t9=A%4%2L |~?x=20|~t9=A%4%2H |~?x=21|~t9=A%4%3L |~?x=22|~t9=A%4%3H
 ~/###      Segment %x% - %t9%: 
 ~z=1
 ~:NEXT DEMAND UPDATE ROUTE TYPE
 ~?z=1
-~+|~t9=N%t9%n|~t8=R%t9%n
+~+|~t9=N%t9%nt|~t8=R%t9%nt
 ~?z=2
-~+|~t9=%t9.5%t|~t8=%t8.5%t
+~+|~?x<7|~t9=%t9.6%tl|~?x>6|~t9=%t9.5%tl|~?x<7|~t8=%t8.6%tl|~?x>6|~t8=%t8.5%tl
 ~/###      - Result matrix number to update
 ~+|~y=%x%|~y-1|~y*2|~y+122|~y+%z%|~y+%r239%
 ~/###      - Save matrix total before update
@@ -683,10 +742,10 @@ q
 ~x=1
 ~:LOOP TOTALS BY SEGMENT
 ~/###      Skim matrix token for each segment
-~+|~?x=01|~t8=S%4%1 |~?x=02|~t8=S%4%1 |~?x=03|~t8=H%4%2 |~?x=04|~t8=H%4%2 |~?x=05|~t8=H%4%3 |~?x=06|~t8=H%4%3 
-~+|~?x=07|~t8=L%4%R |~?x=08|~t8=L%4%R |~?x=09|~t8=M%4%R |~?x=10|~t8=H%4%R 
-~+|~?x=11|~t8=S%4%1 |~?x=12|~t8=S%4%1 |~?x=13|~t8=H%4%2 |~?x=14|~t8=H%4%2 |~?x=15|~t8=H%4%3 |~?x=16|~t8=H%4%3
-~+|~?x=17|~t8=S%4%1 |~?x=18|~t8=S%4%1 |~?x=19|~t8=H%4%2 |~?x=20|~t8=H%4%2 |~?x=21|~t8=H%4%3 |~?x=22|~t8=H%4%3
+~+|~?x=01|~t8=S%4%1lo|~?x=02|~t8=S%4%1hi|~?x=03|~t8=H%4%2lo|~?x=04|~t8=H%4%2hi|~?x=05|~t8=H%4%3lo|~?x=06|~t8=H%4%3hi 
+~+|~?x=07|~t8=L%4%R  |~?x=08|~t8=L%4%R  |~?x=09|~t8=M%4%R  |~?x=10|~t8=H%4%R 
+~+|~?x=11|~t8=S%4%1lo|~?x=12|~t8=S%4%1hi|~?x=13|~t8=H%4%2lo|~?x=14|~t8=H%4%2hi|~?x=15|~t8=H%4%3lo|~?x=16|~t8=H%4%3hi
+~+|~?x=17|~t8=S%4%1lo|~?x=18|~t8=S%4%1hi|~?x=19|~t8=H%4%2lo|~?x=20|~t8=H%4%2hi|~?x=21|~t8=H%4%3lo|~?x=22|~t8=H%4%3hi
 ~z=1
 ~:NEXT LOOP TOTAL BY ROUTE TYPE
 ~/###      Matrix number to total
@@ -696,9 +755,9 @@ q
 ~/###      - Captive users for segment %x%-%t8% and route type %z% that cannot use the other route type
 ~+|~r241=%y%|~r241+100
 ~?z=1 / non-toll captives that have zero toll in toll users skim
-~+|1|y|ms%r241%|~?q=1|y|%mf%y%.n%|%mf%y%.d%|~?q=1|y||mf%y%||mf"%t8%t2t"|0,0,in|n|+|+|2
+~+|1|y|ms%r241%|~?q=1|y|%mf%y%.n%|%mf%y%.d%|~?q=1|y||mf%y%||mf"%t8%tl2t"|0,0,in|n|+|+|2
 ~?z=2 / toll captives that have non-zero toll in non-toll skim
-~+|1|y|ms%r241%|~?q=1|y|%mf%y%.n%|%mf%y%.d%|~?q=1|y||mf%y%||mf"%t8%n2t"|0,0,ex|n|+|+|2
+~+|1|y|ms%r241%|~?q=1|y|%mf%y%.n%|%mf%y%.d%|~?q=1|y||mf%y%||mf"%t8%nt2t"|0,0,ex|n|+|+|2
 ~z+1
 ~?!z>2
 ~$NEXT LOOP TOTAL BY ROUTE TYPE
@@ -757,37 +816,45 @@ s=%r04%
 ~/### 7.   FINAL ASSIGNMENT WITH SAVING CLASS-SPECIFIC VOLUMES
 ~/### 7.1. Aggregation of trip tables for assignment
 3.21
-~+|1|y|mf%4%167|n|mf%4%123+mf%4%125+mf%4%143+mf%4%145+mf%4%155+mf%4%157|||n|2
-~+|1|y|mf%4%168|n|mf%4%124+mf%4%126+mf%4%144+mf%4%146+mf%4%156+mf%4%158|||n|2
-~+|1|y|mf%4%169|n|mf%4%127+mf%4%129+mf%4%147+mf%4%149+mf%4%159+mf%4%161|||n|2
-~+|1|y|mf%4%170|n|mf%4%128+mf%4%130+mf%4%148+mf%4%150+mf%4%160+mf%4%162|||n|2
-~+|1|y|mf%4%171|n|mf%4%131+mf%4%133+mf%4%151+mf%4%153+mf%4%163+mf%4%165|||n|2
-~+|1|y|mf%4%172|n|mf%4%132+mf%4%134+mf%4%152+mf%4%154+mf%4%164+mf%4%166|||n|2
-~+|1|y|mf%4%173|n|mf%4%135+mf%4%137|||n|2
-~+|1|y|mf%4%174|n|mf%4%136+mf%4%138|||n|2
+~+|1|y|mf%4%167|n|mf%4%123+mf%4%143+mf%4%155|||n|2
+~+|1|y|mf%4%168|n|mf%4%125+mf%4%145+mf%4%157|||n|2
+~+|1|y|mf%4%169|n|mf%4%124+mf%4%144+mf%4%156|||n|2
+~+|1|y|mf%4%170|n|mf%4%126+mf%4%146+mf%4%158|||n|2
+~+|1|y|mf%4%171|n|mf%4%127+mf%4%147+mf%4%159|||n|2
+~+|1|y|mf%4%172|n|mf%4%129+mf%4%149+mf%4%161|||n|2
+~+|1|y|mf%4%173|n|mf%4%128+mf%4%148+mf%4%160|||n|2
+~+|1|y|mf%4%174|n|mf%4%130+mf%4%150+mf%4%162|||n|2
+~+|1|y|mf%4%175|n|mf%4%131+mf%4%151+mf%4%163|||n|2
+~+|1|y|mf%4%176|n|mf%4%133+mf%4%153+mf%4%165|||n|2
+~+|1|y|mf%4%177|n|mf%4%132+mf%4%152+mf%4%164|||n|2
+~+|1|y|mf%4%178|n|mf%4%134+mf%4%154+mf%4%166|||n|2
+~+|1|y|mf%4%179|n|mf%4%135+mf%4%137|||n|2
+~+|1|y|mf%4%180|n|mf%4%136+mf%4%138|||n|2
 q
 ~/### 7.2. Final Assignment
 /line below for debugging:
 /~+|~r231=4|~r232=4|~r233=4|~r234=4|~r235=4|~r236=4
-5.11
-~+|1|~?q=2|2|5
-~+|S|%t1%|100   |@vso1n|n||1|mf%4%167|||
-~+|S|%t1%|%r231%|@vso1t|n||  mf%4%168|
-~+|H|%t2%|100   |@vho2n|n||  mf%4%169|
-~+|H|%t2%|%r232%|@vho2t|n||  mf%4%170|
-~+|H|%t3%|100   |@vho3n|n||  mf%4%171|
-~+|H|%t3%|%r233%|@vho3t|n||  mf%4%172|
-~+|b|%t4%|100   |@vltrn|n||  mf%4%173|
-~+|b|%t4%|%r234%|@vltrt|n||  mf%4%174|
-~+|m|%t5%|100   |@vmtrn|n||  mf%4%139|
-~+|m|%t5%|%r235%|@vmtrt|n||  mf%4%140|
-~+|h|%t6%|100   |@vhtrn|n||  mf%4%141|
-~+|h|%t6%|%r236%|@vhtrt|n||  mf%4%142|
-~+||%r03%|0.0001|0.0001
-~o=0
-5.22
-2
-2
+5.23
+1
+~+|S|%t1%|100   |mf%4%167||@vso1ntlo|n|||
+~+|S|%t1%|100   |mf%4%168||@vso1nthi|n|||
+~+|S|%t1%|%r230%|mf%4%169||@vso1tllo|n|||
+~+|S|%t1%|%r231%|mf%4%170||@vso1tlhi|n|||
+~+|H|%t2%|100   |mf%4%171||@vho2ntlo|n|||
+~+|H|%t2%|100   |mf%4%172||@vho2nthi|n|||
+~+|H|%t2%|%r232%|mf%4%173||@vho2tllo|n|||
+~+|H|%t2%|%r233%|mf%4%174||@vho2tlhi|n|||
+~+|H|%t3%|100   |mf%4%175||@vho3ntlo|n|||
+~+|H|%t3%|100   |mf%4%176||@vho3nthi|n|||
+~+|H|%t3%|%r234%|mf%4%177||@vho3tllo|n|||
+~+|H|%t3%|%r235%|mf%4%178||@vho3tlhi|n|||
+~+|b|%t4%|100   |mf%4%179||@vltrnt  |n|||
+~+|b|%t4%|%r236%|mf%4%180||@vltrtl  |n|||
+~+|m|%t5%|100   |mf%4%139||@vmtrnt  |n|||
+~+|m|%t5%|%r237%|mf%4%140||@vmtrtl  |n|||
+~+|h|%t6%|100   |mf%4%141||@vhtrnt  |n|||
+~+|h|%t6%|%r238%|mf%4%142||@vhtrtl  |n||||
+~+|%r03%|0.0001|0.0001|0.005|2|2
 ~o=295
 ~/### Done!!!
 ~:SKIP FINAL ASSIGNMENT
