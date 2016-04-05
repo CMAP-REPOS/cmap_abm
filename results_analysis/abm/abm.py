@@ -779,7 +779,7 @@ class ABM(object):
                     pnr = people_uclasses[pers_id][4]
                     knr = people_uclasses[pers_id][5]
 
-                uclass = {10: wtt, 11: knr, 12: pnr}[mode]
+                uclass = {10: wtt, 11: knr, 12: pnr}.get(mode, None)
 
                 # Insert into table
                 db_row = (
