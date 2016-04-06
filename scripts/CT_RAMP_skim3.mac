@@ -122,67 +122,97 @@ reports=../../outputs/report_hwyskim.txt
 /mf%4%165 - non-toll airport passengers HOV3 High income (auto vehicle equivalent)
 /mf%4%166 - toll HOV3 airport passengers High income (auto vehicle equivalent) 
 /OUTPUT HIGHWAY SKIMS (used by CT-RAMP):
-/mf%4%175 - congested time SOV1 non-toll 
-/mf%4%176 - toll SOV1 non-toll (0 except for captives)
-/mf%4%177 - distance SOV1 non-toll
-/mf%4%178 - toll (managed lane) distance SOV1 non-toll 
-/mf%4%179 - free-flow time SOV1 non-toll
-/mf%4%180 - congested time SOV1 toll 
-/mf%4%181 - toll SOV1 toll 
-/mf%4%182 - distance SOV1 toll
-/mf%4%183 - toll (managed lane) distance SOV1 toll
-/mf%4%184 - free-flow time SOV1 toll
-/mf%4%185 - congested time HOV2 non-toll 
-/mf%4%186 - toll HOV2 non-toll (0 except for captives)
-/mf%4%187 - distance HOV2 non-toll
-/mf%4%188 - toll (managed lane) distance HOV2 non-toll 
-/mf%4%189 - free-flow time HOV2 non-toll
-/mf%4%190 - congested time HOV2 toll 
-/mf%4%191 - toll HOV2 toll 
-/mf%4%192 - distance HOV2 toll
-/mf%4%193 - toll (managed lane) distance HOV2 toll
-/mf%4%194 - free-flow time HOV2 toll
-/mf%4%195 - congested time HOV3 non-toll 
-/mf%4%196 - toll HOV3 non-toll (0 except for captives)
-/mf%4%197 - distance HOV3 non-toll
-/mf%4%198 - toll (managed lane) distance HOV3 non-toll 
-/mf%4%199 - free-flow time HOV3 non-toll
-/mf%4%200 - congested time HOV3 toll 
-/mf%4%201 - toll HOV3 toll 
-/mf%4%202 - distance HOV3 toll
-/mf%4%203 - toll (managed lane) distance HOV3 toll
-/mf%4%204 - free-flow time HOV3 toll
+/mf%4%181 - congested time SOV1 low-income non-toll
+/mf%4%182 - toll SOV1 low-income non-toll (0 except for captives)
+/mf%4%183 - distance SOV1 low-income non-toll
+/mf%4%184 - toll (managed lane) distance SOV1 low-income non-toll
+/mf%4%185 - free-flow time SOV1 low-income non-toll
+/mf%4%186 - congested time SOV1 high-income non-toll
+/mf%4%187 - toll SOV1 high-income non-toll (0 except for captives)
+/mf%4%188 - distance SOV1 high-income non-toll
+/mf%4%189 - toll (managed lane) distance SOV1 high-income non-toll
+/mf%4%190 - free-flow time SOV1 high-income non-toll
+/mf%4%191 - congested time SOV1 low-income toll
+/mf%4%192 - toll SOV1 low-income toll
+/mf%4%193 - distance SOV1 low-income toll
+/mf%4%194 - toll (managed lane) distance SOV1 low-income toll
+/mf%4%195 - free-flow time SOV1 low-income toll
+/mf%4%196 - congested time SOV1 high-income toll
+/mf%4%197 - toll SOV1 high-income toll
+/mf%4%198 - distance SOV1 high-income toll
+/mf%4%199 - toll (managed lane) distance SOV1 high-income toll
+/mf%4%200 - free-flow time SOV1 high-income toll
+/mf%4%201 - congested time HOV2 low-income non-toll
+/mf%4%202 - toll HOV2 low-income non-toll (0 except for captives)
+/mf%4%203 - distance HOV2 low-income non-toll
+/mf%4%204 - toll (managed lane) distance HOV2 low-income non-toll
+/mf%4%205 - free-flow time HOV2 low-income non-toll
+/mf%4%206 - congested time HOV2 high-income non-toll
+/mf%4%207 - toll HOV2 high-income non-toll (0 except for captives)
+/mf%4%208 - distance HOV2 high-income non-toll
+/mf%4%209 - toll (managed lane) distance HOV2 high-income non-toll
+/mf%4%210 - free-flow time HOV2 high-income non-toll
+/mf%4%211 - congested time HOV2 low-income toll
+/mf%4%212 - toll HOV2 low-income toll
+/mf%4%213 - distance HOV2 low-income toll
+/mf%4%214 - toll (managed lane) distance HOV2 low-income toll
+/mf%4%215 - free-flow time HOV2 low-income toll
+/mf%4%216 - congested time HOV2 high-income toll
+/mf%4%217 - toll HOV2 high-income toll
+/mf%4%218 - distance HOV2 high-income toll
+/mf%4%219 - toll (managed lane) distance HOV2 high-income toll
+/mf%4%220 - free-flow time HOV2 high-income toll
+/mf%4%221 - congested time HOV3 low-income non-toll
+/mf%4%222 - toll HOV3 low-income non-toll (0 except for captives)
+/mf%4%223 - distance HOV3 low-income non-toll
+/mf%4%224 - toll (managed lane) distance HOV3 low-income non-toll
+/mf%4%225 - free-flow time HOV3 low-income non-toll
+/mf%4%226 - congested time HOV3 high-income non-toll
+/mf%4%227 - toll HOV3 high-income non-toll (0 except for captives)
+/mf%4%228 - distance HOV3 high-income non-toll
+/mf%4%229 - toll (managed lane) distance HOV3 high-income non-toll
+/mf%4%230 - free-flow time HOV3 high-income non-toll
+/mf%4%231 - congested time HOV3 low-income toll
+/mf%4%232 - toll HOV3 low-income toll
+/mf%4%233 - distance HOV3 low-income toll
+/mf%4%234 - toll (managed lane) distance HOV3 low-income toll
+/mf%4%235 - free-flow time HOV3 low-income toll
+/mf%4%236 - congested time HOV3 high-income toll
+/mf%4%237 - toll HOV3 high-income toll
+/mf%4%238 - distance HOV3 high-income toll
+/mf%4%239 - toll (managed lane) distance HOV3 high-income toll
+/mf%4%240 - free-flow time HOV3 high-income toll
 /OUTPUT HIGHWAY SKIMS (for non-CT-RAMP components):
-/mf%4%205 - congested time light truck non-toll 
-/mf%4%206 - toll light truck non-toll (0 except for captives)
-/mf%4%207 - distance light truck non-toll
-/mf%4%208 - toll (managed lane) distance light truck non-toll 
-/mf%4%209 - free-flow time light truck non-toll
-/mf%4%210 - congested time light truck toll 
-/mf%4%211 - toll light truck toll 
-/mf%4%212 - distance light truck toll
-/mf%4%213 - toll (managed lane) distance light truck toll
-/mf%4%214 - free-flow time light truck toll
-/mf%4%215 - congested time medium truck non-toll 
-/mf%4%216 - toll medium truck non-toll (0 except for captives)
-/mf%4%217 - distance medium truck non-toll
-/mf%4%218 - toll (managed lane) distance medium truck non-toll 
-/mf%4%219 - free-flow time medium truck non-toll
-/mf%4%220 - congested time medium truck toll 
-/mf%4%221 - toll medium truck toll 
-/mf%4%222 - distance medium truck toll
-/mf%4%223 - toll (managed lane) distance medium truck toll
-/mf%4%224 - free-flow time medium truck toll
-/mf%4%225 - congested time heavy truck non-toll 
-/mf%4%226 - toll heavy truck non-toll (0 except for captives)
-/mf%4%227 - distance heavy truck non-toll
-/mf%4%228 - toll (managed lane) distance heavy truck non-toll 
-/mf%4%229 - free-flow time heavy truck non-toll
-/mf%4%230 - congested time heavy truck toll 
-/mf%4%231 - toll heavy truck toll
-/mf%4%232 - distance heavy truck toll
-/mf%4%233 - toll (managed lane) distance heavy truck toll
-/mf%4%234 - free-flow time heavy truck toll
+/mf%4%241 - congested time light truck non-toll
+/mf%4%242 - toll light truck non-toll (0 except for captives)
+/mf%4%243 - distance light truck non-toll
+/mf%4%244 - toll (managed lane) distance light truck non-toll
+/mf%4%245 - free-flow time light truck non-toll
+/mf%4%246 - congested time light truck toll
+/mf%4%247 - toll light truck toll
+/mf%4%248 - distance light truck toll
+/mf%4%249 - toll (managed lane) distance light truck toll
+/mf%4%250 - free-flow time light truck toll
+/mf%4%251 - congested time medium truck non-toll
+/mf%4%252 - toll medium truck non-toll (0 except for captives)
+/mf%4%253 - distance medium truck non-toll
+/mf%4%254 - toll (managed lane) distance medium truck non-toll
+/mf%4%255 - free-flow time medium truck non-toll
+/mf%4%256 - congested time medium truck toll
+/mf%4%257 - toll medium truck toll
+/mf%4%258 - distance medium truck toll
+/mf%4%259 - toll (managed lane) distance medium truck toll
+/mf%4%260 - free-flow time medium truck toll
+/mf%4%261 - congested time heavy truck non-toll
+/mf%4%262 - toll heavy truck non-toll (0 except for captives)
+/mf%4%263 - distance heavy truck non-toll
+/mf%4%264 - toll (managed lane) distance heavy truck non-toll
+/mf%4%265 - free-flow time heavy truck non-toll
+/mf%4%266 - congested time heavy truck toll
+/mf%4%267 - toll heavy truck toll
+/mf%4%268 - distance heavy truck toll
+/mf%4%269 - toll (managed lane) distance heavy truck toll
+/mf%4%270 - free-flow time heavy truck toll
 /Link extra attributes to save class-specific volumes
 /@vso1ntlo - volumes for SOV1 low income non-toll users
 /@vso1nthi - volumes for SOV1 high income non-toll users
