@@ -1,0 +1,115 @@
+~/### quick_update_fix.mac
+~/###  Heither, 12-14-2015
+~/### 
+~/###  Macro prepares existing ABM databank for new procedures by looping through Scens 1-8 to:
+~/###    - read in dummy turn file (needed for SOLA asmt to work in Emme 4.2.0).
+~/###    - clear out unnecessry extra attributes and create new ones.
+
+~o|39
+~t2=%1%
+~x=1
+~:loop
+s=%x%
+~# ## turn issue fix
+batchin=%t2%\dummy.turn.in
+~+|2.31|2|2|q
+batchin=
+~# ## ------ 
+~#
+~#
+~# ##  Clears out old extra attributes and initializes new (Dec. 2015) versions
+2.42
+3
+~+|@vso1n|~?e|~$>SKIP01|y|3
+~:SKIP01
+~+|@vso1t|~?e|~$>SKIP02|y|3
+~:SKIP02
+~+|@vho2n|~?e|~$>SKIP03|y|3
+~:SKIP03
+~+|@vho2t|~?e|~$>SKIP04|y|3
+~:SKIP04
+~+|@vho3n|~?e|~$>SKIP05|y|3
+~:SKIP05
+~+|@vho3t|~?e|~$>SKIP06|y|3
+~:SKIP06
+~+|@vltrn|~?e|~$>SKIP07|y|3
+~:SKIP07
+~+|@vltrt|~?e|~$>SKIP08|y|3
+~:SKIP08
+~+|@vmtrn|~?e|~$>SKIP09|y|3
+~:SKIP09
+~+|@vmtrt|~?e|~$>SKIP10|y|3
+~:SKIP10
+~+|@vhtrn|~?e|~$>SKIP11|y|3
+~:SKIP11
+~+|@vhtrt|~?e|~$>SKIP12|y|3
+~:SKIP12
+~+|@vso1ntlo|~?e|~$>SKIP13|y|3
+~:SKIP13
+~+|@vso1nthi|~?e|~$>SKIP14|y|3
+~:SKIP14
+~+|@vso1tllo|~?e|~$>SKIP15|y|3
+~:SKIP15
+~+|@vso1tlhi|~?e|~$>SKIP16|y|3
+~:SKIP16
+~+|@vho2ntlo|~?e|~$>SKIP17|y|3
+~:SKIP17
+~+|@vho2nthi|~?e|~$>SKIP18|y|3
+~:SKIP18
+~+|@vho2tllo|~?e|~$>SKIP19|y|3
+~:SKIP19
+~+|@vho2tlhi|~?e|~$>SKIP20|y|3
+~:SKIP20
+~+|@vho3ntlo|~?e|~$>SKIP21|y|3
+~:SKIP21
+~+|@vho3nthi|~?e|~$>SKIP22|y|3
+~:SKIP22
+~+|@vho3tllo|~?e|~$>SKIP23|y|3
+~:SKIP23
+~+|@vho3tlhi|~?e|~$>SKIP24|y|3
+~:SKIP24
+~+|@vltrnt|~?e|~$>SKIP25|y|3
+~:SKIP25
+~+|@vltrtl|~?e|~$>SKIP26|y|3
+~:SKIP26
+~+|@vmtrnt|~?e|~$>SKIP27|y|3
+~:SKIP27
+~+|@vmtrtl|~?e|~$>SKIP28|y|3
+~:SKIP28
+~+|@vhtrnt|~?e|~$>SKIP29|y|3
+~:SKIP29
+~+|@vhtrtl|~?e|~$>SKIP30|y|3
+~:SKIP30
+~+||q 
+/Create extra attributes
+2.42
+~+|2|2|@vso1ntlo|Volume SOV1 low income non-toll users |0
+~+|2|2|@vso1nthi|Volume SOV1 high income non-toll users|0
+~+|2|2|@vso1tllo|Volume SOV1 low income toll users     |0
+~+|2|2|@vso1tlhi|Volume SOV1 high income toll users    |0
+~+|2|2|@vho2ntlo|Volume HOV2 low income non-toll users |0
+~+|2|2|@vho2nthi|Volume HOV2 high income non-toll users|0
+~+|2|2|@vho2tllo|Volume HOV2 low income toll users     |0
+~+|2|2|@vho2tlhi|Volume HOV2 high income toll users    |0
+~+|2|2|@vho3ntlo|Volume HOV3 low income non-toll users |0
+~+|2|2|@vho3nthi|Volume HOV3 high income non-toll users|0
+~+|2|2|@vho3tllo|Volume HOV3 low income toll users     |0
+~+|2|2|@vho3tlhi|Volume HOV3 high income toll users    |0
+~+|2|2|@vltrnt  |Volume ltrk non-toll users            |0
+~+|2|2|@vltrtl  |Volume ltrk toll users                |0
+~+|2|2|@vmtrnt  |Volume mtrk non-toll users            |0
+~+|2|2|@vmtrtl  |Volume mtrk toll users                |0
+~+|2|2|@vhtrnt  |Volume htrk non-toll users            |0
+~+|2|2|@vhtrtl  |Volume htrk toll users                |0
+q
+~#
+~#
+~x+1
+~+;~?x<9;~$loop
+~#
+~#
+~o=6
+s=1
+~/ end of macro
+
+q

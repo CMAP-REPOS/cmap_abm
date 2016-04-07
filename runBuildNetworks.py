@@ -67,7 +67,7 @@ runPeriods = map(int, sys.argv[1].split(","))
 #loop by time-of-day
 for i in range(len(tods)):
 
-        #run only specified periods
+    #run only specified periods
     runPeriod = runPeriods[i]
     if runPeriod:
 
@@ -114,7 +114,7 @@ for i in range(len(tods)):
             m.emmebank.delete_scenario(tranScen)
             m.emmebank.create_scenario(tranScen)
 
-          #create transit network
+        #create transit network
         #%1%       /transit import scenario (100)
         #%2%       /hwy scenario and time-of-day for transit run times
         #%3%       /inputs folder
@@ -170,14 +170,14 @@ for i in range(len(tods)):
                 link.num_lanes = 0
                 link.volume_delay_func = 1
 
-          #create link in node to zone direction
+                #create link in node to zone direction
                 link = network.create_link(access_link[1], access_link[0], egress_modes)
                 link.length = 0.001
                 link.type = 1
                 link.num_lanes = 0
                 link.volume_delay_func = 1
 
-          #publish tap network back to bank
+        #publish tap network back to bank
         m.emmebank.scenario(tranScen).publish_network(network)
 
         #input time period transit tap demand matrices
@@ -185,3 +185,8 @@ for i in range(len(tods)):
 
         #log results
         print("Time-of-day %i Complete %s" % (tod, datetime.datetime.now()))
+
+
+# Add dummy turn for SOLA assignment (quick fix until Emme 4.2.3)
+SOLAFixMacro = "../../scripts/quick_update_fix.mac"
+p.run_macro("~< {0} {1}".format(SOLAFixMacro, os.getcwd() + "\\inputs"), m.emmebank.path, scen)
