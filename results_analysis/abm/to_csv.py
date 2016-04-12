@@ -246,9 +246,12 @@ def vmt_statistics(abm, csv_path=False):
 
             # Calculate VMT
             vol = (  # Convert vehicle-equivalents to vehicles
-                link['@vso1n']/1 + link['@vso1t']/1 + link['@vho2n']/1 + link['@vho2t']/1 +
-                link['@vho3n']/1 + link['@vho3t']/1 + link['@vltrn']/1 + link['@vltrt']/1 +
-                link['@vmtrn']/2 + link['@vmtrt']/2 + link['@vhtrn']/3 + link['@vhtrt']/3
+                link['@vso1ntlo']/1 + link['@vso1nthi']/1 + link['@vso1tllo']/1 + link['@vso1tlhi']/1 +
+                link['@vho2ntlo']/1 + link['@vho2nthi']/1 + link['@vho2tllo']/1 + link['@vho2tlhi']/1 +
+                link['@vho3ntlo']/1 + link['@vho3nthi']/1 + link['@vho3tllo']/1 + link['@vho3tlhi']/1 +
+                link['@vltrnt']/1 + link['@vltrtl']/1 +
+                link['@vmtrnt']/2 + link['@vmtrtl']/2 +
+                link['@vhtrnt']/3 + link['@vhtrtl']/3
             )
             vmt = vol * link.length
 
