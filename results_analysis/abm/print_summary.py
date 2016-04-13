@@ -2,7 +2,7 @@
 '''
     print_summary.py
     Author: npeterson
-    Revised: 3/18/16
+    Revised: 4/13/16
     ---------------------------------------------------------------------------
     A set of functions for printing summaries of ABM and Comparison objects
     to the terminal.
@@ -20,9 +20,9 @@ def mode_share(abm, grouped=False):
     if grouped:
         mode_share_grouped = {
             'Auto (Excl. Taxi)': sum(abm.mode_share[m] for m in xrange(1, 7)),
-            'Drive-to-Transit': sum(abm.mode_share[m] for m in (11, 12)),
-            'Walk-to-Transit': sum(abm.mode_share[m] for m in (9, 10)),
-            'Walk/Bike/Taxi/School Bus': sum(abm.mode_share[m] for m in (7, 8, 13, 14))
+            'Drive-to-Transit': sum(abm.mode_share[m] for m in [11, 12]),
+            'Walk-to-Transit': sum(abm.mode_share[m] for m in [10]),
+            'Walk/Bike/Taxi/School Bus': sum(abm.mode_share[m] for m in [7, 8, 13, 14])
         }
         print 'MODE SHARE (GROUPED)'
         print '--------------------'
@@ -114,9 +114,9 @@ def mode_share_change(comparison, grouped=True):
     if grouped:
         mode_share_grouped_diff = {
             'Auto (Excl. Taxi)': sum(mode_share_diff[m] for m in xrange(1, 7)),
-            'Drive-to-Transit': sum(mode_share_diff[m] for m in (11, 12)),
-            'Walk-to-Transit': sum(mode_share_diff[m] for m in (9, 10)),
-            'Walk/Bike/Taxi/School Bus': sum(mode_share_diff[m] for m in (7, 8, 13, 14))
+            'Drive-to-Transit': sum(mode_share_diff[m] for m in [11, 12]),
+            'Walk-to-Transit': sum(mode_share_diff[m] for m in [10]),
+            'Walk/Bike/Taxi/School Bus': sum(mode_share_diff[m] for m in [7, 8, 13, 14])
         }
         print 'MODE SHARE CHANGE (GROUPED)'
         print '---------------------------'
