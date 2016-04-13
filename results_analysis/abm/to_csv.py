@@ -2,7 +2,7 @@
 '''
     to_csv.py
     Author: npeterson
-    Revised: 3/18/16
+    Revised: 4/13/16
     ---------------------------------------------------------------------------
     A set of functions for exporting summaries of ABM and Comparison objects
     to CSVs.
@@ -84,10 +84,10 @@ def od_matrix(abm, csv_path=False):
         6: 'AUTO',      # Shared ride 3+ pay
         7: None,        # Walk
         8: None,        # Bike
-        9: 'TRANSIT',   # Walk to local transit
-        10: 'TRANSIT',  # Walk to premium transit
-        11: 'TRANSIT',  # Drive to local transit
-        12: 'TRANSIT',  # Drive to premium transit
+        #9: None,       # N/A (formerly 'Walk to local transit')
+        10: 'TRANSIT',  # Walk to transit (formerly 'Walk to premium transit')
+        11: 'TRANSIT',  # Kiss-n-ride (formerly 'Drive to local transit')
+        12: 'TRANSIT',  # Park-n-ride (formerly 'Drive to premium transit')
         13: None,       # Taxi
         14: None,       # School bus
     }
