@@ -1,23 +1,15 @@
 :: runModel.bat
 :: Written by BTS, 06/24/13
-:: Modified by NMP, 05/14/14 - don't store username or password
-::                  04/17/15 - log timestamps
-::                  07/08/15 - new server config
+:: Modified by NMP, 04/14/16 - run accessibilities after skimming
 :: ----------------------------------------------------------------------------
-:: Run the CMAP Transit ABM.
-:: Call from command line with CMAP username & password as arguments,
-:: e.g "runmodel npeterson P@ssw0rd > blog.txt"
+:: Run the CMAP ABM from start to finish.
+:: Call from command line, e.g "runModel.bat > blog.txt"
 
 :: Parameters
 SET projDir=Y:/{{{TEMPLATE}}}/cmap_abm
 SET sampleRate=0.50
 
-@SET user=%1
-@SET pwd=%2
-@SET un=cmap\%user%
-SET IP1=\\10.10.1.52
-SET IP2=\\10.10.1.51
-SET IP3=\\10.10.1.53
+:: Set Python paths
 CALL EmmeConfig.bat
 @ECHO on
 SET emmepy="%EMMEPATH%\Python27\python.exe"
@@ -41,6 +33,13 @@ if exist model_run_timestamp.txt (del model_run_timestamp.txt /Q)
 %emmepy% runBuildNetworks.py 1,1,1,1,1,1,1,1
 @ECHO Run initial skims: %date% %time% >> model_run_timestamp.txt
 %emmepy% runInitialSkims.py 1,1,1,1,1,1,1,1
+
+:: Run accessibilities script
+@ECHO Calculate accessibilities: %date% %time% >> model_run_timestamp.txt
+cd accessibilities
+CALL runAccessibilities.bat
+copy outputs\accessibility_maz.csv ..\inputs
+cd ..
 
 :: Create TAP lines file and run CT-RAMP
 @ECHO Create TAP lines: %date% %time% >> model_run_timestamp.txt
