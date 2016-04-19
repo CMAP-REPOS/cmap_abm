@@ -14,17 +14,17 @@ copy tap_attributes.csv ..\accessibilities\inputs
 cd ..\CMAP-ABM\Database\emmemat
 %emmepy% ../../../scripts/EMXtoZMX.py ../../CMAP-ABM.emp 103 mf3431 mf3432 mf3433 mf3434 mf3461
 %emmepy% ../../../scripts/EMXtoZMX.py ../../CMAP-ABM.emp 105 mf5431 mf5432 mf5433 mf5434 mf5461
-copy mf3181.zmx ..\..\..\accessibilities\inputs
-copy mf3182.zmx ..\..\..\accessibilities\inputs
-copy mf3183.zmx ..\..\..\accessibilities\inputs
+copy mf3175.zmx ..\..\..\accessibilities\inputs
+copy mf3176.zmx ..\..\..\accessibilities\inputs
+copy mf3177.zmx ..\..\..\accessibilities\inputs
 copy mf3431.zmx ..\..\..\accessibilities\inputs
 copy mf3432.zmx ..\..\..\accessibilities\inputs
 copy mf3433.zmx ..\..\..\accessibilities\inputs
 copy mf3434.zmx ..\..\..\accessibilities\inputs
 copy mf3461.zmx ..\..\..\accessibilities\inputs
-copy mf5181.zmx ..\..\..\accessibilities\inputs
-copy mf5182.zmx ..\..\..\accessibilities\inputs
-copy mf5183.zmx ..\..\..\accessibilities\inputs
+copy mf5175.zmx ..\..\..\accessibilities\inputs
+copy mf5176.zmx ..\..\..\accessibilities\inputs
+copy mf5177.zmx ..\..\..\accessibilities\inputs
 copy mf5431.zmx ..\..\..\accessibilities\inputs
 copy mf5432.zmx ..\..\..\accessibilities\inputs
 copy mf5433.zmx ..\..\..\accessibilities\inputs
