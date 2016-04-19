@@ -135,6 +135,10 @@ if __name__== "__main__":
 
         print("calculate mode utilities")
 
+        #ensure outputs folder exists
+        if not os.path.exists(outputsFolder):
+            os.makedirs(outputsFolder)
+
         #read mode uec
         mode_table = pd.read_csv(inputsFolder + modeUEC)
 
