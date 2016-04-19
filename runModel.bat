@@ -3,7 +3,7 @@
 :: Modified by NMP, 04/14/16 - run accessibilities after skimming
 :: ----------------------------------------------------------------------------
 :: Run the CMAP ABM from start to finish.
-:: Call from command line, e.g "runModel.bat > blog.txt"
+:: Call from command line, e.g.: runModel.bat > blog.txt
 
 :: Parameters
 SET projDir=Y:/{{{TEMPLATE}}}/cmap_abm
@@ -11,9 +11,17 @@ SET sampleRate=0.50
 
 :: Set Python paths
 CALL EmmeConfig.bat
-@ECHO on
 SET emmepy="%EMMEPATH%\Python27\python.exe"
 SET py64="C:\Python27\python.exe"
+
+:: Optional parameters for distributed skimming/assignment.
+:: If enabled, call script with username and password,
+:: e.g.: runModel.bat npeterson P@ssw0rd > blog.txt
+REM @SET user=%1
+REM @SET pwd=%2
+REM SET un=cmap\%user%
+REM SET IP1=\\10.10.1.52
+REM SET IP2=\\10.10.1.63
 
 :: Initialize timestamp log
 if exist model_run_timestamp.txt (del model_run_timestamp.txt /Q)
