@@ -385,7 +385,7 @@ reports=../../outputs/report_hwyskim.txt
 ~+|~r239=%4%|~r239*1000
 /~$>DEBUG
 ~/###      Scenario %s%: %ts%
-~?!r1=0
+~?!r01=0
 ~$>SKIP INI
 ~?r02=0
 ~/### 0.   INITIALIZE MATRICES mf%4%123-mf%4%166 FOR ALL COMPONENTS
