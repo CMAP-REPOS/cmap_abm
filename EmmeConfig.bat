@@ -1,8 +1,7 @@
 :: The following code is taken directly from %EMMEPATH%\programs\Emme-cmd.bat
-:: (only code up to and including the "@set path" command was copied).
-:: The alternative, according to INRO, is to reinstall Emme and check
-:: the box to make its Python the system/default Python.
-@echo off
+:: (only code after "@echo off", up to and including the "@set path" command
+:: was copied). The alternative, according to INRO, is to reinstall Emme and
+:: check the box to make its Python the system/default Python.
 @set DYNAMEQ=
 @for /F "tokens=2* usebackq" %%a in (
 `%comspec% /C reg QUERY "HKEY_LOCAL_MACHINE\SOFTWARE\INRO\Dynameq" /v CurrentPath 2^>nul`
