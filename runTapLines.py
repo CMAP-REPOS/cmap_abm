@@ -26,7 +26,7 @@ import inro.emme.prompt as p
 import os, csv, math, pickle, datetime, sys
 
 #start EMME desktop and attach a modeller session
-desktop = d.start_dedicated(True, "bts", empFile)
+desktop = d.start_dedicated(True, "cmap", empFile)
 m = m.Modeller(desktop)
 
 ############################################################################

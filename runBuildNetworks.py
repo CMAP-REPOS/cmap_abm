@@ -52,7 +52,7 @@ import os, csv, math, pickle, datetime, sys
 from scripts import EMXtoZMX
 
 #start EMME desktop and attach a modeller session
-desktop = d.start_dedicated(True, "bts", empFile)
+desktop = d.start_dedicated(True, "cmap", empFile)
 m = m.Modeller(desktop)
 
 #location to write matrices
