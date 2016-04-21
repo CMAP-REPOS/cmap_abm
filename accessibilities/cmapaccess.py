@@ -68,7 +68,7 @@ def readZMX(fileName):
 def addMatToDb(db, fullFileName):
 
     #dict of numpy 2D arrays
-    #db['mf3175'][(1,5),(3,1)] #get OD indices 1->3 and 5->1
+    #db['mf3181'][(1,5),(3,1)] #get OD indices 1->3 and 5->1
 
     #read matrix
     mat, zoneNames, name = readZMX(fullFileName)
@@ -165,7 +165,7 @@ if __name__== "__main__":
         mazs = pd.merge(mazs, mazneartaps, left_index=True, right_index=True)
 
         #get matrix names
-        tazNames = addMatToDb(db, inputsFolder + "mf3175.zmx")
+        tazNames = addMatToDb(db, inputsFolder + "mf3181.zmx")
         tapNames = addMatToDb(db, inputsFolder + "mf3431.zmx")
         mazs['tazindex']  = tazNames['index'].loc[mazs['zone09']].tolist()
         mazs['wttapindex']  = tapNames['index'].loc[mazs['wt_tap']].tolist()
