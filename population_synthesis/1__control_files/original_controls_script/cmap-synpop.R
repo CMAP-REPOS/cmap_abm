@@ -4,7 +4,7 @@
 
 ################################################################################
 
-PopSynDir <- getwd() #"S:/AdminGroups/ResearchAnalysis/nmp/ABM/source_code/cmap_abm/population_synthesis"
+source("../../get_dir.R")  # Intelligently create PopSynDir variable
 setwd(file.path(PopSynDir, "2__synpop"))
 
 ################################################################################

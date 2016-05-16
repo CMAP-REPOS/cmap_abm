@@ -2,7 +2,7 @@
 #Allocate SynPop HHs to MAZs and create maz access file
 #Ben Stabler, stabler@pbworld.com, 05/24/13
 
-PopSynDir <- getwd() #"S:/AdminGroups/ResearchAnalysis/nmp/ABM/source_code/cmap_abm/population_synthesis"
+source("../get_dir.R")  # Intelligently create PopSynDir variable
 inDir1 = file.path(PopSynDir, "2__synpop/outputs")
 inDir2 = file.path(PopSynDir, "3__hh_taz_to_maz/inputs")
 outDir = file.path(PopSynDir, "3__hh_taz_to_maz/outputs")

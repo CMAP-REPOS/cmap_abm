@@ -12,7 +12,7 @@ library(plyr)
 library(foreign)
 
 # User inputs
-PopSynDir <- getwd() #"S:/AdminGroups/ResearchAnalysis/nmp/ABM/source_code/cmap_abm/population_synthesis"
+source("../get_dir.R")  # Intelligently create PopSynDir variable
 RScriptDir <- file.path(PopSynDir, "1__control_files")
 InDir <- file.path(PopSynDir, "1__control_files/inputs")
 OutDir <- file.path(PopSynDir, "2__synpop/inputs/datatables")
