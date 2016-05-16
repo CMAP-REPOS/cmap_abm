@@ -60,3 +60,8 @@ Thumbs.db
 /population_synthesis/3__hh_taz_to_maz/inputs/
 /population_synthesis/3__hh_taz_to_maz/outputs/
 .svn/
+
+# Excluded files #
+####################
+/exec/cmap.jar
+/exec/ctrampIf.jar
