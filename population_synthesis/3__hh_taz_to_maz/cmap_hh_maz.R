@@ -1,6 +1,6 @@
-
-#Allocate SynPop HHs to MAZs and create maz access file
+#Allocate SynPop HHs to MAZs
 #Ben Stabler, stabler@pbworld.com, 05/24/13
+#Revised to work with TG files by NMP, 5/19/16
 
 source("../get_dir.R")  # Intelligently create PopSynDir variable
 inDir1 = file.path(PopSynDir, "2__synpop/outputs")
@@ -11,13 +11,24 @@ outDir = file.path(PopSynDir, "3__hh_taz_to_maz/outputs")
 setwd(inDir1)
 hh = read.csv("ForecastHHFile.csv")
 setwd(inDir2)
-mazs = read.csv("SubzoneData.csv")
+#mazs = read.csv("SubzoneData.csv")
+hh_in = read.table("HH_IN.TXT", header=FALSE, sep=",",
+                   col.names=c("subzone09","hshld","ahh","whh","chh",
+                               "iqi","ahi","automs","pef"))
+hh_in = subset(hh_in, select=c("subzone09","hshld"))
+
+geog_in = read.table(file="GEOG_IN.TXT", header=FALSE, sep=",",
+                     col.names=c("subzone09","cofips","coname","state","puma1",
+                                 "puma5","zone09","chi","cbd","rowcol","sqmi"))
+geog_in = subset(geog_in, select=c("subzone09","zone09"))
+
+mazs = merge(geog_in, hh_in)
 
 #Get mazs (and their num hhs) by taz
 mazsByTaz = tapply(mazs$subzone09, mazs$zone09, function(x) x)
 mazHHsByTaz = tapply(mazs$hshld, mazs$zone09, function(x) x)
 
-#Randomly assign an MAZ to a TAZ using the MAZ num hhs as the probability weight
+#Randomly assign an MAZ to a TAZ using the MAZ num HHs as the probability weight
 assignMaz = function(taz) {
   mazs = mazsByTaz[taz][[1]]
   hhs = mazHHsByTaz[taz][[1]]
@@ -32,26 +43,3 @@ mazs = sapply(tazs, assignMaz)
 hh$maz = mazs
 setwd(outDir)
 write.csv(hh, "ForecastHHFile_maz.csv", quote=F, row.names=F)
-
-#Create maz level accessibility csv file as well
-#mazs = read.csv("SubzoneData.csv")
-#access = read.csv("accessibility.csv")
-#
-#mazs$autoPeakRetail = access$autoPeakRetail[match(mazs$zone09, access$taz)]
-#mazs$autoPeakTotal = access$autoPeakTotal[match(mazs$zone09, access$taz)]
-#mazs$autoOffPeakRetail = access$autoOffPeakRetail[match(mazs$zone09, access$taz)]
-#mazs$autoOffPeakTotal = access$autoOffPeakTotal[match(mazs$zone09, access$taz)]
-#mazs$nonMotorizedRetail = access$nonMotorizedRetail[match(mazs$zone09, access$taz)]
-#mazs$nonMotorizedTotal = access$nonMotorizedTotal[match(mazs$zone09, access$taz)]
-#mazs$transitPeakRetail = access$transitPeakRetail[match(mazs$zone09, access$taz)]
-#mazs$transitPeakTotal = access$transitPeakTotal[match(mazs$zone09, access$taz)]
-#mazs$transitOffPeakRetail = access$transitOffPeakRetail[match(mazs$zone09, access$taz)]
-#mazs$transitOffPeakTotal = access$transitOffPeakTotal[match(mazs$zone09, access$taz)]
-#mazs$access17 = access$access17[match(mazs$zone09, access$taz)]
-#mazs$access18 = access$access18[match(mazs$zone09, access$taz)]
-#
-#outFields = c("subzone09","autoPeakRetail", "autoPeakTotal", "autoOffPeakRetail",
-#"autoOffPeakTotal", "nonMotorizedRetail", "nonMotorizedTotal",
-#"transitPeakRetail", "transitPeakTotal", "transitOffPeakRetail",
-#"transitOffPeakTotal", "access17", "access18")
-#write.csv(mazs[,outFields], "accessibility_maz.csv", quote=F, row.names=F)
