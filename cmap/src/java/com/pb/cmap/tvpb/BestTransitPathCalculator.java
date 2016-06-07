@@ -270,8 +270,9 @@ public class BestTransitPathCalculator implements Serializable
             	}
         		
         		//create path for each skim set
-        		paths.add(new TransitPath(pMgra, aMgra, pTap, aTap, userClass, WTW, accUtil, tapTapUtil[userClass], egrUtil));
-            
+        		if (accUtil != NA & tapTapUtil[userClass] != NA & egrUtil != NA) {
+        			paths.add(new TransitPath(pMgra, aMgra, pTap, aTap, userClass, WTW, accUtil, tapTapUtil[userClass], egrUtil));
+            	} 
             }
         }
         
@@ -340,7 +341,9 @@ public class BestTransitPathCalculator implements Serializable
             	}
         		
         		//create path for each skim set
-        		paths.add(new TransitPath(pMgra, aMgra, pTap, aTap, userClass, DTW, accUtil, tapTapUtil[userClass], egrUtil));
+        		if (accUtil != NA & tapTapUtil[userClass] != NA & egrUtil != NA) {
+        			paths.add(new TransitPath(pMgra, aMgra, pTap, aTap, userClass, DTW, accUtil, tapTapUtil[userClass], egrUtil));
+        		}
         		
             }
         }
@@ -411,7 +414,9 @@ public class BestTransitPathCalculator implements Serializable
             	}
         		
         		//create path for each skim set
-        		paths.add(new TransitPath(pMgra, aMgra, pTap, aTap, userClass, KTW, accUtil, tapTapUtil[userClass], egrUtil));
+        		if (accUtil != NA & tapTapUtil[userClass] != NA & egrUtil != NA) {
+        			paths.add(new TransitPath(pMgra, aMgra, pTap, aTap, userClass, KTW, accUtil, tapTapUtil[userClass], egrUtil));
+        		}
         		
             }
         }
@@ -484,7 +489,9 @@ public class BestTransitPathCalculator implements Serializable
             	}
         		
         		//create path for each skim set
+        		if (accUtil != NA & tapTapUtil[userClass] != NA & egrUtil != NA) {
             		paths.add(new TransitPath(pMgra, aMgra, pTap, aTap, userClass, WTD, accUtil, tapTapUtil[userClass], egrUtil));
+        		}
    
             }
         }
@@ -555,7 +562,9 @@ public class BestTransitPathCalculator implements Serializable
             	}
         		
         		//create path for each skim set
+        		if (accUtil != NA & tapTapUtil[userClass] != NA & egrUtil != NA) {
             		paths.add(new TransitPath(pMgra, aMgra, pTap, aTap, userClass, WTK, accUtil, tapTapUtil[userClass], egrUtil));
+        		}
    
             }
         }
@@ -776,7 +785,27 @@ public class BestTransitPathCalculator implements Serializable
             	tapTapUtil = storedDepartPeriodTapTapUtils.get(period).get(storedDataObject.paTapKey(pTap, aTap))[walkDmu.getUserClass()];
             }
     	}
-        return(accUtil + tapTapUtil + egrUtil);
+    	
+    	if (accUtil != NA & tapTapUtil != NA & egrUtil != NA) {
+    		return(accUtil + tapTapUtil + egrUtil);
+    	} else {
+    		
+    		if(myTrace) {
+	            myLogger.info("--------------------------------------------------------");
+	            myLogger.info("TAP pair unavailable at person specific level           ");
+	            myLogger.info("--------------------------------------------------------");
+	    		myLogger.info("maxWalk " + walkDmu.maxWalk);
+	    		myLogger.info("path attributes");
+	    		myLogger.info("accEgr " + accEgr);
+	    		myLogger.info("maz2TapDistance " + walkDmu.getMaz2TapDistance());
+	    		myLogger.info("accUtil " + accUtil);
+	        	myLogger.info("tapTapUtil " + tapTapUtil);
+	            myLogger.info("egrUtil " + egrUtil);
+	            myLogger.info("");
+    		}
+            
+    		return(NA_TIME);
+    	}
     }
     
     /**
@@ -872,7 +901,7 @@ public class BestTransitPathCalculator implements Serializable
      * @param logger Logger to which debugging reports should be logged if debug is true
      * @return double[][] Array of best tap pair values - rows are N-path, columns are orig tap, dest tap, skim set, utility
      */
-    public double[][] calcPersonSpecificUtilities(double[][] bestTapPairs, TransitWalkAccessDMU walkDmu, TransitDriveAccessDMU driveDmu, int accMode, int origMgra, int destMgra, int departPeriod, boolean debug, Logger myLogger)
+    public double[][] calcPersonSpecificUtilities(double[][] bestTapPairs, TransitWalkAccessDMU walkDmu, TransitDriveAccessDMU driveDmu, int accMode, int origMgra, int destMgra, int departPeriod, boolean debug, Logger myLogger, String label)
     {
 
         String separator = "";
@@ -881,7 +910,7 @@ public class BestTransitPathCalculator implements Serializable
         {
         	myLogger.info("");
         	myLogger.info("");
-            header = ACC_EGR_LABELS[accMode] + " best tap pairs person specific utility info for origMgra=" + origMgra
+            header = label + " " + ACC_EGR_LABELS[accMode] + " best tap pairs person specific utility info for origMgra=" + origMgra
                     + ", destMgra=" + destMgra + ", period index=" + departPeriod
                     + ", period label=" + PERIODS[departPeriod];
             for (int i = 0; i < header.length(); i++)
@@ -890,6 +919,7 @@ public class BestTransitPathCalculator implements Serializable
             myLogger.info("");
             myLogger.info(separator);
             myLogger.info("Calculating " + header);
+            myLogger.info(separator);
         }
 
         //re-calculate utilities

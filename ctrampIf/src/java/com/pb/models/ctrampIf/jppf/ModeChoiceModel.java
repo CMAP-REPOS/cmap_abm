@@ -238,6 +238,9 @@ public class ModeChoiceModel implements Serializable {
             
         }
 
+        //create TVPB for tour mode choice model
+        setTVPBValues(mcDmuObject, primaryPurposeName, true, household.getDebugChoiceModels());
+        
         mcModel[modelIndex].computeUtilities( mcDmuObject, mcDmuObject.getDmuIndexValues() );
 
         Random hhRandom = household.getHhRandom();
@@ -327,115 +330,10 @@ public class ModeChoiceModel implements Serializable {
 
     }
 
-    public void applyModel( HouseholdIf household ){
-
-        try {
-	        if (tourCategory.equalsIgnoreCase(ModelStructure.JOINT_NON_MANDATORY_CATEGORY)) {
-	            TourIf[] jointTours = household.getJointTourArray();
-	            if (jointTours!=null) {
-	            	for ( int i=0; i < jointTours.length; i++ ) {
-	            		TourIf tour = jointTours[i];  
-	            		applyJointModel(household, tour); 
-	            	}
-	            }
-	        }
-        } catch ( Exception e ) {
-            logger.error( String.format( "error in joint tour mode choice model model for hhId=%d.", household.getHhId()));
-            throw new RuntimeException(e);
-        }
-        // get the array of persons for this household
-        PersonIf[] personArray = household.getPersons();
-
-        // loop through the persons (1-based array)
-        for(int j=1;j<personArray.length;++j){
-
-            TourIf tour = null;
-            PersonIf person = personArray[j];
-            
-            try {
-	            if (tourCategory.equalsIgnoreCase(ModelStructure.MANDATORY_CATEGORY)) {
-	            	ArrayList<TourIf> workTours = person.getListOfWorkTours();
-	            	for ( int i=0; i < workTours.size(); i++ ) {
-	            		tour = workTours.get(i); 
-	            		applyIndividualModel(household, person, tour); 
-	            	}
-	            	ArrayList<TourIf> schoolTours = person.getListOfSchoolTours();
-	            	for (int i=0; i < schoolTours.size(); i++) {
-	            		tour = schoolTours.get(i); 
-	            		applyIndividualModel(household, person, tour); 
-	            	}                    
-	            }
-	            else if (tourCategory.equalsIgnoreCase(ModelStructure.INDIVIDUAL_NON_MANDATORY_CATEGORY)) {
-	            	ArrayList<TourIf> tours = person.getListOfIndividualNonMandatoryTours();
-	            	for ( int i=0; i < tours.size(); i++ ) {
-	            		tour = tours.get(i); 
-	            		applyIndividualModel(household, person, tour); 
-	            	}            	
-	            }
-	            else if (tourCategory.equalsIgnoreCase(ModelStructure.AT_WORK_CATEGORY)) {
-	            	ArrayList<TourIf> tours = person.getListOfAtWorkSubtours(); 
-	            	for ( int i=0; i < tours.size(); i++ ) {
-	            		tour = tours.get(i); 
-	            		applyIndividualModel(household, person, tour); 
-	            	}            	
-	            }
-            }
-            catch ( Exception e ) {
-                logger.error( String.format( "error in individual tour mode choice model model for hhId=%d, persId=%d, persNum=%d, personType=%s.", household.getHhId(), person.getPersonId(), person.getPersonNum(), person.getPersonType() ));
-                logger.error( String.format( "tour id=%d, tour orig=%d, tour dest=%d, tour purpose=%s, tour purpose index=%d.", tour.getTourId(), tour.getTourOrigTaz(), tour.getTourDestTaz(), tour.getTourPrimaryPurpose(), tour.getTourPrimaryPurposeIndex() ));
-                throw new RuntimeException(e);
-            }
-        }
-    	
-    }
+    
     
 
-    private void applyJointModel(HouseholdIf household, TourIf tour) {
-    	PersonIf person = tour.getPersonObject(); 
-    	applyIndividualModel(household, person, tour); 
-    }
     
-    private void applyIndividualModel(HouseholdIf household, PersonIf person, TourIf tour) {
-        
-        // update the MC dmuObjects for this person
-        mcDmuObject.setHouseholdObject(household);
-        mcDmuObject.setPersonObject( person );
-        mcDmuObject.setTourObject( tour );
-        mcDmuObject.setDmuIndexValues( household.getHhId(), household.getHhTaz(), tour.getTourOrigTaz(), tour.getTourDestTaz(), household.getDebugChoiceModels() );
-        mcDmuObject.setTourDepartPeriod( tour.getTourDepartPeriod() );
-        mcDmuObject.setTourArrivePeriod( tour.getTourArrivePeriod() );
-        
-        if (tourCategory.equalsIgnoreCase(ModelStructure.AT_WORK_CATEGORY)) {
-        	ArrayList<TourIf> workTourList = person.getListOfWorkTours();
-            int workTourIndex = tour.getWorkTourIndexFromSubtourId( tour.getTourId() );
-            TourIf workTour = workTourList.get( workTourIndex );            
-        	mcDmuObject.setWorkTourObject(workTour); 
-        }
-
-        //create TVPB for tour mode choice model
-        setTVPBValues(mcDmuObject, tour.getTourPrimaryPurpose(), true, household.getDebugChoiceModels());
-        
-        // use the mcModel object already setup for computing logsums and get the mode choice, where the selected
-        // worklocation and subzone an departure time and duration are set for this work tour.
-        int chosenMode = getModeChoice ( mcDmuObject, tour.getTourPrimaryPurpose() );
-        tour.setTourModeChoice( chosenMode );
-        
-        //set tour taps
-        setTourTaps(tour, mcDmuObject, chosenMode);
-
-        if ( household.getDebugChoiceModels() ) {
-        	Logger modelLogger = null; 
-            if ( tourCategory.equalsIgnoreCase( ModelStructure.MANDATORY_CATEGORY ) )
-                modelLogger = tourMCManLogger;
-            else
-                modelLogger = tourMCNonManLogger;
-            
-            modelLogger.info("Chosen mode = " + chosenMode); 
-            String decisionMakerLabel = String.format ( "Final Mode Choice Person Object: HH=%d, PersonNum=%d, PersonType=%s", household.getHhId(), person.getPersonNum(), person.getPersonType() );
-            household.logPersonObject( decisionMakerLabel, modelLogger, person );
-        }
-        
-    }
 
     public String[] getModeAltNames( int purposeIndex ) {
         int modelIndex = purposeModelIndexMap.get( tourPurposeList[purposeIndex] );
@@ -550,14 +448,14 @@ public class ModeChoiceModel implements Serializable {
     			bestWtwTapPairsIn = tvpb.calcPersonSpecificUtilities(bestWtwTapPairsIn, walkDmu, driveDmu, tvpb.WTW, 
         				mcDmuObject.getDmuIndexValues().getDestZone(),
         				mcDmuObject.getDmuIndexValues().getOriginZone(), 
-        				mcDmuObject.getTodIn(), debug, logger);
+        				mcDmuObject.getTodIn(), debug, logger, "tour mode choice");
     		}
     		
     		if(bestWtdTapPairsIn[0] != null) {
     			bestWtdTapPairsIn = tvpb.calcPersonSpecificUtilities(bestWtdTapPairsIn, walkDmu, driveDmu, tvpb.WTD, 
         				mcDmuObject.getDmuIndexValues().getDestZone(), 
         				mcDmuObject.getDmuIndexValues().getOriginZone(), 
-        				mcDmuObject.getTodIn(), debug, logger);
+        				mcDmuObject.getTodIn(), debug, logger, "tour mode choice");
 
     		}
     		
@@ -565,28 +463,28 @@ public class ModeChoiceModel implements Serializable {
     			bestWtkTapPairsIn = tvpb.calcPersonSpecificUtilities(bestWtkTapPairsIn, walkDmu, knrDmu, tvpb.WTK, 
         				mcDmuObject.getDmuIndexValues().getDestZone(), 
         				mcDmuObject.getDmuIndexValues().getOriginZone(), 
-        				mcDmuObject.getTodIn(), debug, logger);
+        				mcDmuObject.getTodIn(), debug, logger, "tour mode choice");
     		}
     		
     		if(bestWtwTapPairsOut[0] != null) {
     			bestWtwTapPairsOut = tvpb.calcPersonSpecificUtilities(bestWtwTapPairsOut, walkDmu, driveDmu, tvpb.WTW, 
         				mcDmuObject.getDmuIndexValues().getOriginZone(), 
         				mcDmuObject.getDmuIndexValues().getDestZone(), 
-        				mcDmuObject.getTodOut(), debug, logger);
+        				mcDmuObject.getTodOut(), debug, logger, "tour mode choice");
     		}
     		
     		if(bestDtwTapPairsOut[0] != null) {
     			bestDtwTapPairsOut = tvpb.calcPersonSpecificUtilities(bestDtwTapPairsOut, walkDmu, driveDmu, tvpb.DTW, 
         				mcDmuObject.getDmuIndexValues().getOriginZone(), 
         				mcDmuObject.getDmuIndexValues().getDestZone(), 
-        				mcDmuObject.getTodOut(), debug, logger);
+        				mcDmuObject.getTodOut(), debug, logger, "tour mode choice");
     		}
     		
     		if(bestKtwTapPairsOut[0] != null) {
     			bestKtwTapPairsOut = tvpb.calcPersonSpecificUtilities(bestKtwTapPairsOut, walkDmu, knrDmu, tvpb.KTW, 
         				mcDmuObject.getDmuIndexValues().getOriginZone(), 
         				mcDmuObject.getDmuIndexValues().getDestZone(), 
-        				mcDmuObject.getTodOut(), debug, logger);
+        				mcDmuObject.getTodOut(), debug, logger, "tour mode choice");
     		}
     	
     	}

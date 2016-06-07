@@ -36,6 +36,7 @@ q
 ~r250+400
 ~/SETTING ASSIGNMENT & SKIMMING PARAMETERS
 / CALCULATE WAIT TIME FUNCTION USED AS FRACTION OF HDWY
+~# original rail slopes (0.5, 0.15, 0.10, 0.0333) modified by (BMP 5/13/16):
 ~r01=0.50000 /slope for 1st segment (high frequency) bus
 ~r02=0.40000 /slope for 2nd segment (med frequency)  bus
 ~r03=0.35000 /slope for 3rd segment (low frequency)  bus
@@ -60,9 +61,9 @@ q
 ~+|)))/hdwy
 ~+||mod=BEPQL||4|q
 ~r01=0.50000 /slope for 1st segment (high frequency) rail
-~r02=0.15000 /slope for 2nd segment (med frequency)  rail
-~r03=0.10000 /slope for 3rd segment (low frequency)  rail
-~r04=0.03333 /slope for 4th segment (very low freq)  rail
+~r02=0.4000 /slope for 2nd segment (med frequency)  rail
+~r03=0.35000 /slope for 3rd segment (low frequency)  rail
+~r04=0.08333 /slope for 4th segment (very low freq)  rail
 ~r05=10      /length of 1st segment, min rail
 ~r06=10      /length of 2nd segment, min rail
 ~r07=10      /length of 3rd segment, min rail
@@ -162,6 +163,13 @@ q
 ~r43= 183  /METRA
 ~r44= 200	 /CTA TRANSFER DISCOUNT
 ~r45=  25  /Default transfer cost
+
+~# r41= 0  /CTA BUS AND RAIL
+~# r42= 0  /PACE
+~# r43= 0  /METRA
+~# r44= 0	 /CTA TRANSFER DISCOUNT
+~# r45= 0  /Default transfer cost
+
 2.41
 ~+|1|y|ut1|    0||    all| 4
 ~+|1|y|ut1|%r41%||mod=BEC||4
@@ -1004,6 +1012,7 @@ q
 3.21
 ~+|1|y|mf"Pgen%2%%y%"|n|999||mf"Pgen%2%%y%"|0.001,9999,ex|n|2
 ~+|1|y|mf"Pivt%2%%y%"|n|0||mf"Pivt%2%%y%"|0,9999,ex|n|2
+~+|1|y|mf"Pgen%2%%y%"|n|999||mf"Pivt%2%%y%"|0,0,in|n|2
 ~+|1|y|mf"Pwlk%2%%y%"|n|0||mf"Pwlk%2%%y%"|0,9999,ex|n|2
 ~+|1|y|mf"Pwa1%2%%y%"|n|0||mf"Pwa1%2%%y%"|0,9999,ex|n|2
 ~+|1|y|mf"Pwa2%2%%y%"|n|0||mf"Pwa2%2%%y%"|0,9999,ex|n|2

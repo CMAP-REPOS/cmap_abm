@@ -1438,7 +1438,8 @@ public class StopLocationModeChoiceModel implements Serializable {
 		    		driveDmu.setValueOfTime(walkDmu.getValueOfTime());
 				}
 	    		
-	    		bestWtwTapPairs = tvpb.calcPersonSpecificUtilities(bestWtwTapPairs, walkDmu, driveDmu, tvpb.WTW, omaz, dmaz, tod, debug, logger);
+	    		bestWtwTapPairs = tvpb.calcPersonSpecificUtilities(bestWtwTapPairs, walkDmu, driveDmu, tvpb.WTW, 
+	    				omaz, dmaz, tod, debug, logger, "trip mode choice");
 			}
 			
 			if (bestWtwTapPairs[0] == null) {
@@ -1479,9 +1480,11 @@ public class StopLocationModeChoiceModel implements Serializable {
 				}
 	    		
 	    		if(inbound==1) {
-	    			bestDLTapPairs = tvpb.calcPersonSpecificUtilities(bestDLTapPairs, walkDmu, knrDmu, tvpb.WTK, omaz, dmaz, tod, debug, logger);
+	    			bestDLTapPairs = tvpb.calcPersonSpecificUtilities(bestDLTapPairs, walkDmu, knrDmu, tvpb.WTK, 
+	    					omaz, dmaz, tod, debug, logger, "trip mode choice");
 				} else {					
-					bestDLTapPairs = tvpb.calcPersonSpecificUtilities(bestDLTapPairs, walkDmu, knrDmu, tvpb.KTW, omaz, dmaz, tod, debug, logger);
+					bestDLTapPairs = tvpb.calcPersonSpecificUtilities(bestDLTapPairs, walkDmu, knrDmu, tvpb.KTW, 
+							omaz, dmaz, tod, debug, logger, "trip mode choice");
 				}	    		
 	    		
 			}
@@ -1524,9 +1527,11 @@ public class StopLocationModeChoiceModel implements Serializable {
 				}
 	    		
 	    		if(inbound==1) {
-	    			bestDPTapPairs = tvpb.calcPersonSpecificUtilities(bestDPTapPairs, walkDmu, driveDmu, tvpb.WTD, omaz, dmaz, tod, debug, logger);
+	    			bestDPTapPairs = tvpb.calcPersonSpecificUtilities(bestDPTapPairs, walkDmu, driveDmu, tvpb.WTD, 
+	    					omaz, dmaz, tod, debug, logger, "trip mode choice");
 				} else {					
-					bestDPTapPairs = tvpb.calcPersonSpecificUtilities(bestDPTapPairs, walkDmu, driveDmu, tvpb.DTW, omaz, dmaz, tod, debug, logger);
+					bestDPTapPairs = tvpb.calcPersonSpecificUtilities(bestDPTapPairs, walkDmu, driveDmu, tvpb.DTW, 
+							omaz, dmaz, tod, debug, logger, "trip mode choice");
 				}	    		
 	    		
 			}

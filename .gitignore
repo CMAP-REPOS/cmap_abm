@@ -16,7 +16,6 @@
 *.dmg
 *.gz
 *.iso
-*.jar
 *.rar
 *.tar
 *.zip
@@ -46,10 +45,23 @@ Thumbs.db
 
 # Excluded folders #
 ####################
-CMAP-ABM/
-inputs/
-installers/
-logFiles/
-outputs/
-cmap/build/
-ctrampIf/build/
+/CMAP-ABM/
+/inputs/
+/installers/
+/logFiles/
+/outputs/
+/cmap/build/
+/ctrampIf/build/
+/population_synthesis/1__control_files/inputs/
+/population_synthesis/2__synpop/inputs/
+/population_synthesis/2__synpop/outputs/
+/population_synthesis/2__synpop/model/synpop_source_code/build/
+/population_synthesis/2__synpop/model/synpop_source_code/release/
+/population_synthesis/3__hh_taz_to_maz/inputs/
+/population_synthesis/3__hh_taz_to_maz/outputs/
+.svn/
+
+# Excluded files #
+####################
+/exec/cmap.jar
+/exec/ctrampIf.jar
