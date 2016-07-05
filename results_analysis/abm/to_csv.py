@@ -2,7 +2,7 @@
 '''
     to_csv.py
     Author: npeterson
-    Revised: 4/13/16
+    Revised: 6/15/16
     ---------------------------------------------------------------------------
     A set of functions for exporting summaries of ABM and Comparison objects
     to CSVs.
@@ -315,7 +315,7 @@ def vmt_statistics(abm, csv_path=False):
         cmap_groups = ['Chicago', 'Cook Balance', 'McHenry', 'Lake', 'Kane', 'DuPage', 'Will', 'Kendall']
         cmap_totals = {t: sum(vmt_subset[g][t] for g in cmap_groups) for t in abm.facility_types}
         for facility_type in factype_order:
-            vmt = network_totals[facility_type]
+            vmt = cmap_totals[facility_type]
             w.write(row.format('CMAP Region', facility_type, vmt))
         cmap_total = sum(v for v in cmap_totals.itervalues())
         w.write(row.format('CMAP Region', 'Region Total', cmap_total))
