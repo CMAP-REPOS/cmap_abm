@@ -1,7 +1,7 @@
 #############################################################################
 # Run Final Assignments
 # Ben Stabler, stabler@pbworld.com, 02/18/13
-# "C:\Program Files (x86)\INRO\Emme\Emme 4\Emme-4.0.4\Python26\python.exe" runFinalAssignments.py 1,1,1,1,1,1,1,1
+# "C:\Program Files (x86)\INRO\Emme\Emme 4\Emme-4.0.4\Python26\python.exe" runFinalAssignments.py 1,1,1,1,1,1,1,1 100
 #############################################################################
 
 #EMME project file
@@ -14,7 +14,7 @@ tods = [1,2,3,4,5,6,7,8]
 
 #settings
 runTransitOnly = False
-transitImport = 100
+transitImport = int(sys.argv[2])  #100
 trnAssignIters = 3
 matNumConvDemand = 467
 matNumPremDemand = 468

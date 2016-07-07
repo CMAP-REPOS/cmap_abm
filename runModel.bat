@@ -1,6 +1,7 @@
 :: runModel.bat
 :: Written by BTS, 06/24/13
 :: Modified by NMP, 04/14/16 - run accessibilities after skimming
+::                  07/07/16 - supply scenario as parameter to Python scripts
 :: ----------------------------------------------------------------------------
 :: Run the CMAP ABM from start to finish.
 :: Call from command line, e.g.: runModel.bat > blog.txt
@@ -8,6 +9,7 @@
 :: Parameters
 SET projDir=Y:/{{{TEMPLATE}}}/cmap_abm
 SET sampleRate=0.50
+SET scen=100
 
 :: Set Python paths
 CALL EmmeConfig.bat
@@ -38,9 +40,9 @@ if exist model_run_timestamp.txt (del model_run_timestamp.txt /Q)
 
 :: Create networks and skim
 @ECHO Build networks: %date% %time% >> model_run_timestamp.txt
-%emmepy% runBuildNetworks.py 1,1,1,1,1,1,1,1
+%emmepy% runBuildNetworks.py 1,1,1,1,1,1,1,1 %scen%
 @ECHO Run initial skims: %date% %time% >> model_run_timestamp.txt
-%emmepy% runInitialSkims.py 1,1,1,1,1,1,1,1
+%emmepy% runInitialSkims.py 1,1,1,1,1,1,1,1 %scen%
 
 :: Run accessibilities script
 @ECHO Calculate accessibilities: %date% %time% >> model_run_timestamp.txt
@@ -57,7 +59,7 @@ CALL runCTRAMP-SingleProcess.bat %sampleRate%
 
 :: Final skimming and assignments
 @ECHO Run final assignments: %date% %time% >> model_run_timestamp.txt
-%emmepy% runFinalAssignments.py 1,1,1,1,1,1,1,1
+%emmepy% runFinalAssignments.py 1,1,1,1,1,1,1,1 %scen%
 
 @ECHO ====================================================== >> model_run_timestamp.txt
 @ECHO END CMAP REGIONAL MODEL RUN >> model_run_timestamp.txt

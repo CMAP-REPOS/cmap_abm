@@ -1,7 +1,7 @@
 #############################################################################
 # Build CMAP ABM Databank
 # Ben Stabler, stabler@pbworld.com, 02/18/13
-# "C:\Program Files (x86)\INRO\Emme\Emme 4\Emme-4.0.3\Python26\python.exe" runBuildNetworks.py 1,1,1,1,1,1,1,1
+# "C:\Program Files (x86)\INRO\Emme\Emme 4\Emme-4.0.3\Python26\python.exe" runBuildNetworks.py 1,1,1,1,1,1,1,1 100
 #############################################################################
 
 #create a new emme 4 project with the following defaults for license 24 except:
@@ -24,7 +24,7 @@ tods = [1,2,3,4,5,6,7,8]
 
 #settings
 runTransitOnly = False
-transitImport = 100
+transitImport = int(sys.argv[2])  #100
 previousBank = "inputs/emmebank" #previous bank with hwy matrices 1-99
 matNumConvDemand = 467
 matNumPremDemand = 468
