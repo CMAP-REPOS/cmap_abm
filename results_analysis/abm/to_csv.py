@@ -21,16 +21,22 @@ def all_summaries(abm):
     ''' Run all ABM summary functions, using their default output locations. '''
     print 'Exporting transit line boardings...'
     line_boardings(abm)
+
     print 'Exporting person-trip auto/transit O-D matrices...'
     od_matrix(abm)
+
     print 'Exporting tour/trip purpose counts...'
     trip_purpose(abm)
+
     print 'Exporting trip time-of-day counts...'
     trip_tod(abm)
+
     print 'Exporting VMT by geography and facility type...'
     vmt_statistics(abm)
+
     print 'Export finished!'
     return None
+
 
 def line_boardings(abm, csv_path=False):
     ''' Export a CSV file containing rail boardings by line, and total bus
