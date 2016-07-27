@@ -1,10 +1,12 @@
+~# Modified by NMP, 7/27/16
+~#  - SOV/HOV now handled separately in directional splits and TOD factors
 ~o=295
 reports=nul
 ~r249=%1%  / TOD period 1-8 
 /~r249=2   / TOD period 1-8
 ~/**********************************************************************
 ~/**********************************************************************
-~/ <TOD_tables.mac> %r249%
+~/ <TOD_tables3.mac> %r249%
 ~/ Macro to prepare TOD period %r249% trip tables for CT-RAMP
 ~/ Applied after Mode Choice Model instead of <ttables>
 ~/ Daily auto person and truck vehicle tables are inputs  
@@ -90,27 +92,27 @@ q
 ~rz=%t0%
 /r%z%=%rz%
 ~z+1
-~?z<18
+~?z<27
 ~$loop1
 ~/        0.3.Get Directional Splits
 ~<<%t3%
-~z=31
+~z=41
 ~:loop2
 ~t0=~@
 ~rz=%t0%
 /r%z%=%rz%
 ~z+1
-~?z<39
+~?z<57
 ~$loop2
 ~/        0.4.Get Distribution by income & occupancy for HBO & NHB 
 ~<<%t4%
-~z=41
+~z=81
 ~:loop3
 ~t0=~@
 ~rz=%t0%
 /r%z%=%rz%
 ~z+1
-~?z<53
+~?z<93
 ~$loop3
 ~/        0.5.Set matrix TOD label
 ~y=%r249%
@@ -207,21 +209,21 @@ q
 3.21
 ~+|1|y|mf%r249%101|~?q=1|y|SOV1L%r249%|SOV1 Low VOT veh %t9%|~?q=1|y|0
 ~/            Home to work: SOV1 Low income
-(md"qflag".eq.0)*(put(%r33%*mf50)*%r3%)+
-(md"qflag".eq.1)*((%r31%*mf50)*%r1%)+
-(md"qflag".ge.2)*(get(1)*%r5%)+
+(md"qflag".eq.0)*(put(%r45%*mf50)*%r5%)+
+(md"qflag".eq.1)*((%r41%*mf50)*%r1%)+
+(md"qflag".ge.2)*(get(1)*%r9%)+
 ~/            Work to home: SOV1 Low income
-(mo"pflag".eq.0)*(put(%r34%*mf50')*%r4%)+
-(mo"pflag".eq.1)*((%r32%*mf50')*%r2%)+
-(mo"pflag".ge.2)*(get(2)*%r6%)+
+(mo"pflag".eq.0)*(put(%r47%*mf50')*%r7%)+
+(mo"pflag".eq.1)*((%r43%*mf50')*%r3%)+
+(mo"pflag".ge.2)*(get(2)*%r11%)+
 ~/            Home to other: SOV1 Low income
-((%r38%*mf02)*%r8%*%r41%)+
+((%r55%*mf02)*%r15%*%r81%)+
 ~/            Other to home: SOV1 Low income
-((%r37%*mf02')*%r7%*%r41%)+
+((%r53%*mf02')*%r13%*%r81%)+
 ~/            Non-Home-Based: SOV1 Low income
-(mf03*%r9%*%r47%)+
+(mf03*%r17%*%r87%)+
 ~/            P&R auto legs SOV1 Low income
-mf61*(%r1%+%r2%)/2
+mf61*(%r1%+%r3%)/2
 ~+|||n|2
 q
 ~/   STEP 2.  Calculate mf%r249%102"SOV1H%r249%" as %r249% period mode S vehicles with high VOT 
@@ -232,21 +234,21 @@ q
 3.21
 ~+|1|y|mf%r249%102|~?q=1|y|SOV1H%r249%|SOV1 High VOT veh %t9%|~?q=1|y|0
 ~/            Home to work: SOV1 High income
-(md"qflag".eq.0)*(put(%r33%*mf53)*%r3%)+
-(md"qflag".eq.1)*((%r31%*mf53)*%r1%)+
-(md"qflag".ge.2)*(get(1)*%r5%)+
+(md"qflag".eq.0)*(put(%r45%*mf53)*%r5%)+
+(md"qflag".eq.1)*((%r41%*mf53)*%r1%)+
+(md"qflag".ge.2)*(get(1)*%r9%)+
 ~/            Work to home: SOV1 High income
-(mo"pflag".eq.0)*(put(%r34%*mf53')*%r4%)+
-(mo"pflag".eq.1)*((%r32%*mf53')*%r2%)+
-(mo"pflag".ge.2)*(get(2)*%r6%)+
+(mo"pflag".eq.0)*(put(%r47%*mf53')*%r7%)+
+(mo"pflag".eq.1)*((%r43%*mf53')*%r3%)+
+(mo"pflag".ge.2)*(get(2)*%r11%)+
 ~/            Home to other: SOV1 High income
-((%r38%*mf02)*%r8%*%r42%)+
+((%r55%*mf02)*%r15%*%r82%)+
 ~/            Other to home: SOV1 High income
-((%r37%*mf02')*%r7%*%r42%)+
+((%r53%*mf02')*%r13%*%r82%)+
 ~/            Non-Home-Based: SOV1 High income
-(mf03*%r9%*%r48%)+
+(mf03*%r17%*%r88%)+
 ~/            P&R auto legs SOV1 High income
-mf62*(%r1%+%r2%)/2
+mf62*(%r1%+%r3%)/2
 ~+|||n|2
 q
 ~/   STEP 3.  Calculate mf%r249%103"HOV2L%r249%" as %r249% period mode H vehicles with low VOT 
@@ -257,19 +259,19 @@ q
 3.21
 ~+|1|y|mf%r249%103|~?q=1|y|HOV2L%r249%|HOV2 Low VOT veh %t9%|~?q=1|y|0
 ~/            Home to work: HOV2 Low income
-(md"qflag".eq.0)*(put(%r33%*mf51)*%r3%/2.0)+
-(md"qflag".eq.1)*((%r31%*mf51)*%r1%/2.0)+
-(md"qflag".ge.2)*(get(1)*%r5%/2.0)+
+(md"qflag".eq.0)*(put(%r46%*mf51)*%r6%/2.0)+
+(md"qflag".eq.1)*((%r42%*mf51)*%r2%/2.0)+
+(md"qflag".ge.2)*(get(1)*%r10%/2.0)+
 ~/            Work to home: HOV2 Low income
-(mo"pflag".eq.0)*(put(%r34%*mf51')*%r4%/2.0)+
-(mo"pflag".eq.1)*((%r32%*mf51')*%r2%/2.0)+
-(mo"pflag".ge.2)*(get(2)*%r6%/2.0)+
+(mo"pflag".eq.0)*(put(%r48%*mf51')*%r8%/2.0)+
+(mo"pflag".eq.1)*((%r44%*mf51')*%r4%/2.0)+
+(mo"pflag".ge.2)*(get(2)*%r12%/2.0)+
 ~/            Home to other: HOV2 Low income
-((%r38%*mf02)*%r8%*%r43%/2.0)+
+((%r56%*mf02)*%r16%*%r83%/2.0)+
 ~/            Other to home: HOV2 Low income
-((%r37%*mf02')*%r7%*%r43%/2.0)+
+((%r54%*mf02')*%r14%*%r83%/2.0)+
 ~/            Non-Home-Based: HOV2 Low income
-(mf03*%r9%*%r49%/2.0)
+(mf03*%r18%*%r89%/2.0)
 ~+|||n|2
 q
 ~/   STEP 4.  Calculate mf%r249%104"HOV2H%r249%" as %r249% period mode H vehicles with high VOT 
@@ -280,19 +282,19 @@ q
 3.21
 ~+|1|y|mf%r249%104|~?q=1|y|HOV2H%r249%|HOV2 High VOT veh %t9%|~?q=1|y|0
 ~/            Home to work: HOV2 High income
-(md"qflag".eq.0)*(put(%r33%*mf54)*%r3%/2.0)+
-(md"qflag".eq.1)*((%r31%*mf54)*%r1%/2.0)+
-(md"qflag".ge.2)*(get(1)*%r5%/2.0)+
+(md"qflag".eq.0)*(put(%r46%*mf54)*%r6%/2.0)+
+(md"qflag".eq.1)*((%r42%*mf54)*%r2%/2.0)+
+(md"qflag".ge.2)*(get(1)*%r10%/2.0)+
 ~/            Work to home: HOV2 High income
-(mo"pflag".eq.0)*(put(%r34%*mf54')*%r4%/2.0)+
-(mo"pflag".eq.1)*((%r32%*mf54')*%r2%/2.0)+
-(mo"pflag".ge.2)*(get(2)*%r6%/2.0)+
+(mo"pflag".eq.0)*(put(%r48%*mf54')*%r8%/2.0)+
+(mo"pflag".eq.1)*((%r44%*mf54')*%r4%/2.0)+
+(mo"pflag".ge.2)*(get(2)*%r12%/2.0)+
 ~/            Home to other: HOV2 High income
-((%r38%*mf02)*%r8%*%r44%/2.0)+
+((%r56%*mf02)*%r16%*%r84%/2.0)+
 ~/            Other to home: HOV2 High income
-((%r37%*mf02')*%r7%*%r44%/2.0)+
+((%r54%*mf02')*%r14%*%r84%/2.0)+
 ~/            Non-Home-Based: HOV2 High income
-(mf03*%r9%*%r50%/2.0)
+(mf03*%r18%*%r90%/2.0)
 ~+|||n|2
 q
 ~/   STEP 5.  Calculate mf%r249%105"HOV3L%r249%" as %r249% period mode H vehicles with low VOT 
@@ -303,19 +305,19 @@ q
 3.21
 ~+|1|y|mf%r249%105|~?q=1|y|HOV3L%r249%|HOV3 Low VOT veh %t9%|~?q=1|y|0
 ~/            Home to work: HOV3 Low income
-(md"qflag".eq.0)*(put(%r33%*mf52)*%r3%/3.2)+
-(md"qflag".eq.1)*((%r31%*mf52)*%r1%/3.2)+
-(md"qflag".ge.2)*(get(1)*%r5%/3.2)+
+(md"qflag".eq.0)*(put(%r46%*mf52)*%r6%/3.2)+
+(md"qflag".eq.1)*((%r42%*mf52)*%r2%/3.2)+
+(md"qflag".ge.2)*(get(1)*%r10%/3.2)+
 ~/            Work to home: HOV3 Low income
-(mo"pflag".eq.0)*(put(%r34%*mf52')*%r4%/3.2)+
-(mo"pflag".eq.1)*((%r32%*mf52')*%r2%/3.2)+
-(mo"pflag".ge.2)*(get(2)*%r6%/3.2)+
+(mo"pflag".eq.0)*(put(%r48%*mf52')*%r8%/3.2)+
+(mo"pflag".eq.1)*((%r44%*mf52')*%r4%/3.2)+
+(mo"pflag".ge.2)*(get(2)*%r12%/3.2)+
 ~/            Home to other: HOV3 Low income
-((%r38%*mf02)*%r8%*%r45%/3.2)+
+((%r56%*mf02)*%r16%*%r85%/3.2)+
 ~/            Other to home: HOV3 Low income
-((%r37%*mf02')*%r7%*%r45%/3.2)+
+((%r54%*mf02')*%r14%*%r85%/3.2)+
 ~/            Non-Home-Based: HOV3 Low income
-(mf03*%r9%*%r51%/3.2)
+(mf03*%r18%*%r91%/3.2)
 ~+|||n|2
 q
 ~/   STEP 6.  Calculate mf%r249%106"HOV3H%r249%" as %r249% period mode H vehicles with high VOT 
@@ -326,19 +328,19 @@ q
 3.21
 ~+|1|y|mf%r249%106|~?q=1|y|HOV3H%r249%|HOV3 High VOT veh %t9%|~?q=1|y|0
 ~/            Home to work: HOV3 High income
-(md"qflag".eq.0)*(put(%r33%*mf55)*%r3%/3.2)+
-(md"qflag".eq.1)*((%r31%*mf55)*%r1%/3.2)+
-(md"qflag".ge.2)*(get(1)*%r5%/3.2)+
+(md"qflag".eq.0)*(put(%r46%*mf55)*%r6%/3.2)+
+(md"qflag".eq.1)*((%r42%*mf55)*%r2%/3.2)+
+(md"qflag".ge.2)*(get(1)*%r10%/3.2)+
 ~/            Work to home: HOV3 High income
-(mo"pflag".eq.0)*(put(%r34%*mf55')*%r4%/3.2)+
-(mo"pflag".eq.1)*((%r32%*mf55')*%r2%/3.2)+
-(mo"pflag".ge.2)*(get(2)*%r6%/3.2)+
+(mo"pflag".eq.0)*(put(%r48%*mf55')*%r8%/3.2)+
+(mo"pflag".eq.1)*((%r44%*mf55')*%r4%/3.2)+
+(mo"pflag".ge.2)*(get(2)*%r12%/3.2)+
 ~/            Home to other: HOV3 High income
-((%r38%*mf02)*%r8%*%r46%/3.2)+
+((%r56%*mf02)*%r16%*%r86%/3.2)+
 ~/            Other to home: HOV3 High income
-((%r37%*mf02')*%r7%*%r46%/3.2)+
+((%r54%*mf02')*%r14%*%r86%/3.2)+
 ~/            Non-Home-Based: HOV3 High income
-(mf03*%r9%*%r52%/3.2)
+(mf03*%r18%*%r92%/3.2)
 ~+|||n|2
 q   
 ~/   STEP 7.  Calculate mf%r249%111"EXT1L%r249%"-116"EXT3H%r249%" as %r249% period 
@@ -346,45 +348,45 @@ q
 ~/            Split external auto vehicle trips by income group and occupancy level 
 3.21
 ~+|1|y|mf%r249%111|~?q=1|y|EXT1L%r249%|External SOV1 Low VOT veh %t9%|~?q=1|y|0
-~+|(mf08*%r10%)*%r61%|||n|2
+~+|(mf08*%r19%)*%r61%|||n|2
 ~+|1|y|mf%r249%112|~?q=1|y|EXT1H%r249%|External SOV1 High VOT veh %t9%|~?q=1|y|0
-~+|(mf08*%r10%)*%r62%|||n|2
+~+|(mf08*%r19%)*%r62%|||n|2
 ~+|1|y|mf%r249%113|~?q=1|y|EXT2L%r249%|External HOV2 Low VOT veh %t9%|~?q=1|y|0
-~+|(mf08*%r10%)*%r63%|||n|2
+~+|(mf08*%r19%)*%r63%|||n|2
 ~+|1|y|mf%r249%114|~?q=1|y|EXT2H%r249%|External HOV2 High VOT veh %t9%|~?q=1|y|0
-~+|(mf08*%r10%)*%r64%|||n|2
+~+|(mf08*%r19%)*%r64%|||n|2
 ~+|1|y|mf%r249%115|~?q=1|y|EXT3L%r249%|External HOV3 Low VOT veh %t9%|~?q=1|y|0
-~+|(mf08*%r10%)*%r65%|||n|2
+~+|(mf08*%r19%)*%r65%|||n|2
 ~+|1|y|mf%r249%116|~?q=1|y|EXT3H%r249%|External HOV3 High VOT veh %t9%|~?q=1|y|0
-~+|(mf08*%r10%)*%r66%|||n|2
+~+|(mf08*%r19%)*%r66%|||n|2
 q
 ~/   STEP 8.  Calculate mf%r249%117"AIR1L%r249%"-122"AIR3H%r249%" as %r249% period 
 ~/            mode S/H vehicles with low/high VOT 
 ~/            Split airport passenger auto vehicle trips by income group and occupancy level 
 3.21
 ~+|1|y|mf%r249%117|~?q=1|y|AIR1L%r249%|Air pass. SOV1 Low VOT veh %t9%|~?q=1|y|0
-~+|mf10*(("qflag".ge.2)*%r11%+("pflag".ge.2)*("qflag".eq.0)*%r12%)*%r71%|||n|2
+~+|mf10*(("qflag".ge.2)*%r20%+("pflag".ge.2)*("qflag".eq.0)*%r21%)*%r71%|||n|2
 ~+|1|y|mf%r249%118|~?q=1|y|AIR1H%r249%|Air pass. SOV1 High VOT veh %t9%|~?q=1|y|0
-~+|mf10*(("qflag".ge.2)*%r11%+("pflag".ge.2)*("qflag".eq.0)*%r12%)*%r72%|||n|2
+~+|mf10*(("qflag".ge.2)*%r20%+("pflag".ge.2)*("qflag".eq.0)*%r21%)*%r72%|||n|2
 ~+|1|y|mf%r249%119|~?q=1|y|AIR2L%r249%|Air pass. HOV2 Low VOT veh %t9%|~?q=1|y|0
-~+|mf10*(("qflag".ge.2)*%r11%+("pflag".ge.2)*("qflag".eq.0)*%r12%)*%r73%|||n|2
+~+|mf10*(("qflag".ge.2)*%r20%+("pflag".ge.2)*("qflag".eq.0)*%r21%)*%r73%|||n|2
 ~+|1|y|mf%r249%120|~?q=1|y|AIR2H%r249%|Air pass. HOV2 High VOT veh %t9%|~?q=1|y|0
-~+|mf10*(("qflag".ge.2)*%r11%+("pflag".ge.2)*("qflag".eq.0)*%r12%)*%r74%|||n|2
+~+|mf10*(("qflag".ge.2)*%r20%+("pflag".ge.2)*("qflag".eq.0)*%r21%)*%r74%|||n|2
 ~+|1|y|mf%r249%121|~?q=1|y|AIR3L%r249%|Air pass. HOV3 Low VOT veh %t9%|~?q=1|y|0
-~+|mf10*(("qflag".ge.2)*%r11%+("pflag".ge.2)*("qflag".eq.0)*%r12%)*%r75%|||n|2
+~+|mf10*(("qflag".ge.2)*%r20%+("pflag".ge.2)*("qflag".eq.0)*%r21%)*%r75%|||n|2
 ~+|1|y|mf%r249%122|~?q=1|y|AIR3H%r249%|Air pass. HOV3 High VOT veh %t9%|~?q=1|y|0
-~+|mf10*(("qflag".ge.2)*%r11%+("pflag".ge.2)*("qflag".eq.0)*%r12%)*%r76%|||n|2
+~+|mf10*(("qflag".ge.2)*%r20%+("pflag".ge.2)*("qflag".eq.0)*%r21%)*%r76%|||n|2
 q
 ~/   STEP 9.  Calculate mf%r249%107"BPLT%r249%"-%r249%110"HTRK%r249%" as %r249% period truck trips
 3.21
 ~+|1|y|mf%r249%107|~?q=1|y|BPLT%r249%|B-license truck trips %t9%|~?q=1|y|0
-~+|%r13%*mf04|||n|2
+~+|%r22%*mf04|||n|2
 ~+|1|y|mf%r249%108|~?q=1|y|LTRK%r249%|Light truck trips %t9%|~?q=1|y|0
-~+|%r14%*mf05|||n|2
+~+|%r23%*mf05|||n|2
 ~+|1|y|mf%r249%109|~?q=1|y|MTRK%r249%|Medium truck trips %t9%|~?q=1|y|0
-~+|%r15%*mf06*2.0|||n|2
+~+|%r24%*mf06*2.0|||n|2
 ~+|1|y|mf%r249%110|~?q=1|y|HTRK%r249%|Heavy truck trips %t9%|~?q=1|y|0
-~+|(%r16%*mf07+%r17%*mf09)*3.0|||n|2
+~+|(%r25%*mf07+%r26%*mf09)*3.0|||n|2
 q
 ~:DEBUG
 ~/   STEP 10. Calculate matrix totals
