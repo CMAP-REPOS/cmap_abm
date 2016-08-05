@@ -14,6 +14,13 @@
 
 #############################################################################
 
+#load libraries
+import os, csv, math, pickle, datetime, sys
+import inro.modeller as m
+import inro.emme.desktop.app as d
+import inro.emme.prompt as p
+from scripts import EMXtoZMX
+
 #EMME project file
 empFile = "CMAP-ABM/CMAP-ABM.emp"
 
@@ -43,13 +50,6 @@ tapFile = "inputs/tap_attributes.csv"
 tapLinks = "inputs/tap2node.csv"
 
 ############################################################################
-
-#load libraries
-import inro.modeller as m
-import inro.emme.desktop.app as d
-import inro.emme.prompt as p
-import os, csv, math, pickle, datetime, sys
-from scripts import EMXtoZMX
 
 #start EMME desktop and attach a modeller session
 desktop = d.start_dedicated(True, "cmap", empFile)

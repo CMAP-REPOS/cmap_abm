@@ -4,6 +4,13 @@
 # "C:\Program Files (x86)\INRO\Emme\Emme 4\Emme-4.0.4\Python26\python.exe" runFinalAssignments.py 1,1,1,1,1,1,1,1 100
 #############################################################################
 
+#load libraries
+import os, csv, math, pickle, datetime, sys
+import inro.modeller as m
+import inro.emme.desktop.app as d
+import inro.emme.prompt as p
+from scripts import EMXtoZMX
+
 #EMME project file
 empFile = "CMAP-ABM/CMAP-ABM.emp"
 
@@ -25,13 +32,6 @@ hwySkimMacro = "../../scripts/CT_RAMP_skim3.mac"
 transitSkimMacro = "../../scripts/Transit_assignment_skimming_CT_RAMP3.mac"
 
 ############################################################################
-
-#load libraries
-import inro.modeller as m
-import inro.emme.desktop.app as d
-import inro.emme.prompt as p
-import os, csv, math, pickle, datetime, sys
-from scripts import EMXtoZMX
 
 #start EMME desktop and attach a modeller session
 desktop = d.start_dedicated(True, "cmap", empFile)
