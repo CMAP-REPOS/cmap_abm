@@ -15,11 +15,6 @@ from scripts import EMXtoZMX
 #EMME project file
 empFile = "CMAP-ABM/CMAP-ABM.emp"
 
-#scenarios
-highwayScenarios = [1,2,3,4,5,6,7,8]
-transitScenarios = [101,102,103,104,105,106,107,108]
-tods = [1,2,3,4,5,6,7,8]
-
 #settings
 runTransitOnly = False
 transitImport = int(sys.argv[2])  #100
@@ -27,6 +22,11 @@ trnAssignIters = 3
 matNumConvDemand = 467
 matNumPremDemand = 468
 bypassConventionalTransit = True
+
+#scenarios
+tods = [1,2,3,4,5,6,7,8]
+highwayScenarios = [i for i in tods]
+transitScenarios = [transitImport + i for i in tods]
 
 #macros - relative to the databank location
 hwySkimMacro = "../../scripts/CT_RAMP_skim3.mac"

@@ -1,7 +1,7 @@
 :: runModel.bat
 :: Written by BTS, 06/24/13
 :: Modified by NMP, 04/14/16 - run accessibilities after skimming
-::                  07/07/16 - supply scenario as parameter to Python scripts
+::                  08/12/16 - supply scenario as parameter to scripts
 :: ----------------------------------------------------------------------------
 :: Run the CMAP ABM from start to finish.
 :: Call from command line, e.g.: runModel.bat > blog.txt
@@ -47,7 +47,7 @@ if exist model_run_timestamp.txt (del model_run_timestamp.txt /Q)
 :: Run accessibilities script
 @ECHO Calculate accessibilities: %date% %time% >> model_run_timestamp.txt
 cd accessibilities
-CALL runAccessibilities.bat
+CALL runAccessibilities.bat %scen%
 copy outputs\accessibility_maz.csv ..\inputs
 cd ..
 

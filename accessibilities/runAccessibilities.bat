@@ -9,11 +9,16 @@ copy CMAP_MAZ_cents.txt ..\accessibilities\inputs
 copy SubzoneData.csv ..\accessibilities\inputs
 copy tap_attributes.csv ..\accessibilities\inputs
 
+:: Set transit AM Peak and Midday scenario IDs
+SET scen=%1
+SET /a scen3=%scen%+3
+SET /a scen5=%scen%+5
+
 :: Create/copy all necessary skim ZMXs
 :: (mfX181-83 already created by ..\runInitialSkims.py)
 cd ..\CMAP-ABM\Database\emmemat
-%emmepy% ../../../scripts/EMXtoZMX.py ../../CMAP-ABM.emp 103 mf3431 mf3432 mf3433 mf3434 mf3461
-%emmepy% ../../../scripts/EMXtoZMX.py ../../CMAP-ABM.emp 105 mf5431 mf5432 mf5433 mf5434 mf5461
+%emmepy% ../../../scripts/EMXtoZMX.py ../../CMAP-ABM.emp %scen3% mf3431 mf3432 mf3433 mf3434 mf3461
+%emmepy% ../../../scripts/EMXtoZMX.py ../../CMAP-ABM.emp %scen5% mf5431 mf5432 mf5433 mf5434 mf5461
 copy mf3181.zmx ..\..\..\accessibilities\inputs
 copy mf3182.zmx ..\..\..\accessibilities\inputs
 copy mf3183.zmx ..\..\..\accessibilities\inputs
