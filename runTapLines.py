@@ -14,6 +14,7 @@ import os, csv, math, pickle, datetime, sys
 empFile = "CMAP-ABM/CMAP-ABM.emp"
 
 #scenarios
+transitImport = int(sys.argv[1])  #100
 tods = [1,2,3,4,5,6,7,8]
 highwayScenarios = [i for i in tods]
 transitScenarios = [transitImport + i for i in tods]

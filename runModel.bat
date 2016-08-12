@@ -53,7 +53,7 @@ cd ..
 
 :: Create TAP lines file and run CT-RAMP
 @ECHO Create TAP lines: %date% %time% >> model_run_timestamp.txt
-%emmepy% runTapLines.py
+%emmepy% runTapLines.py %scen%
 @ECHO Run CT-RAMP: %date% %time% >> model_run_timestamp.txt
 CALL runCTRAMP-SingleProcess.bat %sampleRate%
 
