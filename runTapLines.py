@@ -4,13 +4,19 @@
 # "C:\Program Files (x86)\INRO\Emme\Emme 4\Emme-4.0.3\Python26\python.exe" runTapLines.py
 #############################################################################
 
+#load libraries
+import inro.modeller as m
+import inro.emme.desktop.app as d
+import inro.emme.prompt as p
+import os, csv, math, pickle, datetime, sys
+
 #EMME project file
 empFile = "CMAP-ABM/CMAP-ABM.emp"
 
 #scenarios
-highwayScenarios = [1,2,3,4,5,6,7,8]
-transitScenarios = [101,102,103,104,105,106,107,108]
 tods = [1,2,3,4,5,6,7,8]
+highwayScenarios = [i for i in tods]
+transitScenarios = [transitImport + i for i in tods]
 
 #settings
 tapFile = "inputs/tap_attributes.csv"
@@ -18,12 +24,6 @@ tapLinks = "inputs/tap2node.csv"
 tapLinesOutFileName = "outputs/tapLines.csv"
 
 ############################################################################
-
-#load libraries
-import inro.modeller as m
-import inro.emme.desktop.app as d
-import inro.emme.prompt as p
-import os, csv, math, pickle, datetime, sys
 
 #start EMME desktop and attach a modeller session
 desktop = d.start_dedicated(True, "cmap", empFile)
