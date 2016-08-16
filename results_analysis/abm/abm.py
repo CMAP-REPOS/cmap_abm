@@ -2,7 +2,7 @@
 '''
     abm.py
     Author: npeterson
-    Revised: 3/18/16
+    Revised: 8/16/16
     ---------------------------------------------------------------------------
     A class for reading ABM output files and matrix data into an SQL database
     for querying and summarization.
@@ -102,7 +102,7 @@ class ABM(object):
 
 
     # --- Init ---
-    def __init__(self, abm_dir, sample_rate=0.50, build_db=False):
+    def __init__(self, abm_dir, sample_rate=0.50, build_db=False, scen=100):
         self.dir = abm_dir
         self.sample_rate = sample_rate
         self.name = os.path.basename(self.dir)
@@ -110,6 +110,7 @@ class ABM(object):
         self._output_dir = os.path.join(self.dir, 'cmap_abm', 'outputs')
         self._emmebank_path = os.path.join(self.dir, 'cmap_abm', 'CMAP-ABM', 'Database', 'emmebank')
         self._db = os.path.join(self._output_dir, 'results.sqlite')
+        self._trn_scen_id_prefix = str(scen)[:2]
         #self._db = r'D:\workspace\Temp\ABM\results_{0}.sqlite'.format(self.name)  ### DEBUG ###
         if build_db and os.path.exists(self._db):
             print 'Reinitializing existing results database...'.format(self._db)
@@ -568,7 +569,7 @@ class ABM(object):
                     vmt_by_speed[mph_bin] += vmt
 
             # Bus VMT from transit segments in TOD's transit network
-            scenario_id_trn = '10{0}'.format(tod)
+            scenario_id_trn = '{0}{1}'.format(self._trn_scen_id_prefix, tod)
             scenario_trn = emmebank.scenario(scenario_id_trn)
             network_trn = scenario_trn.get_network()
 
@@ -808,7 +809,7 @@ class ABM(object):
         ''' Populate the TransitSegs table from Emme transit assignments. '''
         emmebank = _eb.Emmebank(self._emmebank_path)
         for tod in xrange(1, 9):
-            scenario_id = '10{0}'.format(tod)
+            scenario_id = '{0}{1}'.format(self._trn_scen_id_prefix, tod)
             scenario = emmebank.scenario(scenario_id)
             network = scenario.get_network()
             for tseg in network.transit_segments():

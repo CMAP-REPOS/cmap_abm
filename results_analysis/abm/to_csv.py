@@ -2,7 +2,7 @@
 '''
     to_csv.py
     Author: npeterson
-    Revised: 7/11/16
+    Revised: 8/16/16
     ---------------------------------------------------------------------------
     A set of functions for exporting summaries of ABM and Comparison objects
     to CSVs.
@@ -280,7 +280,7 @@ def vmt_statistics(abm, csv_path=False):
             vmt_subset[zone_group][facility_type] += vmt
 
         # Bus VMT from transit segments in TOD's transit network
-        scenario_id_trn = '10{0}'.format(tod)
+        scenario_id_trn = '{0}{1}'.format(abm._trn_scen_id_prefix, tod)
         scenario_trn = emmebank.scenario(scenario_id_trn)
         network_trn = scenario_trn.get_network()
 
