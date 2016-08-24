@@ -1,20 +1,28 @@
+~# Modified by NMP, 8/23/16
+~#  - New extra attributes for truck toll rates
 ~o=295
 reports=nul
+~# set scenario
+s=%1%
+~x=%1%
+/ PARAMETERS (toll factors for truck classes): 
+~r1=3.00 / Light truck, day (p. 2-8)
+~r2=4.50 / Medium truck, day (p. 2-8)
+~r3=8.00 / Heavy truck, day (p. 2-8)
+~r4=2.00 / Light truck, night (p. 1)
+~r5=3.50 / Medium truck, night (p. 1)
+~r6=6.00 / Heavy truck, night (p. 1)
 batchin=../../inputs/toll
 2.42
-2
-2
-@toll
-toll
-0
-6
+~+|2|2|@toll |toll auto        |0
+~+|2|2|@toll2|toll light truck |0
+~+|2|2|@toll3|toll medium truck|0
+~+|2|2|@toll4|toll heavy truck |0
+q
 2.41
-3
-@toll
-n
-all
-1,2,3
-n
-y
-6
+~+|3|@toll|n|all|1,2,3|n|y
+~+|1|y|@toll2|n|~?x=1|@toll*%r4%|~?!x=1|@toll*%r1%||all|4
+~+|1|y|@toll3|n|~?x=1|@toll*%r5%|~?!x=1|@toll*%r2%||all|4
+~+|1|y|@toll4|n|~?x=1|@toll*%r6%|~?!x=1|@toll*%r3%||all|4
+q
 q
