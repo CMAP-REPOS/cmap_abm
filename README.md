@@ -1,7 +1,7 @@
 # cmap_abm
 CMAP's Activity Based Model
 
-#How To Build
+# How To Build
 1. Download Eclipse Luna
 2. Import cmap_abm\cmap as an Eclipse project
 3. Import cmap_abm\ctrampIf as an Eclipse project
