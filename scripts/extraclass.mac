@@ -1,5 +1,6 @@
 ~o=295
 ~# ## - Revised for Dec. 2015 updates to class volume extra attributes
+~# ## - Revised to eliminate trip-based model attributes that aren't relevant to ABM
 reports=nul
 ~/# set scenario
 s=%1%
@@ -53,6 +54,52 @@ s=%1%
 ~:SKIP22
 ~+|@zone|~?e|~$>SKIP23|y|3
 ~:SKIP23
+~+|@vso1n|~?e|~$>SKIP24|y|3
+~:SKIP24
+~+|@vso1t|~?e|~$>SKIP25|y|3
+~:SKIP25
+~+|@vho2n|~?e|~$>SKIP26|y|3
+~:SKIP26
+~+|@vho2t|~?e|~$>SKIP27|y|3
+~:SKIP27
+~+|@vho3n|~?e|~$>SKIP28|y|3
+~:SKIP28
+~+|@vho3t|~?e|~$>SKIP29|y|3
+~:SKIP29
+~+|@vauto|~?e|~$>SKIP30|y|3
+~:SKIP30
+~+|@vhov2|~?e|~$>SKIP31|y|3
+~:SKIP31
+~+|@vhov3|~?e|~$>SKIP32|y|3
+~:SKIP32
+~+|@vbplt|~?e|~$>SKIP33|y|3
+~:SKIP33
+~+|@vlght|~?e|~$>SKIP34|y|3
+~:SKIP34
+~+|@vmed|~?e|~$>SKIP35|y|3
+~:SKIP35
+~+|@vhevy|~?e|~$>SKIP36|y|3
+~:SKIP36
+~+|@avauv|~?e|~$>SKIP37|y|3
+~:SKIP37
+~+|@avh2v|~?e|~$>SKIP38|y|3
+~:SKIP38
+~+|@avh3v|~?e|~$>SKIP39|y|3
+~:SKIP39
+~+|@avbqv|~?e|~$>SKIP40|y|3
+~:SKIP40
+~+|@avlqv|~?e|~$>SKIP41|y|3
+~:SKIP41
+~+|@avmqv|~?e|~$>SKIP42|y|3
+~:SKIP42
+~+|@avhqv|~?e|~$>SKIP43|y|3
+~:SKIP43
+~+|@pvht|~?e|~$>SKIP44|y|3
+~:SKIP44
+~+|@avtot|~?e|~$>SKIP45|y|3
+~:SKIP45
+~+|@busveq|~?e|~$>SKIP46|y|3
+~:SKIP46
 ~+||q 
 /Create extra attributes
 2.42

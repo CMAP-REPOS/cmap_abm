@@ -41,7 +41,6 @@ hwySetupMacro = "../../scripts/hwySetup.mac"
 hwyMatImportMacro = "../../scripts/HwayMatIn.mac"
 todTablesMacro = "../../scripts/TOD_tables3.mac"
 extraAttrsMacro = "../../scripts/extraclass.mac"
-tollAttrMacro = "../../scripts/addtoll.mac"
 transitSetupMacro = "../../scripts/Build_TOD_Transit_CT_RAMP3.mac"
 transitMatImportMacro = "../../scripts/TranMatIn.mac"
 
@@ -64,6 +63,12 @@ runPeriods = map(int, sys.argv[1].split(","))
 
 ############################################################################
 
+#create dummy scenario while importing highway networks
+dummy_scen = 9
+if m.emmebank.scenario(dummy_scen):
+    m.emmebank.delete_scenario(dummy_scen)
+m.emmebank.create_scenario(dummy_scen)
+
 #loop by time-of-day
 for i in range(len(tods)):
 
@@ -81,14 +86,11 @@ for i in range(len(tods)):
 
         if not runTransitOnly:
 
-            #create scenario if needed (scenario 1 created when creating bank)
-            if m.emmebank.scenario(scen) == None:
-                m.emmebank.create_scenario(scen)
-            else:
+            #delete scenario if it exists so that import is possible
+            if m.emmebank.scenario(scen):
                 m.emmebank.delete_scenario(scen)
-                m.emmebank.create_scenario(scen)
 
-            #modes, functions, highway network
+            #modes, functions, highway network (directly from trip-based model)
             #%1%       /tod
             p.run_macro("~< %s %i" % (hwySetupMacro, tod), m.emmebank.path, scen)
 
@@ -97,11 +99,10 @@ for i in range(len(tods)):
             if i==0:
                 p.run_macro("~< %s %s" % (hwyMatImportMacro, os.getcwd() + "\\" + previousBank), m.emmebank.path, scen)
 
-            #tod tables, extra attributes, and toll field (which is currently not by tod)
+            #tod tables and extra attributes
             #%1%       /tod
             p.run_macro("~< %s %i" % (todTablesMacro, tod), m.emmebank.path, scen)
             p.run_macro("~< %s %i" % (extraAttrsMacro, tod), m.emmebank.path, scen)
-            p.run_macro("~< %s %i" % (tollAttrMacro, tod), m.emmebank.path, scen)
 
         ##########################################################################
         # TRANSIT
@@ -185,8 +186,6 @@ for i in range(len(tods)):
 
         #log results
         print("Time-of-day %i Complete %s" % (tod, datetime.datetime.now()))
-
-
-# Add dummy turn for SOLA assignment (quick fix until Emme 4.2.3)
-SOLAFixMacro = "../../scripts/quick_update_fix.mac"
-p.run_macro("~< {0} {1}".format(SOLAFixMacro, os.getcwd() + "\\inputs"), m.emmebank.path, scen)
+		
+#delete dummy scenario
+m.emmebank.delete_scenario(dummy_scen)

@@ -134,7 +134,7 @@ q
 ~/            Perform convolution for low income 
 3.23
 1
-mf"kzone"                ~/first operand matrix
+mf"kzonep"               ~/first operand matrix
 ==                       ~/matrix combination operator
 mo"ptemp"                ~/second operand matrix
 y                        ~/use transpose of second operand matrix?
@@ -166,7 +166,7 @@ q
 ~/            Perform convolution for high income 
 3.23
 1
-mf"kzone"                ~/first operand matrix
+mf"kzonep"                ~/first operand matrix
 ==                       ~/matrix combination operator
 mo"ptemp"                ~/second operand matrix
 y                        ~/use transpose of second operand matrix?
