@@ -236,25 +236,25 @@ reports=../../outputs/report_hwyskim.txt
 /MODEL PARAMETERS:
 /VOT ($/hour)
 ~r011=06.00     /VOT for SOV1 low income vehicle
-~r011*1.5       /Sensitivity test    
+~r011*1.0       /Sensitivity test    
 ~r021=18.00     /VOT for SOV1 high income vehicle 
-~r021*1.5       /Sensitivity test
+~r021*1.0       /Sensitivity test
 ~r031=10.00     /VOT for HOV2 low income vehicle 
-~r031*1.5       /Sensitivity test
+~r031*1.0       /Sensitivity test
 ~r041=30.00     /VOT for HOV2 high income vehicle 
-~r041*1.5       /Sensitivity test
+~r041*1.0       /Sensitivity test
 ~r051=15.00     /VOT for HOV3 low income vehicle 
-~r051*1.5       /Sensitivity test
+~r051*1.0       /Sensitivity test
 ~r061=45.00     /VOT for HOV3 high income vehicle 
-~r061*1.5       /Sensitivity test
+~r061*1.0       /Sensitivity test
 ~r071=04.00     /VOT for commercials
-~r071*15.0       /Sensitivity test
+~r071*1.0       /Sensitivity test
 ~r081=04.00     /VOT for light truck
-~r081*15.0       /Sensitivity test
+~r081*1.0       /Sensitivity test
 ~r091=04.00     /VOT for medium truck
-~r091*15.0       /Sensitivity test
+~r091*1.0       /Sensitivity test
 ~r101=04.00     /VOT for heavy truck
-~r101*15.0       /Sensitivity test
+~r101*1.0       /Sensitivity test
 ~r111=06.00     /VOT for external SOV1 low income vehicle
 ~r111*1.0       /Sensitivity test    
 ~r121=18.00     /VOT for external SOV1 high income vehicle 
