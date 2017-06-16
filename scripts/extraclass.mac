@@ -96,10 +96,6 @@ s=%1%
 ~:SKIP43
 ~+|@pvht|~?e|~$>SKIP44|y|3
 ~:SKIP44
-~+|@avtot|~?e|~$>SKIP45|y|3
-~:SKIP45
-~+|@busveq|~?e|~$>SKIP46|y|3
-~:SKIP46
 ~+||q 
 /Create extra attributes
 2.42
