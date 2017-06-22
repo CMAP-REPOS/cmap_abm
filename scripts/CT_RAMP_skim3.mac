@@ -2,7 +2,12 @@
 ~#reports=nul
 ~###  -- Macro updated Dec. 2015 to segment assignment into VOT classes --
 ~###  -- Macro updated Aug. 2016 to apply different tolls to trucks --
-reports=../../outputs/report_hwyskim.txt
+~###  -- Macro updated 03-02-2017 CMH: 
+~###        - test auto toll sensitivities of 8.0 for internal high income, 6.0 for internal low income autos and 10.0 for external/airport autos
+~###        - Expand toll demand to include likely potential toll users for final iteration assignments (25% margin of error)
+~###        - create separate report for each TOD period
+~###
+reports=../../outputs/report_hwyskim_pd%4%.txt
 ~r01=%1%       /0 - initialize split matrices mf%4%131-mf%4%174, 1 - start with the previous set 
 /~r01=0
 ~r02=%6%       /0 - include auto split, 1 - exclude (when applied with CT-RAMP)
@@ -236,49 +241,49 @@ reports=../../outputs/report_hwyskim.txt
 /MODEL PARAMETERS:
 /VOT ($/hour)
 ~r011=06.00     /VOT for SOV1 low income vehicle
-~r011*1.0       /Sensitivity test    
+~r011*6.0       /Sensitivity test    
 ~r021=18.00     /VOT for SOV1 high income vehicle 
-~r021*1.0       /Sensitivity test
+~r021*8.0       /Sensitivity test
 ~r031=10.00     /VOT for HOV2 low income vehicle 
-~r031*1.0       /Sensitivity test
+~r031*6.0       /Sensitivity test
 ~r041=30.00     /VOT for HOV2 high income vehicle 
-~r041*1.0       /Sensitivity test
+~r041*8.0       /Sensitivity test
 ~r051=15.00     /VOT for HOV3 low income vehicle 
-~r051*1.0       /Sensitivity test
+~r051*6.0       /Sensitivity test
 ~r061=45.00     /VOT for HOV3 high income vehicle 
-~r061*1.0       /Sensitivity test
+~r061*8.0       /Sensitivity test
 ~r071=04.00     /VOT for commercials
-~r071*1.0       /Sensitivity test
+~r071*15.0       /Sensitivity test
 ~r081=04.00     /VOT for light truck
-~r081*1.0       /Sensitivity test
+~r081*15.0       /Sensitivity test
 ~r091=04.00     /VOT for medium truck
-~r091*1.0       /Sensitivity test
+~r091*15.0       /Sensitivity test
 ~r101=04.00     /VOT for heavy truck
-~r101*1.0       /Sensitivity test
+~r101*15.0       /Sensitivity test
 ~r111=06.00     /VOT for external SOV1 low income vehicle
-~r111*1.0       /Sensitivity test    
+~r111*10.0       /Sensitivity test    
 ~r121=18.00     /VOT for external SOV1 high income vehicle 
-~r121*1.0       /Sensitivity test
+~r121*10.0       /Sensitivity test
 ~r131=10.00     /VOT for external HOV2 low income vehicle 
-~r131*1.0       /Sensitivity test
+~r131*10.0       /Sensitivity test
 ~r141=30.00     /VOT for external HOV2 high income vehicle 
-~r141*1.0       /Sensitivity test
+~r141*10.0       /Sensitivity test
 ~r151=15.00     /VOT for external HOV3 low income vehicle 
-~r151*1.0       /Sensitivity test
+~r151*10.0       /Sensitivity test
 ~r161=45.00     /VOT for external HOV3 high income vehicle 
-~r161*1.0       /Sensitivity test
+~r161*10.0       /Sensitivity test
 ~r171=06.00     /VOT for airport passenger SOV1 low income vehicle
-~r171*1.5       /Sensitivity test    
+~r171*10.0       /Sensitivity test    
 ~r181=18.00     /VOT for airport passenger SOV1 high income vehicle 
-~r181*1.5       /Sensitivity test
+~r181*10.0      /Sensitivity test
 ~r191=10.00     /VOT for airport passenger HOV2 low income vehicle 
-~r191*1.5       /Sensitivity test
+~r191*10.0       /Sensitivity test
 ~r201=30.00     /VOT for airport passenger HOV2 high income vehicle 
-~r201*1.5       /Sensitivity test
+~r201*10.0       /Sensitivity test
 ~r211=15.00     /VOT for airport passenger HOV3 low income vehicle 
-~r211*1.5       /Sensitivity test
+~r211*10.0       /Sensitivity test
 ~r221=45.00     /VOT for airport passenger HOV3 high income vehicle 
-~r221*1.5       /Sensitivity test
+~r221*10.0       /Sensitivity test
 /PERCEPTIONAL TOLL BIAS (utils):
 ~r012=-1.00     /Toll bias for SOV1 low income vehicle
 ~r022=-0.50     /Toll bias for SOV1 high income vehicle 
@@ -402,8 +407,8 @@ reports=../../outputs/report_hwyskim.txt
 ~+|~z=%x%|~z*2|~z+122|~z+%r239%
 ~+|~t9=%mf%r240%.n%
 ~+|~t9=%t9_<5%
-~+|1|y|mf%y%|~?q=1|y|%t9%n|%t9% non-toll|~?q=1|y||mf%r240%*0.99|||n|2
-~+|1|y|mf%z%|~?q=1|y|%t9%t|%t9% toll    |~?q=1|y||mf%r240%*0.01|||n|2
+~+|1|y|mf%y%|~?q=1|y|%t9%n|%t9% non-toll|~?q=1|y||mf%r240%*0.98|||n|2
+~+|1|y|mf%z%|~?q=1|y|%t9%t|%t9% toll    |~?q=1|y||mf%r240%*0.02|||n|2
 ~/### 0.%x%. Matrices mf%y%"%t9%n" and mf %z%"%t9%t" built from mf%r240%"%t9%" 
 ~x+1
 ~?!x>22
@@ -845,6 +850,68 @@ s=%r04%
 ~?r10=0
 ~$>SKIP FINAL ASSIGNMENT
 ~/### 7.   FINAL ASSIGNMENT WITH SAVING CLASS-SPECIFIC VOLUMES
+~#
+~/### 7.01. Expand toll demand to include likely potential toll users for assignment
+~/### Heither, 02-10-2017
+~r100=0.25                  / margin of error in determining toll users
+~r126=0	                    / loop counter
+
+~:adj_demand
+~# ## -- toll user class demand matrix
+~+|~?r126=0|~r106=%4%169|~?r126=01|~r106=%4%170|~?r126=02|~r106=%4%173|~?r126=03|~r106=%4%174|~?r126=04|~r106=%4%177|~?r126=05|~r106=%4%178
+~# ## -- toll user class toll amount matrix
+~+|~?r126=0|~r107=%4%192|~?r126=01|~r107=%4%197|~?r126=02|~r107=%4%212|~?r126=03|~r107=%4%217|~?r126=04|~r107=%4%232|~?r126=05|~r107=%4%237
+~# ## -- toll user class distance matrix
+~+|~?r126=0|~r108=%4%193|~?r126=01|~r108=%4%198|~?r126=02|~r108=%4%213|~?r126=03|~r108=%4%218|~?r126=04|~r108=%4%233|~?r126=05|~r108=%4%238
+~# ## -- non-toll user class distance matrix
+~+|~?r126=0|~r109=%4%183|~?r126=01|~r109=%4%188|~?r126=02|~r109=%4%203|~?r126=03|~r109=%4%208|~?r126=04|~r109=%4%223|~?r126=05|~r109=%4%228
+~# ## -- non-toll Vehicle Occupancy demand
+~+|~?r126=0|~r110=%4%123|~?r126=01|~r110=%4%125|~?r126=02|~r110=%4%127|~?r126=03|~r110=%4%129|~?r126=04|~r110=%4%131|~?r126=05|~r110=%4%133
+~# ## -- non-toll External Vehicle Occupancy demand             
+~+|~?r126=0|~r116=%4%143|~?r126=01|~r116=%4%145|~?r126=02|~r116=%4%147|~?r126=03|~r116=%4%149|~?r126=04|~r116=%4%151|~?r126=05|~r116=%4%153
+~# ## -- non-toll Air Passenger Vehicle Occupancy demand  			  
+~+|~?r126=0|~r117=%4%155|~?r126=01|~r117=%4%157|~?r126=02|~r117=%4%159|~?r126=03|~r117=%4%161|~?r126=04|~r117=%4%163|~?r126=05|~r117=%4%165
+~# ## -- toll Vehicle Occupancy demand			  
+~+|~?r126=0|~r118=%4%124|~?r126=01|~r118=%4%126|~?r126=02|~r118=%4%128|~?r126=03|~r118=%4%130|~?r126=04|~r118=%4%132|~?r126=05|~r118=%4%134
+~# ## -- toll External Vehicle Occupancy demand   
+~+|~?r126=0|~r119=%4%144|~?r126=01|~r119=%4%146|~?r126=02|~r119=%4%148|~?r126=03|~r119=%4%150|~?r126=04|~r119=%4%152|~?r126=05|~r119=%4%154
+~# ## -- toll Air Passenger Vehicle Occupancy demand  
+~+|~?r126=0|~r120=%4%156|~?r126=01|~r120=%4%158|~?r126=02|~r120=%4%160|~?r126=03|~r120=%4%162|~?r126=04|~r120=%4%164|~?r126=05|~r120=%4%166
+~#
+~#
+3.21 
+~# ## -- Sum User Class Toll demand using tolls
+~+|1|y|ms701|~?q=1|y|trips|toll trips by class|~?q=1|y|0|mf%r106%||mf%r107%||n|+|+|2
+~# ## -- Calculate Mean Distance Traveled for User Class toll demand trips
+~+|1|y|ms702|~?q=1|y|mean dist|toll trips mean distance - std dev by class|~?q=1|y|0|mf%r106%*mf%r108%||mf%r107%||n|+|+|2
+~+|1|y|ms702|n|ms702/ms701|||2
+~# ## -- Calculate Standard Deviation of Distance (Part 1 - squared differences)
+~+|1|y|mf900|y|sqrdiff|squared differences|~?q=1|y|0|(mf%r108%-ms702)^2*mf%r106%||mf%r107%||n|2
+~# ## -- Calculate Standard Deviation of Distance (Part 2 - mean of squared differences)
+~+|1|y|ms703|~?q=1|y|stdev|standard deviation of toll distance|~?q=1|y|0|mf900|||n|+|+|2
+~+|1|y|ms703|n|ms703/ms701|||2
+~# ## -- Calculate Standard Deviation of Distance (Part 3 - square root of squared differences)
+~+|1|y|ms703|n|sqrt(ms703)|||2
+~# ## -- Potential Toll User Distance Threshold (Average Distance minus one standard deviation) - floor of 5.0 miles
+~+|1|y|ms702|n|nint(ms702-ms703).max.5|||2
+~# ## -- Calculate Potential Toll User Demand & Adjust Demand Matrices
+~# ##    -- Internal non-toll User Demand 
+~+|1|y|mf901|y|potential toll demand|potential toll demand for user class|~?q=1|y|0|(mf%r109%.ge.ms702)*mf%r110%*%r100%||mf%r107%||n|2
+~+|1|y|mf%r110%|n|mf%r110%-mf901|||n|2
+~+|1|y|mf%r118%|n|mf%r118%+mf901|||n|2
+~# ##    -- External non-toll User Demand 
+~+|1|y|mf901|y|potential toll demand|potential toll demand for user class|~?q=1|y|0|(mf%r109%.ge.ms702)*mf%r116%*%r100%||mf%r107%||n|2
+~+|1|y|mf%r116%|n|mf%r116%-mf901|||n|2
+~+|1|y|mf%r119%|n|mf%r119%+mf901|||n|2
+~# ##    -- External Air passenger non-toll User Demand 
+~+|1|y|mf901|y|potential toll demand|potential toll demand for user class|~?q=1|y|0|(mf%r109%.ge.ms702)*mf%r117%*%r100%||mf%r107%||n|2
+~+|1|y|mf%r117%|n|mf%r117%-mf901|||n|2
+~+|1|y|mf%r120%|n|mf%r120%+mf901|||n|2
+q
+~r126+1
+~+|~?r126<6|~$adj_demand
+~#
+~# ## =====================================================================================================================================
 ~/### 7.1. Aggregation of trip tables for assignment
 3.21
 ~+|1|y|mf%4%167|n|mf%4%123+mf%4%143+mf%4%155|||n|2
