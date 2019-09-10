@@ -75,10 +75,10 @@ for i in range(len(tods)):
             #%4%       /base scenario for assignment (9999 - for skimming)
             #%5%       /number of assignment iterations
             #%6%       /0 - include auto split, 1 - exclude (when applied with CT-RAMP)
-            p.run_macro("~< %s %i %f %i %i %i %i" % (hwySkimMacro, 1, 1.00, 0, scen, 25, 1), m.emmebank.path, scen)
-            p.run_macro("~< %s %i %f %i %i %i %i" % (hwySkimMacro, 1, 0.75, 0, scen, 50, 1), m.emmebank.path, scen)
-            p.run_macro("~< %s %i %f %i %i %i %i" % (hwySkimMacro, 1, 0.50, 0, scen, 75, 1), m.emmebank.path, scen)
-            p.run_macro("~< %s %i %f %i %i %i %i" % (hwySkimMacro, 1, 0.25, 1, scen, 100, 1), m.emmebank.path, scen)
+            p.run_macro("~< %s %i %f %i %i %i %i" % (hwySkimMacro, 1, 1.00, 0, scen, 50, 1), m.emmebank.path, scen)
+            #p.run_macro("~< %s %i %f %i %i %i %i" % (hwySkimMacro, 1, 0.75, 0, scen, 50, 1), m.emmebank.path, scen)
+            p.run_macro("~< %s %i %f %i %i %i %i" % (hwySkimMacro, 1, 0.667, 0, scen, 75, 1), m.emmebank.path, scen)
+            p.run_macro("~< %s %i %f %i %i %i %i" % (hwySkimMacro, 1, 0.333, 1, scen, 100, 1), m.emmebank.path, scen)
 
         #read taz and tap demand matrices and write to bank
         matNames = ["mf%i359","mf%i360","mf%i361","mf%i362","mf%i363","mf%i364"] #tap

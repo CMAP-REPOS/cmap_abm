@@ -10,15 +10,15 @@
     if %errorlevel%==0 set DYNAMEQ=%%b
 )
 IF NOT EXIST "%DYNAMEQ%" set DYNAMEQ=
-@set EMMEPATH=C:\Program Files\INRO\Emme\Emme 4\Emme-4.2.0
+@set EMMEPATH=C:\Program Files\INRO\Emme\Emme 4\Emme-4.3.6
 @set INRO_HOST=EMMEPATH
 @set TOOLBOX_PATH=%EMMEPATH%
 @set MODELLER_PYTHON=%EMMEPATH%\Python27\
 @set currentdir=%CD%
 @IF NOT EXIST "%APPDATA%\INRO\Emme" @goto endloop
 @cd "%APPDATA%\INRO\Emme\"
-@IF EXIST lastworkspace_4.2.0-64bit (
-@For /F "tokens=1* delims==" %%A IN (lastworkspace_4.2.0-64bit) DO ( @IF /I "%%A"=="ModellerPython " @set MODELLER_PYTHON=%%B ) )
+@IF EXIST lastworkspace_4.3.6-64bit (
+@For /F "tokens=1* delims==" %%A IN (lastworkspace_4.3.6-64bit) DO ( @IF /I "%%A"=="ModellerPython " @set MODELLER_PYTHON=%%B ) )
 @cd "%currentdir%"
 @IF  "X%MODELLER_PYTHON: =%"=="X" @set MODELLER_PYTHON=%EMMEPATH%\Python27\
 @For /f "tokens=* delims= " %%a in ("%MODELLER_PYTHON%") do @set MODELLER_PYTHON=%%a

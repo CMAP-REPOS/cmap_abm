@@ -72,9 +72,9 @@ for i in range(len(tods)):
             #%5%       /number of assignment iterations
             #%6%       /0 - include auto split, 1 - exclude (when applied with CT-RAMP)
             p.run_macro("~< %s %i %f %i %i %i %i" % (hwySkimMacro, 0, 1.00, 0, scen, 25, 0), m.emmebank.path, scen)
-            p.run_macro("~< %s %i %f %i %i %i %i" % (hwySkimMacro, 1, 0.75, 0, scen, 50, 0), m.emmebank.path, scen)
-            p.run_macro("~< %s %i %f %i %i %i %i" % (hwySkimMacro, 1, 0.50, 0, scen, 75, 0), m.emmebank.path, scen)
-            p.run_macro("~< %s %i %f %i %i %i %i" % (hwySkimMacro, 1, 0.25, 0, scen, 100, 0), m.emmebank.path, scen)
+            #p.run_macro("~< %s %i %f %i %i %i %i" % (hwySkimMacro, 1, 0.75, 0, scen, 50, 0), m.emmebank.path, scen)
+            p.run_macro("~< %s %i %f %i %i %i %i" % (hwySkimMacro, 1, 0.667, 0, scen, 40, 0), m.emmebank.path, scen)
+            p.run_macro("~< %s %i %f %i %i %i %i" % (hwySkimMacro, 1, 0.333, 0, scen, 60, 0), m.emmebank.path, scen)
 
             # Get list of IDs for low & high-income skim matrix pairs
             hwy_skims = []

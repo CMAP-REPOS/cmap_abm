@@ -6,6 +6,10 @@
 ~###        - test auto toll sensitivities of 8.0 for internal high income, 6.0 for internal low income autos and 10.0 for external/airport autos
 ~###        - Expand toll demand to include likely potential toll users for final iteration assignments (25% margin of error)
 ~###        - create separate report for each TOD period
+~###  -- Macro updated 02-21-2018 CMH: 
+~###        - Upgrading to Emme 4.3.5 required modifying the macro to conform to the updated SOLA asmt menu: 
+~###          - Response for new assignment or continue from existing assignment
+~###          - Additional responses for path attribute matrices (final line)  
 ~###
 reports=../../outputs/report_hwyskim_pd%4%.txt
 ~r01=%1%       /0 - initialize split matrices mf%4%131-mf%4%174, 1 - start with the previous set 
@@ -243,15 +247,15 @@ reports=../../outputs/report_hwyskim_pd%4%.txt
 ~r011=06.00     /VOT for SOV1 low income vehicle
 ~r011*6.0       /Sensitivity test    
 ~r021=18.00     /VOT for SOV1 high income vehicle 
-~r021*8.0       /Sensitivity test
+~r021*15.0       /Sensitivity test
 ~r031=10.00     /VOT for HOV2 low income vehicle 
 ~r031*6.0       /Sensitivity test
 ~r041=30.00     /VOT for HOV2 high income vehicle 
-~r041*8.0       /Sensitivity test
+~r041*15.0       /Sensitivity test
 ~r051=15.00     /VOT for HOV3 low income vehicle 
 ~r051*6.0       /Sensitivity test
 ~r061=45.00     /VOT for HOV3 high income vehicle 
-~r061*8.0       /Sensitivity test
+~r061*15.0       /Sensitivity test
 ~r071=04.00     /VOT for commercials
 ~r071*15.0       /Sensitivity test
 ~r081=04.00     /VOT for light truck
@@ -259,7 +263,7 @@ reports=../../outputs/report_hwyskim_pd%4%.txt
 ~r091=04.00     /VOT for medium truck
 ~r091*15.0       /Sensitivity test
 ~r101=04.00     /VOT for heavy truck
-~r101*15.0       /Sensitivity test
+~r101*25.0       /Sensitivity test
 ~r111=06.00     /VOT for external SOV1 low income vehicle
 ~r111*10.0       /Sensitivity test    
 ~r121=18.00     /VOT for external SOV1 high income vehicle 
@@ -502,6 +506,7 @@ s=%r04%
 ~/### 1.3. Implement main SOLA assignment onto network scenario %s% %ts% 
 /~$>BYPASS
 5.23
+~+;~?q=2;2        / 1: more iterations on old assignment, 2: new assignment - added 02-21-2018, Heither
 1
 ~+|S|%t1%|100   |mf%4%167|||||
 ~+|S|%t1%|100   |mf%4%168|||||
@@ -606,10 +611,12 @@ q
 ~+|~?x=17|~r240=141|~?x=18|~r240=142
 ~r240+%r239%
 /Get congested travel time skim using UL2
+~/ t8=%t8%  t9=%t9%  r240=%r240%  r241=%r241%   
 5.23
+~+;~?q=2;2        / 1: more iterations on old assignment, 2: new assignment - added 02-21-2018, Heither
 ~+|1|%t8%||mf%r240%||||ul2||+|0,999999|1|
 ~+|mf%r241%|~?q=1|y|%t9%1c|Congested time %t9%|~?q=1|y|
-~+||||1|-1|-1|-1|2|2
+~+||||||1|-1|-1|-1|2|2
 3.21 /Impute intrazonal congested time
 ~+|1|y|mo100|~?q=1|y|Intra|Intrazonal|~?q=1|y|0|mf%r241%+(p.eq.q)*999|||n|.min.|2
 ~+|1|y|md100|~?q=1|y|Intra|Intrazonal|~?q=1|y|0|mf%r241%+(p.eq.q)*999|||n|.min.|2
@@ -618,15 +625,17 @@ q
 ~r241+1
 /Get toll value using class-specific extra-attribute t1-t6
 5.23
+~+;~?q=2;2        / 1: more iterations on old assignment, 2: new assignment - added 02-21-2018, Heither
 ~+|1|%t8%||mf%r240%||||%%%t%y%%%%||+|0,999999|1|
 ~+|mf%r241%|~?q=1|y|%t9%2t|Toll %t9%|~?q=1|y|
-~+||||1|-1|-1|-1|2|2
+~+||||||1|-1|-1|-1|2|2
 ~r241+1
 /Get total trip distance using LEN 
 5.23
+~+;~?q=2;2        / 1: more iterations on old assignment, 2: new assignment - added 02-21-2018, Heither
 ~+|1|%t8%||mf%r240%||||len||+|0,999999|1|
 ~+|mf%r241%|~?q=1|y|%t9%3d|Distance %t9%|~?q=1|y|
-~+||||1|-1|-1|-1|2|2
+~+||||||1|-1|-1|-1|2|2
 3.21 /Impute intrazonal distance (truncated by 3 miles)
 ~+|1|y|mo100|~?q=1|y|Intra|Intrazonal|~?q=1|y|0|mf%r241%+(p.eq.q)*999|||n|.min.|2
 ~+|1|y|md100|~?q=1|y|Intra|Intrazonal|~?q=1|y|0|mf%r241%+(p.eq.q)*999|||n|.min.|2
@@ -635,15 +644,17 @@ q
 ~r241+1
 /Get toll/managed lane distance using UL3
 5.23
+~+;~?q=2;2        / 1: more iterations on old assignment, 2: new assignment - added 02-21-2018, Heither
 ~+|1|%t8%||mf%r240%||||ul3||+|0,999999|1|
 ~+|mf%r241%|~?q=1|y|%t9%4m|Toll distance %t9%|~?q=1|y|
-~+||||1|-1|-1|-1|2|2
+~+||||||1|-1|-1|-1|2|2
 ~r241+1
 /Get free-flow time using @ftime
 5.23
+~+;~?q=2;2        / 1: more iterations on old assignment, 2: new assignment - added 02-21-2018, Heither
 ~+|1|%t8%||mf%r240%||||@ftime||+|0,999999|1|
 ~+|mf%r241%|~?q=1|y|%t9%5f|Free-flow time %t9%|~?q=1|y|
-~+||||1|-1|-1|-1|2|2
+~+||||||1|-1|-1|-1|2|2
 3.21 /Impute intrazonal free-flow time
 ~+|1|y|mo100|~?q=1|y|Intra|Intrazonal|~?q=1|y|0|mf%r241%+(p.eq.q)*999|||n|.min.|2
 ~+|1|y|md100|~?q=1|y|Intra|Intrazonal|~?q=1|y|0|mf%r241%+(p.eq.q)*999|||n|.min.|2
@@ -853,7 +864,7 @@ s=%r04%
 ~#
 ~/### 7.01. Expand toll demand to include likely potential toll users for assignment
 ~/### Heither, 02-10-2017
-~r100=0.25                  / margin of error in determining toll users
+~r100=0.75                  / margin of error in determining toll users
 ~r126=0	                    / loop counter
 
 ~:adj_demand
@@ -933,6 +944,7 @@ q
 /line below for debugging:
 /~+|~r231=4|~r232=4|~r233=4|~r234=4|~r235=4|~r236=4
 5.23
+~+;~?q=2;2        / 1: more iterations on old assignment, 2: new assignment - added 02-21-2018, Heither
 1
 ~+|S|%t1%|100   |mf%4%167||@vso1ntlo|n|||
 ~+|S|%t1%|100   |mf%4%168||@vso1nthi|n|||
