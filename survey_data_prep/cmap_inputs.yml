@@ -1,0 +1,26 @@
+# CMAP data processing/qc inputs
+
+proj_dir: 'N:/Projects/CMAP_Activitysim/cmap_abm/survey_data_prep'
+data_dir: 'N:/Projects/CMAP_Activitysim/cmap_abm/survey_data_prep/survey_data'
+cmap_folder: 'MDT_CMAP_Research_Dataset_Lean/Data'
+nirpc_folder: 'NIRPC_MDT_survey'
+
+SPA_input_dir: 'N:/Projects/CMAP_Activitysim/cmap_abm/survey_data_prep/SPA_Inputs'
+SPA_output_dir: 'N:/Projects/CMAP_Activitysim/cmap_abm/survey_data_prep/SPA_Processed'
+SPA_code_dir: "N:/Projects/CMAP_Activitysim/cmap_abm/survey_data_prep/SPA"
+
+
+zone_dir: 'N:/Projects/CMAP_Activitysim/cmap_abm/survey_data_prep/zone_data'
+
+county_flows_csv: 'N:/Projects/CMAP_Activitysim/cmap_abm/survey_data_prep/acs_county_flows_IL.csv'
+
+
+visualizer_dir: 'N:/Projects/CMAP_Activitysim/cmap_abm/survey_data_prep/Visualizer'
+visualizer_summaries: 'N:/Projects/CMAP_Activitysim/cmap_abm/survey_data_prep/Visualizer/summaries'
+
+skims_file: 'N:/Projects/CMAP_Activitysim/cmap_abm/survey_data_prep/mf5183.zmx'
+
+popsim_folder: 'N:/Projects/CMAP_Activitysim/cmap_abm/survey_data_prep/cmap_survey_weighting'
+popsim_folder_nirpc: 'N:/Projects/CMAP_Activitysim/cmap_abm/survey_data_prep/nirpc_survey_weighting'
+
+obs_dir: 'N:/Projects/CMAP_Activitysim/cmap_abm/obs_processing'

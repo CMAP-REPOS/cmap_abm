@@ -1,0 +1,27 @@
+# files/folders to ignore in survey processing
+
+
+SPA/env/
+SPA/.vs
+SPA/__pycache__
+
+survey_data/
+SPA_Inputs/
+SPA_Processed/
+Visualizer/dependencies/
+zone_data
+
+.Rhistory
+mf5183.zmx
+
+cmap_survey_weighting/data
+cmap_survey_weighting/output
+nirpc_survey_weighting/output
+
+
+# avoid data files unless we know they are not personal info or large files:
+*.rds
+*.csv
+
+!acs_county_flows_IL.csv
+!county_lookup.csv

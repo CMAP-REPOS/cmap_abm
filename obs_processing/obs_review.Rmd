@@ -1,0 +1,130 @@
+---
+title: "CMAP OBS data review"
+author: "Leah Flake"
+date: "June 4, 2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(yaml)
+library(data.table)
+library(ggplot2)
+library(janitor)
+library(kableExtra)
+
+options(scipen = 99)
+settings = yaml.load_file('N:/Projects/CMAP_Activitysim/cmap_abm/survey_data_prep/cmap_inputs.yml')
+
+obs_dir = settings$obs_dir
+
+obs_data = fread(file.path(obs_dir, 'output', 'processed_obs.csv'))
+
+obs_data[, provider := fcase(study == 'cta' & route %like% 'Line', 'CTA Rail',
+                              study == 'metra', 'Metra',
+                              default = 'CTA Bus')]
+by_provider = obs_data[, .(Linked = sum(linked_weight_scaled, na.rm =TRUE), 
+                           Unlinked = sum(unlinked_weight_scaled, na.rm = TRUE)), by = .(`Transit Service` = provider)]
+
+by_provider[, `Transfer rate` := Unlinked/Linked]
+```
+
+## Overview 
+
+Linked rides & unlinked boardings
+
+Unlinked:
+`r obs_data[, sum(unlinked_weight, na.rm = TRUE)]`
+
+Linked:
+`r obs_data[, sum(linked_weight, na.rm = TRUE)]`
+
+
+By service provider:
+
+```{r echo = FALSE}
+kable(by_provider, "simple")
+```
+
+## Boardings by route
+
+```{r echo = FALSE, warning = FALSE}
+# Boardings by route
+boardings = obs_data[, .(boardings =  sum(unlinked_weight_scaled, na.rm = TRUE)), .(provider, route)]
+
+boardings = dcast(boardings, route ~ provider)
+boardings[is.na(boardings)] = 0
+cols = c('Metra', 'CTA Rail', 'CTA Bus') 
+boardings = boardings[order(-Metra, -`CTA Rail`, -`CTA Bus`)]
+
+boardings[, (cols) := lapply(.SD, function(col) paste0(round(col/sum(col, na.rm = TRUE), 3) * 100,'%')), .SDcols=cols]
+
+kable(boardings, 'simple')
+```
+
+## Auto sufficiency
+```{r echo = FALSE,warning = FALSE, results = 'asis'}
+# Auto suff
+obs_data[, auto_suff_labeled := factor(auto_suff, 
+                                      levels = c(0:2), 
+                                      labels = c('Zero veh', 'Vehicles < workers', 'Vehicles >= workers'))]
+
+auto_suff = obs_data[, .(linked_weight_scaled = sum(linked_weight_scaled, na.rm = TRUE)), .(provider, auto_suff_labeled)]
+auto_suff[, weighted_pct := linked_weight_scaled/sum(linked_weight_scaled), by = .(provider)]
+cat("\n")
+cat("\n")
+
+cat('\n \n By transit provider \n')
+cat("\n")
+
+ggplot(auto_suff, aes(x = auto_suff_labeled, y = weighted_pct))+ geom_bar(stat = 'identity') + theme_bw() + facet_grid('provider', scales = 'free')  + ylab('Proportion')  + xlab('Auto sufficiency')
+cat("\n")
+cat(' \n \n Total \n ')
+cat("\n")
+ggplot(auto_suff, aes(x = auto_suff_labeled, y = linked_weight_scaled/sum(linked_weight_scaled)))+ geom_bar(stat = 'identity') + theme_bw() + ylab('Proportion') + xlab('Auto sufficiency')
+
+
+
+
+```
+
+## Access mode
+
+```{r echo = FALSE, warning = FALSE, results = 'asis'}
+# access mode
+
+access = obs_data[, .(linked_weight_scaled = sum(linked_weight_scaled, na.rm = TRUE)), .(provider, TOUR_MODE)]
+access[, weighted_pct := linked_weight_scaled/sum(linked_weight_scaled), by = .(provider)]
+
+cat("\n")
+cat("\n")
+cat('\n \n By transit provider \n')
+cat("\n")
+ggplot(access, aes(x = TOUR_MODE, y = weighted_pct))+ geom_bar(stat = 'identity') + theme_bw() + facet_wrap('provider', scales = 'free') + ylab('Proportion') + xlab('Transit access mode')
+
+cat("\n")
+cat("\n")
+cat('\n \n Total \n ')
+cat("\n")
+ggplot(access, aes(x = TOUR_MODE, y = linked_weight_scaled/sum(linked_weight_scaled)))+ geom_bar(stat = 'identity') + theme_bw() +
+  ylab('Proportion')+ xlab('Transit access mode')
+```
+
+## Tour purpose
+
+```{r echo = FALSE, warning = FALSE, results = 'asis'}
+
+purp = obs_data[, .(linked_weight_scaled = sum(linked_weight_scaled, na.rm = TRUE)), .(provider, TOUR_PURPOSE)]
+purp[, weighted_pct := linked_weight_scaled/sum(linked_weight_scaled), by = .(provider)]
+
+cat("\n")
+cat("\n")
+cat('\n \n By transit provider \n')
+cat("\n")
+ggplot(purp, aes(x = TOUR_PURPOSE, y = weighted_pct))+ geom_bar(stat = 'identity', positin = 'fill') + theme_bw() + facet_grid('provider', scales = 'free') + coord_flip() + ylab('Proportion') + xlab('Tour Purpose')
+cat("\n")
+cat("\n")
+cat(' \n \nTotal \n')
+cat("\n")
+ggplot(purp, aes(x = TOUR_PURPOSE, y = linked_weight_scaled/sum(linked_weight_scaled)))+ geom_bar(stat = 'identity') + theme_bw() +
+  coord_flip() + ylab('Proportion') + xlab('Tour Purpose')
+```

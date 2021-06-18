@@ -1,0 +1,328 @@
+---
+title: "CMAP SPA Output Review"
+author: "Leah Flake"
+output: 
+  html_document:
+    collapsed: yes
+    toc: yes
+    toc_depth: 4
+    toc_float: yes
+    self_contained: true
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+library(data.table)
+library(kableExtra)
+library(dplyr)
+source('_functions.R')
+library(yaml)
+settings = yaml.load_file('N:/Projects/CMAP_Activitysim/cmap_abm/survey_data_prep/cmap_inputs.yml')
+
+spa_output_dir = settings$SPA_output_dir
+spa_input_dir = settings$SPA_input_dir
+
+survey_hh = fread(file.path(spa_input_dir, "HH_SPA_INPUT.csv"))
+survey_per = fread(file.path(spa_input_dir, "PER_SPA_INPUT.csv"))
+survey_place = fread(file.path(spa_input_dir, "PLACE_SPA_INPUT.csv"))
+
+spa_trip = fread(file.path(spa_output_dir, 'trips.csv'))
+spa_tour = fread(file.path(spa_output_dir, 'tours.csv'))
+spa_hh = fread(file.path(spa_output_dir, 'households.csv'))
+spa_per = fread(file.path(spa_output_dir, 'persons.csv'))
+# join weights - fix in SPA tool
+spa_trip[survey_hh, HHEXPFACT := i.HHEXPFAC, on = .(HH_ID = SAMPN)]
+spa_trip[survey_per, PEREXPFACT :=  i.PEREXPFAC, on = .(HH_ID = SAMPN, PER_ID = PERNO)]
+spa_per[survey_per, PEREXPFACT :=  i.PEREXPFAC, on = .(HH_ID = SAMPN, PER_ID = PERNO)]
+spa_tour[survey_per, PEREXPFACT :=  i.PEREXPFAC, on = .(HH_ID = SAMPN, PER_ID = PERNO)]
+spa_tour[survey_hh, HHEXPFACT :=  i.HHEXPFAC, on = .(HH_ID = SAMPN)]
+spa_hh[survey_hh, HHEXPFACT :=  i.HHEXPFAC, on = .(HH_ID = SAMPN)]
+
+# label data
+
+dpurp_value_labels = data.table(variable = rep('DEST_PURP', 14), value = c(0:13), value_label =  c('HOME' , 
+                                                                          'WORK'  ,
+                                                                          'UNIVERSITY',   
+                                                                          'SCHOOL',       
+                                                                          'ESCORTING',    
+                                                                          'SHOPPING',     
+                                                                          'MAINTENANCE',  
+                                                                          'EAT OUT',      
+                                                                          'SOCIAL/VISIT', 
+                                                                          'DISCRETIONARY',
+                                                                          'WORK-RELATED', 
+                                                                          'LOOP',         
+                                                                          'CHANGE MODE',  
+                                                                          'OTHER'))
+
+dpurp_variable_labels = data.table(variable = 'DEST_PURP', description = 'Trip dest purpose', logic = NA)
+
+
+tourpurp_variable_labels = data.table(variable = 'TOURPURP', description = 'Tour purpose', logic = NA)
+
+
+tourpurp_value_labels = data.table(variable = rep('TOURPURP', 14), value = c(0:13), value_label =  c('HOME' , 
+                                                                          'WORK'  ,
+                                                                          'UNIVERSITY',   
+                                                                          'SCHOOL',       
+                                                                          'ESCORTING',    
+                                                                          'SHOPPING',     
+                                                                          'MAINTENANCE',  
+                                                                          'EAT OUT',      
+                                                                          'SOCIAL/VISIT', 
+                                                                          'DISCRETIONARY',
+                                                                          'WORK-RELATED', 
+                                                                          'LOOP',         
+                                                                          'CHANGE MODE',  
+                                                                          'OTHER'))
+
+
+
+tripmode_value_labels = data.table(variable = rep('TRIPMODE', 15), value = c(1:14, 100), value_label = c('SOV',
+                                                                                                    'HOV2',
+                                                                                                    'HOV3',
+                                                                                                    'WALK',
+                                                                                                    'BIKE',
+                                                                                                    'WALK-TRANSIT',
+                                                                                                    'PNR-TRANSIT', 
+                                                                                                    'KNR-TRANSIT', 
+                                                                                                    'TNR-TRANSIT', 
+                                                                                                    'TAXI', 
+                                                                                                    'TNC-SINGLE', 
+                                                                                                    'TNC-POOL', 
+                                                                                                    'SCHOOLBUS', 
+                                                                                                    'OTHER', 
+                                                                                                    'TRANSIT - ERR'))
+
+tripmode_variable_labels = data.table(variable = 'TRIPMODE', description = 'Tour mode', logic = NA)
+
+tourmode_value_labels = data.table(variable = rep('TOURMODE', 15), value = c(1:14, 100), value_label = c('SOV',
+                                                                                                    'HOV2',
+                                                                                                    'HOV3',
+                                                                                                    'WALK',
+                                                                                                    'BIKE',
+                                                                                                    'WALK-TRANSIT',
+                                                                                                    'PNR-TRANSIT', 
+                                                                                                    'KNR-TRANSIT', 
+                                                                                                    'TNR-TRANSIT', 
+                                                                                                    'TAXI', 
+                                                                                                    'TNC-SINGLE', 
+                                                                                                    'TNC-POOL', 
+                                                                                                    'SCHOOLBUS', 
+                                                                                                    'OTHER', 
+                                                                                                    'TRANSIT - ERR'))
+
+tourmode_value_labels[, value_label := paste(value, '-', value_label)]
+tripmode_value_labels[, value_label := paste(value, '-', value_label)]
+dpurp_value_labels[, value_label := paste(value, '-', value_label)]
+tourpurp_value_labels[, value_label := paste(value, '-', value_label)]
+
+tourmode_variable_labels = data.table(variable = 'TOURMODE', description = 'Tour mode', logic = NA)
+
+
+ptype_value_labels = data.table(variable = rep('PERSONTYPE', 8), value = c(1:8), value_label = c('FT worker',
+                                                                                                 'PT worker', 
+                                                                                                 'University student',
+                                                                                                 'Non-working adult',
+                                                                                                 'Retiree',
+                                                                                                 'Driving age student',
+                                                                                                 'Non-driving age student',
+                                                                                                 'Preschooler'))
+
+ptype_variable_labels = data.table(variable = 'PERSONTYPE', description = 'Person type', logic = NA)
+
+age_value_labels = data.table(variable = rep('AGE_CAT', 7), value = c(1:7), value_label = c('Under 5',
+                                                                                        '5-15', 
+                                                                                        '16-17',
+                                                                                        '18-24',
+                                                                                        '25-44',
+                                                                                        '45-64',
+                                                                                        '65+'))
+age_variable_labels = data.table(variable = 'AGE_CAT', description = 'Person age', logic = NA)
+
+value_labels = rbindlist(list(tripmode_value_labels, tourmode_value_labels, tourpurp_value_labels, dpurp_value_labels, ptype_value_labels, age_value_labels))
+
+variable_labels = rbindlist(list(tripmode_variable_labels, tourmode_variable_labels, tourpurp_variable_labels, dpurp_variable_labels, ptype_variable_labels, age_variable_labels))
+
+```
+
+
+```{r create_summaries, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE, include = FALSE}
+
+trip_purpose_tab_w = cross_tab(spa_trip, variable_labels ,value_labels, variables = 'DEST_PURP', weight_column = "PEREXPFACT")
+format_crosstab_table(trip_purpose_tab_w)
+
+trip_purpose_tab_uw = cross_tab(spa_trip, variable_labels ,value_labels, variables = 'DEST_PURP')
+format_crosstab_table(trip_purpose_tab_uw)
+
+
+tour_purpose_tab_w = cross_tab(spa_tour, variable_labels ,value_labels, variables = 'TOURPURP', weight_column = "PEREXPFACT")
+format_crosstab_table(tour_purpose_tab_w)
+
+tour_purpose_tab_uw = cross_tab(spa_tour, variable_labels ,value_labels, variables = 'TOURPURP')
+format_crosstab_table(tour_purpose_tab_uw)
+
+
+trip_tour_mode_tab_w = cross_tab(spa_trip, variable_labels ,value_labels, variables = 'TRIPMODE', tab_by = 'TOURMODE', weight_column = "PEREXPFACT")
+format_crosstab_table(trip_tour_mode_tab_w)
+
+trip_tour_mode_tab_w[is.na(trip_tour_mode_tab_w)] = ""
+trip_tour_mode_tab_w_count = trip_tour_mode_tab_w[, c(1:15)]
+setcolorder(trip_tour_mode_tab_w_count, c('TRIPMODE', "1 - SOV", "2 - HOV2", "3 - HOV3","4 - WALK", "5 - BIKE", "6 - WALK-TRANSIT", "7 - PNR-TRANSIT" , "8 - KNR-TRANSIT",  "9 - TNR-TRANSIT" , "10 - TAXI", "11 - TNC-SINGLE", "12 - TNC-POOL" ,  "13 - SCHOOLBUS", "14 - OTHER"))
+
+trip_tour_mode_tab_w_pct = trip_tour_mode_tab_w[, c(1, 16:29)]
+setcolorder(trip_tour_mode_tab_w_pct, c('TRIPMODE', "1 - SOV", "2 - HOV2", "3 - HOV3","4 - WALK", "5 - BIKE", "6 - WALK-TRANSIT", "7 - PNR-TRANSIT" , "8 - KNR-TRANSIT",  "9 - TNR-TRANSIT" , "10 - TAXI", "11 - TNC-SINGLE", "12 - TNC-POOL" ,  "13 - SCHOOLBUS", "14 - OTHER"))
+
+trip_tour_mode_tab_uw = cross_tab(spa_trip, variable_labels, value_labels, variables = 'TRIPMODE', tab_by = 'TOURMODE')
+format_crosstab_table(trip_tour_mode_tab_uw)
+trip_tour_mode_tab_uw[is.na(trip_tour_mode_tab_uw)] = ""
+
+trip_tour_mode_tab_uw_count = trip_tour_mode_tab_uw[, c(1:15)]
+setcolorder(trip_tour_mode_tab_uw_count, c('TRIPMODE', "1 - SOV", "2 - HOV2", "3 - HOV3","4 - WALK", "5 - BIKE", "6 - WALK-TRANSIT", "7 - PNR-TRANSIT" , "8 - KNR-TRANSIT",  "9 - TNR-TRANSIT" , "10 - TAXI", "11 - TNC-SINGLE", "12 - TNC-POOL" ,  "13 - SCHOOLBUS", "14 - OTHER"))
+
+trip_tour_mode_tab_uw_pct = trip_tour_mode_tab_uw[, c(1, 16:29)]
+setcolorder(trip_tour_mode_tab_uw_pct, c('TRIPMODE', "1 - SOV", "2 - HOV2", "3 - HOV3","4 - WALK", "5 - BIKE", "6 - WALK-TRANSIT", "7 - PNR-TRANSIT" , "8 - KNR-TRANSIT",  "9 - TNR-TRANSIT" , "10 - TAXI", "11 - TNC-SINGLE", "12 - TNC-POOL" ,  "13 - SCHOOLBUS", "14 - OTHER"))
+
+
+trip_mode_tab_w = cross_tab(spa_trip, variable_labels ,value_labels, variables = 'TRIPMODE', weight_column = "PEREXPFACT")
+format_crosstab_table(trip_mode_tab_w)
+
+
+trip_mode_tab_uw = cross_tab(spa_trip, variable_labels ,value_labels, variables = 'TRIPMODE')
+format_crosstab_table(trip_mode_tab_uw)
+
+
+tour_mode_tab_w = cross_tab(spa_tour, variable_labels ,value_labels, variables = 'TOURMODE', weight_column = "PEREXPFACT")
+format_crosstab_table(tour_mode_tab_w)
+
+tour_mode_tab_uw = cross_tab(spa_tour, variable_labels ,value_labels, variables = 'TOURMODE')
+format_crosstab_table(tour_mode_tab_uw)
+
+
+ptype_tab_w = cross_tab(spa_per, variable_labels ,value_labels, variables = 'PERSONTYPE', weight_column = "PEREXPFACT")
+format_crosstab_table(ptype_tab_w)
+
+
+ptype_tab_uw = cross_tab(spa_per, variable_labels ,value_labels, variables = 'PERSONTYPE')
+format_crosstab_table(ptype_tab_uw)
+
+
+ptype_age_tab_w = cross_tab(spa_per, variable_labels ,value_labels, variables = 'PERSONTYPE', tab_by = 'AGE_CAT', weight_column = "PEREXPFACT")
+format_crosstab_table(ptype_age_tab_w)
+
+ptype_age_tab_uw = cross_tab(spa_per, variable_labels ,value_labels, variables = 'PERSONTYPE', tab_by = 'AGE_CAT')
+format_crosstab_table(ptype_age_tab_uw)
+
+
+
+```
+
+## Trip and tour rate
+
+#### Person trip rate - weighted: `r spa_trip[, sum(PEREXPFACT)]/spa_per[, sum(PEREXPFACT)]`
+
+#### Person trip rate - unweighted: `r spa_trip[, .N]/spa_per[, .N]`
+
+
+#### Person tour rate - weighted: `r spa_tour[, sum(PEREXPFACT)]/spa_per[, sum(PEREXPFACT)]`
+
+#### Person tour rate - unweighted: `r spa_tour[, .N]/spa_per[, .N]`
+
+
+#### HH trip rate - weighted: `r spa_trip[, sum(HHEXPFACT)]/spa_hh[, sum(HHEXPFACT)]`
+
+#### HH trip rate - unweighted: `r spa_trip[, .N]/spa_hh[, .N]`
+
+
+#### HH tour rate - weighted: `r spa_tour[, sum(HHEXPFACT)]/spa_hh[, sum(HHEXPFACT)]`
+
+#### HH tour rate - unweighted: `r spa_tour[, .N]/spa_hh[, .N]`
+
+
+## Weighted
+
+```{r print_summaries, eval=TRUE, echo = FALSE, warning = FALSE, message=FALSE, results = 'asis'}
+
+cat('\n####  Trips by purpose\n')
+
+tpurp = format_table(trip_purpose_tab_w)
+print(tpurp)
+
+cat('\n####  Tours by purpose\n')
+
+topurp = format_table(tour_purpose_tab_w)
+print(topurp)
+
+cat('\n####  Trips by mode\n')
+
+format_table(trip_mode_tab_w)
+
+cat('\n####  Tours by mode\n')
+
+format_table(tour_mode_tab_w)
+
+cat('\n#### Trips by trip mode x tour mode - count\n')
+
+format_table(trip_tour_mode_tab_w_count)
+
+cat('\n####  Trips by trip mode x tour mode - percent\n')
+
+format_table(trip_tour_mode_tab_w_pct)
+
+
+cat('\n####  Persons by type\n')
+
+format_table(ptype_tab_w)
+
+cat('\n####  Persons by type x age\n')
+
+format_table(ptype_age_tab_w)
+```
+
+
+## Unweighted
+
+```{r print_summaries_uw, eval=TRUE, echo = FALSE, warning = FALSE, message=FALSE, results = 'asis'}
+
+cat('\n####  Trips by purpose\n')
+
+tpurp = format_table(trip_purpose_tab_uw)
+print(tpurp)
+
+cat('\n#### Tours by purpose\n')
+
+topurp = format_table(tour_purpose_tab_uw)
+print(topurp)
+
+cat('\n#### Trips by mode\n')
+
+format_table(trip_mode_tab_uw)
+
+cat('\n#### Tours by mode\n')
+
+format_table(tour_mode_tab_uw)
+
+cat('\n#### Trips by trip mode x tour mode - count\n')
+
+format_table(trip_tour_mode_tab_uw_count)
+
+cat('\n#### Trips by trip mode x tour mode - percent\n')
+
+format_table(trip_tour_mode_tab_uw_pct)
+
+
+cat('\n#### Persons by type\n')
+
+format_table(ptype_tab_uw)
+
+cat('\n#### Persons by type x age\n')
+
+format_table(ptype_age_tab_uw)
+```
+
+
+```{r change_mode, include = FALSE, echo = FALSE}
+
+
+```
