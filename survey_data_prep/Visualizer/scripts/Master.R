@@ -13,7 +13,7 @@
 ### Read Command Line Arguments
 args                <- commandArgs(trailingOnly = TRUE)
 Parameters_File     <- args[1]
-Parameters_File <- "N:/Projects/CMAP_Activitysim/cmap_abm/survey_data_prep/Visualizer/runtime/parameters.csv"
+Parameters_File <- "N:/Projects/CMAP_Activitysim/cmap_abm_lf/survey_data_prep/Visualizer/runtime/parameters.csv"
 #Run_switch          <- "FULL"
 
 ### Read parameters from Parameters_File

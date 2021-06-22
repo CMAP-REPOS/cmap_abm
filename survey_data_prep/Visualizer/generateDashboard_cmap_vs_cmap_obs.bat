@@ -10,22 +10,22 @@
 :: #    with appropriate Census sources names wherever applicable
 :: ############################################################################
 @ECHO off
-SET WORKING_DIR= "N:\Projects\CMAP_Activitysim\cmap_abm\survey_data_prep\Visualizer"
+SET WORKING_DIR= "N:\Projects\CMAP_Activitysim\cmap_abm_lf\survey_data_prep\Visualizer"
 
 :: User Inputs
 :: ###########
 
 
 :: Set paths
-SET PROJECT_DIR= "N:\Projects\CMAP_Activitysim\cmap_abm\survey_data_prep\Visualizer"
+SET PROJECT_DIR= "N:\Projects\CMAP_Activitysim\cmap_abm_lf\survey_data_prep\Visualizer"
 REM SET ABM_DIR=E:\Projects\Clients\SEMCOG\SNABM\2015_TM151_PPA_V1
-SET ABM_SUMMARY_DIR="N:\Projects\CMAP_Activitysim\cmap_abm\survey_data_prep\Visualizer\data\calibration_runs\summarized"
+SET ABM_SUMMARY_DIR="N:\Projects\CMAP_Activitysim\cmap_abm_lf\survey_data_prep\Visualizer\data\calibration_runs\summarized"
 REM SET BASE_SUMMARY_DIR_SUBSET=E:\Projects\Clients\SEMCOG\Data\CHTS\CHTS_Summaries_TM1format_SN
-SET BASE_SUMMARY_DIR="N:\Projects\CMAP_Activitysim\cmap_abm\survey_data_prep\Visualizer\summaries"
-SET BUILD_SUMMARY_DIR="N:\Projects\CMAP_Activitysim\cmap_abm\survey_data_prep\Visualizer\summaries"
-SET CENSUS_DIR="N:\Projects\CMAP_Activitysim\cmap_abm\survey_data_prep\Visualizer\data\census"
-SET CENSUS_SUMMARY_DIR="N:\Projects\CMAP_Activitysim\cmap_abm\survey_data_prep\Visualizer\data\census\summarized"
-SET CALIBRATION_DIR="N:\Projects\CMAP_Activitysim\cmap_abm\survey_data_prep\Visualizer\data\calibration_targets"
+SET BASE_SUMMARY_DIR="N:\Projects\CMAP_Activitysim\cmap_abm_lf\survey_data_prep\Visualizer\summaries"
+SET BUILD_SUMMARY_DIR="N:\Projects\CMAP_Activitysim\cmap_abm_lf\survey_data_prep\Visualizer\summaries"
+SET CENSUS_DIR="N:\Projects\CMAP_Activitysim\cmap_abm_lf\survey_data_prep\Visualizer\data\census"
+SET CENSUS_SUMMARY_DIR="N:\Projects\CMAP_Activitysim\cmap_abm_lf\survey_data_prep\Visualizer\data\census\summarized"
+SET CALIBRATION_DIR="N:\Projects\CMAP_Activitysim\cmap_abm_lf\survey_data_prep\Visualizer\data\calibration_targets"
 SET SHP_FILE_NAME=zones17.shp
 SET CT_ZERO_AUTO_FILE_NAME=ct_zero_auto.shp
 
@@ -44,12 +44,12 @@ SET BUILD_SAMPLE_RATE=1.0
 
 :: Set up dependencies
 :: ###################
-SET R_SCRIPT=N:\Projects\CMAP_Activitysim\cmap_abm\survey_data_prep\Visualizer\dependencies\R-4.0.3\bin\Rscript
-SET R_LIBRARY=N:\Projects\CMAP_Activitysim\cmap_abm\survey_data_prep\Visualizer\dependencies\R-4.0.3\library
+SET R_SCRIPT=N:\Projects\CMAP_Activitysim\cmap_abm_lf\survey_data_prep\Visualizer\dependencies\R-4.0.3\bin\Rscript
+SET R_LIBRARY=N:\Projects\CMAP_Activitysim\cmap_abm_lf\survey_data_prep\Visualizer\dependencies\R-4.0.3\library
 :: Set PANDOC path
-SET RSTUDIO_PANDOC=N:\Projects\CMAP_Activitysim\cmap_abm\survey_data_prep\Visualizer\dependencies\Pandoc
+SET RSTUDIO_PANDOC=N:\Projects\CMAP_Activitysim\cmap_abm_lf\survey_data_prep\Visualizer\dependencies\Pandoc
 :: Parameters file
-SET PARAMETERS_FILE=N:\Projects\CMAP_Activitysim\cmap_abm\survey_data_prep\Visualizer\runtime\parameters.csv
+SET PARAMETERS_FILE=N:\Projects\CMAP_Activitysim\cmap_abm_lf\survey_data_prep\Visualizer\runtime\parameters.csv
 
 ECHO Key,Value > %PARAMETERS_FILE%
 ECHO WORKING_DIR,%WORKING_DIR% >> %PARAMETERS_FILE%
