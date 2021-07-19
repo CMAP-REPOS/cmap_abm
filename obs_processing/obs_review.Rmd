@@ -13,7 +13,7 @@ library(janitor)
 library(kableExtra)
 
 options(scipen = 99)
-settings = yaml.load_file('N:/Projects/CMAP_Activitysim/cmap_abm/survey_data_prep/cmap_inputs.yml')
+settings = yaml.load_file('N:/Projects/CMAP_Activitysim/cmap_abm_lf/survey_data_prep/cmap_inputs.yml')
 
 obs_dir = settings$obs_dir
 
@@ -21,6 +21,7 @@ obs_data = fread(file.path(obs_dir, 'output', 'processed_obs.csv'))
 
 obs_data[, provider := fcase(study == 'cta' & route %like% 'Line', 'CTA Rail',
                               study == 'metra', 'Metra',
+                             study == 'pace', 'PACE',
                               default = 'CTA Bus')]
 by_provider = obs_data[, .(Linked = sum(linked_weight_scaled, na.rm =TRUE), 
                            Unlinked = sum(unlinked_weight_scaled, na.rm = TRUE)), by = .(`Transit Service` = provider)]
@@ -33,10 +34,10 @@ by_provider[, `Transfer rate` := Unlinked/Linked]
 Linked rides & unlinked boardings
 
 Unlinked:
-`r obs_data[, sum(unlinked_weight, na.rm = TRUE)]`
+`r obs_data[, sum(unlinked_weight_scaled, na.rm = TRUE)]`
 
 Linked:
-`r obs_data[, sum(linked_weight, na.rm = TRUE)]`
+`r obs_data[, sum(linked_weight_scaled, na.rm = TRUE)]`
 
 
 By service provider:
@@ -53,8 +54,8 @@ boardings = obs_data[, .(boardings =  sum(unlinked_weight_scaled, na.rm = TRUE))
 
 boardings = dcast(boardings, route ~ provider)
 boardings[is.na(boardings)] = 0
-cols = c('Metra', 'CTA Rail', 'CTA Bus') 
-boardings = boardings[order(-Metra, -`CTA Rail`, -`CTA Bus`)]
+cols = c('Metra', 'CTA Rail', 'CTA Bus', 'PACE') 
+boardings = boardings[order(-Metra, -`CTA Rail`, -`CTA Bus`, -PACE)]
 
 boardings[, (cols) := lapply(.SD, function(col) paste0(round(col/sum(col, na.rm = TRUE), 3) * 100,'%')), .SDcols=cols]
 
