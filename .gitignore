@@ -45,7 +45,7 @@ Thumbs.db
 
 # Excluded folders #
 ####################
-/activitysim/outputs
+/activitysim/output
 /activitysim/data
 /activitysim/data_cmap_samp
 /activitysim/data_mtc
