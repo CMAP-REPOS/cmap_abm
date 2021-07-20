@@ -4,3 +4,5 @@
 
 *.csv
 *.xlsx
+
+output/processed_obs.csv
