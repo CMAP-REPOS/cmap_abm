@@ -1,4 +1,4 @@
-inherit_settings: True
+inherit_settings: False
 
 # area_types less than this are considered urban
 urban_threshold: 2
@@ -19,15 +19,15 @@ household_median_value_of_time:
 
 fail_fast: True
 # - ------------------------- dev config
-multiprocess: False
+multiprocess: True
 strict: False
 mem_tick: 30
 use_shadow_pricing: False
 ## - example sample
 households_sample_size: 0
-chunk_size: 0
+chunk_size: 400_000_000_000
 #chunk_training_mode: training
-num_processes: 1 
+num_processes: 24 
 # - tracing
 trace_od:
 trace_hh_id:
@@ -110,7 +110,7 @@ output_tables:
     - trips
 
 models:
-  ### mp_initialize step
+  #  ## mp_initialize step
   - initialize_landuse
   - initialize_households
   - compute_accessibility
@@ -157,6 +157,13 @@ models:
 multiprocess_steps:
   - name: mp_initialize
     begin: initialize_landuse
+#  - name: mp_accessibility
+#    begin: compute_accessibility
+#    slice:
+#      tables:
+#        - accessibility
+#      # don't slice any tables not explicitly listed above in slice.tables
+#      except: True
   - name: mp_households
     begin: school_location
     slice:
@@ -179,8 +186,3 @@ output_tables:
 #    - school_shadow_prices
 #    - workplace_shadow_prices
     - joint_tour_participants
-
-# read cached skims (using numpy memmap) from output directory (memmap is faster than omx )
-#read_skim_cache: True
-# write memmapped cached skims to output directory after reading from omx, for use in subsequent runs
-#write_skim_cache: True
