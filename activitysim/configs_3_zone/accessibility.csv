@@ -35,7 +35,7 @@ transit peak total,trPkTotal,df.TOTEMP * _decay
 o-d off-peak transit time,_trOpTime_od,"tvpb.get_tvpb_best_transit_time(orig=df.orig, dest=df.dest, tod='MD')"
 d-o off-peak transit time,_trOpTime_do,"tvpb.get_tvpb_best_transit_time(orig=df.dest, dest=df.orig, tod='MD')"
 off-peak transit time,_trOpTime,_trOpTime_od + _trPkTime_do
-#round trip path is available,_rt_available,(_trOpTime_od > 0) & (_trOpTime_do > 0)
+round trip path is available,_rt_available,(_trOpTime_od > 0) & (_trOpTime_do > 0)
 decay function,_decay,_rt_available * exp(_trOpTime * dispersion_parameter_transit)
 transit off-peak retail,trOpRetail,df.retail * _decay
 transit off-peak total,trOpTotal,df.TOTEMP * _decay

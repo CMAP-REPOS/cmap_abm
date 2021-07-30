@@ -2,13 +2,13 @@ inherit_settings: True
 
 zone_system: 3
 
-skim_dict_factory: NumpyArraySkimFactory
-#skim_dict_factory: MemMapSkimFactory
+#skim_dict_factory: NumpyArraySkimFactory
+skim_dict_factory: MemMapSkimFactory
 
 # read cached skims (using numpy memmap) from output directory (memmap is faster than omx )
-read_skim_cache: False
+read_skim_cache: True
 # write memmapped cached skims to output directory after reading from omx, for use in subsequent runs
-write_skim_cache: False
+write_skim_cache: True
 
 # rebuild and overwrite existing tap_tap_utilities cache
 rebuild_tvpb_cache: True
@@ -83,9 +83,9 @@ TVPB_SETTINGS:
         max_paths_per_tap_set: 1
     tap_tap_settings:
       SPEC: tvpb_utility_tap_tap.csv
-      PREPROCESSOR:
-        SPEC: tvpb_utility_tap_tap_annotate_choosers_preprocessor.csv
-        DF: df
+      #PREPROCESSOR:
+      #  SPEC: tvpb_utility_tap_tap_annotate_choosers_preprocessor.csv
+      #  DF: df
       # FIXME this has to be explicitly specified, since e.g. attribute columns are assigned in expression files
       attribute_segments:
         demographic_segment: *demographic_segments
@@ -143,8 +143,8 @@ TVPB_SETTINGS:
         max_paths_per_tap_set: 1
     tap_tap_settings:
       SPEC: tvpb_accessibility_tap_tap_.csv
-#      sets:
-#        - transit
+      sets:
+        - transit
     maz_tap_settings:
         walk:
           SPEC: tvpb_accessibility_walk_maz_tap.csv

@@ -4,4 +4,4 @@ Description,Target,Expression
 ,c_cost_for_segment,"np.where(df.demographic_segment==C_LOW_INCOME_SEGMENT_ID,c_cost_low_income, c_cost_high_income)"
 # fastest,,
 ,transit_available_fastest,"los.get_tappairs3d(df.btap, df.atap, df.tod, 'ALLPEN_TOTALIVTT')>0"
-
+,not_transit_available_fastest,~transit_available_fastest
