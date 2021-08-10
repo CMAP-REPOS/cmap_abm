@@ -8,7 +8,7 @@ skim_dict_factory: MemMapSkimFactory
 # read cached skims (using numpy memmap) from output directory (memmap is faster than omx )
 read_skim_cache: True
 # write memmapped cached skims to output directory after reading from omx, for use in subsequent runs
-write_skim_cache: True
+write_skim_cache: False
 
 # rebuild and overwrite existing tap_tap_utilities cache
 rebuild_tvpb_cache: True
@@ -29,6 +29,9 @@ maz: maz.csv
 
 tap: tap.csv
 
+tap_lines: tapLines.csv
+
+
 maz_to_maz:
   tables:
     - maz_to_maz_walk.csv
@@ -47,14 +50,24 @@ maz_to_maz:
 maz_to_tap:
   walk:
     table: maz_to_tap_walk.csv
+    # if provided, this column will be used (together with tap_lines table) to trim the near tap set
+    # to only include the nearest tap to origin when more than one tap serves the same line
+    tap_line_distance_col: DISTWALK
+    max_dist: 1.2
   drive:
     table: maz_to_tap_drive.csv
+    # although maz_tap untility calculations use both DIST and drive_time,
+    # it looks like drive_time is a linear function of DIST so we can use either column to trim to nearest
+    tap_line_distance_col: DIST
+
 
 skim_time_periods:
     time_window: 1440
     period_minutes: 60
-    periods: [0, 6, 7, 9, 10, 14, 16, 18, 20, 24]
-    labels: &skim_time_period_labels ['NT', 'EA', 'AM', 'MM', 'MD', 'AF', 'PM', 'EV', 'NT']
+    #periods: [0, 6, 7, 9, 10, 14, 16, 18, 20, 24]
+    #labels: &skim_time_period_labels ['NT', 'EA', 'AM', 'MM', 'MD', 'AF', 'PM', 'EV', 'NT']
+    periods: [0, 6, 11, 16, 20, 24]
+    labels: &skim_time_period_labels ['EA', 'AM', 'MD', 'PM', 'EV']
 
 demographic_segments: &demographic_segments
   - &low_income_segment_id 0
@@ -83,9 +96,9 @@ TVPB_SETTINGS:
         max_paths_per_tap_set: 1
     tap_tap_settings:
       SPEC: tvpb_utility_tap_tap.csv
-      #PREPROCESSOR:
-      #  SPEC: tvpb_utility_tap_tap_annotate_choosers_preprocessor.csv
-      #  DF: df
+      PREPROCESSOR:
+        SPEC: tvpb_utility_tap_tap_annotate_choosers_preprocessor.csv
+        DF: df
       # FIXME this has to be explicitly specified, since e.g. attribute columns are assigned in expression files
       attribute_segments:
         demographic_segment: *demographic_segments
@@ -145,6 +158,8 @@ TVPB_SETTINGS:
       SPEC: tvpb_accessibility_tap_tap_.csv
       sets:
         - transit
+      attribute_segments:
+        tod: *skim_time_period_labels
     maz_tap_settings:
         walk:
           SPEC: tvpb_accessibility_walk_maz_tap.csv

@@ -24,14 +24,27 @@ strict: False
 mem_tick: 30
 use_shadow_pricing: False
 ## - example sample
-households_sample_size: 5
-chunk_size: 100_000_000_000
-chunk_training_mode: training
-num_processes: 4 
+households_sample_size: 50
+#chunk_size: 100_000_000_000
+#chunk_training_mode: training
+num_processes: 1 
+# minimum fraction of total chunk_size to reserve for adaptive chunking
+min_available_chunk_ratio: 0.05
+# method to calculate memory overhead when chunking is enabled (chunk_size > 0)
+chunk_method: hybrid_uss
+# whether to preserve or delete subprocess chunk and mem logs when they are consolidated at end of multiprocess run
+keep_chunk_logs: True
+keep_mem_logs: True
+
+# initial number of chooser rows for first chunk in training mode
+# when there is no pre-existing chunk_cache to set initial value
+# ordinarily bigger is better as long as it is not so big it causes memory issues (e.g. accessibility with lots of zones)
+default_initial_rows_per_chunk: 500
+
 # - tracing
 trace_od:
-trace_hh_id:
-
+trace_hh_id: 168595
+resume_after: atwork_subtour_mode_choice
 
 # input tables
 input_table_list:
@@ -43,7 +56,7 @@ input_table_list:
       PERSONS: hhsize
       hworkers: num_workers
       VEHICL: auto_ownership
-      TAZ: home_zone_id
+      maz: home_zone_id
       HINC: income
     keep_columns:
       - home_zone_id
@@ -52,6 +65,7 @@ input_table_list:
       - HHT
       - auto_ownership
       - num_workers
+      - TAZ
   - tablename: persons
     filename: persons.csv
     index_col: person_id
@@ -71,13 +85,16 @@ input_table_list:
     filename: land_use.csv
     index_col: zone_id
     rename_columns:
-      MAZ: zone_id
-      COUNTY: county_id
+      maz: zone_id
       hshld: TOTHH
       emp: TOTEMP
+      pop: TOTPOP
+      PARKRATE: PRKCST
+      taz: TAZ
     keep_columns:
       - TAZ
       - TOTHH
+      - TOTPOP
       - acres
       - areatype
       - TOTEMP
@@ -92,9 +109,10 @@ input_table_list:
       - highschool_enroll
       - lg_college
       - small_coll
+      - PRKCST
 
 output_tables:
-  h5_store: False
+  h5_store: True
   action: include
   prefix: final_
   sort: True
@@ -111,16 +129,11 @@ models:
   ## mp_initialize step
   - initialize_landuse
   - initialize_households
-  ## mp_accessibility step
-  - compute_accessibility 
-  # --- STATIC cache prebuild steps
-  # single-process step to create attribute_combination list
   - initialize_los
-  # multi-processable step to build STATIC cache
-  # (this step is a NOP if cache already exists and network_los.rebuild_tvpb_cache setting is False)
+  ## mp_accessibility step
+  - compute_accessibility
   - initialize_tvpb
-  # ---
-  # ## mp_households step
+  ## mp_households step
   - school_location
   - workplace_location
   - auto_ownership_simulate
@@ -161,8 +174,6 @@ multiprocess_steps:
     slice:
       tables:
         - accessibility
-      # don't slice any tables not explicitly listed above in slice.tables
-      except: True
   - name: mp_households
     begin: school_location
     slice:

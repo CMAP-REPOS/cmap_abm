@@ -42,8 +42,8 @@ transit off-peak total,trOpTotal,df.TOTEMP * _decay
 #,,
 #,, non motorized
 #,,
-#non-motorized round trip distance,_nmDist,"skim_od[(SOV_TR_M_DIST, MD)] + skim_do[(SOV_TR_M_DIST, MD)]"
-#round trip path is available,_rt_available,_nmDist <= maximum_walk_distance
+non-motorized round trip distance,_nmDist,"skim_od['DIST'] + skim_do['DIST']"
+round trip path is available,_rt_available,_nmDist <= maximum_walk_distance
 decay function,_decay,_rt_available * exp(_nmDist * dispersion_parameter_walk)
 retail accessibility,nmRetail,df.retail * _decay
 total accessibility,nmTotal,df.TOTEMP * _decay

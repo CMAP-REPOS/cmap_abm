@@ -70,4 +70,4 @@ SHADOW_PRICE_TABLE: workplace_shadow_prices
 MODELED_SIZE_TABLE: workplace_modeled_size
 
 # not loaded if commented out
-SAVED_SHADOW_PRICE_TABLE_NAME: workplace_shadow_prices.csv
+#SAVED_SHADOW_PRICE_TABLE_NAME: workplace_shadow_prices.csv
