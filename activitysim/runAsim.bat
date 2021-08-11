@@ -1,1 +1,1 @@
-activitysim run -c configs_3_zone -o output -d data_cmap_ltest
+activitysim run -c configs_3_zone -o output_samp -d data_cmap_samp

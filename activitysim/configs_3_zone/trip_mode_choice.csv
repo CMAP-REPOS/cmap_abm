@@ -111,7 +111,7 @@ util_TNC_Shared_In_vehicle_time,TNC Shared - In-vehicle time,@odt_skims['HOV2_M_
 util_TNC_Shared_Wait_time,TNC Shared - Wait time,@ridehail_wait_time_multiplier * df.origSharedTNCWaitTime,,,,,,,,,,,,,coef_ivt
 util_TNC_Shared_Tolls,TNC Shared - Tolls,@ivt_cost_multiplier * df.ivot * odt_skims['HOV2_M_TOLLCOST'],,,,,,,,,,,,,coef_ivt
 util_TNC_Shared_Bridge_toll,TNC Shared - Bridge toll,@ivt_cost_multiplier * df.ivot * (odt_skims['HOV2_M_TOLLCOST'] + dot_skims['HOV2_M_TOLLCOST']),,,,,,,,,,,,,coef_ivt
-util_TNC_Shared_Cost,TNC Shared - Cost,"@ivt_cost_multiplier * df.ivot * np.maximum(TNC_shared_baseFare + odt_skims['HOV2_M__DIST'] * TNC_shared_costPerMile + odt_skims['HOV2_M_TIME']* TNC_shared_costPerMinute, TNC_shared_costMinimum) * 100",,,,,,,,,,,,,coef_ivt
+util_TNC_Shared_Cost,TNC Shared - Cost,"@ivt_cost_multiplier * df.ivot * np.maximum(TNC_shared_baseFare + odt_skims['HOV2_M_DIST'] * TNC_shared_costPerMile + odt_skims['HOV2_M_TIME']* TNC_shared_costPerMinute, TNC_shared_costMinimum) * 100",,,,,,,,,,,,,coef_ivt
 #,,,,,,,,,,,,,,,
 util_tour_mode_is_auto,Auto tour mode availability,tour_mode_is_auto,,,,,,,,-999,-999,-999,,,
 util_tour_mode_is_walk,Walk tour mode availability,tour_mode_is_walk,-999,-999,-999,-999,-999,-999,,-999,-999,-999,,,
