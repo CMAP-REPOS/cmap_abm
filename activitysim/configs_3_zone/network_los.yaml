@@ -64,10 +64,11 @@ maz_to_tap:
 skim_time_periods:
     time_window: 1440
     period_minutes: 60
-    #periods: [0, 6, 7, 9, 10, 14, 16, 18, 20, 24]
-    #labels: &skim_time_period_labels ['NT', 'EA', 'AM', 'MM', 'MD', 'AF', 'PM', 'EV', 'NT']
-    periods: [0, 6, 11, 16, 20, 24]
-    labels: &skim_time_period_labels ['EA', 'AM', 'MD', 'PM', 'EV']
+    #periods: [0, 6, 7, 9, 10, 14, 16, 18, 20]
+    periods: [0, 1, 3, 4, 8, 10, 12, 14, 24]
+    labels: &skim_time_period_labels ['EA', 'AM', 'MM', 'MD', 'AF', 'PM', 'EV', 'NT']
+    #periods: [0, 6, 11, 16, 20, 24]
+    #labels: &skim_time_period_labels ['EA', 'AM', 'MD', 'PM', 'EV']
 
 demographic_segments: &demographic_segments
   - &low_income_segment_id 0
@@ -156,10 +157,10 @@ TVPB_SETTINGS:
         max_paths_per_tap_set: 1
     tap_tap_settings:
       SPEC: tvpb_accessibility_tap_tap_.csv
-      sets:
-        - transit
-      attribute_segments:
-        tod: *skim_time_period_labels
+      #sets:
+      #  - transit
+      #attribute_segments:
+      #  tod: *skim_time_period_labels
     maz_tap_settings:
         walk:
           SPEC: tvpb_accessibility_walk_maz_tap.csv

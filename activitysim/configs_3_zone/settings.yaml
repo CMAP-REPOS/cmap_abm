@@ -24,10 +24,10 @@ strict: False
 mem_tick: 30
 use_shadow_pricing: False
 ## - example sample
-households_sample_size: 50
-chunk_size: 50_000_000_000
-chunk_training_mode: production
-num_processes: 12 
+households_sample_size: 1000
+#chunk_size: 50_000_000_000
+chunk_training_mode: disabled
+num_processes: 10 
 # minimum fraction of total chunk_size to reserve for adaptive chunking
 min_available_chunk_ratio: 0.05
 # method to calculate memory overhead when chunking is enabled (chunk_size > 0)
