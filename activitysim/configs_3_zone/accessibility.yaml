@@ -1,6 +1,6 @@
 
 # columns from land_use table to add to df
-land_use_columns: ['RETEMPN', 'TOTEMP']
+land_use_columns: ['retail', 'TOTEMP']
 
 CONSTANTS:
   # dispersion parameters

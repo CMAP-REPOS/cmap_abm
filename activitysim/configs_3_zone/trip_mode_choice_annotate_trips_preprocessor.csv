@@ -51,7 +51,8 @@ dest terminal time not counted at home,_dest_terminal_time,"np.where(inbound & l
 ,origin_parking_cost,origin_duration*origin_hourly_peak_parking_cost
 ,dest_parking_cost,dest_duration*dest_hourly_peak_parking_cost
 ,total_parking_cost,(origin_parking_cost + dest_parking_cost) / 2.0
-,trip_topology,"np.where(df.outbound, reindex(land_use.TOPOLOGY, df[DESTINATION]), reindex(land_use.TOPOLOGY, df[ORIGIN]))"
+#,trip_topology,"np.where(df.outbound, reindex(land_use.TOPOLOGY, df[DESTINATION]), reindex(land_use.TOPOLOGY, df[ORIGIN]))"
+,trip_topology,0
 ,density_index,"np.where(df.outbound, reindex(land_use.density_index, df[DESTINATION]), reindex(land_use.density_index, df[ORIGIN]))"
 ,origin_density_index,"np.where(df.outbound, reindex(land_use.density_index, df[ORIGIN]), reindex(land_use.density_index, df[DESTINATION]))"
 # FIXME no transit subzones so all zones short walk to transit,,
@@ -62,7 +63,7 @@ dest terminal time not counted at home,_dest_terminal_time,"np.where(inbound & l
 ,origin_walk_time,shortWalk*60/walkSpeed
 ,destination_walk_time,shortWalk*60/walkSpeed
 # RIDEHAIL,,
-,origin_density_measure,"(reindex(land_use.TOTPOP, df[orig_col_name]) + reindex(land_use.TOTEMP, df[orig_col_name])) / (reindex(land_use.TOTACRE, df[orig_col_name]) / 640)"
+,origin_density_measure,"(reindex(land_use.TOTPOP, df[orig_col_name]) + reindex(land_use.TOTEMP, df[orig_col_name])) / (reindex(land_use.acres, df[orig_col_name]) / 640)"
 ,origin_density,"pd.cut(origin_density_measure, bins=[-np.inf, 500, 2000, 5000, 15000, np.inf], labels=[5, 4, 3, 2, 1]).astype(int)"
 ,origin_zone_taxi_wait_time_mean,"origin_density.map({k: v for k, v in Taxi_waitTime_mean.items()})"
 ,origin_zone_taxi_wait_time_sd,"origin_density.map({k: v for k, v in Taxi_waitTime_sd.items()})"
@@ -75,12 +76,12 @@ dest terminal time not counted at home,_dest_terminal_time,"np.where(inbound & l
 ,origin_zone_sharedTNC_wait_time_sd,"origin_density.map({k: v for k, v in TNC_shared_waitTime_sd.items()})"
 ,origSharedTNCWaitTime,"rng.lognormal_for_df(df, mu=origin_zone_sharedTNC_wait_time_mean, sigma=origin_zone_sharedTNC_wait_time_sd, broadcast=True, scale=True).clip(min_waitTime, max_waitTime)"
 #,,
-,sov_available,odt_skims['SOV_TIME']>0
-,hov2_available,odt_skims['HOV2_TIME']>0
-,hov3_available,odt_skims['HOV3_TIME']>0
-,sovtoll_available,odt_skims['SOVTOLL_VTOLL']>0
-,hov2toll_available,odt_skims['HOV2TOLL_VTOLL']>0
-,hov3toll_available,odt_skims['HOV3TOLL_VTOLL']>0
+,sov_available,odt_skims['SOV_NT_M_TIME']>0
+,hov2_available,odt_skims['HOV2_M_TIME']>0
+,hov3_available,odt_skims['HOV3_M_TIME']>0
+,sovtoll_available,odt_skims['SOV_TR_M_TOLLCOST']>0
+,hov2toll_available,odt_skims['HOV2_M_TOLLCOST']>0
+,hov3toll_available,odt_skims['HOV3_M_TOLLCOST']>0
 #,walk_local_available,walk_transit_available & (odt_skims['WLK_LOC_WLK_TOTIVT']/100>0)
 #,walk_lrf_available,walk_transit_available & (i_tour_mode >= 10) & (odt_skims['WLK_LRF_WLK_KEYIVT']/100>0)
 #,walk_express_available,walk_transit_available & (i_tour_mode >= 11) & (odt_skims['WLK_EXP_WLK_KEYIVT']/100>0)

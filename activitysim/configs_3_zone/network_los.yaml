@@ -29,6 +29,9 @@ maz: maz.csv
 
 tap: tap.csv
 
+tap_lines: tapLines.csv
+
+
 maz_to_maz:
   tables:
     - maz_to_maz_walk.csv
@@ -47,14 +50,25 @@ maz_to_maz:
 maz_to_tap:
   walk:
     table: maz_to_tap_walk.csv
+    # if provided, this column will be used (together with tap_lines table) to trim the near tap set
+    # to only include the nearest tap to origin when more than one tap serves the same line
+    tap_line_distance_col: DISTWALK
+    max_dist: 1.2
   drive:
     table: maz_to_tap_drive.csv
+    # although maz_tap untility calculations use both DIST and drive_time,
+    # it looks like drive_time is a linear function of DIST so we can use either column to trim to nearest
+    tap_line_distance_col: DIST
+
 
 skim_time_periods:
     time_window: 1440
     period_minutes: 60
-    periods: [0, 6, 11, 16, 20, 24]
-    labels: &skim_time_period_labels ['EA', 'AM', 'MD', 'PM', 'EV']
+    #periods: [0, 6, 7, 9, 10, 14, 16, 18, 20]
+    periods: [0, 1, 3, 4, 8, 10, 12, 14, 24]
+    labels: &skim_time_period_labels ['EA', 'AM', 'MM', 'MD', 'AF', 'PM', 'EV', 'NT']
+    #periods: [0, 6, 11, 16, 20, 24]
+    #labels: &skim_time_period_labels ['EA', 'AM', 'MD', 'PM', 'EV']
 
 demographic_segments: &demographic_segments
   - &low_income_segment_id 0
@@ -143,8 +157,10 @@ TVPB_SETTINGS:
         max_paths_per_tap_set: 1
     tap_tap_settings:
       SPEC: tvpb_accessibility_tap_tap_.csv
-#      sets:
-#        - transit
+      #sets:
+      #  - transit
+      #attribute_segments:
+      #  tod: *skim_time_period_labels
     maz_tap_settings:
         walk:
           SPEC: tvpb_accessibility_walk_maz_tap.csv
