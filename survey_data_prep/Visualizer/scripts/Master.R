@@ -13,7 +13,7 @@
 ### Read Command Line Arguments
 args                <- commandArgs(trailingOnly = TRUE)
 Parameters_File     <- args[1]
-Parameters_File <- "N:/Projects/CMAP_Activitysim/cmap_abm_lf/survey_data_prep/Visualizer/runtime/parameters.csv"
+# Parameters_File <- "N:/Projects/CMAP_Activitysim/cmap_abm_lf/survey_data_prep/Visualizer/runtime/parameters.csv"
 #Run_switch          <- "FULL"
 
 ### Read parameters from Parameters_File
@@ -74,7 +74,7 @@ if(retVal) q(save = "no", status = 11)
 if(BUILD_SCENARIO_NAME == "SEMCOG_HTS") {
   build_csv_list <- "summaryFilesNames_ActivitySim_SEMCOG.csv"
 } else {
-  build_csv_list <- "summaryFilesNames_survey_CMAP.csv"
+  build_csv_list <- "summaryFilesNames_ActivitySim_CMAP.csv"
 }
 
 summaryFileList_build <- read.csv(paste(SYSTEM_TEMPLATES_PATH, build_csv_list, sep = '/'), as.is = T)
