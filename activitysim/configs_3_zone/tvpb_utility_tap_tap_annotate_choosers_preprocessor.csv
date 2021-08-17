@@ -3,5 +3,5 @@ Description,Target,Expression
 ,c_ivt_for_segment,"np.where(df.demographic_segment==C_LOW_INCOME_SEGMENT_ID,c_ivt_low_income, c_ivt_high_income)"
 ,c_cost_for_segment,"np.where(df.demographic_segment==C_LOW_INCOME_SEGMENT_ID,c_cost_low_income, c_cost_high_income)"
 # fastest,,
-,transit_available_fastest,"los.get_tappairs3d(df.btap, df.atap, df.tod, 'ALLPEN_TOTALIVTT')>0"
+,transit_available_fastest,"los.get_tappairs3d(df.btap, df.atap, df.tod, 'ALLPEN_TOTALIVTT')>0 & los.get_tappairs3d(df.btap, df.atap, df.tod, 'ALLPEN_TOTALIVTT')<1000"
 ,not_transit_available_fastest,~transit_available_fastest

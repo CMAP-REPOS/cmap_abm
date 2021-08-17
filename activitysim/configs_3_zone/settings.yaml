@@ -19,12 +19,12 @@ household_median_value_of_time:
 
 fail_fast: True
 # - ------------------------- dev config
-multiprocess: True
+multiprocess: False
 strict: False
 mem_tick: 30
 use_shadow_pricing: False
 ## - example sample
-households_sample_size: 1000
+households_sample_size: 50
 #chunk_size: 50_000_000_000
 chunk_training_mode: disabled
 num_processes: 10 
@@ -43,8 +43,8 @@ default_initial_rows_per_chunk: 500
 
 # - tracing
 trace_od:
-#trace_hh_id: 168595
-#resume_after: atwork_subtour_mode_choice
+trace_hh_id: 2532177
+#resume_after: cdap_simulate
 
 # input tables
 input_table_list:
