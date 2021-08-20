@@ -1,5 +1,11 @@
 # CMAP HTS Data Processing for Model Comparisons
 
+Steps for processing CMAP survey data and visualizing against model output.
+
+Note: 
+OBS processing and re-weighting are not included in this step-by-step, as their outputs are saved in the repo (calibration target tables from OBS processing, and weight outputs from re-weighting exercise).
+The scripts for these processes are included in the repo and should be fairly easy to follow along if necessary to re-do.
+
 ## Step 0: Pre-requisites
 
 * Create Python environment
