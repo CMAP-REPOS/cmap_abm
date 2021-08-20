@@ -8,6 +8,7 @@ import pandas as pd
 import pandana as pdna
 import numpy as np
 import time
+import yaml
 
 ################################################################################
 # functions from the old setup to get the allstreets network from shapefile
@@ -76,22 +77,43 @@ def write_links_from_shp(sf):
 
     output.close()
 
+def readYaml(file):
+    with open(file, "r") as stream:
+        try:
+            return(yaml.load(stream, Loader=yaml.SafeLoader))
+        except yaml.YAMLError as exc:
+            print(exc)
 ################################################################################
 # do stuff
 ################################################################################
 
 print(time.ctime(), " start")
+
+sp_settings = readYaml("cmap-sp.yaml")
+
+
 for arg in sys.argv:
   print(time.ctime(), "", arg)
 
-shapefile_name = sys.argv[1]                   # "Chicago_streets.shp"
-mazfile_name = sys.argv[2]                     # "CMAP_MAZ_cents.txt"
-tapfile_name = sys.argv[3]                     # "tap_attributes.csv"
-drive_tap_field = sys.argv[4]                  # "canpnr"
-max_maz_maz_walk_dist_feet = int(sys.argv[5])  # 5280
-max_maz_maz_bike_dist_feet = int(sys.argv[6])  # 26400
-max_maz_tap_walk_dist_feet = int(sys.argv[7])  # 5280
-max_maz_tap_drive_dist_feet = int(sys.argv[8]) # 105600
+shapefile_name = sp_settings['shapefile_name']
+mazfile_name = sp_settings['mazfile_name']
+tapfile_name = sp_settings['tapfile_name']
+drive_tap_field = sp_settings['drive_tap_field']
+max_maz_maz_walk_dist_feet = int(sp_settings['max_maz_maz_walk_dist_feet'])
+max_maz_maz_bike_dist_feet = int(sp_settings['max_maz_maz_bike_dist_feet'])
+max_maz_tap_walk_dist_feet = int(sp_settings['max_maz_tap_walk_dist_feet'])
+max_maz_tap_drive_dist_feet = int(sp_settings['max_maz_tap_drive_dist_feet'])
+walk_speed_mph = float(sp_settings["walk_speed_mph"])
+drive_speed_mph = float(sp_settings["drive_speed_mph"])
+
+#shapefile_name = sys.argv[1]                   # "Chicago_streets.shp"
+#mazfile_name = sys.argv[2]                     # "CMAP_MAZ_cents.txt"
+#tapfile_name = sys.argv[3]                     # "tap_attributes.csv"
+#drive_tap_field = sys.argv[4]                  # "canpnr"
+#max_maz_maz_walk_dist_feet = int(sys.argv[5])  # 5280
+#max_maz_maz_bike_dist_feet = int(sys.argv[6])  # 26400
+#max_maz_tap_walk_dist_feet = int(sys.argv[7])  # 5280
+#max_maz_tap_drive_dist_feet = int(sys.argv[8]) # 105600
 
 print(time.ctime(), " read shapefile and write network")
 
@@ -111,7 +133,7 @@ taps = pd.read_csv(tapfile_name)
 
 print(time.ctime(), " construct pandanas network")
 
-net = pdna.Network(nodes["X"], nodes["Y"], links["FNODE"], links["TNODE"], links[["LENGTH"]], twoway=False)
+net = pdna.Network(nodes["X"], nodes["Y"], links["FNODE"], links["TNODE"], links[["LENGTH"]] / 5280.0, twoway=False)
 
 print(time.ctime(), " assign nearest network node to mazs and taps")
 
@@ -134,36 +156,36 @@ d_m_x = np.tile(mazs['network_node_x'].tolist(), len(mazs))
 d_m_y = np.tile(mazs['network_node_y'].tolist(), len(mazs))
 
 maz_to_maz_cost = pd.DataFrame({"OMAZ":o_m, "DMAZ":d_m, "OMAZ_NODE":o_m_nn, "DMAZ_NODE":d_m_nn, "OMAZ_NODE_X":o_m_x, "OMAZ_NODE_Y":o_m_y, "DMAZ_NODE_X":d_m_x, "DMAZ_NODE_Y":d_m_y})
-maz_to_maz_cost["DISTANCE"] = maz_to_maz_cost.eval("((OMAZ_NODE_X-DMAZ_NODE_X)**2 + (OMAZ_NODE_Y-DMAZ_NODE_Y)**2)**0.5")
+maz_to_maz_cost["DISTWALK"] = maz_to_maz_cost.eval("((OMAZ_NODE_X-DMAZ_NODE_X)**2 + (OMAZ_NODE_Y-DMAZ_NODE_Y)**2)**0.5")
 maz_to_maz_cost = maz_to_maz_cost[maz_to_maz_cost["OMAZ"] != maz_to_maz_cost["DMAZ"]]
 
 print(time.ctime(), " remove maz maz pairs beyond max walk distance")
 
-maz_to_maz_walk_cost = maz_to_maz_cost[maz_to_maz_cost["DISTANCE"] <= max_maz_maz_walk_dist_feet]
+maz_to_maz_walk_cost = maz_to_maz_cost[maz_to_maz_cost["DISTWALK"] <= max_maz_maz_walk_dist_feet / 5280.0].copy()
 
 print(time.ctime(), " get shortest path length")
 
-maz_to_maz_walk_cost["NETWORK_DISTANCE"] = net.shortest_path_lengths(maz_to_maz_walk_cost["OMAZ_NODE"], maz_to_maz_walk_cost["DMAZ_NODE"])
-maz_to_maz_walk_cost = maz_to_maz_walk_cost[maz_to_maz_walk_cost["NETWORK_DISTANCE"] <= max_maz_maz_walk_dist_feet]
+maz_to_maz_walk_cost["DISTWALK"] = net.shortest_path_lengths(maz_to_maz_walk_cost["OMAZ_NODE"], maz_to_maz_walk_cost["DMAZ_NODE"])
+maz_to_maz_walk_cost = maz_to_maz_walk_cost[maz_to_maz_walk_cost["DISTWALK"] <= max_maz_maz_walk_dist_feet / 5280.0]
 
 print(time.ctime(), " write results")
 
-maz_to_maz_walk_cost[["OMAZ","DMAZ","NETWORK_DISTANCE"]].to_csv("maz_to_maz_walk_dist.csv", index=False)
+maz_to_maz_walk_cost[["OMAZ","DMAZ","DISTWALK"]].to_csv(sp_settings["maz_to_maz_walk_output"], index=False)
 
 print(time.ctime(), " build maz to maz bike table") # same table above
 
 print(time.ctime(), " remove maz maz pairs beyond max bike distance")
 
-maz_to_maz_bike_cost = maz_to_maz_cost[maz_to_maz_cost["DISTANCE"] <= max_maz_maz_bike_dist_feet]
+maz_to_maz_bike_cost = maz_to_maz_cost[maz_to_maz_cost["DISTWALK"] <= max_maz_maz_bike_dist_feet / 5280.0].copy()
 
 print(time.ctime(), " get shortest path length")
 
-maz_to_maz_bike_cost["NETWORK_DISTANCE"] = net.shortest_path_lengths(maz_to_maz_bike_cost["OMAZ_NODE"], maz_to_maz_bike_cost["DMAZ_NODE"])
-maz_to_maz_bike_cost = maz_to_maz_bike_cost[maz_to_maz_bike_cost["NETWORK_DISTANCE"] <= max_maz_maz_bike_dist_feet]
+maz_to_maz_bike_cost["DISTBIKE"] = net.shortest_path_lengths(maz_to_maz_bike_cost["OMAZ_NODE"], maz_to_maz_bike_cost["DMAZ_NODE"])
+maz_to_maz_bike_cost = maz_to_maz_bike_cost[maz_to_maz_bike_cost["DISTBIKE"] <= max_maz_maz_bike_dist_feet / 5280.0]
 
 print(time.ctime(), " write results")
 
-maz_to_maz_bike_cost[["OMAZ","DMAZ","NETWORK_DISTANCE"]].to_csv("maz_to_maz_bike_dist.csv", index=False)
+maz_to_maz_bike_cost[["OMAZ","DMAZ","DISTBIKE"]].to_csv(sp_settings["maz_to_maz_bike_output"], index=False)
 
 print(time.ctime(), " build maz to tap walk table")
 
@@ -184,16 +206,17 @@ maz_to_tap_cost["DISTANCE"] = maz_to_tap_cost.eval("((OMAZ_NODE_X-DTAP_NODE_X)**
 
 print(time.ctime(), " remove maz tap pairs beyond max walk distance")
 
-maz_to_tap_walk_cost = maz_to_tap_cost[maz_to_tap_cost["DISTANCE"] <= max_maz_tap_walk_dist_feet]
+maz_to_tap_walk_cost = maz_to_tap_cost[maz_to_tap_cost["DISTANCE"] <= max_maz_tap_walk_dist_feet / 5280.0].copy()
 
 print(time.ctime(), " get shortest path length")
 
-maz_to_tap_walk_cost["NETWORK_DISTANCE"] = net.shortest_path_lengths(maz_to_tap_walk_cost["OMAZ_NODE"], maz_to_tap_walk_cost["DTAP_NODE"])
-maz_to_tap_walk_cost = maz_to_tap_walk_cost[maz_to_tap_walk_cost["NETWORK_DISTANCE"] <= max_maz_tap_walk_dist_feet]
+maz_to_tap_walk_cost["DISTWALK"] = net.shortest_path_lengths(maz_to_tap_walk_cost["OMAZ_NODE"], maz_to_tap_walk_cost["DTAP_NODE"])
+maz_to_tap_walk_cost = maz_to_tap_walk_cost[maz_to_tap_walk_cost["DISTWALK"] <= max_maz_tap_walk_dist_feet / 5280.0]
+maz_to_tap_walk_cost["walk_time"] = maz_to_tap_walk_cost["DISTWALK"].apply(lambda x: x / walk_speed_mph * 60.0)
 
 print(time.ctime(), " write results")
 
-maz_to_tap_walk_cost[["OMAZ","DTAP","NETWORK_DISTANCE"]].to_csv("maz_to_tap_walk_dist.csv", index=False)
+maz_to_tap_walk_cost[["OMAZ","DTAP","DISTWALK", "walk_time"]].to_csv(sp_settings["maz_to_tap_walk_output"], index=False)
 
 print(time.ctime(), " build maz to tap drive table")
 
@@ -201,15 +224,15 @@ maz_to_tap_drive_cost = maz_to_tap_cost[maz_to_tap_cost["DTAP_CANPNR"].astype("b
 
 print(time.ctime(), " remove maz tap pairs beyond max distance")
 
-maz_to_tap_drive_cost = maz_to_tap_drive_cost[maz_to_tap_drive_cost["DISTANCE"] <= max_maz_tap_drive_dist_feet]
+maz_to_tap_drive_cost = maz_to_tap_drive_cost[maz_to_tap_drive_cost["DISTANCE"] <= max_maz_tap_drive_dist_feet / 5280.0]
 
 print(time.ctime(), " get shortest path length")
 
-maz_to_tap_drive_cost["NETWORK_DISTANCE"] = net.shortest_path_lengths(maz_to_tap_drive_cost["OMAZ_NODE"], maz_to_tap_drive_cost["DTAP_NODE"])
-maz_to_tap_drive_cost = maz_to_tap_drive_cost[maz_to_tap_drive_cost["NETWORK_DISTANCE"] <= max_maz_tap_drive_dist_feet]
+maz_to_tap_drive_cost["DIST"] = net.shortest_path_lengths(maz_to_tap_drive_cost["OMAZ_NODE"], maz_to_tap_drive_cost["DTAP_NODE"])
+maz_to_tap_drive_cost = maz_to_tap_drive_cost[maz_to_tap_drive_cost["DIST"] <= max_maz_tap_drive_dist_feet / 5280.0]
 
 print(time.ctime(), " write results")
-
-maz_to_tap_drive_cost[["OMAZ","DTAP","NETWORK_DISTANCE"]].to_csv("maz_to_tap_drive_dist.csv", index=False)
+maz_to_tap_drive_cost['drive_time'] = maz_to_tap_drive_cost["DIST"].apply(lambda x: x / drive_speed_mph * 60.0)
+maz_to_tap_drive_cost[["OMAZ","DTAP","DIST"]].to_csv(sp_settings["maz_to_tap_drive_output"], index=False)
 
 print(time.ctime(), " finish")
