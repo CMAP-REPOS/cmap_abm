@@ -14,24 +14,16 @@ SET WORKING_DIR= "N:\Projects\CMAP_Activitysim\cmap_abm_lf\survey_data_prep\Visu
 
 :: User Inputs
 :: ###########
+:: Set up dependencies
+:: ###################
+SET R_SCRIPT=C:\Users\leah.flake\Documents\R-4.0.3\bin\Rscript
+SET R_LIBRARY=C:\Users\leah.flake\Documents\R-4.0.3\library
+:: Set PANDOC path
+SET RSTUDIO_PANDOC=C:\Users\leah.flake\Documents\Pandoc
+:: Parameters file
+SET PARAMETERS_FILE=N:\Projects\CMAP_Activitysim\cmap_abm_lf\survey_data_prep\Visualizer\runtime\parameters.csv
+SET SETTINGS_FILE=N:\Projects\CMAP_Activitysim\cmap_abm_lf\survey_data_prep\cmap_inputs.yml
 
-
-:: Set paths
-SET PROJECT_DIR= "N:\Projects\CMAP_Activitysim\cmap_abm_lf\survey_data_prep\Visualizer"
-REM SET ABM_DIR=E:\Projects\Clients\SEMCOG\SNABM\2015_TM151_PPA_V1
-SET ABM_SUMMARY_DIR="N:\Projects\CMAP_Activitysim\cmap_abm_lf\survey_data_prep\Visualizer\data\calibration_runs\summarized"
-REM SET BASE_SUMMARY_DIR_SUBSET=E:\Projects\Clients\SEMCOG\Data\CHTS\CHTS_Summaries_TM1format_SN
-SET BASE_SUMMARY_DIR="N:\Projects\CMAP_Activitysim\cmap_abm_lf\survey_data_prep\Visualizer\summaries"
-SET BUILD_SUMMARY_DIR="N:\Projects\CMAP_Activitysim\cmap_abm_lf\survey_data_prep\Visualizer\data\calibration_runs\summarized"
-SET CENSUS_DIR="N:\Projects\CMAP_Activitysim\cmap_abm_lf\survey_data_prep\Visualizer\data\census"
-SET CENSUS_SUMMARY_DIR="N:\Projects\CMAP_Activitysim\cmap_abm_lf\survey_data_prep\Visualizer\data\census\summarized"
-SET CALIBRATION_DIR="N:\Projects\CMAP_Activitysim\cmap_abm_lf\survey_data_prep\Visualizer\data\calibration_targets"
-SET SHP_FILE_NAME=zones17.shp
-SET CT_ZERO_AUTO_FILE_NAME=ct_zero_auto.shp
-
-
-REM SET SUBSET_HTML_NAME=SNABM_Dashboard_SUBSET_vs_CHTS_%RUN_NAME%
-REM SET FULL_HTML_NAME=SNABM_Dashboard_FULL_vs_CHTS_%RUN_NAME%
 SET FULL_HTML_NAME=CMAP_visualizer
 
 SET BASE_SCENARIO_NAME=Survey
@@ -42,22 +34,31 @@ SET MAX_ITER=1
 SET BASE_SAMPLE_RATE=1.0
 SET BUILD_SAMPLE_RATE=1.0
 
-:: Set up dependencies
-:: ###################
-SET R_SCRIPT=C:\Users\leah.flake\Documents\R-4.0.3\bin\Rscript
-SET R_LIBRARY=C:\Users\leah.flake\Documents\R-4.0.3\library
-:: Set PANDOC path
-SET RSTUDIO_PANDOC=C:\Users\leah.flake\Documents\Pandoc
-:: Parameters file
-SET PARAMETERS_FILE=N:\Projects\CMAP_Activitysim\cmap_abm_lf\survey_data_prep\Visualizer\runtime\parameters.csv
+SET CT_ZERO_AUTO_FILE_NAME=ct_zero_auto.shp
+
+
+:: Set paths
+:: Commented out -- get from R script that uses settings file instead
+:: SET PROJECT_DIR= "N:\Projects\CMAP_Activitysim\cmap_abm_lf\survey_data_prep\Visualizer"
+:: REM SET ABM_DIR=E:\Projects\Clients\SEMCOG\SNABM\2015_TM151_PPA_V1
+:: SET ABM_SUMMARY_DIR="N:\Projects\CMAP_Activitysim\cmap_abm_lf\survey_data_prep\Visualizer\data\calibration_runs\summarized"
+:: REM SET BASE_SUMMARY_DIR_SUBSET=E:\Projects\Clients\SEMCOG\Data\CHTS\CHTS_Summaries_TM1format_SN
+:: SET BASE_SUMMARY_DIR="N:\Projects\CMAP_Activitysim\cmap_abm_lf\survey_data_prep\Visualizer\summaries"
+:: SET BUILD_SUMMARY_DIR="N:\Projects\CMAP_Activitysim\cmap_abm_lf\survey_data_prep\Visualizer\data\calibration_runs\summarized"
+:: SET CENSUS_DIR="N:\Projects\CMAP_Activitysim\cmap_abm_lf\survey_data_prep\Visualizer\data\census"
+:: SET CENSUS_SUMMARY_DIR="N:\Projects\CMAP_Activitysim\cmap_abm_lf\survey_data_prep\Visualizer\data\census\summarized"
+:: SET CALIBRATION_DIR="N:\Projects\CMAP_Activitysim\cmap_abm_lf\survey_data_prep\Visualizer\data\calibration_targets"
+:: SET SHP_FILE_NAME=zones17.shp
+
+
 
 ECHO Key,Value > %PARAMETERS_FILE%
-ECHO WORKING_DIR,%WORKING_DIR% >> %PARAMETERS_FILE%
-ECHO PROJECT_DIR,%PROJECT_DIR% >> %PARAMETERS_FILE%
-ECHO ABM_SUMMARY_DIR,%ABM_SUMMARY_DIR% >> %PARAMETERS_FILE%
-ECHO CALIBRATION_DIR,%CALIBRATION_DIR% >> %PARAMETERS_FILE%
-ECHO BASE_SUMMARY_DIR,%BASE_SUMMARY_DIR% >> %PARAMETERS_FILE%
-ECHO BUILD_SUMMARY_DIR,%BUILD_SUMMARY_DIR% >> %PARAMETERS_FILE%
+REM ECHO WORKING_DIR,%WORKING_DIR% >> %PARAMETERS_FILE%
+REM ECHO PROJECT_DIR,%PROJECT_DIR% >> %PARAMETERS_FILE%
+REM ECHO ABM_SUMMARY_DIR,%ABM_SUMMARY_DIR% >> %PARAMETERS_FILE%
+REM ECHO CALIBRATION_DIR,%CALIBRATION_DIR% >> %PARAMETERS_FILE%
+REM ECHO BASE_SUMMARY_DIR,%BASE_SUMMARY_DIR% >> %PARAMETERS_FILE%
+REM ECHO BUILD_SUMMARY_DIR,%BUILD_SUMMARY_DIR% >> %PARAMETERS_FILE%
 REM ECHO BASE_SUMMARY_DIR_SUBSET,%BASE_SUMMARY_DIR_SUBSET% >> %PARAMETERS_FILE%
 ECHO BASE_SCENARIO_NAME,%BASE_SCENARIO_NAME% >> %PARAMETERS_FILE%
 ECHO BUILD_SCENARIO_NAME,%BUILD_SCENARIO_NAME% >> %PARAMETERS_FILE%
@@ -65,12 +66,14 @@ ECHO BASE_SAMPLE_RATE,%BASE_SAMPLE_RATE% >> %PARAMETERS_FILE%
 ECHO BUILD_SAMPLE_RATE,%BUILD_SAMPLE_RATE% >> %PARAMETERS_FILE%
 ECHO MAX_ITER,%MAX_ITER% >> %PARAMETERS_FILE%
 ECHO R_LIBRARY,%R_LIBRARY% >> %PARAMETERS_FILE%
+ECHO RSTUDIO_PANDOC, %RSTUDIO_PANDOC% >> %PARAMETERS_FILE%
 REM ECHO SUBSET_HTML_NAME,%SUBSET_HTML_NAME% >> %PARAMETERS_FILE%
 ECHO FULL_HTML_NAME,%FULL_HTML_NAME% >> %PARAMETERS_FILE%
-ECHO SHP_FILE_NAME,%SHP_FILE_NAME% >> %PARAMETERS_FILE%
+REM ECHO SHP_FILE_NAME,%SHP_FILE_NAME% >> %PARAMETERS_FILE%
 ECHO CT_ZERO_AUTO_FILE_NAME,%CT_ZERO_AUTO_FILE_NAME% >> %PARAMETERS_FILE%
 ECHO IS_BASE_SURVEY,%IS_BASE_SURVEY% >> %PARAMETERS_FILE%
 
+%R_SCRIPT% scripts\settings_to_parameters_csv.R 
 
 :: Create calibration output directory
 :: ############################################################################

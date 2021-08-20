@@ -2,7 +2,15 @@
 
 library(yaml)
 
-settings = yaml.load_file('E:/Projects/Clients/MetCouncilASIM/tasks/survey_data_processing/metc_inputs.yml')
+args = commandArgs(trailingOnly = TRUE)
+
+if(length(args) > 0){
+  settings_file = args[1]
+} else {
+  settings_file = 'N:/Projects/CMAP_Activitysim/cmap_abm_lf/survey_data_prep/cmap_inputs.yml'
+}
+
+settings = yaml.load_file(settings_file)
 
 parameters_path = file.path(settings$visualizer_dir, 'runtime', 'parameters.csv')
 

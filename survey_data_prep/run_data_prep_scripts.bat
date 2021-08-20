@@ -3,7 +3,7 @@
 SET SETTINGS_FILE= "N:\Projects\CMAP_Activitysim\cmap_abm_lf\survey_data_prep\cmap_inputs.yml"
 
 @echo off
-Rscript data_processing\process_cmap_survey.R %SETTINGS_FILE%
+::Rscript data_processing\process_cmap_survey.R %SETTINGS_FILE%
 ::python SPA\__init__.py %SETTINGS_FILE%
 
 ::Rscript Visualizer\scripts\install_packages.R
