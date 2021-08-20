@@ -1,0 +1,14 @@
+- Edit model summaries parameters file (survey_data_prep/Visualizer/runtime/parameters_model_summaries.csv)
+  - Update filepaths as appropriate
+  - Some will just need the root path changed to your drive; the zones, skims, and ABM dir are pointed to a folder with SANDAG files temporarily
+  - Zones can be the zones shapefile or dbf instead of the land use file -- just make sure script is updated to read it appropriately (the script uses 2017 zones for the map and 2009 zones for skims currently)
+
+- Edit ActivitySim summarize script -- survey_data_prep/Visualizer/scripts/summarize_ActivitySim_cmap.R		
+  - Currently this is set up to work with SANDAG data & ignore counties
+  - Read 09 skims in with ZMX function (is in the script but commented)
+  - Un-comment zones file reading + county name lookup
+  - Un-comment WFH section 
+
+- Run the R script after edits
+
+- Follow the general readme.md for running the survey summaries & setting up the visualizer ##TBD

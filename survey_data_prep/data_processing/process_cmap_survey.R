@@ -35,7 +35,15 @@ get_distance_meters =
 
 # load settings
 
-settings = yaml.load_file('N:/Projects/CMAP_Activitysim/cmap_abm/survey_data_prep/cmap_inputs.yml')
+args = commandArgs(trailingOnly = TRUE)
+
+if(length(args) > 0){
+  settings_file = args[1]
+} else {
+  settings_file = 'N:/Projects/CMAP_Activitysim/cmap_abm/survey_data_prep/cmap_inputs.yml'
+}
+
+settings = yaml.load_file(settings_file)
 
 # Combine data from CMAP main and NIRPC
 
@@ -96,13 +104,13 @@ purpose_edits_nirpc = setDT(read_xlsx(file.path(data_dir, 'tpurp_update_nirpc.xl
 mode_edits = setDT(read_xlsx(file.path(data_dir, 'mode_update.xlsx')))
 
 ### --- School bus incorrectly coded as transit --- ###
-place_raw[mode!=401 & (payf_o %like% "school bus" | payf_o %like% "public school"),mode:=401]
+place_raw[mode!=401 & (payf_o %like% "school bus" | payf_o %like% "public school"), mode:=401]
 #
 ### --- "Other" mode --- ###
 place_raw[study == 'nirpc' & mode==997 & mode_o=="RV" & perno==1,mode:=202]                                                                           ## -- auto/van/truck driver
 place_raw[study == 'nirpc' & mode==997 & mode_o=="RV" & perno>1,mode:=203]                                                                                            ## -- auto/van/truck passenger
 place_raw[study == 'nirpc' & mode==997 & mode_o %in% c("DROVE PRIVATE VEHICLE","DROVE","DRIVE MY CAR","DROVE SELF","CAR",
-                                "GOLF CART","GARBAGE TRUCK","TRACKTOR","TACKTOR") & party==1,mode:=202]               ## -- auto/van/truck driver
+                                "GOLF CART","GARBAGE TRUCK","TRACKTOR","TACKTOR") & party==1, mode:=202]               ## -- auto/van/truck driver
 place_raw[study == 'nirpc' & mode==997 & mode_o %in% c("DROVE"),mode:=202]                                                                                             ## -- auto/van/truck driver
 place_raw[study == 'nirpc' & mode==997 & mode_o %in% c("CAR"),mode:=202]                                                                                                  ## -- auto/van/truck driver
 place_raw[study == 'nirpc' & mode==997 & mode_o %in% c("NEIGHBOR DROVE ME.","FRIEND"),mode:=203]    ## -- auto/van/truck passenger
@@ -192,7 +200,7 @@ lookup = hh_raw[HH_ZONE_ID %in% na_zones_17 & !is.na(zone09), .N, .(zone09, HH_Z
 hh_raw[lookup, zone09 := ifelse(is.na(zone09), i.zone09, zone09), on = .(HH_ZONE_ID)]
 
 # Add counts of EV, hybrids per HH
-codebook[NAME == 'fuel']
+# codebook[NAME == 'fuel'
 
 hh_raw[, `:=` (numveh_ev = 0, numveh_hybrid = 0)]
 hh_raw[vehicle_raw[fuel == 4, .N, .(sampno)], numveh_ev := i.N, on = .(sampno)]
@@ -344,11 +352,7 @@ PER = per_raw[, .(PERNO = perno,
 
 PER = PER[order(SAMPN, PERNO)]
 
-
-
 PER[is.na(PER)] = 0
-
-
 
 # Processing PLACE
 #---------------------------
@@ -368,14 +372,12 @@ place_raw[DEP_HR == 3 & DEP_MIN == 0, `:=` (DEP_HR = 2, DEP_MIN = 59)]
 place_raw = place_raw[order(sampno, perno, placeno)]
 
 
-
-
 # Derive trips for kids < 5
 
 under_5_per = per_raw[age < 5 | aage == 1]
 
 under_5_per = under_5_per[!place_raw, on = .(sampno, perno)]
-under_5_per[, .(min(perno), max(perno))]
+# under_5_per[, .(min(perno), max(perno))]
 under_5_record = data.table()
 for(per_num in 1:11){
   field = paste0('perno_', per_num)
@@ -392,7 +394,7 @@ under_5_record[, prev_deptime := shift(deptime_hhmm, type = 'lag'), by = .(sampn
 under_5_record[, next_deptime := shift(deptime_hhmm, type = 'lead'), by = .(sampno, kid_perno)]
 under_5_record[, prev_arrtime := shift(arrtime_hhmm, type = 'lag'), by = .(sampno, kid_perno)]
 under_5_record[, next_arrtime := shift(arrtime_hhmm, type = 'lead'), by = .(sampno, kid_perno)]
-under_5_record[prev_deptime > arrtime_hhmm, .(perno, kid_perno, sampno, arrtime_hhmm, deptime_hhmm, prev_arrtime, prev_deptime)]
+# under_5_record[prev_deptime > arrtime_hhmm, .(perno, kid_perno, sampno, arrtime_hhmm, deptime_hhmm, prev_arrtime, prev_deptime)]
 
 n_overlaps = under_5_record[prev_deptime > arrtime_hhmm, .N]
 init_overlaps = 0
@@ -525,11 +527,11 @@ place_raw[codebook[TABLE == 'PLACE' & NAME == 'tpurp', .(VALUE = as.integer(VALU
 place_raw[codebook[TABLE == 'PLACE' & NAME == 'mode', .(VALUE = as.integer(VALUE), LABEL)], mode_labeled := LABEL, on = .(mode = VALUE)]
 
 # check out transit
-place_raw[transit_raw, on = .(sampno, perno, placeno), .(mode_labeled, i.mode, placeno, tpurp_labeled)]
-place_raw[transit_raw, on = .(sampno, perno, placeno)][, .N, .(sampno, perno, placeno, tpurp_labeled)][N<3]
+# place_raw[transit_raw, on = .(sampno, perno, placeno), .(mode_labeled, i.mode, placeno, tpurp_labeled)]
+# place_raw[transit_raw, on = .(sampno, perno, placeno)][, .N, .(sampno, perno, placeno, tpurp_labeled)][N<3]
 
-place_raw[tpurp == 28, .N, .(mode_labeled)]
-place_raw[tpurp == 28 & mode %in% c(505:509)] # some transit change mode that will get linked
+# place_raw[tpurp == 28, .N, .(mode_labeled)]
+# place_raw[tpurp == 28 & mode %in% c(505:509)] # some transit change mode that will get linked
 
 # get access mode from transit file
 transit_raw[, is_last_trip := fifelse(transitno == max(transitno), 1, 0), by = .(sampno, perno, placeno)]
@@ -538,8 +540,8 @@ transit_raw[, is_first_trip := fifelse(transitno == 1, 1, 0), by = .(sampno, per
 place_raw[transit_raw[is_first_trip == 1], access_mode := i.mode, on = .(sampno, perno, placeno)]
 place_raw[transit_raw[is_last_trip == 1], egress_mode := i.mode, on = .(sampno, perno, placeno)]
 
-place_raw[, .N, access_mode]
-place_raw[, .N, egress_mode]
+# place_raw[, .N, access_mode]
+# place_raw[, .N, egress_mode]
 
 place_raw[!is.na(access_mode), access_mode_recode := fcase(access_mode == 'WALKING', 'WALK',
                                         access_mode == 'BICYCLING', 'PNR',
@@ -714,15 +716,15 @@ OTHER = 14L
 # investigate non-students going to school
 
 
-place_raw[STUDE == 0 & tpurp == 6 & age >= 18, .(SCHOL, o_purpose, party, prev_party, next_party, mode_labeled, next_mode, arrtime, deptime)] %>%
-  .[codebook[TABLE == 'PLACE' & NAME == 'tpurp', .(opurp_labeled = LABEL, VALUE = as.integer(VALUE))], on = .(o_purpose = VALUE), nomatch = 0] %>%
-  .[codebook[TABLE == 'PLACE' & NAME == 'mode', .(next_mode_labeled = LABEL, VALUE = as.integer(VALUE))], on = .( next_mode = VALUE), nomatch = 0]
-
-place_raw[STUDE == 0 & tpurp == 6 & age >= 18 & hhparty != prev_hhparty, .N]
-place_raw[STUDE == 0 & tpurp == 6 & age >= 18 & hhparty != next_hhparty & hhparty == prev_hhparty, .N]
-# 219 of 306 might be pu/do
-
-place_raw[STUDE == 0 & tpurp == 6 & age >= 18 & hhparty == prev_hhparty & hhparty == next_hhparty, .(mode_labeled, arrtime, deptime, party, prev_party, next_party)]
+# place_raw[STUDE == 0 & tpurp == 6 & age >= 18, .(SCHOL, o_purpose, party, prev_party, next_party, mode_labeled, next_mode, arrtime, deptime)] %>%
+#   .[codebook[TABLE == 'PLACE' & NAME == 'tpurp', .(opurp_labeled = LABEL, VALUE = as.integer(VALUE))], on = .(o_purpose = VALUE), nomatch = 0] %>%
+#   .[codebook[TABLE == 'PLACE' & NAME == 'mode', .(next_mode_labeled = LABEL, VALUE = as.integer(VALUE))], on = .( next_mode = VALUE), nomatch = 0]
+# 
+# place_raw[STUDE == 0 & tpurp == 6 & age >= 18 & hhparty != prev_hhparty, .N]
+# place_raw[STUDE == 0 & tpurp == 6 & age >= 18 & hhparty != next_hhparty & hhparty == prev_hhparty, .N]
+# # 219 of 306 might be pu/do
+# 
+# place_raw[STUDE == 0 & tpurp == 6 & age >= 18 & hhparty == prev_hhparty & hhparty == next_hhparty, .(mode_labeled, arrtime, deptime, party, prev_party, next_party)]
 
 ## check change mode/lack thereof
 
@@ -766,7 +768,7 @@ place_raw[, MODE := fcase( mode %in% c(201:202, 301) & (party == 1 | party < 0),
 place_raw[, driver := fifelse(mode %in% c(201:202), 1, 0)]
 place_raw[, driver := fifelse(MODE == SOV, 1, driver)]
 
-place_raw[, .N, MODE][order(MODE)]
+# place_raw[, .N, MODE][order(MODE)]
 
 
 

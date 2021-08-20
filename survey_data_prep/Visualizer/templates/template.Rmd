@@ -798,7 +798,7 @@ t2
 ```{r Table2_MandTripLengths}
 cat("Average Mandatory Tour Lengths")
 
-build_df <- build_data[[which(build_csv_names=="mandTripLengths")]]
+build_df <- build_data[[which(build_csv_names=="mandTourLengths")]]
 df <- build_df
 colnames(df) <- c("Home District", "Work","University","School")
 
@@ -1298,7 +1298,7 @@ bscols(widths=c(2,10),
 ### Average Non-Mandatory Tour Lengths (Miles){data-height=250}
 ```{r Table1_nonMandTripLength}
 base_df <- base_data[[which(base_csv_names=="nonMandTripLengths")]]
-build_df <- build_data[[which(build_csv_names=="nonMandTripLengths")]]
+build_df <- build_data[[which(build_csv_names=="nonMandTourLengths")]]
 df <- data.frame(base_df, build_df[,-1])
 colnames(df) <- c("Purpose", BASE_SCENARIO_NAME, BUILD_SCENARIO_NAME)
 df$Purpose <- purpose_type_df$name[match(df$Purpose, purpose_type_df$code)]
@@ -1433,28 +1433,20 @@ Chart Column 1{data-width=150}
 ### Tour Mode Choice
 ```{r tourMode}
  # [3/31/2020] DH
-# base_df <- base_data[[which(base_csv_names=="tmodeProfile_vis_CHTS_OBS")]]
-if(IS_BASE_SURVEY=="Yes"){
-  # base_df <- base_data[[which(base_csv_names=="tmodeProfile_vis_HTS")]]
-  base_df <- base_data[[which(base_csv_names=="tmodeProfile_vis_HTS")]]
-}else{
-  base_df <- base_data[[which(base_csv_names=="tmodeProfile_vis")]]
-}
-# base_df <- base_data[[which(base_csv_names=="tmodeProfile_vis_calib")]]
+
 base_df$purpose <- as.character(base_df$purpose)
 base_df$purpose <- purpose_type_df$name[match(base_df$purpose, purpose_type_df$code)]
-if(BASE_SCENARIO_NAME == "SEMCOG_HTS") {
-  build_df <- build_data[[which(build_csv_names=="tmodeProfile_vis")]]
-} else {
-  build_df <- build_data[[which(build_csv_names=="tmodeProfile_vis_HTS")]]
-}
+
+
 if(BUILD_SCENARIO_NAME == "CMAP_OBS") {
+  # if running HTS vs OBS mode comparison
+  base_df <- base_data[[which(base_csv_names=="tmodeProfile_vis_HTS")]]
   build_df <- build_data[[which(build_csv_names=="tmodeProfile_vis_calib")]]
 } else {
-  build_df <- build_data[[which(build_csv_names=="tmodeProfile_vis_HTS")]]
+  base_df <- base_data[[which(base_csv_names=="tmodeProfile_vis_calib")]]
+  build_df <- build_data[[which(build_csv_names=="tmodeProfile_vis")]]
 }
 
-# build_df <- build_data[[which(build_csv_names=="tmodeProfile_vis_CHTS")]]
 build_df$purpose <- as.character(build_df$purpose)
 build_df$purpose <- purpose_type_df$name[match(build_df$purpose, purpose_type_df$code)]
 colnames(build_df) <- colnames(base_df)
@@ -1780,28 +1772,14 @@ Distribution of trips by trip mode and tour mode, which constrains the availabil
 
 ### Trip Mode Choice
 ```{r tripMode}
-if(IS_BASE_SURVEY=="Yes"){
-  # base_df <- base_data[[which(base_csv_names=="tripModeProfile_vis_HTS")]]
-  base_df <- base_data[[which(base_csv_names=="tripModeProfile_vis_HTS")]]
-}else{
-  base_df <- base_data[[which(base_csv_names=="tripModeProfile_vis_HTS")]]
-}
-# base_df <- base_data[[which(base_csv_names=="tripModeProfile_vis_calib")]]
-# base_df <- base_data[[which(base_csv_names=="tripModeProfile_vis_HTS")]]
-# base_df <- base_data[[which(base_csv_names=="tripModeProfile_vis_CHTS_OBS")]]
-# build_df <- build_data[[which(build_csv_names=="tripModeProfile_vis_CHTS")]]
-if(BUILD_SCENARIO_NAME == 'SEMCOG_HTS') {
-  build_df <- build_data[[which(build_csv_names=="tripModeProfile_vis")]]
-} else {
-  build_df <- build_data[[which(build_csv_names=="tripModeProfile_vis_HTS")]]
 
-}
 
 if(BUILD_SCENARIO_NAME == 'CMAP_OBS') {
+  base_df <- base_data[[which(base_csv_names=="tripModeProfile_vis_HTS")]]
   build_df <- build_data[[which(build_csv_names=="tripModeProfile_vis_calib")]]
 } else {
-  build_df <- build_data[[which(build_csv_names=="tripModeProfile_vis_HTS")]]
-
+  build_df <- build_data[[which(build_csv_names=="tripModeProfile_vis")]]
+  base_df <- base_data[[which(base_csv_names=="tripModeProfile_vis_calib")]]
 }
 
 colnames(build_df) <- colnames(base_df)

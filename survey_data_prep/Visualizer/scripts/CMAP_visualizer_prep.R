@@ -62,55 +62,40 @@ include_delivery_trips = F
 
 # Directories
 # WD = ifelse(include_delivery_trips,
-settings = yaml.load_file('N:/Projects/CMAP_Activitysim/cmap_abm/survey_data_prep/cmap_inputs.yml')
+
+args = commandArgs(trailingOnly = TRUE)
+
+if(length(args) > 0){
+  settings_file = args[1]
+} else {
+  settings_file = 'N:/Projects/CMAP_Activitysim/cmap_abm_lf/survey_data_prep/cmap_inputs.yml'
+}
+
+settings = yaml.load_file(settings_file)
 
 WD                   = settings$visualizer_summaries
 gis_dir              = settings$zone_dir
 HTS_raw_Dir          = settings$data_dir
 Survey_Dir           = settings$SPA_input_dir
 Survey_Processed_Dir = settings$SPA_output_dir
-# SkimDir              = "E:/Projects/Clients/MWCOG/Models/CGV2_3_75_Visualize2045_CLRP_Xmittal/2019_Final/"
 # geogXWalkDir         = "E:/projects/clients/mtc/data/Trip End Geocodes"
 zone_dir = settings$zone_dir
 print('Reading input files...')
 
-# Exclude weekends 
-# weekend_ids = c(20000228,
-#                 20001889,
-#                 20004409,
-#                 30000325,
-#                 30000618,
-#                 30001542,
-#                 30002714,
-#                 30004060,
-#                 30004077,
-#                 30007944,
-#                 30008190,
-#                 30008429,
-#                 30008847,
-#                 30008971, 
-#                 30009282, 
-#                 30009663, 
-#                 30009996, 
-#                 30010703, 
-#                 30010719, 
-#                 30011321, 
-#                 30011987, 
-#                 30012316)
 
-weekend_ids = c(-1)
 
 ## Read Data
-hh                   = fread(file.path(Survey_Dir, "HH_SPA_INPUT.csv"))[!SAMPN %in% weekend_ids]
-per                  = fread(file.path(Survey_Dir, "PER_SPA_INPUT.csv"))[!SAMPN %in% weekend_ids]
-place                = fread(file.path(Survey_Dir, "PLACE_SPA_INPUT.csv"))[!SAMPN %in% weekend_ids]
+hh                   = fread(file.path(Survey_Dir, "HH_SPA_INPUT.csv"))
+per                  = fread(file.path(Survey_Dir, "PER_SPA_INPUT.csv"))
+place                = fread(file.path(Survey_Dir, "PLACE_SPA_INPUT.csv"))
 
-processedPerson      = fread(file.path(Survey_Processed_Dir, "persons.csv"))[!HH_ID %in% weekend_ids]
-proc_hh              = fread(file.path(Survey_Processed_Dir, "households.csv"))[!HH_ID %in% weekend_ids]
-tours                = fread(file.path(Survey_Processed_Dir, "tours.csv"))[!HH_ID %in% weekend_ids]
-trips                = fread(file.path(Survey_Processed_Dir, "trips.csv"))[!HH_ID %in% weekend_ids]
-jutrips              = fread(file.path(Survey_Processed_Dir, "unique_joint_ultrips.csv"))[!HH_ID %in% weekend_ids]
-jtours               = fread(file.path(Survey_Processed_Dir, "unique_joint_tours.csv"))[!HH_ID %in% weekend_ids]
+processedPerson      = fread(file.path(Survey_Processed_Dir, "persons.csv"))
+proc_hh              = fread(file.path(Survey_Processed_Dir, "households.csv"))
+
+tours                = fread(file.path(Survey_Processed_Dir, "tours.csv"))
+trips                = fread(file.path(Survey_Processed_Dir, "trips.csv"))
+jutrips              = fread(file.path(Survey_Processed_Dir, "unique_joint_ultrips.csv"))
+jtours               = fread(file.path(Survey_Processed_Dir, "unique_joint_tours.csv"))
 
 
 zones = st_read(file.path(zone_dir, "zones17.shp"))
@@ -165,9 +150,8 @@ pertypeCodes = data.frame(code = c(1,2,3,4,5,6,7,8,"All"),
 
 ### Add new weights
 
-wt_dir_cmap = settings$popsim_folder
-wt_dir_nirpc = settings$popsim_folder_nirpc
-trip_wt_file = file.path(settings$proj_dir, 'underreporting_correction', 'trip_weights.rds')
+wt_dir_cmap = settings$cmap_weights_dir
+trip_wt_file = file.path(settings$cmap_weights_dir, 'trip_weights.rds')
 
 trip_weights = readRDS(trip_wt_file)
 nirpc_dir = file.path(settings$data_dir, settings$nirpc_folder)
@@ -175,7 +159,7 @@ nirpc_dir = file.path(settings$data_dir, settings$nirpc_folder)
 nirpc_hh_weights = fread(file.path(nirpc_dir, 'weights', 'ipf', 'household_weights.csv'))
 nirpc_per_weights = fread(file.path(settings$data_dir, settings$nirpc_folder, 'weights', 'ipf', 'person_weights.csv'))
 
-cmap_weights = fread(file.path(wt_dir_cmap, 'output/final_summary_hh_weights.csv'))
+cmap_weights = fread(file.path(wt_dir_cmap, 'final_summary_hh_weights.csv'))
 print('Applying weighting factors...')
 
 # weights = rbind(cmap_weights, nirpc_weights)
@@ -1445,8 +1429,8 @@ tours = tour_original
 tourdist4 = wtd.hist(tours$SKIMDIST[tours$TOURPURP==4 & tours$IS_SUBTOUR == 0 & !(is.na(tours$SKIMDIST))], breaks = c(seq(0,40, by=1), 9999), freq = NULL, right=FALSE, weight = tours$finalweight[tours$TOURPURP==4 & tours$IS_SUBTOUR == 0 & !(is.na(tours$SKIMDIST))])
 tourdisti56 = wtd.hist(tours$SKIMDIST[tours$TOURPURP>=5 & tours$TOURPURP<=6 & tours$IS_SUBTOUR == 0 & tours$FULLY_JOINT==0 & !(is.na(tours$SKIMDIST))], breaks = c(seq(0,40, by=1), 9999), freq = NULL, right=FALSE, weight = tours$finalweight[tours$TOURPURP>=5 & tours$TOURPURP<=6 & tours$IS_SUBTOUR == 0 & tours$FULLY_JOINT==0 & !(is.na(tours$SKIMDIST))])
 tourdisti789 = wtd.hist(tours$SKIMDIST[tours$TOURPURP>=7 & tours$TOURPURP<=9 & tours$IS_SUBTOUR == 0 & tours$FULLY_JOINT==0 & !(is.na(tours$SKIMDIST))], breaks = c(seq(0,40, by=1), 9999), freq = NULL, right=FALSE, weight = tours$finalweight[tours$TOURPURP>=7 & tours$TOURPURP<=9 & tours$IS_SUBTOUR == 0 & tours$FULLY_JOINT==0 & !(is.na(tours$SKIMDIST))])
-tourdistj56 = wtd.hist(jtours$SKIMDIST[jtours$JOINT_PURP>=5 & jtours$JOINT_PURP<=6 & !(is.na(tours$SKIMDIST))], breaks = c(seq(0,40, by=1), 9999), freq = NULL, right=FALSE, weight = jtours$finalweight[jtours$JOINT_PURP>=5 & jtours$JOINT_PURP<=6 & !(is.na(tours$SKIMDIST))])
-tourdistj789 = wtd.hist(jtours$SKIMDIST[jtours$JOINT_PURP>=7 & jtours$JOINT_PURP<=9 & !(is.na(tours$SKIMDIST))], breaks = c(seq(0,40, by=1), 9999), freq = NULL, right=FALSE, weight = jtours$finalweight[jtours$JOINT_PURP>=7 & jtours$JOINT_PURP<=9 & !(is.na(tours$SKIMDIST))])
+tourdistj56 = wtd.hist(jtours$SKIMDIST[jtours$JOINT_PURP>=5 & jtours$JOINT_PURP<=6 & !(is.na(jtours$SKIMDIST))], breaks = c(seq(0,40, by=1), 9999), freq = NULL, right=FALSE, weight = jtours$finalweight[jtours$JOINT_PURP>=5 & jtours$JOINT_PURP<=6 & !(is.na(jtours$SKIMDIST))])
+tourdistj789 = wtd.hist(jtours$SKIMDIST[jtours$JOINT_PURP>=7 & jtours$JOINT_PURP<=9 & !(is.na(jtours$SKIMDIST))], breaks = c(seq(0,40, by=1), 9999), freq = NULL, right=FALSE, weight = jtours$finalweight[jtours$JOINT_PURP>=7 & jtours$JOINT_PURP<=9 & !(is.na(jtours$SKIMDIST))])
 tourdist10 = wtd.hist(tours$SKIMDIST[tours$IS_SUBTOUR == 1 & !(is.na(tours$SKIMDIST))], breaks = c(seq(0,40, by=1), 9999), freq = NULL, right=FALSE, weight = tours$finalweight[tours$IS_SUBTOUR == 1 & !(is.na(tours$SKIMDIST))])
 
 tourDistProfile = data.frame(tourdist4$counts, tourdisti56$counts, tourdisti789$counts, tourdistj56$counts, tourdistj789$counts, tourdist10$counts)
