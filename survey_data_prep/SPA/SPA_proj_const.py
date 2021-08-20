@@ -16,9 +16,15 @@ TIME_WINDOW_BIN_MIN = 30    #bin width in minutes
 #   primary trip location
 USE_DISTANCE_IN_PRIMARY_LOCATION_SCORE = True
 
-with open(r'N:/Projects/CMAP_Activitysim/cmap_abm/survey_data_prep/cmap_inputs.yml') as file:
-    settings = yaml.full_load(file)
+if len(sys.argv) > 1:
+    settings_file = sys.argv[1]
+else:
+   settings_file = r'E:/Projects/Clients/MetCouncilASIM/tasks/survey_data_processing/metc_inputs.yml'
 
+
+with open(settings_file) as file:
+    settings = yaml.full_load(file)
+	
 IN_DIR = settings['SPA_input_dir'] + '/'
 if USE_DISTANCE_IN_PRIMARY_LOCATION_SCORE:
     OUT_DIR = settings['SPA_output_dir']  + '/'
