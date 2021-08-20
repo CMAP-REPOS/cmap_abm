@@ -1,8 +1,5 @@
 # files/folders to ignore in obs processing
 
-.ipynb_checkpounts
-
-*.csv
-*.xlsx
+.ipynb_checkpoints
 
 output/processed_obs.csv

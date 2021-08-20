@@ -13,33 +13,36 @@ LOAD_PKGS_LIST = c("leaflet", "htmlwidgets", "rgdal", "rgeos", "raster", "dplyr"
                     "stringr", "data.table", "tigris", "yaml", "sf")
 lib_sink = suppressWarnings(suppressMessages(lapply(LOAD_PKGS_LIST, library, character.only = TRUE)))
 
-settings = yaml.load_file('N:/Projects/CMAP_Activitysim/cmap_abm/survey_data_prep/cmap_inputs.yml')
 
-Parameters_File = file.path(settings$visualizer_dir, 'runtime', 'parameters.csv' )
+args = commandArgs(trailingOnly = TRUE)
+
+if(length(args) > 0){
+  settings_file = args[1]
+} else {
+  settings_file = 'N:/Projects/CMAP_Activitysim/cmap_abm/survey_data_prep/cmap_inputs.yml'
+}
+
+settings = yaml.load_file(settings_file)
 
 
 ### Read parameters from Parameters_File
 
-parameters              = read.csv(Parameters_File, header = TRUE)
-ABM_DIR                 = trimws(paste(parameters$Value[parameters$Key=="ABM_DIR"]))
-ABM_SUMMARY_DIR =  file.path(settings$visualizer_dir, 'data', 'calibration_runs', 'summarized')
-#ABM_SUMMARY_DIR         = trimws(paste(parameters$Value[parameters$Key=="ABM_SUMMARY_DIR"]))
-CENSUS_DIR              = trimws(paste(parameters$Value[parameters$Key=="CENSUS_DIR"]))
-ZONES_DIR               = trimws(paste(parameters$Value[parameters$Key=="ZONES_DIR"]))
-R_LIBRARY               = trimws(paste(parameters$Value[parameters$Key=="R_LIBRARY"]))
-BUILD_SAMPLE_RATE       = trimws(paste(parameters$Value[parameters$Key=="BUILD_SAMPLE_RATE"]))
-# CT_ZERO_AUTO_FILE_NAME  = trimws(paste(parameters$Value[parameters$Key=="CT_ZERO_AUTO_FILE_NAME"]))
-CT_ZERO_AUTO_FILE_NAME='ct_zero_auto.shp'
-SHP_FILE_NAME           = trimws(paste(parameters$Value[parameters$Key=="SHP_FILE_NAME"]))
+
+ABM_DIR                 = settings$abm_dir
+ABM_SUMMARY_DIR =  settings$abm_summaries_dir
+ZONES_DIR               = settings$zone_dir
+# BUILD_SAMPLE_RATE       = '' # if this ends up being needed -- add to settings
+CT_ZERO_AUTO_FILE_NAME = 'ct_zero_auto.shp'
+SHP_FILE_NAME           = settings$zone_shp_file
 
 # INPUTS
 ########
 # CensusData      = "E:/Projects/Clients/SEMCOG/Tasks/Task5_Visualizer/data/census/ACS_2017_5yr_MI_CT_AutoOwn.csv"
 CensusData      = file.path(settings$visualizer_summaries, 'ACS_2018_5yr_AutoOwn.csv')
-# hh_file       = "E:/Projects/Clients/SEMCOG/Tasks/Task5_Visualizer/data/activitySim_400k_hh/final_households.csv"
+# hh_file       =  file.path(ABM_DIR, "final_households.csv")
 hh_file         = file.path(settings$SPA_input_dir, 'HH_SPA_INPUT.csv')
 
-tract_to_taz_file = file.path(settings$zone_dir, 'zones17.shp')
+tract_to_taz_file = file.path(settings$zone_dir, zone_shp_file)
 
 hh = read.csv(hh_file)
 census = read.csv(CensusData, stringsAsFactors = F)
@@ -70,14 +73,14 @@ setwd(ABM_SUMMARY_DIR) # output dir
 # Calculating auto availability and merging Census Tract ID
 
 # get weights
-wt_dir_cmap = settings$popsim_folder
-wt_dir_nirpc = settings$popsim_folder_nirpc
-trip_wt_file = file.path(settings$proj_dir, 'underreporting_correction', 'trip_weights.rds')
+trip_wt_file = file.path(settings$cmap_weights_dir, 'trip_weights.rds')
 
-nirpc_weights = fread(file.path(wt_dir_nirpc, 'output/final_summary_hh_weights.csv'))
-cmap_weights = fread(file.path(wt_dir_cmap, 'output/final_summary_hh_weights.csv'))
+nirpc_weights = fread(file.path(settings$data_dir, settings$nirpc_folder, 'weights/ipf/household_weights.csv'))
+cmap_weights = fread(file.path(settings$cmap_weights_dir, 'final_summary_hh_weights.csv'))
 
 print('Applying weighting factors...')
+
+nirpc_weights = nirpc_weights[, .(sampno, SUBREGCluster_balanced_weight = wthhfin)]
 
 weights = rbind(cmap_weights, nirpc_weights)
 setDT(hh)

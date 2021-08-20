@@ -8,14 +8,22 @@ library(tidycensus)
 library(stringr)
 library(sf)
 library(yaml)
-settings = yaml.load_file('N:/Projects/CMAP_Activitysim/cmap_abm/survey_data_prep/cmap_inputs.yml')
 
+args = commandArgs(trailingOnly = TRUE)
+
+if(length(args) > 0){
+  settings_file = args[1]
+} else {
+  settings_file = 'N:/Projects/CMAP_Activitysim/cmap_abm/survey_data_prep/cmap_inputs.yml'
+}
+
+settings = yaml.load_file(settings_file)
 # county_flows= fread('E:/Projects/Clients/MWCOG/Tasks/TO3/Visualizer/data/census/ACS_commuting_flows_2015_5yr.csv')
 # tract_to_taz = fread('E:/Projects/Clients/MWCOG/Tasks/TO3/PopulationSim/data/xwalk/tract_to_taz.csv')
 
 zone_dir = settings$zone_dir
 
-zones = st_read(file.path(zone_dir, 'zones17.shp'))
+zones = st_read(file.path(zone_dir, settings$zone_shp_file))
 
 zones_dt = setDT(zones)
 

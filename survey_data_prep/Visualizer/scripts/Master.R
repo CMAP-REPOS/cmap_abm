@@ -45,7 +45,7 @@ OUTPUT_HTML_NAME    <- FULL_HTML_NAME
 # Load global variables
 .libPaths(R_LIBRARY)
 Sys.getenv("RSTUDIO_PANDOC")
-Sys.setenv(RSTUDIO_PANDOC="N:/Projects/CMAP_Activitysim/cmap_abm/survey_data_prep/Visualizer/dependencies")
+Sys.setenv(RSTUDIO_PANDOC=RSTUDIO_PANDOC_path)
 cat("Using the R packages found in ", .libPaths(), "\n")
 # cat("Pandoc version: ", pandoc_available())
 # cat(installed.packages())

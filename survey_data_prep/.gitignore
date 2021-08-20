@@ -25,3 +25,11 @@ nirpc_survey_weighting/output
 
 !acs_county_flows_IL.csv
 !county_lookup.csv
+
+!Visualizer/summaries/tripModeProfile_vis_calib.csv
+!Visualizer/summaries/tmodeProfile_vis_calib.csv
+
+!underreporting_correction/imputed_ages.rds
+!underreporting_correction/imputed_income.rds
+!underreporting_correction/imputed_sex.rds
+!model_summaries/.
