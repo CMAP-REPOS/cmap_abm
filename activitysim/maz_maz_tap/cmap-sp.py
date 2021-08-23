@@ -201,7 +201,7 @@ d_t_y = np.tile(taps['network_node_y'].tolist(), len(mazs))
 
 d_t_canpnr = np.tile(taps[drive_tap_field].tolist(), len(mazs))
 
-maz_to_tap_cost = pd.DataFrame({"OMAZ":o_m, "DTAP":d_t, "OMAZ_NODE":o_m_nn, "DTAP_NODE":d_t_nn, "OMAZ_NODE_X":o_m_x, "OMAZ_NODE_Y":o_m_y, "DTAP_NODE_X":d_t_x, "DTAP_NODE_Y":d_t_y, "DTAP_CANPNR":d_t_canpnr})
+maz_to_tap_cost = pd.DataFrame({"MAZ":o_m, "TAP":d_t, "OMAZ_NODE":o_m_nn, "DTAP_NODE":d_t_nn, "OMAZ_NODE_X":o_m_x, "OMAZ_NODE_Y":o_m_y, "DTAP_NODE_X":d_t_x, "DTAP_NODE_Y":d_t_y, "DTAP_CANPNR":d_t_canpnr})
 maz_to_tap_cost["DISTANCE"] = maz_to_tap_cost.eval("((OMAZ_NODE_X-DTAP_NODE_X)**2 + (OMAZ_NODE_Y-DTAP_NODE_Y)**2)**0.5")
 
 print(time.ctime(), " remove maz tap pairs beyond max walk distance")
@@ -216,7 +216,7 @@ maz_to_tap_walk_cost["walk_time"] = maz_to_tap_walk_cost["DISTWALK"].apply(lambd
 
 print(time.ctime(), " write results")
 
-maz_to_tap_walk_cost[["OMAZ","DTAP","DISTWALK", "walk_time"]].to_csv(sp_settings["maz_tap_walk_output"], index=False)
+maz_to_tap_walk_cost[["MAZ","TAP","DISTWALK", "walk_time"]].to_csv(sp_settings["maz_tap_walk_output"], index=False)
 
 print(time.ctime(), " build maz to tap drive table")
 
@@ -233,6 +233,6 @@ maz_to_tap_drive_cost = maz_to_tap_drive_cost[maz_to_tap_drive_cost["DIST"] <= m
 
 print(time.ctime(), " write results")
 maz_to_tap_drive_cost['drive_time'] = maz_to_tap_drive_cost["DIST"].apply(lambda x: x / drive_speed_mph * 60.0)
-maz_to_tap_drive_cost[["OMAZ","DTAP","DIST"]].to_csv(sp_settings["maz_tap_drive_output"], index=False)
+maz_to_tap_drive_cost[["MAZ","TAP","DIST", "drive_time"]].to_csv(sp_settings["maz_tap_drive_output"], index=False)
 
 print(time.ctime(), " finish")
