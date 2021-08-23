@@ -170,7 +170,7 @@ maz_to_maz_walk_cost = maz_to_maz_walk_cost[maz_to_maz_walk_cost["DISTWALK"] <= 
 
 print(time.ctime(), " write results")
 
-maz_to_maz_walk_cost[["OMAZ","DMAZ","DISTWALK"]].to_csv(sp_settings["maz_to_maz_walk_output"], index=False)
+maz_to_maz_walk_cost[["OMAZ","DMAZ","DISTWALK"]].to_csv(sp_settings["maz_maz_walk_output"], index=False)
 
 print(time.ctime(), " build maz to maz bike table") # same table above
 
@@ -185,7 +185,7 @@ maz_to_maz_bike_cost = maz_to_maz_bike_cost[maz_to_maz_bike_cost["DISTBIKE"] <= 
 
 print(time.ctime(), " write results")
 
-maz_to_maz_bike_cost[["OMAZ","DMAZ","DISTBIKE"]].to_csv(sp_settings["maz_to_maz_bike_output"], index=False)
+maz_to_maz_bike_cost[["OMAZ","DMAZ","DISTBIKE"]].to_csv(sp_settings["maz_maz_bike_output"], index=False)
 
 print(time.ctime(), " build maz to tap walk table")
 
@@ -216,7 +216,7 @@ maz_to_tap_walk_cost["walk_time"] = maz_to_tap_walk_cost["DISTWALK"].apply(lambd
 
 print(time.ctime(), " write results")
 
-maz_to_tap_walk_cost[["OMAZ","DTAP","DISTWALK", "walk_time"]].to_csv(sp_settings["maz_to_tap_walk_output"], index=False)
+maz_to_tap_walk_cost[["OMAZ","DTAP","DISTWALK", "walk_time"]].to_csv(sp_settings["maz_tap_walk_output"], index=False)
 
 print(time.ctime(), " build maz to tap drive table")
 
@@ -233,6 +233,6 @@ maz_to_tap_drive_cost = maz_to_tap_drive_cost[maz_to_tap_drive_cost["DIST"] <= m
 
 print(time.ctime(), " write results")
 maz_to_tap_drive_cost['drive_time'] = maz_to_tap_drive_cost["DIST"].apply(lambda x: x / drive_speed_mph * 60.0)
-maz_to_tap_drive_cost[["OMAZ","DTAP","DIST"]].to_csv(sp_settings["maz_to_tap_drive_output"], index=False)
+maz_to_tap_drive_cost[["OMAZ","DTAP","DIST"]].to_csv(sp_settings["maz_tap_drive_output"], index=False)
 
 print(time.ctime(), " finish")
