@@ -133,7 +133,7 @@ taps = pd.read_csv(tapfile_name)
 
 print(time.ctime(), " construct pandanas network")
 
-net = pdna.Network(nodes["X"], nodes["Y"], links["FNODE"], links["TNODE"], links[["LENGTH"]] / 5280.0, twoway=False)
+net = pdna.Network(nodes["X"], nodes["Y"], links["FNODE"], links["TNODE"], links[["LENGTH"]].apply(lambda x: x / 5280.0), twoway=False)
 
 print(time.ctime(), " assign nearest network node to mazs and taps")
 
@@ -156,7 +156,7 @@ d_m_x = np.tile(mazs['network_node_x'].tolist(), len(mazs))
 d_m_y = np.tile(mazs['network_node_y'].tolist(), len(mazs))
 
 maz_to_maz_cost = pd.DataFrame({"OMAZ":o_m, "DMAZ":d_m, "OMAZ_NODE":o_m_nn, "DMAZ_NODE":d_m_nn, "OMAZ_NODE_X":o_m_x, "OMAZ_NODE_Y":o_m_y, "DMAZ_NODE_X":d_m_x, "DMAZ_NODE_Y":d_m_y})
-maz_to_maz_cost["DISTWALK"] = maz_to_maz_cost.eval("((OMAZ_NODE_X-DMAZ_NODE_X)**2 + (OMAZ_NODE_Y-DMAZ_NODE_Y)**2)**0.5")
+maz_to_maz_cost["DISTWALK"] = maz_to_maz_cost.eval("(((OMAZ_NODE_X-DMAZ_NODE_X)**2 + (OMAZ_NODE_Y-DMAZ_NODE_Y)**2)**0.5) / 5280.0")
 maz_to_maz_cost = maz_to_maz_cost[maz_to_maz_cost["OMAZ"] != maz_to_maz_cost["DMAZ"]]
 
 print(time.ctime(), " remove maz maz pairs beyond max walk distance")
@@ -202,7 +202,7 @@ d_t_y = np.tile(taps['network_node_y'].tolist(), len(mazs))
 d_t_canpnr = np.tile(taps[drive_tap_field].tolist(), len(mazs))
 
 maz_to_tap_cost = pd.DataFrame({"MAZ":o_m, "TAP":d_t, "OMAZ_NODE":o_m_nn, "DTAP_NODE":d_t_nn, "OMAZ_NODE_X":o_m_x, "OMAZ_NODE_Y":o_m_y, "DTAP_NODE_X":d_t_x, "DTAP_NODE_Y":d_t_y, "DTAP_CANPNR":d_t_canpnr})
-maz_to_tap_cost["DISTANCE"] = maz_to_tap_cost.eval("((OMAZ_NODE_X-DTAP_NODE_X)**2 + (OMAZ_NODE_Y-DTAP_NODE_Y)**2)**0.5")
+maz_to_tap_cost["DISTANCE"] = maz_to_tap_cost.eval("(((OMAZ_NODE_X-DTAP_NODE_X)**2 + (OMAZ_NODE_Y-DTAP_NODE_Y)**2)**0.5) / 5280.0")
 
 print(time.ctime(), " remove maz tap pairs beyond max walk distance")
 
