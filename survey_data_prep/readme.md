@@ -32,7 +32,7 @@ The scripts for these processes are included in the repo and should be fairly ea
 ## To run automatically & skip the steps 1-5 -- 
 
 * Data prep, SPA, and visualizer summaries:
-	* run_data_prep_scripts.bat
+	* https://github.com/CMAP-REPOS/cmap_abm/blob/activitysim/survey_data_prep/run_data_prep_scripts.bat
 	* Edit the settings file path
 	* Run via command line
 * Run the visualizer (see step 6)
@@ -43,7 +43,7 @@ Otherwise -- to run each script and confirm things look good -- follow the steps
 
 Time: <5 minutes
 
-* Script: process_cmap_survey.R
+* Script: https://github.com/CMAP-REPOS/cmap_abm/blob/activitysim/survey_data_prep/data_processing/process_cmap_survey.R
 * Inputs needed: CMAP and NIRPC HTS data; folder for SPA inputs (create the folder if you don't have one); zones shapefiles; weights files
 * Ensure that the settings file path in the script is pointing to the right file
 * Run the script -- if any filepaths are wrong in the settings, fix and run again. 
@@ -57,7 +57,7 @@ Time: <5 minutes
 
 Time: ~1 hour (varies by machine)
 
-* Script: _init_.py
+* Script: https://github.com/CMAP-REPOS/cmap_abm/blob/activitysim/survey_data_prep/SPA/__init__.py
 * Ensure that the settings file path is pointing to the right file
 * Run the script
 * Check that outputs are in the SPA Processed folder
@@ -68,7 +68,7 @@ Time: ~1 hour (varies by machine)
 
 ## Step 3: Prepare survey data summaries for Visualizer dashboard
 
-* Script: CMAP_visualizer_prep.R
+* Script: https://github.com/CMAP-REPOS/cmap_abm/blob/activitysim/survey_data_prep/Visualizer/scripts/CMAP_visualizer_prep.R
 * Ensure that the settings file path is pointing to the right file
 * Ensure you're in a brand new R environment (restart R session or restart RStudio)
 * Run the script
@@ -81,8 +81,8 @@ Time: ~5 minutes
 ## Step 4: Prepare Census data summaries for Visualizer dashboard
 
 * Note that these have been pushed to git, BUT you can re-create them with the scripts if needed.
-* Script: Visualizer/Get_census_data_CMAP.R
-* Script: Visualizer/AutoOwnership_Census_CMAP.R
+* Script: https://github.com/CMAP-REPOS/cmap_abm/blob/activitysim/survey_data_prep/Visualizer/scripts/Get_census_data_CMAP.R
+* Script: https://github.com/CMAP-REPOS/cmap_abm/blob/activitysim/survey_data_prep/Visualizer/scripts/AutoOwnership_Census_CMAP.R
 * Edit settings & params files
 * These scripts generate Visualizer summaries based on census/ACS data.
 
@@ -90,7 +90,7 @@ Time: ~5 minutes
 
 ## Step 5: Prepare ActivitySim output summaries for Visualizer dashboard
 
-* Script: Summarize_ActivitySim_cmap.R
+* Script: https://github.com/CMAP-REPOS/cmap_abm/blob/activitysim/survey_data_prep/Visualizer/scripts/Summarize_ActivitySim_cmap.R
 * Ensure that the settings file path is pointing to the right file
 * Run the script
 * What the script does:
@@ -101,6 +101,6 @@ Time: ~45 minutes
 
 ## Step 6: Run the visualizer
 
-* Script: generateDashboard_cmap_vs_model.bat
+* Script: https://github.com/CMAP-REPOS/cmap_abm/blob/activitysim/survey_data_prep/Visualizer/generateDashboard_cmap_vs_model.bat
 * Edit the various paths/inputs as needed -- R location, settings file, etc.
 * Run via the command line

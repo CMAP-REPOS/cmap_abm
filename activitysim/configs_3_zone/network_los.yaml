@@ -53,7 +53,7 @@ maz_to_tap:
     # if provided, this column will be used (together with tap_lines table) to trim the near tap set
     # to only include the nearest tap to origin when more than one tap serves the same line
     tap_line_distance_col: DISTWALK
-    max_dist: 1.2
+    #max_dist: 1.0
   drive:
     table: maz_to_tap_drive.csv
     # although maz_tap untility calculations use both DIST and drive_time,
