@@ -25,11 +25,14 @@ else:
 with open(settings_file) as file:
     settings = yaml.full_load(file)
 	
-IN_DIR = settings['SPA_input_dir'] + '/'
+
+IN_DIR = path.join(settings['proj_dir'], 'SPA_Inputs') + '/'
 if USE_DISTANCE_IN_PRIMARY_LOCATION_SCORE:
-    OUT_DIR = settings['SPA_output_dir']  + '/'
+    OUT_DIR = path.join(settings['proj_dir'], 'SPA_Processed')  + '/'
 else:
-    OUT_DIR = path.join(settings['SPA_output_dir'], 'trip_purp_no_distance')
+    OUT_DIR = path.join(settings['proj_dir'], 'SPA_Processed', 'trip_purp_no_distance') + '/'
+
+
 
 
 SurveyChangeModeCode = 12

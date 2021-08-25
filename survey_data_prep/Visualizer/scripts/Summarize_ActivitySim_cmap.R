@@ -33,20 +33,17 @@ settings = yaml.load_file(settings_file)
 ABM_DIR             <- settings$abm_dir
 ABM_SUMMARY_DIR     <- settings$abm_summaries_dir
 # SKIMS_FILEPATH           <- settings$skims_file
-SKIMS_FILEPATH = 'N:/Projects/CMAP_Activitysim/cmap_abm_lf/asim_visualizer_prep/sandag_example_for_visualizer/taz_skims.omx'
+SKIMS_FILEPATH = file.path(settings$skims_dir, settings$skims_filename)
 # ZONES_DIR           <- settings$zone_dir
-ZONES_DIR = settings$abm_dir # when using sandag example 
+ZONES_DIR = settings$zone_dir # when using sandag example 
 # R_LIBRARY           <- trimws(paste(parameters$Value[parameters$Key=="R_LIBRARY"]))
 
 # .libPaths(R_LIBRARY)
 library(omxr)
 WD <- ABM_SUMMARY_DIR
 # 
-# xwalk_file = file.path(ZONES_DIR, "zones17.dbf")
-# xwalk <- read.dbf(xwalk_file, as.is=FALSE)
-
-xwalk_file = file.path(ZONES_DIR, 'land_use.csv')
-xwalk = read.csv(xwalk_file)
+xwalk_file = file.path(ZONES_DIR, "subzones17.dbf")
+xwalk <- read.dbf(xwalk_file, as.is=TRUE)
 
 source(file.path(settings$visualizer_dir, 'scripts', 'ZMX.R'))
 
@@ -74,7 +71,7 @@ purposeCodes <- data.frame(code = c(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
 modeCodes <- data.frame(code = c(1, 1, 2, 2, 3, 3, 4, 5, 6, 7, 8, 9, 10, 11, 11, 11),
                         name = c("DRIVEALONEFREE", "DRIVEALONEPAY", "SHARED2FREE", "SHARED2PAY",
                                  "SHARED3FREE","SHARED3PAY", "WALK", "BIKE",
-                                 "WALK_TRANSIT", "PNR", "KNR", "TNR",
+                                 "WALK_TRANSIT", "DRIVE_TRANSIT", "KNR", "TNR",
                                  "SCHOOLBUS",                        # 9 = School Bus
                                  "TAXI", "TNC_SINGLE", "TNC_SHARED")) #10 = Ride hail
 
@@ -82,16 +79,20 @@ tourcatCodes <- data.frame(code = c(0,1,3),
                            name = c("mandatory", "non-mandatory", "atwork"))
 
 
-#xwalk <- select(xwalk, TAZ, CNTY_FIPS, NAME)
 
-# county_lookup = fread(file.path(settings$proj_dir, 'county_lookup.csv'))
-# setDT(xwalk)
+
+county_lookup = fread(file.path(settings$proj_dir, 'county_lookup.csv'))
+setDT(xwalk)
+
+county_lookup[, county_fip := as.character(county_fip)]
+
+xwalk[county_lookup, county_name_proper := i.county_name, on = .(county_fip)]
+xwalk = xwalk[county_name_proper != '' ]
 # 
-# xwalk[county_lookup, COUNTY_NAME := i.county_name, on = .(COUNTY = county_fip)]
-xwalk$COUNTY_NAME = 'temp_county'
 
-districtList <- sort(unique(xwalk$COUNTY_NAME))
 
+districtList <- sort(unique(xwalk$county_nam))
+setnames(xwalk, c('county_name_proper', 'county_fip', 'zone17', 'subzone17'), c('COUNTY_NAME', 'COUNTY', 'TAZ', 'MAZ'), skip_absent = TRUE)
 
 print('Processing Distance Skim Matrix...')
 # skimMat = readZipMat(SKIMS_FILEPATH)
@@ -123,8 +124,8 @@ hh$HHVEH[hh$auto_ownership >= 4] <- 4
 hh$HHSIZE[hh$hhsize == 1] <- 1
 hh$HHSIZE[hh$hhsize == 2] <- 2
 hh$HHSIZE[hh$hhsize == 3] <- 3
-hh$HHSIZE[hh$hhsize >= 4] <- 4
-#hh$HHSIZE[hh$hhsize >= 5] <- 5
+hh$HHSIZE[hh$hhsize == 4] <- 4
+hh$HHSIZE[hh$hhsize >= 5] <- 5
 
 # calculate HH weights
 hh$finalweight <- 1
@@ -138,8 +139,8 @@ all_trips$finalweight  <- hh$finalweight[match(all_trips$household_id, hh$househ
 per$PERTYPE <- per$ptype
 
 # Districts are Counties
-per$HDISTRICT <- xwalk$COUNTY_NAME[match(per$home_zone_id, xwalk$TAZ)]
-per$WDISTRICT <- xwalk$COUNTY_NAME[match(per$workplace_zone_id, xwalk$TAZ)]
+per$HDISTRICT <- xwalk$COUNTY_NAME[match(per$home_zone_id, xwalk$MAZ)]
+per$WDISTRICT <- xwalk$COUNTY_NAME[match(per$workplace_zone_id, xwalk$MAZ)]
 
 #Workers in the HH
 hh$WORKERS <- hh$num_workers
@@ -157,7 +158,7 @@ write.csv(xtabs(finalweight~HHVEH+WORKERS, data = hh), "xtab_HHVEH_WORKERS.csv",
 autoOwnership <- count(hh, c("HHVEH"), "finalweight")
 write.csv(autoOwnership, "autoOwnership.csv", row.names = TRUE)
 
-hh$COUNTY <- xwalk$COUNTY_NAME[match(hh$home_zone_id, xwalk$TAZ)]
+hh$COUNTY <- xwalk$COUNTY_NAME[match(hh$home_zone_id, xwalk$MAZ)]
 autoOwnershipCY <- count(hh, c("COUNTY", "HHVEH"), "finalweight")
 autoOwnershipCY <- cast(autoOwnershipCY, COUNTY~HHVEH, value = "freq", sum)
 write.csv(autoOwnershipCY, "autoOwnershipCY.csv", row.names = F)
@@ -245,8 +246,8 @@ colnames(mandTourLengths) <- c("District", "Work", "Univ", "Schl")
 # rearranging such that the "Total" comes at the end
 mandTourLengths <- rbind(mandTourLengths[!(mandTourLengths$District == "Total"),], mandTourLengths[(mandTourLengths$District == "Total"),])
 write.csv(mandTourLengths, "mandTourLengths.csv", row.names = F)
-
-# Work from home [for each district and total]
+# 
+# # Work from home [for each district and total]
 # districtWorkers <- ddply(per[per$is_worker=="True",c("HDISTRICT", "finalweight")], c("HDISTRICT"), summarise, workers = sum(finalweight))
 # districtWorkers_df <- merge(x = data.frame(HDISTRICT = districtList), y = districtWorkers, by = "HDISTRICT", all.x = TRUE)
 # districtWorkers_df[is.na(districtWorkers_df)] <- 0
@@ -260,6 +261,8 @@ write.csv(mandTourLengths, "mandTourLengths.csv", row.names = F)
 # totalwfh        <- data.frame("Total", sum((per$is_worker=="True")*per$finalweight), sum((per$is_worker=="True" & per$work_from_home=="True")*per$finalweight))
 # colnames(totalwfh) <- colnames(wfh_summary)
 # wfh_summary <- rbind(wfh_summary, totalwfh)
+
+# no wfh info in asim output?
 wfh_summary = data.frame(District = '', Workers = 0, WFH = 0) # faking it with sandag data to avoid i
 write.csv(wfh_summary, "wfh_summary.csv", row.names = F)
 
@@ -302,8 +305,8 @@ all_tours$num_ib_stops <- sapply(strsplit(as.character(all_tours$stop_frequency)
 
 all_tours$num_tot_stops <- all_tours$num_ob_stops + all_tours$num_ib_stops
 
-all_tours$OTAZ <- all_tours$origin
-all_tours$DTAZ <- all_tours$destination
+all_tours$OTAZ <- xwalk$TAZ[match(all_tours$origin, xwalk$MAZ)]
+all_tours$DTAZ <- xwalk$TAZ[match(all_tours$destination, xwalk$MAZ)]
 all_tours$OCOUNTY <- xwalk$COUNTY[match(all_tours$OTAZ, xwalk$TAZ)]
 all_tours$DCOUNTY <- xwalk$COUNTY[match(all_tours$DTAZ, xwalk$TAZ)]
 
@@ -347,6 +350,8 @@ all_trips$AUTOSUFF[all_trips$HHVEH >= all_trips$WORKERS & all_trips$HHVEH > 0] <
 all_trips$OTAZ <- all_trips$origin
 all_trips$DTAZ <- all_trips$destination
 
+all_trips$OTAZ <- xwalk$TAZ[match(all_trips$origin, xwalk$MAZ)]
+all_trips$DTAZ <- xwalk$TAZ[match(all_trips$destination, xwalk$MAZ)]
 all_trips$OCOUNTY <- xwalk$COUNTY[match(all_trips$OTAZ, xwalk$TAZ)]
 all_trips$DCOUNTY <- xwalk$COUNTY[match(all_trips$DTAZ, xwalk$TAZ)]
 
@@ -701,6 +706,9 @@ write.csv(toursPertypeDistbn, "toursPertypeDistbn.csv", row.names = TRUE)
 temp_joint <- melt(unique_joint_tours[, c("household_id","tour_id","PTYPE1","PTYPE2","PTYPE3","PTYPE4","PTYPE5","PTYPE6","PTYPE7","PTYPE8","finalweight")], id = c("household_id", "tour_id", "finalweight"))
 names(temp_joint)[names(temp_joint)=="value"] <- "PERTYPE"
 jtoursPertypeDistbn <- count(temp_joint[temp_joint$PERTYPE>0,], c("PERTYPE"), "finalweight")
+jtoursPertypeDistbn = merge(jtoursPertypeDistbn, pertypeCodes[pertypeCodes$code != 'All',], by.x = 'PERTYPE', by.y = 'code', all = TRUE)
+jtoursPertypeDistbn$name = NULL
+jtoursPertypeDistbn[is.na(jtoursPertypeDistbn)] = 0
 
 # Total tours by person type for visualizer
 totaltoursPertypeDistbn <- toursPertypeDistbn
@@ -866,7 +874,7 @@ jointComp$tour_composition[jointComp$tour_composition==3] <- "Mixed"
 
 jointToursHHSizeProp <- xtabs(freq~jointCat+HHSIZE, jointToursHHSize[jointToursHHSize$HHSIZE>1,])
 jointToursHHSizeProp <- addmargins(as.table(jointToursHHSizeProp))
-jointToursHHSizeProp <- jointToursHHSizeProp[-4,]  #remove last row 
+jointToursHHSizeProp <- jointToursHHSizeProp[1:(nrow(jointToursHHSizeProp) - 1),]  #remove last row 
 jointToursHHSizeProp <- prop.table(jointToursHHSizeProp, margin = 2)
 jointToursHHSizeProp <- as.data.frame.matrix(jointToursHHSizeProp)
 jointToursHHSizeProp <- jointToursHHSizeProp*100
@@ -882,7 +890,8 @@ jointCompPartySize$tour_composition[jointCompPartySize$tour_composition==3] <- "
 
 jointCompPartySizeProp <- xtabs(freq~tour_composition+NUMBER_HH, jointCompPartySize)
 jointCompPartySizeProp <- addmargins(as.table(jointCompPartySizeProp))
-jointCompPartySizeProp <- jointCompPartySizeProp[,-6]  #remove last row 
+# jointCompPartySizeProp <- jointCompPartySizeProp[1:(nrow(jointCompPartySizeProp) - 1),]  #remove last row 
+# fixme: above line was removing totals in this case, which are used in the visualization - may need to edit with full sample?
 jointCompPartySizeProp <- prop.table(jointCompPartySizeProp, margin = 1)
 jointCompPartySizeProp <- as.data.frame.matrix(jointCompPartySizeProp)
 jointCompPartySizeProp <- jointCompPartySizeProp*100
@@ -1859,7 +1868,7 @@ jtripmode10 <- wtd.hist(jtrips$TRIPMODE[jtrips$TRIPMODE>0 & jtrips$TOURMODE==10]
 jtripmode11 <- wtd.hist(jtrips$TRIPMODE[jtrips$TRIPMODE>0 & jtrips$TOURMODE==11], breaks = seq(1,12, by=1), freq = NULL, right=FALSE, weight = jtrips$numpart_wgt[jtrips$TRIPMODE>0 & jtrips$TOURMODE==11])
 
 tripModeProfile <- data.frame(itripmode1$counts+jtripmode1$counts, itripmode2$counts+jtripmode2$counts, itripmode3$counts+jtripmode3$counts, itripmode4$counts+jtripmode4$counts,
-                              itripmode5$counts+jtripmode5$counts, itripmode6$counts+jtripmodytipe6$counts, itripmode7$counts+jtripmode7$counts, itripmode8$counts+jtripmode8$counts, 
+                              itripmode5$counts+jtripmode5$counts, itripmode6$counts+jtripmode6$counts, itripmode7$counts+jtripmode7$counts, itripmode8$counts+jtripmode8$counts, 
                               itripmode9$counts+jtripmode9$counts, itripmode10$counts+jtripmode10$counts,
                               itripmode11$counts+jtripmode11$counts)
 colnames(tripModeProfile) <- c("tourmode1", "tourmode2", "tourmode3", "tourmode4", "tourmode5", "tourmode6", 

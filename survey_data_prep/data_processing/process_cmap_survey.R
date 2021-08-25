@@ -50,7 +50,11 @@ settings = yaml.load_file(settings_file)
 data_dir = settings$data_dir
 cmap_dir = file.path(data_dir, settings$cmap_folder)
 nirpc_dir = file.path(data_dir, settings$nirpc_folder)
-output_dir = settings$SPA_input_dir
+output_dir = file.path(settings$proj_dir, 'SPA_Inputs')
+
+# create spa input/output directories if they don't exist
+dir.create(output_dir, showWarnings = FALSE)
+dir.create( file.path(settings$proj_dir, 'SPA_Processed'), showWarnings = FALSE) # also create processed folder if doesn't exist
 
 studies = c('cmap', 'nirpc')
 folders = c(cmap_dir, nirpc_dir)

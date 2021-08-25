@@ -118,7 +118,7 @@ get_standardDF <- function(data_df1, data_df2, x, y, grp = "", shared = F){
     eval(parse(text = eval_expr))
   }
   
-  # data_df[is.na(data_df)] <- 0
+  data_df[is.na(data_df)] <- 0
 
   #data_df$grp_var <- as.character(data_df$grp_var)
 

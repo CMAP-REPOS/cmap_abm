@@ -29,7 +29,7 @@ The scripts for these processes are included in the repo and should be fairly ea
   * Data processing scripts read the settings file so that you don't have to change the path references in every script
 	* You DO need to change the settings file path in the scripts that reference it, unless passing from the command line
 
-## To run automatically & skip the steps 1-5 -- 
+## To run automatically & skip the steps 1-5:
 
 * Data prep, SPA, and visualizer summaries:
 	* https://github.com/CMAP-REPOS/cmap_abm/blob/activitysim/survey_data_prep/run_data_prep_scripts.bat
