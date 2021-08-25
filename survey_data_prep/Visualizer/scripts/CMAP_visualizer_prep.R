@@ -76,8 +76,8 @@ settings = yaml.load_file(settings_file)
 WD                   = settings$visualizer_summaries
 gis_dir              = settings$zone_dir
 HTS_raw_Dir          = settings$data_dir
-Survey_Dir           = settings$SPA_input_dir
-Survey_Processed_Dir = settings$SPA_output_dir
+Survey_Dir           = file.path(settings$proj_dir, 'SPA_Inputs')
+Survey_Processed_Dir = file.path(settings$proj_dir, 'SPA_Processed')
 # geogXWalkDir         = "E:/projects/clients/mtc/data/Trip End Geocodes"
 zone_dir = settings$zone_dir
 print('Reading input files...')
@@ -123,22 +123,21 @@ print('Processing Distance Skim Matrix...')
 DST_SKM = setNames(reshape2::melt(skimMat), c('o', 'd', 'dist'))
 DST_SKM = setDT(DST_SKM)
 
-DST_SKM[, orig_dist := dist]
+# DST_SKM[, orig_dist := dist]
 # DST_SKM[o == d, dist := (next_dist/2)]
 #zones09$appx_centroid = st_point_on_surface(zones09$geometry)
 # zones09$nearest_poly_index = st_nearest_feature(zones09$geometry, zones09$geometry)
-zones09_dt = setDT(zones09)
+# zones09_dt = setDT(zones09)
 # DST_SKM[zones09_dt, nearest_zone := nearest_poly_index, on = .(o = zone09)]
-DST_SKM[zones09_dt, area := AREA* 0.00000038610, on = .(o = zone09)]
+# DST_SKM[zones09_dt, area := AREA* 0.00000038610, on = .(o = zone09)]
 # DST_SKM[DST_SKM[, .(i_d = d, i_dist = dist, i_o = o)], dist_to_nearest_zone := i_dist, on = .(o = i_o, nearest_zone = i_d)]
-# 
+#
 # DST_SKM[o==d, dist := dist_to_nearest_zone/2]
-DST_SKM[o == d, dist := sqrt(area)/2]
+# DST_SKM[o == d, dist := sqrt(area)/2]
 
-
-hh$hhtaz = hh$HH_ZONE_ID
-per$pwtaz = per$PER_WK_ZONE_ID
-per$pstaz = per$PER_SCHL_ZONE_ID
+hh$hhtaz = hh$HH_ZONE_17
+per$pwtaz = per$PER_WK_ZONE_17
+per$pstaz = per$PER_SCHL_ZONE_17
 
 hh$hhtaz[is.na(hh$hhtaz)] = 0
 per$pwtaz[is.na(per$pwtaz)] = 0
@@ -234,7 +233,7 @@ hh$ADULTS[is.na(hh$ADULTS)] = 0
 
 
 per[processedPerson, PERTYPE := i.PERSONTYPE, on = .(SAMPN = HHID, PERNO = PERID)]
-per$hhtaz = hh$HH_ZONE_ID[match(per$SAMPN, hh$SAMPN)]
+per$hhtaz = hh$HH_ZONE_17[match(per$SAMPN, hh$SAMPN)]
 
 ##-------Compute Summary Statistics-------
 ##########################################
@@ -253,12 +252,12 @@ write.csv(pertypeDistbn, "pertypeDistbn.csv", row.names = TRUE)
 # per$empl_loc_type = per_raw$empl_loc_type[match(paste(per$SAMPN, per$PERNO, sep = "-"), paste(per_raw$sampno, per_raw$perno, sep = "-"))]
 per$empl_loc_type = per$PER_EMPLY_LOC_TYPE
 per$empl_loc_type[is.na(per$empl_loc_type)] = 0
-workers = per[PER_WK_ZONE_ID > 0 & (PERTYPE<=3 | PERTYPE==6) & empl_loc_type!=2, c("SAMPN", "PERNO", "hhtaz", "PER_WK_ZONE_ID", "empl_loc_type","PERTYPE", "HDISTRICT", "WDISTRICT", "finalweight")]
+workers = per[PER_WK_ZONE_17 > 0 & (PERTYPE<=3 | PERTYPE==6) & empl_loc_type!=2, c("SAMPN", "PERNO", "hhtaz", "PER_WK_ZONE_17", "empl_loc_type","PERTYPE", "HDISTRICT", "WDISTRICT", "finalweight")]
 
 # todo: replace when have skims
 
 #workers$WDIST = 0
-workers$WDIST = DST_SKM$dist[match(paste(workers$hhtaz, workers$PER_WK_ZONE_ID, sep = "-"), paste(DST_SKM$o, DST_SKM$d, sep = "-"))]
+workers$WDIST = DST_SKM$dist[match(paste(workers$hhtaz, workers$PER_WK_ZONE_17, sep = "-"), paste(DST_SKM$o, DST_SKM$d, sep = "-"))]
 workers = na.omit(workers)
 
 
