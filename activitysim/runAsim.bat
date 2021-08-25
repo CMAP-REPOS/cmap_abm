@@ -9,3 +9,4 @@ cd ..
 :skipmazmaztap
 REM Run Activitysim
 activitysim run -c configs_3_zone -o output_samp2 -d data_cmap_samp
+REM Debug/test: activitysim run -c configs_3_zone -o output_ltest -d data_cmap_ltest
