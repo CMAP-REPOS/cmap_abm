@@ -1145,7 +1145,7 @@ jointComp$COMPOSITION[jointComp$COMPOSITION==3] = "Mixed"
 
 jointToursHHSizeProp = xtabs(freq~jointCat+HHSIZE, jointToursHHSize[jointToursHHSize$HHSIZE>1,])
 jointToursHHSizeProp = addmargins(as.table(jointToursHHSizeProp))
-jointToursHHSizeProp = jointToursHHSizeProp[-4,]  #remove last row 
+jointToursHHSizeProp = jointToursHHSizeProp[1:(nrow(jointToursHHSizeProp) - 1),]  #remove last row 
 jointToursHHSizeProp = prop.table(jointToursHHSizeProp, margin = 2)
 jointToursHHSizeProp = as.data.frame.matrix(jointToursHHSizeProp)
 jointToursHHSizeProp = jointToursHHSizeProp*100
