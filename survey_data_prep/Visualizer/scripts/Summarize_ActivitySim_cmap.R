@@ -33,20 +33,17 @@ settings = yaml.load_file(settings_file)
 ABM_DIR             <- settings$abm_dir
 ABM_SUMMARY_DIR     <- settings$abm_summaries_dir
 # SKIMS_FILEPATH           <- settings$skims_file
-SKIMS_FILEPATH = 'N:/Projects/CMAP_Activitysim/cmap_abm_lf/asim_visualizer_prep/sandag_example_for_visualizer/taz_skims.omx'
+SKIMS_FILEPATH = file.path(settings$skims_dir, settings$skims_filename)
 # ZONES_DIR           <- settings$zone_dir
-ZONES_DIR = settings$abm_dir # when using sandag example 
+ZONES_DIR = settings$zone_dir # when using sandag example 
 # R_LIBRARY           <- trimws(paste(parameters$Value[parameters$Key=="R_LIBRARY"]))
 
 # .libPaths(R_LIBRARY)
 library(omxr)
 WD <- ABM_SUMMARY_DIR
 # 
-# xwalk_file = file.path(ZONES_DIR, "zones17.dbf")
-# xwalk <- read.dbf(xwalk_file, as.is=FALSE)
-
-xwalk_file = file.path(ZONES_DIR, 'land_use.csv')
-xwalk = read.csv(xwalk_file)
+xwalk_file = file.path(ZONES_DIR, "subzones17.dbf")
+xwalk <- read.dbf(xwalk_file, as.is=TRUE)
 
 source(file.path(settings$visualizer_dir, 'scripts', 'ZMX.R'))
 
@@ -82,16 +79,17 @@ tourcatCodes <- data.frame(code = c(0,1,3),
                            name = c("mandatory", "non-mandatory", "atwork"))
 
 
-#xwalk <- select(xwalk, TAZ, CNTY_FIPS, NAME)
+
 
 # county_lookup = fread(file.path(settings$proj_dir, 'county_lookup.csv'))
-# setDT(xwalk)
+setDT(xwalk)
+
+
 # 
-# xwalk[county_lookup, COUNTY_NAME := i.county_name, on = .(COUNTY = county_fip)]
-xwalk$COUNTY_NAME = 'temp_county'
 
-districtList <- sort(unique(xwalk$COUNTY_NAME))
 
+districtList <- sort(unique(xwalk$county_nam))
+setnames(xwalk, c('county_nam', 'county_fip', 'zone17', 'subzone17'), c('COUNTY_NAME', 'COUNTY', 'TAZ', 'MAZ'), skip_absent = TRUE)
 
 print('Processing Distance Skim Matrix...')
 # skimMat = readZipMat(SKIMS_FILEPATH)
@@ -138,8 +136,8 @@ all_trips$finalweight  <- hh$finalweight[match(all_trips$household_id, hh$househ
 per$PERTYPE <- per$ptype
 
 # Districts are Counties
-per$HDISTRICT <- xwalk$COUNTY_NAME[match(per$home_zone_id, xwalk$TAZ)]
-per$WDISTRICT <- xwalk$COUNTY_NAME[match(per$workplace_zone_id, xwalk$TAZ)]
+per$HDISTRICT <- xwalk$COUNTY_NAME[match(per$home_zone_id, xwalk$MAZ)]
+per$WDISTRICT <- xwalk$COUNTY_NAME[match(per$workplace_zone_id, xwalk$MAZ)]
 
 #Workers in the HH
 hh$WORKERS <- hh$num_workers
@@ -157,7 +155,7 @@ write.csv(xtabs(finalweight~HHVEH+WORKERS, data = hh), "xtab_HHVEH_WORKERS.csv",
 autoOwnership <- count(hh, c("HHVEH"), "finalweight")
 write.csv(autoOwnership, "autoOwnership.csv", row.names = TRUE)
 
-hh$COUNTY <- xwalk$COUNTY_NAME[match(hh$home_zone_id, xwalk$TAZ)]
+hh$COUNTY <- xwalk$COUNTY_NAME[match(hh$home_zone_id, xwalk$MAZ)]
 autoOwnershipCY <- count(hh, c("COUNTY", "HHVEH"), "finalweight")
 autoOwnershipCY <- cast(autoOwnershipCY, COUNTY~HHVEH, value = "freq", sum)
 write.csv(autoOwnershipCY, "autoOwnershipCY.csv", row.names = F)
@@ -245,8 +243,8 @@ colnames(mandTourLengths) <- c("District", "Work", "Univ", "Schl")
 # rearranging such that the "Total" comes at the end
 mandTourLengths <- rbind(mandTourLengths[!(mandTourLengths$District == "Total"),], mandTourLengths[(mandTourLengths$District == "Total"),])
 write.csv(mandTourLengths, "mandTourLengths.csv", row.names = F)
-
-# Work from home [for each district and total]
+# 
+# # Work from home [for each district and total]
 # districtWorkers <- ddply(per[per$is_worker=="True",c("HDISTRICT", "finalweight")], c("HDISTRICT"), summarise, workers = sum(finalweight))
 # districtWorkers_df <- merge(x = data.frame(HDISTRICT = districtList), y = districtWorkers, by = "HDISTRICT", all.x = TRUE)
 # districtWorkers_df[is.na(districtWorkers_df)] <- 0
@@ -260,6 +258,8 @@ write.csv(mandTourLengths, "mandTourLengths.csv", row.names = F)
 # totalwfh        <- data.frame("Total", sum((per$is_worker=="True")*per$finalweight), sum((per$is_worker=="True" & per$work_from_home=="True")*per$finalweight))
 # colnames(totalwfh) <- colnames(wfh_summary)
 # wfh_summary <- rbind(wfh_summary, totalwfh)
+
+# no wfh info in asim output?
 wfh_summary = data.frame(District = '', Workers = 0, WFH = 0) # faking it with sandag data to avoid i
 write.csv(wfh_summary, "wfh_summary.csv", row.names = F)
 
@@ -302,8 +302,8 @@ all_tours$num_ib_stops <- sapply(strsplit(as.character(all_tours$stop_frequency)
 
 all_tours$num_tot_stops <- all_tours$num_ob_stops + all_tours$num_ib_stops
 
-all_tours$OTAZ <- all_tours$origin
-all_tours$DTAZ <- all_tours$destination
+all_tours$OTAZ <- xwalk$TAZ[match(all_tours$origin, xwalk$MAZ)]
+all_tours$DTAZ <- xwalk$TAZ[match(all_tours$destination, xwalk$MAZ)]
 all_tours$OCOUNTY <- xwalk$COUNTY[match(all_tours$OTAZ, xwalk$TAZ)]
 all_tours$DCOUNTY <- xwalk$COUNTY[match(all_tours$DTAZ, xwalk$TAZ)]
 
@@ -347,6 +347,8 @@ all_trips$AUTOSUFF[all_trips$HHVEH >= all_trips$WORKERS & all_trips$HHVEH > 0] <
 all_trips$OTAZ <- all_trips$origin
 all_trips$DTAZ <- all_trips$destination
 
+all_trips$OTAZ <- xwalk$TAZ[match(all_trips$origin, xwalk$MAZ)]
+all_trips$DTAZ <- xwalk$TAZ[match(all_trips$destination, xwalk$MAZ)]
 all_trips$OCOUNTY <- xwalk$COUNTY[match(all_trips$OTAZ, xwalk$TAZ)]
 all_trips$DCOUNTY <- xwalk$COUNTY[match(all_trips$DTAZ, xwalk$TAZ)]
 

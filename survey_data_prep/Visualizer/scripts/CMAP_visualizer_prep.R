@@ -102,10 +102,10 @@ zones = st_read(file.path(zone_dir, "zones17.shp"))
 zones09 = st_read(file.path(zone_dir, 'Zone09_CMAP_2009.shp'))
 zones_dt = setDT(zones)
 
-source(file.path(settings$visualizer_dir, 'scripts', 'ZMX.R'))
+# source(file.path(settings$visualizer_dir, 'scripts', 'ZMX.R'))
 
-skim_file = settings$skims_file
-skimMat = readZipMat(skim_file)
+SKIMS_FILEPATH = file.path(settings$skims_dir, settings$skims_filename)
+skimMat = read_omx(SKIMS_FILEPATH, "DIST")
 
 
 ## Prepare Data Files
@@ -134,6 +134,8 @@ DST_SKM[zones09_dt, area := AREA* 0.00000038610, on = .(o = zone09)]
 # 
 # DST_SKM[o==d, dist := dist_to_nearest_zone/2]
 DST_SKM[o == d, dist := sqrt(area)/2]
+
+
 hh$hhtaz = hh$HH_ZONE_ID
 per$pwtaz = per$PER_WK_ZONE_ID
 per$pstaz = per$PER_SCHL_ZONE_ID
