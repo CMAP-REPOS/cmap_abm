@@ -45,7 +45,7 @@ WD <- ABM_SUMMARY_DIR
 xwalk_file = file.path(ZONES_DIR, "subzones17.dbf")
 xwalk <- read.dbf(xwalk_file, as.is=TRUE)
 
-source(file.path(settings$visualizer_dir, 'scripts', 'ZMX.R'))
+# source(file.path(settings$visualizer_dir, 'scripts', 'ZMX.R'))
 
 # skim_file = file.path(SKIMS_DIR, "mf5183.zmx")
 
@@ -87,7 +87,8 @@ setDT(xwalk)
 county_lookup[, county_fip := as.character(county_fip)]
 
 xwalk[county_lookup, county_name_proper := i.county_name, on = .(county_fip)]
-xwalk = xwalk[county_name_proper != '' ]
+xwalk[county_lookup, county_name_proper := i.county_name, on = .(county_fip)]
+xwalk[county_name_proper == '', county_name_proper := str_to_title(county_nam) ]
 # 
 
 
