@@ -33,7 +33,9 @@ nirpc_survey_weighting/output
 !underreporting_correction/imputed_sex.rds
 !model_summaries/.
 
-!survey_data/cmap_weights/.
+!survey_data/cmap_weights/final_summary_hh_weights.csv
+!survey_data/cmap_weights/trip_weights.csv
+!survey_data/cmap_weights/trip_weights.rds
 survey_data/CTA_2017/
 survey_data/MDT_CMAP_Research_Dataset_Lean/
 
