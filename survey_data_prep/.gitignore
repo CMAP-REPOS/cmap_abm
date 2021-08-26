@@ -33,3 +33,7 @@ nirpc_survey_weighting/output
 !underreporting_correction/imputed_income.rds
 !underreporting_correction/imputed_sex.rds
 !model_summaries/.
+
+!final_summary_hh_weights.csv
+!trip_weights.csv
+!trip_weights.rds
