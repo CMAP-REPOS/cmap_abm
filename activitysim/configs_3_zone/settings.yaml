@@ -19,7 +19,7 @@ household_median_value_of_time:
 
 fail_fast: True
 # - ------------------------- dev config
-multiprocess: True
+multiprocess: False
 strict: False
 mem_tick: 30
 use_shadow_pricing: False
@@ -39,7 +39,7 @@ keep_mem_logs: True
 # initial number of chooser rows for first chunk in training mode
 # when there is no pre-existing chunk_cache to set initial value
 # ordinarily bigger is better as long as it is not so big it causes memory issues (e.g. accessibility with lots of zones)
-default_initial_rows_per_chunk: 1000
+default_initial_rows_per_chunk: 500
 
 # - tracing
 trace_od:
