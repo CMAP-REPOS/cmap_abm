@@ -263,8 +263,8 @@ write.csv(mandTourLengths, "mandTourLengths.csv", row.names = F)
 # colnames(totalwfh) <- colnames(wfh_summary)
 # wfh_summary <- rbind(wfh_summary, totalwfh)
 
-# no wfh info in asim output?
-wfh_summary = data.frame(District = '', Workers = 0, WFH = 0) # faking it with sandag data to avoid i
+# fixme: no wfh info in asim output?
+wfh_summary = data.frame(District = '', Workers = 0, WFH = 0) # faking it with sandag data to avoid it
 write.csv(wfh_summary, "wfh_summary.csv", row.names = F)
 
 # Telecommute Frequency
