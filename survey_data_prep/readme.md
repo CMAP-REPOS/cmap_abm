@@ -20,7 +20,7 @@ The scripts for these processes are included in the repo and should be fairly ea
 * Download or confirm you have data available
   * CMAP and NIRPC survey data files
   * CMAP updated weights
-  * TAZ shapefile for the region -- 2009 (for distance skims) and 2017 (for region map/county crosswalks)
+  * TAZ shapefile for the region -- 2017 zones and subzones for county crosswalks; and 2009 zones are still referenced due to previous distance skims
   * Skims matrix with distance between TAZs
 
 * Create/edit settings file with filepaths
