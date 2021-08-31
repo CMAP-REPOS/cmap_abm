@@ -2,6 +2,7 @@ from collections import defaultdict
 import numpy as np
 import yaml as yaml
 from os import path
+import sys
 
 ################## Constants ##########################################
 COMPUTE_TRIP_DIST = False     #true if trip distance is to be computed from route file
@@ -19,7 +20,7 @@ USE_DISTANCE_IN_PRIMARY_LOCATION_SCORE = True
 if len(sys.argv) > 1:
     settings_file = sys.argv[1]
 else:
-   settings_file = r'E:/Projects/Clients/MetCouncilASIM/tasks/survey_data_processing/metc_inputs.yml'
+   settings_file = r'N:/Projects/CMAP_Activitysim/cmap_abm_lf/survey_data_prep/cmap_inputs.yml'
 
 
 with open(settings_file) as file:
