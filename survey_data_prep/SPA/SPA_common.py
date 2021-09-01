@@ -3090,7 +3090,7 @@ class Trip:
         _num_joint_episodes = 0
         for row_index in range(1,_last_row+1):
             #indicator for joint trip (with other household members)
-            _hh_mem_on_trip = df['HHMEM'].iloc[row_index]   # HHMEM includes the current person for MWCOG
+            _hh_mem_on_trip = df['HHMEM'].iloc[row_index]   # HHMEM includes the current person
 
             if (_hh_mem_on_trip>1):
                 #this is a joint episode:

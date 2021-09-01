@@ -67,6 +67,12 @@ read_and_bind = function(folder_list, study_list, data_file_name, data_level) {
     dt = fread(file.path(folder, data_file_name))
     dt[, study := study]
     cat(nrow(dt), 'records in', study, data_level, 'file\n')
+    if('arrtime' %in% names(dt)) {
+      dt[, arrtime := as.character(arrtime)]
+    }
+    if('deptime' %in% names(dt)) {
+      dt[, deptime := as.character(deptime)]
+    }
     dt_full = rbindlist(list(dt_full, dt), fill = TRUE, use.names = TRUE)
   }
   
