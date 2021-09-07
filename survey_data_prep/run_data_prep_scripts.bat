@@ -7,7 +7,7 @@ SET SETTINGS_FILE= "N:\Projects\CMAP_Activitysim\cmap_abm_lf\survey_data_prep\cm
 ::python SPA\__init__.py %SETTINGS_FILE%
 
 ::Rscript Visualizer\scripts\install_packages.R
-::Rscript Visualizer\scripts\CMAP_visualizer_prep.R %SETTINGS_FILE%
+Rscript Visualizer\scripts\CMAP_visualizer_prep.R %SETTINGS_FILE%
 ::Rscript Visualizer\scripts\Get_census_data_CMAP %SETTINGS_FILE%
 ::Rscript Visualizer\scripts\AutoOwnership_Census_CMAP %SETTINGS_FILE%
 ::Rscript Visualizer\scripts\Summarize_ActivitySim_cmap %SETTINGS_FILE%
