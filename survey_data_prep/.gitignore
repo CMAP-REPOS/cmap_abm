@@ -27,6 +27,9 @@ nirpc_survey_weighting/output
 
 !Visualizer/summaries/tripModeProfile_vis_calib.csv
 !Visualizer/summaries/tmodeProfile_vis_calib.csv
+!Visualizer/templates/summaryFilesNames_survey_CMAP.csv
+!Visualizer/templates/summaryFilesNames_census_CMAP.csv
+!Visualizer/templates/summaryFilesNames_ActivitySim_CMAP.csv
 
 !underreporting_correction/imputed_ages.rds
 !underreporting_correction/imputed_income.rds
@@ -41,3 +44,4 @@ survey_data/MDT_CMAP_Research_Dataset_Lean/
 
 survey_data/NIRPC_MDT_survey/
 survey_data/Metra_2019/
+
