@@ -1,4 +1,4 @@
-Label,Description,Expression,DRIVEALONE,SHAREDRIDE2,SHAREDRIDE3,WALK,BIKE,WALK_TRANSIT,DRIVE_TRANSIT,TAXI,TNC_SINGLE,TNC_SHARED
+Label,Description,Expression,DRIVEALONE,SHAREDRIDE2,SHAREDRIDE3,WALK,BIKE,WALK_TRANSIT,PNR_TRANSIT,KNR_TRANSIT,TNC_TRANSIT,TAXI,TNC_SINGLE,TNC_SHARED
 #,Drive alone no toll,,,,,,,,,,,,,,
 util_DRIVEALONE_Unavailable,DRIVEALONE - Unavailable,sov_available == False,-999,,,,,,,,,,
 util_DRIVEALONE_Unavailable_for_zero_auto_households,DRIVEALONE - Unavailable for zero auto households,auto_ownership == 0,-999,,,,,,,,,
@@ -49,64 +49,79 @@ util_WALK_TRANSIT_Paths_logsums,WALK_TRANSIT - Path logsums,@tvpb_logsum_odt['WT
 util_WALK_TRANSIT_Destination_zone_densityIndex,WALK_TRANSIT - Destination zone densityIndex,@density_index_multiplier * df.dest_density_index,,,,,,coef_ivt,,,,
 #util_WALK_TRANSIT_Topology,WALK_TRANSIT - Topology,@coef_topology_trn_multiplier * df.trip_topology,,,,,,coef_ivt,,,,
 util_WALK_TRANSIT_Person_is_less_than_10_years_old,WALK_TRANSIT - Person is less than 10 years old,@(df.age <= 10),,,,,,coef_age010_trn_multiplier,,,,
-#,Drive to Transit,,,,,,,,,,,,,,
-#util_DRIVE_TRANSIT_Unavailable,DRIVE_TRANSIT - Unavailable,drive_transit_available == False,,,,,,,-999,,,
-util_DRIVE_TRANSIT_Unavailable_for_zero_auto_households,DRIVE_TRANSIT - Unavailable for zero auto households,auto_ownership == 0,,,,,,,-999,,,
-util_DRIVE_TRANSIT_Unavailable_for_persons_less_than_16,DRIVE_TRANSIT - Unavailable for persons less than 16,age < 16,,,,,,,-999,,,
-util_DRIVE_TRANSIT_Paths_logsums,DRIVE_TRANSIT - Path logsums,@tvpb_logsum_odt['DTW'],,,,,,,coef_one,,,
-util_DRIVE_TRANSIT_Destination_zone_densityIndex,DRIVE_TRANSIT - Destination zone densityIndex,@density_index_multiplier * df.dest_density_index,,,,,,,coef_ivt,,,
-#util_DRIVE_TRANSIT_Topology,DRIVE_TRANSIT - Topology,@coef_topology_trn_multiplier * df.trip_topology,,,,,,,coef_ivt,,,
-util_DRIVE_TRANSIT_Person_is_less_than_10_years_old,DRIVE_TRANSIT - Person is less than 10 years old,@(df.age < 10),,,,,,,coef_age010_trn_multiplier,,,
+#PNR Transit
+#util_PNR_TRANSIT_Unavailable,PNR_TRANSIT - Unavailable,drive_transit_available == False,,,,,,,-999,,,
+util_PNR_TRANSIT_Unavailable_for_zero_auto_households,PNR_TRANSIT - Unavailable for zero auto households,auto_ownership == 0,,,,,,,-999,,,
+util_PNR_TRANSIT_Unavailable_for_persons_less_than_16,PNR_TRANSIT - Unavailable for persons less than 16,age < 16,,,,,,,-999,,,
+util_PNR_TRANSIT_Paths_logsums,PNR_TRANSIT - Path logsums,@tvpb_logsum_odt['DTW'],,,,,,,coef_one,,,
+util_PNR_TRANSIT_Destination_zone_densityIndex,PNR_TRANSIT - Destination zone densityIndex,@density_index_multiplier * df.dest_density_index,,,,,,,coef_ivt,,,
+#util_PNR_TRANSIT_Topology,PNR_TRANSIT - Topology,@coef_topology_trn_multiplier * df.trip_topology,,,,,,,coef_ivt,,,
+util_PNR_TRANSIT_Person_is_less_than_10_years_old,PNR_TRANSIT - Person is less than 10 years old,@(df.age < 10),,,,,,,coef_age010_trn_multiplier,,,
+#KNR Transit
+#util_KNR_TRANSIT_Unavailable,KNR_TRANSIT - Unavailable,drive_transit_available == False,,,,,,,,-999,,,
+util_KNR_TRANSIT_Unavailable_for_zero_auto_households,KNR_TRANSIT - Unavailable for zero auto households,auto_ownership == 0,,,,,,,,-999,,,
+util_KNR_TRANSIT_Unavailable_for_persons_less_than_16,KNR_TRANSIT - Unavailable for persons less than 16,age < 16,,,,,,,,-999,,,
+util_KNR_TRANSIT_Paths_logsums,KNR_TRANSIT - Path logsums,@tvpb_logsum_odt['DTW'],,,,,,,,coef_one,,,
+util_KNR_TRANSIT_Destination_zone_densityIndex,KNR_TRANSIT - Destination zone densityIndex,@density_index_multiplier * df.dest_density_index,,,,,,,,coef_ivt,,,
+#util_KNR_TRANSIT_Topology,KNR_TRANSIT - Topology,@coef_topology_trn_multiplier * df.trip_topology,,,,,,,,coef_ivt,,,
+util_KNR_TRANSIT_Person_is_less_than_10_years_old,KNR_TRANSIT - Person is less than 10 years old,@(df.age < 10),,,,,,,,coef_age010_trn_multiplier,,,
+#TNC Transit
+#util_TNC_TRANSIT_Unavailable,TNC_TRANSIT - Unavailable,drive_transit_available == False,,,,,,,,,-999,,,
+util_TNC_TRANSIT_Unavailable_for_zero_auto_households,TNC_TRANSIT - Unavailable for zero auto households,auto_ownership == 0,,,,,,,,,-999,,,
+util_TNC_TRANSIT_Unavailable_for_persons_less_than_16,TNC_TRANSIT - Unavailable for persons less than 16,age < 16,,,,,,,,,-999,,,
+util_TNC_TRANSIT_Paths_logsums,TNC_TRANSIT - Path logsums,@tvpb_logsum_odt['DTW'],,,,,,,,,coef_one,,,
+util_TNC_TRANSIT_Destination_zone_densityIndex,TNC_TRANSIT - Destination zone densityIndex,@density_index_multiplier * df.dest_density_index,,,,,,,,,coef_ivt,,,
+#util_TNC_TRANSIT_Topology,TNC_TRANSIT - Topology,@coef_topology_trn_multiplier * df.trip_topology,,,,,,,,,coef_ivt,,,
+util_TNC_TRANSIT_Person_is_less_than_10_years_old,TNC_TRANSIT - Person is less than 10 years old,@(df.age < 10),,,,,,,,,coef_age010_trn_multiplier,,,
 #,Taxi,,,,,,,,,,,,,,
-util_Taxi_In_vehicle_time,Taxi - In-vehicle time,@(odt_skims['HOV2_M_TIME'] + dot_skims['HOV2_M_TIME']),,,,,,,,coef_ivt,,
-util_Taxi_Wait_time,Taxi - Wait time,@ridehail_wait_time_multiplier * df.totalWaitTaxi,,,,,,,,coef_ivt,,
-util_Taxi_Tolls,Taxi - Tolls,@ivt_cost_multiplier * df.ivot * (odt_skims['HOV2_M_TOLLCOST']),,,,,,,,coef_ivt,,
-util_Taxi_Bridge_toll,Taxi - Bridge toll,@ivt_cost_multiplier * df.ivot * (odt_skims['HOV2_M_TOLLCOST']),,,,,,,,coef_ivt,,
-util_Taxi_Fare,Taxi - Fare,@ivt_cost_multiplier * df.ivot * (Taxi_baseFare + odt_skims['HOV2_M_DIST'] * Taxi_costPerMile +odt_skims['HOV2_M_TIME'] * Taxi_costPerMinute)*100,,,,,,,,coef_ivt,,
+util_Taxi_In_vehicle_time,Taxi - In-vehicle time,@(odt_skims['HOV2_M_TIME'] + dot_skims['HOV2_M_TIME']),,,,,,,,,,coef_ivt,,
+util_Taxi_Wait_time,Taxi - Wait time,@ridehail_wait_time_multiplier * df.totalWaitTaxi,,,,,,,,,,coef_ivt,,
+util_Taxi_Tolls,Taxi - Tolls,@ivt_cost_multiplier * df.ivot * (odt_skims['HOV2_M_TOLLCOST']),,,,,,,,,,coef_ivt,,
+util_Taxi_Bridge_toll,Taxi - Bridge toll,@ivt_cost_multiplier * df.ivot * (odt_skims['HOV2_M_TOLLCOST']),,,,,,,,,,coef_ivt,,
+util_Taxi_Fare,Taxi - Fare,@ivt_cost_multiplier * df.ivot * (Taxi_baseFare + odt_skims['HOV2_M_DIST'] * Taxi_costPerMile +odt_skims['HOV2_M_TIME'] * Taxi_costPerMinute)*100,,,,,,,,,,coef_ivt,,
 #,TNC Single,,,,,,,,,,,,,,
-util_TNC_Single_In_vehipasim
-cle_time,TNC Single - In-vehicle time,@odt_skims['HOV2_M_TIME'],,,,,,,,,coef_ivt,
-util_TNC_Single_Wait_time,TNC Single - Wait time,@ridehail_wait_time_multiplier * df.origSingleTNCWaitTime,,,,,,,,,coef_ivt,
-util_TNC_Single_Tolls,TNC Single - Tolls,@ivt_cost_multiplier * df.ivot * odt_skims['HOV2_M_TOLLCOST'],,,,,,,,,coef_ivt,
-util_TNC_Single_Bridge_toll,TNC Single - Bridge toll,@ivt_cost_multiplier * df.ivot * (odt_skims['HOV2_M_TOLLCOST'] + dot_skims['HOV2_M_TOLLCOST']),,,,,,,,,coef_ivt,
-util_TNC_Single_Cost,TNC Single - Cost,"@ivt_cost_multiplier * df.ivot * np.maximum(TNC_single_baseFare + odt_skims['HOV2_M_DIST'] * TNC_single_costPerMile + odt_skims['HOV2_M_TIME'] * TNC_single_costPerMinute, TNC_single_costMinimum) * 100",,,,,,,,,coef_ivt,
+util_TNC_Single_In_vehicle_time,TNC Single - In-vehicle time,@odt_skims['HOV2_M_TIME'],,,,,,,,,,,coef_ivt,
+util_TNC_Single_Wait_time,TNC Single - Wait time,@ridehail_wait_time_multiplier * df.origSingleTNCWaitTime,,,,,,,,,,,coef_ivt,
+util_TNC_Single_Tolls,TNC Single - Tolls,@ivt_cost_multiplier * df.ivot * odt_skims['HOV2_M_TOLLCOST'],,,,,,,,,,,coef_ivt,
+util_TNC_Single_Bridge_toll,TNC Single - Bridge toll,@ivt_cost_multiplier * df.ivot * (odt_skims['HOV2_M_TOLLCOST'] + dot_skims['HOV2_M_TOLLCOST']),,,,,,,,,,,coef_ivt,
+util_TNC_Single_Cost,TNC Single - Cost,"@ivt_cost_multiplier * df.ivot * np.maximum(TNC_single_baseFare + odt_skims['HOV2_M_DIST'] * TNC_single_costPerMile + odt_skims['HOV2_M_TIME'] * TNC_single_costPerMinute, TNC_single_costMinimum) * 100",,,,,,,,,,,coef_ivt,
 #,#TNC Shared,,,,,,,,,,,,,,
-util_TNC_Shared_In_vehicle_time,TNC Shared - In-vehicle time,@odt_skims['HOV2_M_TIME'] * TNC_shared_IVTFactor,,,,,,,,,coef_ivt
-util_TNC_Shared_Wait_time,TNC Shared - Wait time,@ridehail_wait_time_multiplier * df.origSharedTNCWaitTime,,,,,,,,,coef_ivt
-util_TNC_Shared_Tolls,TNC Shared - Tolls,@ivt_cost_multiplier * df.ivot * odt_skims['HOV2_M_TOLLCOST'],,,,,,,,,coef_ivt
-util_TNC_Shared_Bridge_toll,TNC Shared - Bridge toll,@ivt_cost_multiplier * df.ivot * (odt_skims['HOV2_M_TOLLCOST'] + dot_skims['HOV2_M_TOLLCOST']),,,,,,,,,coef_ivt
-util_TNC_Shared_Cost,TNC Shared - Cost,"@ivt_cost_multiplier * df.ivot * np.maximum(TNC_shared_baseFare + odt_skims['HOV2_M_DIST'] * TNC_shared_costPerMile + odt_skims['HOV2_M_TIME']* TNC_shared_costPerMinute, TNC_shared_costMinimum) * 100",,,,,,,,,coef_ivt
+util_TNC_Shared_In_vehicle_time,TNC Shared - In-vehicle time,@odt_skims['HOV2_M_TIME'] * TNC_shared_IVTFactor,,,,,,,,,,,,coef_ivt
+util_TNC_Shared_Wait_time,TNC Shared - Wait time,@ridehail_wait_time_multiplier * df.origSharedTNCWaitTime,,,,,,,,,,,,coef_ivt
+util_TNC_Shared_Tolls,TNC Shared - Tolls,@ivt_cost_multiplier * df.ivot * odt_skims['HOV2_M_TOLLCOST'],,,,,,,,,,,,coef_ivt
+util_TNC_Shared_Bridge_toll,TNC Shared - Bridge toll,@ivt_cost_multiplier * df.ivot * (odt_skims['HOV2_M_TOLLCOST'] + dot_skims['HOV2_M_TOLLCOST']),,,,,,,,,,,,coef_ivt
+util_TNC_Shared_Cost,TNC Shared - Cost,"@ivt_cost_multiplier * df.ivot * np.maximum(TNC_shared_baseFare + odt_skims['HOV2_M_DIST'] * TNC_shared_costPerMile + odt_skims['HOV2_M_TIME']* TNC_shared_costPerMinute, TNC_shared_costMinimum) * 100",,,,,,,,,,,,coef_ivt
 #,,,,,,,,,,,,,,,
-util_tour_mode_is_auto,Auto tour mode availability,tour_mode_is_auto,,,,,-999,-999,-999,,,
-util_tour_mode_is_walk,Walk tour mode availability,tour_mode_is_walk,-999,-999,-999,,-999,-999,-999,,,
-util_tour_mode_is_bike,Bike tour mode availability,tour_mode_is_bike,-999,-999,-999,,,-999,-999,,,
-util_tour_mode_is_walk_transit,Walk to Transit tour mode availability,tour_mode_is_walk_transit,-999,,,,-999,,-999,,,
-util_tour_mode_is_drive_transit,Drive to Transit tour modes availability,tour_mode_is_drive_transit,-999,-999,-999,-999,-999,-999,-999,,,
-util_tour_mode_is_ride_hail,Ride hail tour modes availability,tour_mode_is_ride_hail,-999,,,,,-999,,,,
-#FIXME ASR to fix everything below this
+util_tour_mode_is_auto,Auto tour mode availability,tour_mode_is_auto,,,,,-999,,,,,,
+util_tour_mode_is_walk,Walk tour mode availability,tour_mode_is_walk,-999,-999,-999,,-999,,-999,-999,,
+util_tour_mode_is_bike,Bike tour mode availability,tour_mode_is_bike,-999,-999,-999,,,,-999,-999,-999,,,
+util_tour_mode_is_walk_transit,Walk to Transit tour mode availability,tour_mode_is_walk_transit,-999,,,,,,-999,-999,-999,
+util_tour_mode_is_drive_transit,Drive to Transit tour modes availability,tour_mode_is_drive_transit,-999,,,,-999,,-999,-999,,
+util_tour_mode_is_ride_hail,Ride hail tour modes availability,tour_mode_is_ride_hail,-999,,,,-999,,-999,-999,,
 #indiv tour ASCs,,,,,,,,,,,,,,
-#util_Drive_Alone_tour_mode_ASC_shared_ride_2_df_is_indiv,Drive Alone tour mode ASC -- shared ride 2,@(df.is_indiv & df.i_tour_mode.isin(I_SOV_MODES)),,,sov_ASC_sr2,sov_ASC_sr2,,,,,,,,,
-#util_Drive_Alone_tour_mode_ASC_shared_ride_3_plus,Drive Alone tour mode ASC -- shared ride 3+,@(df.is_indiv & df.i_tour_mode.isin(I_SOV_MODES)),,,,,sov_ASC_sr3p,sov_ASC_sr3p,,,,,,,
-#util_Drive_Alone_tour_mode_ASC_walk,Drive Alone tour mode ASC -- walk,@(df.is_indiv & df.i_tour_mode.isin(I_SOV_MODES)),,,,,,,sov_ASC_walk,,,,,,
-#util_Drive_Alone_tour_mode_ASC_ride_hail,Drive Alone tour mode ASC -- ride hail,@(df.is_indiv & df.i_tour_mode.isin(I_SOV_MODES)),,,,,,,,,,,sov_ASC_rh,sov_ASC_rh,sov_ASC_rh
-#util_Shared_Ride_2_tour_mode_ASC_shared_ride_2,Shared Ride 2 tour mode ASC -- shared ride 2,@(df.is_indiv & df.i_tour_mode.isin(I_SR2_MODES)),,,sr2_ASC_sr2,sr2_ASC_sr2,,,,,,,,,
-#util_Shared_Ride_2_tour_mode_ASC_shared_ride_3_plus,Shared Ride 2 tour mode ASC -- shared ride 3+,@(df.is_indiv & df.i_tour_mode.isin(I_SR2_MODES)),,,,,sr2_ASC_sr3p,sr2_ASC_sr3p,,,,,,,
-#util_Shared_Ride_2_tour_mode_ASC_walk,Shared Ride 2 tour mode ASC -- walk,@(df.is_indiv & df.i_tour_mode.isin(I_SR2_MODES)),,,,,,,sr2_ASC_walk,,,,,,
-#util_Shared_Ride_2_tour_mode_ASC_ride_hail,Shared Ride 2 tour mode ASC -- ride hail,@(df.is_indiv & df.i_tour_mode.isin(I_SR2_MODES)),,,,,,,,,,,sr2_ASC_rh,sr2_ASC_rh,sr2_ASC_rh
-#util_Shared_Ride_3_tour_mode_ASC_shared_ride_2,Shared Ride 3+ tour mode ASC -- shared ride 2,@(df.is_indiv & df.i_tour_mode.isin(I_SR3P_MODES)),,,sr3p_ASC_sr2,sr3p_ASC_sr2,,,,,,,,,
-#util_Shared_Ride_3_tour_mode_ASC_shared_ride_3_plus,Shared Ride 3+ tour mode ASC -- shared ride 3+,@(df.is_indiv & df.i_tour_mode.isin(I_SR3P_MODES)),,,,,sr3p_ASC_sr3p,sr3p_ASC_sr3p,,,,,,,
-#util_Shared_Ride_3_tour_mode_ASC_walk,Shared Ride 3+ tour mode ASC -- walk,@(df.is_indiv & df.i_tour_mode.isin(I_SR3P_MODES)),,,,,,,sr3p_ASC_walk,,,,,,
-#util_Shared_Ride_3_tour_mode_ASC_ride_hail,Shared Ride 3+ tour mode ASC -- ride hail,@(df.is_indiv & df.i_tour_mode.isin(I_SR3P_MODES)),,,,,,,,,,,sr3p_ASC_rh,sr3p_ASC_rh,sr3p_ASC_rh
-#util_Walk_tour_mode_ASC_ride_hail,Walk tour mode ASC -- ride hail,@df.is_indiv & (df.i_tour_mode == I_WALK_MODE),,,,,,,,,,,walk_ASC_rh,walk_ASC_rh,walk_ASC_rh
-#util_Bike_tour_mode_ASC_walk,Bike tour mode ASC -- walk,@df.is_indiv & (df.i_tour_mode == I_BIKE_MODE),,,,,,,bike_ASC_walk,,,,,,
-#util_Bike_tour_mode_ASC_ride_hail,Bike tour mode ASC -- ride hail,@df.is_indiv & (df.i_tour_mode == I_BIKE_MODE),,,,,,,,,,,bike_ASC_rh,bike_ASC_rh,bike_ASC_rh
-#util_Ride_Hail_tour_mode_ASC_shared_ride_2,Ride Hail tour mode ASC -- shared ride 2,@(df.is_indiv & df.tour_mode_is_ride_hail),,,ride_hail_ASC_sr2,ride_hail_ASC_sr2,,,,,,,,,
-#util_Ride_Hail_tour_mode_ASC_shared_ride_3_plus,Ride Hail tour mode ASC -- shared ride 3+,@(df.is_indiv & df.tour_mode_is_ride_hail),,,,,ride_hail_ASC_sr3p,ride_hail_ASC_sr3p,,,,,,,
-#util_Ride_Hail_tour_mode_ASC_walk,Ride Hail tour mode ASC -- walk,@(df.is_indiv & df.tour_mode_is_ride_hail),,,,,,,ride_hail_ASC_walk,,,,,,
-#util_Ride_Hail_tour_mode_ASC_walk_to_transit,Ride Hail tour mode ASC -- walk to transit,@(df.is_indiv & df.tour_mode_is_ride_hail),,,,,,,,,ride_hail_ASC_walk_transit,ride_hail_ASC_walk_transit,,,
-#util_Ride_Hail_tour_mode_ASC_ride_hail_taxi,Ride Hail tour mode ASC -- ride hail,@(df.is_indiv & df.i_tour_mode.isin(I_RIDE_HAIL_MODES)),,,,,,,,,,,ride_hail_ASC_taxi,,
-#util_Ride_Hail_tour_mode_ASC_ride_hail_single,Ride Hail tour mode ASC -- ride hail,@(df.is_indiv & df.i_tour_mode.isin(I_RIDE_HAIL_MODES)),,,,,,,,,,,,ride_hail_ASC_tnc_single,
-#util_Ride_Hail_tour_mode_ASC_ride_hail_shared,Ride Hail tour mode ASC -- ride hail,@(df.is_indiv & df.i_tour_mode.isin(I_RIDE_HAIL_MODES)),,,,,,,,,,,,,ride_hail_ASC_tnc_shared
+util_Drive_Alone_tour_mode_ASC_shared_ride_2_df_is_indiv,Drive Alone tour mode ASC -- shared ride 2,@(df.is_indiv & df.i_tour_mode.isin(I_SOV_MODES)),,sov_ASC_sr2,,,,,,,,,,
+util_Drive_Alone_tour_mode_ASC_shared_ride_3_plus,Drive Alone tour mode ASC -- shared ride 3+,@(df.is_indiv & df.i_tour_mode.isin(I_SOV_MODES)),,,sov_ASC_sr3p,,,,,,,,
+util_Drive_Alone_tour_mode_ASC_walk,Drive Alone tour mode ASC -- walk,@(df.is_indiv & df.i_tour_mode.isin(I_SOV_MODES)),,,,sov_ASC_walk,,,,,,
+util_Drive_Alone_tour_mode_ASC_ride_hail,Drive Alone tour mode ASC -- ride hail,@(df.is_indiv & df.i_tour_mode.isin(I_SOV_MODES)),,,,,,,,,,sov_ASC_rh,sov_ASC_rh,sov_ASC_rh
+util_Shared_Ride_2_tour_mode_ASC_shared_ride_2,Shared Ride 2 tour mode ASC -- shared ride 2,@(df.is_indiv & df.i_tour_mode.isin(I_SR2_MODES)),,sr2_ASC_sr2,,,,,,,,,,
+util_Shared_Ride_2_tour_mode_ASC_shared_ride_3_plus,Shared Ride 2 tour mode ASC -- shared ride 3+,@(df.is_indiv & df.i_tour_mode.isin(I_SR2_MODES)),,,sr2_ASC_sr3p,,,,,,,,
+util_Shared_Ride_2_tour_mode_ASC_walk,Shared Ride 2 tour mode ASC -- walk,@(df.is_indiv & df.i_tour_mode.isin(I_SR2_MODES)),,,,sr2_ASC_walk,,,,,,
+util_Shared_Ride_2_tour_mode_ASC_ride_hail,Shared Ride 2 tour mode ASC -- ride hail,@(df.is_indiv & df.i_tour_mode.isin(I_SR2_MODES)),,,,,,,,,,sr2_ASC_rh,sr2_ASC_rh,sr2_ASC_rh
+util_Shared_Ride_3_tour_mode_ASC_shared_ride_2,Shared Ride 3+ tour mode ASC -- shared ride 2,@(df.is_indiv & df.i_tour_mode.isin(I_SR3P_MODES)),,sr3p_ASC_sr2,,,,,,,,,,
+util_Shared_Ride_3_tour_mode_ASC_shared_ride_3_plus,Shared Ride 3+ tour mode ASC -- shared ride 3+,@(df.is_indiv & df.i_tour_mode.isin(I_SR3P_MODES)),,,sr3p_ASC_sr3p,,,,,,,,
+util_Shared_Ride_3_tour_mode_ASC_walk,Shared Ride 3+ tour mode ASC -- walk,@(df.is_indiv & df.i_tour_mode.isin(I_SR3P_MODES)),,,,sr3p_ASC_walk,,,,,,
+util_Shared_Ride_3_tour_mode_ASC_ride_hail,Shared Ride 3+ tour mode ASC -- ride hail,@(df.is_indiv & df.i_tour_mode.isin(I_SR3P_MODES)),,,,,,,,,,sr3p_ASC_rh,sr3p_ASC_rh,sr3p_ASC_rh
+util_Walk_tour_mode_ASC_ride_hail,Walk tour mode ASC -- ride hail,@df.is_indiv & (df.i_tour_mode == I_WALK_MODE),,,,,,,,,,walk_ASC_rh,walk_ASC_rh,walk_ASC_rh
+util_Bike_tour_mode_ASC_walk,Bike tour mode ASC -- walk,@df.is_indiv & (df.i_tour_mode == I_BIKE_MODE),,,,bike_ASC_walk,,,,,,
+util_Bike_tour_mode_ASC_ride_hail,Bike tour mode ASC -- ride hail,@df.is_indiv & (df.i_tour_mode == I_BIKE_MODE),,,,,,,,,,bike_ASC_rh,bike_ASC_rh,bike_ASC_rh
+util_Ride_Hail_tour_mode_ASC_shared_ride_2,Ride Hail tour mode ASC -- shared ride 2,@(df.is_indiv & df.tour_mode_is_ride_hail),,ride_hail_ASC_sr2,,,,,,,,,,
+util_Ride_Hail_tour_mode_ASC_shared_ride_3_plus,Ride Hail tour mode ASC -- shared ride 3+,@(df.is_indiv & df.tour_mode_is_ride_hail),,,ride_hail_ASC_sr3p,,,,,,,,
+util_Ride_Hail_tour_mode_ASC_walk,Ride Hail tour mode ASC -- walk,@(df.is_indiv & df.tour_mode_is_ride_hail),,,,ride_hail_ASC_walk,,,,,,
+util_Ride_Hail_tour_mode_ASC_walk_to_transit,Ride Hail tour mode ASC -- walk to transit,@(df.is_indiv & df.tour_mode_is_ride_hail),,,,,,ride_hail_ASC_walk_transit,,,,
+util_Ride_Hail_tour_mode_ASC_ride_hail_taxi,Ride Hail tour mode ASC -- ride hail,@(df.is_indiv & df.i_tour_mode.isin(I_RIDE_HAIL_MODES)),,,,,,,,,,ride_hail_ASC_taxi,,
+util_Ride_Hail_tour_mode_ASC_ride_hail_single,Ride Hail tour mode ASC -- ride hail,@(df.is_indiv & df.i_tour_mode.isin(I_RIDE_HAIL_MODES)),,,,,,,,,,,ride_hail_ASC_tnc_single,
+util_Ride_Hail_tour_mode_ASC_ride_hail_shared,Ride Hail tour mode ASC -- ride hail,@(df.is_indiv & df.i_tour_mode.isin(I_RIDE_HAIL_MODES)),,,,,,,,,,,,ride_hail_ASC_tnc_shared
+#FIXME ASR to fix everything below this
 #,joint tour ASCs,,,,,,,,,,,,,,
 #util_joint_auto_tour_mode_ASC_shared_ride_2,joint - auto tour mode ASC -- shared ride 2,@(df.is_joint & df.i_tour_mode.isin(I_AUTO_MODES)),,,joint_auto_ASC_sr2,joint_auto_ASC_sr2,,,,,,,,,
 #util_joint_auto_tour_mode_ASC_shared_ride_3_,joint - auto tour mode ASC -- shared ride 3+,@(df.is_joint & df.i_tour_mode.isin(I_AUTO_MODES)),,,,,joint_auto_ASC_sr3p,joint_auto_ASC_sr3p,,,,,,,
@@ -130,4 +145,4 @@ util_tour_mode_is_ride_hail,Ride hail tour modes availability,tour_mode_is_ride_
 #util_Bike_not_available_for_long_distances,Bike not available for long distances,@df.tour_mode_is_walk & (od_skims['DISTBIKE'] > 8),,,,,,,,-999,,,,,
 #util_origin_density_index,Origin density index,@origin_density_applied*(origin_density_index_multiplier*df.origin_density_index).clip(origin_density_index_max),,,,,,,coef_ivt,coef_ivt,coef_ivt,coef_ivt,,coef_ivt,coef_ivt
 #util_walk_express_penalty,Walk-express penalty for intermediate stops,@walk_express_penalty * ~(df.first_trip | df.first_trip),,,,,,,,,,,,,
-#util_adjust_tnc_shared,TNC shared adjustment,@adjust_tnc_shared,,,,,,,,,,,,,coef_ivt
+#util_adjust_tnc_shared,TNC shared adjustment,@adjust_tnc_shared,,,,,,,,,,,,coef_ivt
