@@ -3,8 +3,10 @@ COEFFICIENTS: trip_mode_choice_coefficients.csv
 COEFFICIENT_TEMPLATE: trip_mode_choice_coefficients_template.csv
 
 tvpb_mode_path_types:
-  DRIVE_TRANSIT: DTW
+  PNR_TRANSIT: DTW
   WALK_TRANSIT: WTW
+  KNR_TRANSIT: KTW
+  TNC_TRANSIT: NTW
 
 
 LOGIT_TYPE: NL
@@ -144,6 +146,8 @@ CONSTANTS:
   topology_trn_multiplier: 2.20
   topology_walk_multiplier: 15
   ridehail_wait_time_multiplier: 1.5
+  walktimeshort_multiplier: 1 #CHECKME
+  biketimeshort_multiplier: 1 #CHECKME
   walktimelong_multiplier: 5
   biketimelong_multiplier: 5
   xfers_wlk_multiplier: 5

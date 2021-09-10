@@ -94,6 +94,26 @@ TVPB_SETTINGS:
         egress: drive
         max_paths_across_tap_sets: 3
         max_paths_per_tap_set: 1
+      KTW:
+        access: drive
+        egress: walk
+        max_paths_across_tap_sets: 3
+        max_paths_per_tap_set: 1
+      WTK:
+        access: walk
+        egress: drive
+        max_paths_across_tap_sets: 3
+        max_paths_per_tap_set: 1
+      NTW:
+        access: drive
+        egress: walk
+        max_paths_across_tap_sets: 3
+        max_paths_per_tap_set: 1
+      WTN:
+        access: walk
+        egress: drive
+        max_paths_across_tap_sets: 3
+        max_paths_per_tap_set: 1
     tap_tap_settings:
       SPEC: tvpb_utility_tap_tap.csv
       PREPROCESSOR:
