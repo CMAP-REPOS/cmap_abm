@@ -1,4 +1,4 @@
-Label,Description,Expression,DRIVEALONE,SHAREDRIDE2,SHAREDRIDE3,WALK,BIKE,WALK_TRANSIT,PNR_TRANSIT,KNR_TRANSIT,TNC_TRANSIT,TAXI,TNC_SINGLE,TNC_SHARED
+Label,Description,Expression,DRIVEALONE,SHAREDRIDE2,SHAREDRIDE3,WALK,BIKE,WALK_TRANSIT,PNR_TRANSIT,KNR_TRANSIT,TNC_TRANSIT,TAXI,TNC_SINGLE,TNC_SHARED,SCHBUS
 #,Drive alone no toll,,,,,,,,,,,,,,
 util_DRIVEALONE_Unavailable,DRIVEALONE - Unavailable,sov_available == False,-999,,,,,,,,,
 util_DRIVEALONE_Unavailable_for_zero_auto_households,DRIVEALONE - Unavailable for zero auto households,auto_ownership == 0,-999,,,,,,,,
@@ -94,6 +94,9 @@ util_TNC_Shared_Wait_time,TNC Shared - Wait time,@1.5 * df.totalWaitSharedTNC,,,
 util_TNC_Shared_Tolls,TNC Shared - Tolls,@ivt_cost_multiplier * df.ivot * (odt_skims['HOV2_M_TOLLCOST'] + dot_skims['HOV2_M_TOLLCOST']),,,,,,,,,,,,coef_ivt
 util_TNC_Shared_Bridge_toll,TNC Shared - Bridge toll,@ivt_cost_multiplier * df.ivot * (odt_skims['HOV2_M_TOLLCOST'] + odr_skims['HOV2_M_TOLLCOST'] + dot_skims['HOV2_M_TOLLCOST'] + dor_skims['HOV2_M_TOLLCOST']),,,,,,,,,,,,coef_ivt
 util_TNC_Shared_Cost,TNC Shared - Cost,"@ivt_cost_multiplier * df.ivot * np.maximum(TNC_shared_baseFare * 2 + (odt_skims['HOV2_M_DIST'] + dot_skims['HOV2_M_DIST']) * TNC_shared_costPerMile + (odt_skims['HOV2_M_TIME'] + dot_skims['HOV2_M_TIME']) * TNC_shared_costPerMinute, TNC_shared_costMinimum)",,,,,,,,,,,,coef_ivt
+#SCHBUS
+util_SCHBUS_unav,School bus unav,schbus_available == False,,,,,,,,,,,,,-999
+util_SCHBUS_In_vehicle_time,School bus - In-vehicle time,@odt_skims['SOV_NT_M_TIME'] + dot_skims['SOV_NT_M_TIME'],,,,,,,,,,,,,coef_ivt
 #,indiv tour ASCs,,,,,,,,,,,,,, 
 util_Walk_ASC_Zero_auto,Walk ASC - Zero auto,@(df.is_indiv & (df.auto_ownership == 0)),,,,walk_ASC_no_auto,,,,,,
 util_Walk_ASC_Auto_deficient,Walk ASC - Auto deficient,@(df.is_indiv & (df.auto_ownership < df.num_workers) & (df.auto_ownership > 0)),,,,walk_ASC_auto_deficient,,,,,,
@@ -122,6 +125,7 @@ util_TNC_Single_Auto_sufficient,TNC Single - Auto sufficient,@(df.is_indiv & (df
 util_TNC_Shared_Zero_auto,TNC Shared - Zero auto,@(df.is_indiv & (df.auto_ownership == 0)),,,,,,,,,,,,tnc_shared_ASC_no_auto
 util_TNC_Shared_Auto_deficient,TNC Shared - Auto deficient,@(df.is_indiv & (df.auto_ownership < df.num_workers) & (df.auto_ownership > 0)),,,,,,,,,,,,tnc_shared_ASC_auto_deficient
 util_TNC_Shared_Auto_sufficient,TNC Shared - Auto sufficient,@(df.is_indiv & (df.auto_ownership >= df.num_workers)),,,,,,,,,,,,tnc_shared_ASC_auto_sufficient
+SCHBUS_ASC,,schbus_available == False,,,,,,,,,,,,,-999
 #,joint tour ASCs,,,,,,,,,,,,,, 
 util_Joint_Walk_ASC_Zero_auto,Joint - Walk ASC - Zero auto,@(df.is_joint & (df.auto_ownership == 0)),,,,joint_walk_ASC_no_auto,,,,,
 util_Joint_Walk_ASC_Auto_deficient,Joint - Walk ASC - Auto deficient,@(df.is_joint & (df.auto_ownership < df.num_workers) & (df.auto_ownership > 0)),,,,joint_walk_ASC_auto_deficient,,,,,

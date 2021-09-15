@@ -35,6 +35,7 @@ Description,Target,Expression
 ,tour_mode_is_walk_transit,i_tour_mode.isin(I_WALK_TRANSIT_MODES)
 ,tour_mode_is_drive_transit,i_tour_mode.isin(I_DRIVE_TRANSIT_MODES)
 ,tour_mode_is_ride_hail,i_tour_mode.isin(I_RIDE_HAIL_MODES)
+,tour_mode_is_schbus,i_tour_mode == I_SCHBUS_MODE
 #,,
 ,inbound,~df.outbound
 ,first_trip,df.trip_num == 1
@@ -106,3 +107,4 @@ dest terminal time not counted at home,_dest_terminal_time,"np.where(inbound & l
 #,max_dist_walk,od_skims.max('DISTWALK')
 #,dist_bike,od_skims['DISTBIKE']
 #,dist_only,od_skims['DIST']
+,school_tour,(df.tour_type == 'school')

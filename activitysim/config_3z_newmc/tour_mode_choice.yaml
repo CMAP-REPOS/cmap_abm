@@ -43,6 +43,11 @@ NESTS:
           - TAXI
           - TNC_SINGLE
           - TNC_SHARED
+      - name: SCHOOL_BUS
+        coefficient: coef_nest_SCHOOL_BUS
+        alternatives:
+          - SCHBUS
+        
 
 SPEC: tour_mode_choice.csv
 COEFFICIENTS: tour_mode_choice_coefficients.csv
@@ -174,5 +179,6 @@ LOGSUM_CHOOSER_COLUMNS:
   - demographic_segment
   - c_ivt_for_segment
   - c_cost_for_segment
+  - is_student
 
 MODE_CHOICE_LOGSUM_COLUMN_NAME: mode_choice_logsum

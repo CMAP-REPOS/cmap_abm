@@ -5,6 +5,7 @@ coef_nest_AUTO,0.72,T
 coef_nest_NONMOTORIZED,0.72,T
 coef_nest_TRANSIT,0.72,T
 coef_nest_RIDEHAIL,0.36,T
+coef_nest_SCHOOL_BUS,0.72,T
 #,,
 coef_ivt_othmaint_social,-0.0175,F
 coef_ivt_work,-0.022,F
@@ -386,3 +387,14 @@ walk_express_penalty,10,T
 adjust_tnc_shared,30,T
 coef_origin_density_applied_work_univ_school,0,T
 coef_origin_density_applied_escort_shopping_eatout_othmaint_social_othdiscr_atwork,1,T
+schbus_ASC_eatout_escort_othdiscr_othmaint_shopping_social_univ_work_atwork,-999,T
+schbus_ASC_school,0.005,F
+schbus_ASC_sbtourntrip_sr2,-4,F
+schbus_ASC_sbtourntrip_sr3,-4,F
+schbus_ASC_sbtourntrip_walk,-4,F
+schbus_ASC_sbtourntrip_trnw,-4,F
+schbus_ASC_sbtourntrip_trnknr,-4,F
+schbus_ASC_sbtourntrip_trntnc,-4,F
+schbus_ASC_sbtourntrip_taxi,-4,F
+schbus_ASC_sbtourntrip_tncsingle,-4,F
+schbus_ASC_sbtourntrip_tncshared,-4,F
