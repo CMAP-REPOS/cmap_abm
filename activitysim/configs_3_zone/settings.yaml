@@ -26,8 +26,8 @@ use_shadow_pricing: False
 
 ## - example sample
 
-households_sample_size: 5000
-chunk_size: 400_000_000_000
+households_sample_size: 10000
+chunk_size: 200_000_000_000
 
 # 100 percent sample full scale won't fit in 512GB with chunking disabled
 # so train with 100,000 HHs and then run production mode
@@ -54,7 +54,7 @@ default_initial_rows_per_chunk: 1000000000
 # - tracing
 trace_od:
 #trace_hh_id: 807274
-resume_after: trip_purpose
+resume_after: mandatory_tour_frequency
 
 # input tables
 input_table_list:

@@ -4,6 +4,19 @@
 ### March 2021
 ### Copied from previous processing scripts
 #######################################################
+args = commandArgs(trailingOnly = TRUE)
+
+if(length(args) > 0){
+  settings_file = args[1]
+} else {
+  settings_file = 'N:/Projects/CMAP_Activitysim/cmap_abm_lf/survey_data_prep/cmap_inputs.yml'
+}
+
+library(yaml)
+settings = yaml.load_file(settings_file)
+
+R_LIBRARY              = settings$R_LIBRARY
+
 start_time = Sys.time()
 #-------------------------------------------------------------------------------
 # person trips to be used for tour/trip mode choice
@@ -36,6 +49,7 @@ start_time = Sys.time()
 
 ## Libraries
 ############
+.libPaths(c(.libPaths(), R_LIBRARY))
 library(plyr)
 library(weights)
 library(reshape2)
@@ -49,9 +63,9 @@ library(rgdal)
 library(foreign)
 #library(devtools)
 # devtools::install_github("gregmacfarlane/omxr")
-#library(omxr) 
+library(omxr) 
 library(stringr)
-library(yaml)
+
 library(reshape2)
 library(sf)
 
@@ -63,15 +77,7 @@ include_delivery_trips = F
 # Directories
 # WD = ifelse(include_delivery_trips,
 
-args = commandArgs(trailingOnly = TRUE)
 
-if(length(args) > 0){
-  settings_file = args[1]
-} else {
-  settings_file = 'N:/Projects/CMAP_Activitysim/cmap_abm_lf/survey_data_prep/cmap_inputs.yml'
-}
-
-settings = yaml.load_file(settings_file)
 
 WD                   = settings$visualizer_summaries
 gis_dir              = settings$zone_dir

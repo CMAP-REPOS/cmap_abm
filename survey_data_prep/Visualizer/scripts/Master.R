@@ -9,7 +9,7 @@
 # https://stackoverflow.com/questions/26923862/why-are-my-dplyr-group-by-summarize-not-working-properly-name-collision-with
 #
 #############################################################################################################################
-
+library(Rcpp)
 ### Read Command Line Arguments
 args                <- commandArgs(trailingOnly = TRUE)
 Parameters_File     <- args[1]
@@ -40,7 +40,7 @@ BUILD_SUMMARY_DIR      <- trimws(paste(parameters$Value[parameters$Key=="BUILD_S
 #                               file.path(CALIBRATION_DIR, "ABM_Summaries"))
 OUTPUT_HTML_NAME    <- FULL_HTML_NAME
 
-
+print(paste("ASRDBG Working directory:", WORKING_DIR))
 ### Initialization
 # Load global variables
 .libPaths(R_LIBRARY)
@@ -91,6 +91,7 @@ SYSTEM_REPORT_PKGS <- c("DT", "flexdashboard", "leaflet", "geojsonio", "htmltool
                         "knitr", "mapview", "plotly", "RColorBrewer", "rgdal", "rgeos", "crosstalk","treemap", "htmlTable",
                         "rmarkdown", "scales", "stringr", "jsonlite", "pander", "ggplot2", "reshape", "raster", "dplyr")
 
+lib_inst <- suppressWarnings(suppressMessages(lapply(SYSTEM_REPORT_PKGS, function(x){if (x %in% rownames(installed.packages()) == FALSE) install.packages(x, lib=R_LIBRARY, repos='http://cran.us.r-project.org')})))
 lib_sink <- suppressWarnings(suppressMessages(lapply(SYSTEM_REPORT_PKGS, library, character.only = TRUE)))
 
 ### Read Target and Output SUmmary files

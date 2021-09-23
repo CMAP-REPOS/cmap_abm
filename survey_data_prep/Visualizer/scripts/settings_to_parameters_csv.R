@@ -10,6 +10,8 @@ if(length(args) > 0){
   settings_file = 'N:/Projects/CMAP_Activitysim/cmap_abm_lf/survey_data_prep/cmap_inputs.yml'
 }
 
+print(paste("Using Settings file at", settings_file))
+
 settings = yaml.load_file(settings_file)
 
 parameters_path = file.path(settings$visualizer_dir, 'runtime', 'parameters.csv')

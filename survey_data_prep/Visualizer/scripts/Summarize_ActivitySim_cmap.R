@@ -50,11 +50,14 @@ xwalk <- read.dbf(xwalk_file, as.is=TRUE)
 # skim_file = file.path(SKIMS_DIR, "mf5183.zmx")
 
 setwd(ABM_DIR)
+print(paste("Using the files from", ABM_DIR))
 hh                 <- read.csv("final_households.csv", header = TRUE)
 per                <- read.csv("final_persons.csv", header = TRUE)
 all_tours          <- read.csv("final_tours.csv", header = TRUE)
 all_trips          <- read.csv("final_trips.csv", header = TRUE)
 jtour_participants <- read.csv("final_joint_tour_participants.csv", header = TRUE)
+
+print(paste("Model data has", nrow(hh), "households,", nrow(per), "people,", nrow(all_tours), "tours, and", nrow(all_trips), "trips."))
 
 setwd(WD)
 

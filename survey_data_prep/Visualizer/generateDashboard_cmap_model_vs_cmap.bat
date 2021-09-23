@@ -10,19 +10,19 @@
 :: #    with appropriate Census sources names wherever applicable
 :: ############################################################################
 @ECHO off
-SET WORKING_DIR= "N:\Projects\CMAP_Activitysim\cmap_abm_lf\survey_data_prep\Visualizer"
+SET WORKING_DIR= "D:\Projects\Clients\CMAP\Tasks\asim_setup\cmap_abm\survey_data_prep\Visualizer"
 
 :: User Inputs
 :: ###########
 :: Set up dependencies
 :: ###################
-SET R_SCRIPT=C:\Users\leah.flake\Documents\R-4.0.3\bin\Rscript
-SET R_LIBRARY=C:\Users\leah.flake\Documents\R-4.0.3\library
+SET R_SCRIPT="C:\Program Files\R\R-4.0.3\bin\x64\Rscript"
+SET R_LIBRARY=C:\Users\andrew.rohne\r_library
 :: Set PANDOC path
-SET RSTUDIO_PANDOC=C:\Users\leah.flake\Documents\Pandoc
+SET RSTUDIO_PANDOC=C:\Users\andrew.rohne\pandoc-2.14.2
 :: Parameters file
-SET PARAMETERS_FILE=N:\Projects\CMAP_Activitysim\cmap_abm_lf\survey_data_prep\Visualizer\runtime\parameters.csv
-SET SETTINGS_FILE=N:\Projects\CMAP_Activitysim\cmap_abm_lf\survey_data_prep\cmap_inputs.yml
+SET PARAMETERS_FILE=D:\Projects\Clients\CMAP\Tasks\asim_setup\cmap_abm\survey_data_prep\Visualizer\runtime\parameters.csv
+SET SETTINGS_FILE=D:\Projects\Clients\CMAP\Tasks\asim_setup\cmap_abm\survey_data_prep\cmap_inputs.yml
 
 SET FULL_HTML_NAME=CMAP_visualizer
 
@@ -73,7 +73,7 @@ REM ECHO SHP_FILE_NAME,%SHP_FILE_NAME% >> %PARAMETERS_FILE%
 ECHO CT_ZERO_AUTO_FILE_NAME,%CT_ZERO_AUTO_FILE_NAME% >> %PARAMETERS_FILE%
 ECHO IS_BASE_SURVEY,%IS_BASE_SURVEY% >> %PARAMETERS_FILE%
 
-%R_SCRIPT% scripts\settings_to_parameters_csv.R 
+%R_SCRIPT% scripts\settings_to_parameters_csv.R %SETTINGS_FILE%
 
 :: Create calibration output directory
 :: ############################################################################
@@ -123,4 +123,4 @@ ECHO Model Failed
 
 
 :END
-PAUSE
+

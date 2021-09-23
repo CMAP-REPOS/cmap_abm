@@ -64,11 +64,18 @@ maz_to_tap:
 skim_time_periods:
     time_window: 1440
     period_minutes: 60
-    #periods: [0, 6, 7, 9, 10, 14, 16, 18, 20]
-    periods: [0, 1, 3, 4, 8, 10, 12, 14, 24]
-    labels: &skim_time_period_labels ['EA', 'AM', 'MM', 'MD', 'AF', 'PM', 'EV', 'NT']
-    #periods: [0, 6, 11, 16, 20, 24]
-    #labels: &skim_time_period_labels ['EA', 'AM', 'MD', 'PM', 'EV']
+    #Index is 3 AM! 
+    periods: [0, 4, 5, 7, 8, 12, 14, 16, 18, 24]
+    labels: &skim_time_period_labels ['VE', 'EA', 'AM', 'MM', 'MD', 'AF', 'PM', 'EV', 'NT']
+    # VE = 3a - 6a (same skim data as NT)
+    # EA = 6a - 7a
+    # AM = 7a - 9a
+    # MM = 9a - 10a
+    # MD = 10a - 2p
+    # AF = 2p - 4p
+    # PM = 4p - 6p
+    # EV = 6p - 8p
+    # NT = 8p - 3a
 
 demographic_segments: &demographic_segments
   - &low_income_segment_id 0
@@ -76,7 +83,7 @@ demographic_segments: &demographic_segments
 
 # transit virtual path builder settings
 TVPB_SETTINGS:
-
+  TVPB_SETTINGS:
   tour_mode_choice:
     units: utility
     path_types:
@@ -101,6 +108,16 @@ TVPB_SETTINGS:
         max_paths_across_tap_sets: 3
         max_paths_per_tap_set: 1
       WTK:
+        access: walk
+        egress: drive
+        max_paths_across_tap_sets: 3
+        max_paths_per_tap_set: 1
+      NTW:
+        access: drive
+        egress: walk
+        max_paths_across_tap_sets: 3
+        max_paths_per_tap_set: 1
+      WTN:
         access: walk
         egress: drive
         max_paths_across_tap_sets: 3

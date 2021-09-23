@@ -1,32 +1,34 @@
 # CMAP data processing/qc inputs
 
-proj_dir: 'N:/Projects/CMAP_Activitysim/cmap_abm_lf/survey_data_prep'
-data_dir: 'N:/Projects/CMAP_Activitysim/cmap_abm_lf/survey_data_prep/survey_data'
+proj_dir: 'D:/Projects/Clients/CMAP/Tasks/asim_setup/cmap_abm/survey_data_prep'
+data_dir: 'D:/Projects/Clients/CMAP/Tasks/asim_setup/cmap_abm/survey_data_prep/survey_data'
 cmap_folder: 'MDT_CMAP_Research_Dataset_Lean/Data'
 nirpc_folder: 'NIRPC_MDT_survey'
-cmap_weights_dir: 'N:/Projects/CMAP_Activitysim/cmap_abm_lf/survey_data_prep/survey_data/cmap_weights'
+cmap_weights_dir: 'D:/Projects/Clients/CMAP/Tasks/asim_setup/cmap_abm/survey_data_prep/survey_data/cmap_weights'
 
-SPA_code_dir: "N:/Projects/CMAP_Activitysim/cmap_abm_lf/survey_data_prep/SPA"
+SPA_code_dir: "D:/Projects/Clients/CMAP/Tasks/asim_setup/cmap_abm/survey_data_prep/SPA"
 
 
-zone_dir: 'N:/Projects/CMAP_Activitysim/cmap_abm_lf/survey_data_prep/zone_data'
+zone_dir: 'D:/Projects/Clients/CMAP/Tasks/asim_setup/cmap_abm/survey_data_prep/zone_data'
 zone_shp_file: 'zones17.shp'
 zones_maz_shp_file: 'subzones17.shp'
 
-county_flows_csv: 'N:/Projects/CMAP_Activitysim/cmap_abm_lf/survey_data_prep/acs_county_flows_IL.csv'
+county_flows_csv: 'D:/Projects/Clients/CMAP/Tasks/asim_setup/cmap_abm/survey_data_prep/acs_county_flows_IL.csv'
 
 
-visualizer_dir: 'N:/Projects/CMAP_Activitysim/cmap_abm_lf/survey_data_prep/Visualizer'
-visualizer_summaries: 'N:/Projects/CMAP_Activitysim/cmap_abm_lf/survey_data_prep/Visualizer/summaries'
+visualizer_dir: 'D:/Projects/Clients/CMAP/Tasks/asim_setup/cmap_abm/survey_data_prep/Visualizer'
+visualizer_summaries: 'D:/Projects/Clients/CMAP/Tasks/asim_setup/cmap_abm/survey_data_prep/Visualizer/summaries'
 
-skims_dir: 'N:/Projects/CMAP_Activitysim/cmap_abm_lf/survey_data_prep/zone_data'
+skims_dir: 'D:/Projects/Clients/CMAP/Tasks/asim_setup/cmap_abm/survey_data_prep/zone_data'
 skims_filename: 'TAZ_skims.omx'
 
 # only needed if re-weighting
-popsim_folder: 'N:/Projects/CMAP_Activitysim/cmap_abm_lf/survey_data_prep/cmap_survey_weighting'
-popsim_folder_nirpc: 'N:/Projects/CMAP_Activitysim/cmap_abm_lf/survey_data_prep/nirpc_survey_weighting'
+popsim_folder: 'D:/Projects/Clients/CMAP/Tasks/asim_setup/cmap_abm/survey_data_prep/cmap_survey_weighting'
+popsim_folder_nirpc: 'D:/Projects/Clients/CMAP/Tasks/asim_setup/cmap_abm/survey_data_prep/nirpc_survey_weighting'
 
-obs_dir: 'N:/Projects/CMAP_Activitysim/cmap_abm_lf/obs_processing'
+obs_dir: 'D:/Projects/Clients/CMAP/Tasks/asim_setup/cmap_abm/obs_processing'
 
-abm_dir: 'N:/Projects/CMAP_Activitysim/cmap_abm_lf/survey_data_prep/asim_output'
-abm_summaries_dir: 'N:/Projects/CMAP_Activitysim/cmap_abm_lf/survey_data_prep/Visualizer/data/calibration_runs/summarized'
+abm_dir: 'D:/Projects/Clients/CMAP/Tasks/asim_setup/cmap_abm/activitysim/output'
+abm_summaries_dir: 'D:/Projects/Clients/CMAP/Tasks/asim_setup/cmap_abm/survey_data_prep/Visualizer/data/calibration_runs/summarized'
+
+R_LIBRARY: "C:/Users/andrew.rohne/r_library"
