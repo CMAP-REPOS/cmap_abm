@@ -1,6 +1,7 @@
 
 # Calculate MAZ to MAZ and MAZ to TAP shortest paths
 # Ben Stabler, ben.stabler@rsginc.com, 07/15/21
+# Andrew Rohne, andrew.rohne@rsginc.com, 7/30/21, 9/28/21
 
 import sys
 import shapefile
@@ -231,8 +232,8 @@ del(missing_maz)
 maz_to_tap_walk_cost["walk_time"] = maz_to_tap_walk_cost["DISTWALK"].apply(lambda x: x / walk_speed_mph * 60.0)
 
 print(time.ctime(), " write results")
-
 maz_to_tap_walk_cost[["MAZ","TAP","DISTWALK", "walk_time"]].to_csv(sp_settings["maz_tap_walk_output"], index=False)
+
 
 #
 # MAZ-to-TAP Drive
@@ -250,9 +251,14 @@ print(time.ctime(), " get shortest path length")
 
 maz_to_tap_drive_cost["DIST"] = net.shortest_path_lengths(maz_to_tap_drive_cost["OMAZ_NODE"], maz_to_tap_drive_cost["DTAP_NODE"])
 maz_to_tap_drive_cost = maz_to_tap_drive_cost[maz_to_tap_drive_cost["DIST"] <= max_maz_tap_drive_dist_feet / 5280.0]
+maz_to_tap_drive_cost['drive_time'] = maz_to_tap_drive_cost["DIST"].apply(lambda x: x / drive_speed_mph * 60.0)
 
 print(time.ctime(), " write results")
-maz_to_tap_drive_cost['drive_time'] = maz_to_tap_drive_cost["DIST"].apply(lambda x: x / drive_speed_mph * 60.0)
-maz_to_tap_drive_cost[["MAZ","TAP","DIST", "drive_time"]].to_csv(sp_settings["maz_tap_drive_output"], index=False)
+if 'tap_parkcost_field' in sp_settings.keys():
+    tapPCost = dict(zip(taps['tap_id'], taps[sp_settings['tap_parkcost_field']]/100.0))
+    maz_to_tap_drive_cost['PCOST'] = maz_to_tap_drive_cost['TAP'].map(tapPCost)
+    maz_to_tap_drive_cost[["MAZ","TAP","DIST", "drive_time", "PCOST"]].to_csv(sp_settings["maz_tap_drive_output"], index=False)
+else:
+    maz_to_tap_drive_cost[["MAZ","TAP","DIST", "drive_time"]].to_csv(sp_settings["maz_tap_drive_output"], index=False)
 
 print(time.ctime(), " finish")

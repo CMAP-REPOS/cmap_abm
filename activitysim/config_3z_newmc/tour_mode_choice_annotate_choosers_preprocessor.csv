@@ -9,6 +9,7 @@ local,_DF_IS_TOUR,'tour_type' in df.columns
 ,demographic_segment,df.income_segment.map(TVPB_demographic_segments_by_income_segment)
 ,c_ivt_for_segment,"np.where(demographic_segment==C_LOW_INCOME_SEGMENT_ID,c_ivt_low_income, c_ivt_high_income)"
 ,c_cost_for_segment,"np.where(demographic_segment==C_LOW_INCOME_SEGMENT_ID,c_cost_low_income, c_cost_high_income)"
+
 #,,
  local,_HAVE_PARENT_TOURS,'parent_tour_id' in df.columns
 ,_parent_tour_mode,"reindex(tours.tour_mode, df.parent_tour_id) if _HAVE_PARENT_TOURS else ''"
@@ -31,15 +32,16 @@ local,_DF_IS_TOUR,'tour_type' in df.columns
 #,terminal_time,"reindex(land_use.TERMINAL, df[dest_col_name])"
 ,terminal_time,0
 ,dest_density_index,"reindex(land_use.density_index, df[dest_col_name])"
+# NOTE: Everything below is now done in tour_mode_choice via logsums...
 # FIXME no transit subzones for ONE_ZONE version, so all zones short walk to transit,,
-,_origin_distance_to_transit,"reindex(land_use.access_dist_transit, df[orig_col_name]) if 'access_dist_transit' in land_use else shortWalk"
-,_destination_distance_to_transit,"reindex(land_use.access_dist_transit, df[dest_col_name]) if 'access_dist_transit' in land_use else shortWalk"
-,walk_transit_available,(_origin_distance_to_transit > 0) & (_destination_distance_to_transit > 0)
-,pnr_transit_available,(_destination_distance_to_transit > 0) & (df.auto_ownership > 0)
-,knr_transit_available,(_destination_distance_to_transit > 0) & (df.auto_ownership > 0)
-,tnc_transit_available,(_destination_distance_to_transit > 0)
-,origin_walk_time,_origin_distance_to_transit*60/walkSpeed
-,destination_walk_time,_destination_distance_to_transit*60/walkSpeed
+#,_origin_distance_to_transit,"reindex(land_use.access_dist_transit, df[orig_col_name]) if 'access_dist_transit' in land_use else shortWalk"
+#,_destination_distance_to_transit,"reindex(land_use.access_dist_transit, df[dest_col_name]) if 'access_dist_transit' in land_use else shortWalk"
+#,walk_transit_available,(_origin_distance_to_transit > 0) & (_destination_distance_to_transit > 0)
+#,pnr_transit_available,(_destination_distance_to_transit > 0) & (df.auto_ownership > 0)
+#,knr_transit_available,(_destination_distance_to_transit > 0) & (df.auto_ownership > 0)
+#,tnc_transit_available,(_destination_distance_to_transit > 0)
+#,origin_walk_time,_origin_distance_to_transit*60/walkSpeed
+#,destination_walk_time,_destination_distance_to_transit*60/walkSpeed
 # RIDEHAIL,,
 ,origin_density_measure,"(reindex(land_use.TOTPOP, df[orig_col_name]) + reindex(land_use.TOTEMP, df[orig_col_name])) / (reindex(land_use.acres, df[orig_col_name]) / 640)"
 ,dest_density_measure,"(reindex(land_use.TOTPOP, df[dest_col_name]) + reindex(land_use.TOTEMP, df[dest_col_name])) / (reindex(land_use.acres, df[dest_col_name]) / 640)"

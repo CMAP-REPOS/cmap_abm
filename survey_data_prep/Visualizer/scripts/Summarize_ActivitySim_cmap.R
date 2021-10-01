@@ -21,7 +21,7 @@ args = commandArgs(trailingOnly = TRUE)
 if(length(args) > 0){
   settings_file = args[1]
 } else {
-  settings_file = 'N:/Projects/CMAP_Activitysim/cmap_abm_lf/survey_data_prep/cmap_inputs.yml'
+  settings_file = 'C:\\projects\\cmap_activitysim\\cmap_abm\\survey_data_prep\\cmap_inputs.yml'
 }
 
 settings = yaml.load_file(settings_file)
@@ -72,9 +72,9 @@ purposeCodes <- data.frame(code = c(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
 
 # fixme: Confirm text/numeric correspond to CMAP model output modes
 modeCodes <- data.frame(code = c(1, 1, 2, 2, 3, 3, 4, 5, 6, 7, 8, 9, 10, 11, 11, 11),
-                        name = c("DRIVEALONEFREE", "DRIVEALONEPAY", "SHARED2FREE", "SHARED2PAY",
-                                 "SHARED3FREE","SHARED3PAY", "WALK", "BIKE",
-                                 "WALK_TRANSIT", "DRIVE_TRANSIT", "KNR", "TNR",
+                        name = c("DRIVEALONE", "DRIVEALONEPAY", "SHAREDRIDE2", "SHARED2PAY",
+                                 "SHAREDRIDE3","SHARED3PAY", "WALK", "BIKE",
+                                 "WALK_TRANSIT", "PNR_TRANSIT", "KNR_TRANSIT", "TNC_TRANSIT",
                                  "SCHOOLBUS",                        # 9 = School Bus
                                  "TAXI", "TNC_SINGLE", "TNC_SHARED")) #10 = Ride hail
 
@@ -95,7 +95,7 @@ xwalk[county_name_proper == '', county_name_proper := str_to_title(county_nam) ]
 # 
 
 
-districtList <- sort(unique(xwalk$county_nam))
+districtList <- sort(unique(xwalk$county_name_proper))
 setnames(xwalk, c('county_name_proper', 'county_fip', 'zone17', 'subzone17'), c('COUNTY_NAME', 'COUNTY', 'TAZ', 'MAZ'), skip_absent = TRUE)
 
 print('Processing Distance Skim Matrix...')
@@ -159,16 +159,16 @@ write.csv(xtabs(finalweight~HHVEH+WORKERS, data = hh), "xtab_HHVEH_WORKERS.csv",
 # Compute Summary Statistics
 
 # Auto ownership
-autoOwnership <- count(hh, c("HHVEH"), "finalweight")
+autoOwnership <- plyr::count(hh, c("HHVEH"), "finalweight")
 write.csv(autoOwnership, "autoOwnership.csv", row.names = TRUE)
 
 hh$COUNTY <- xwalk$COUNTY_NAME[match(hh$home_zone_id, xwalk$MAZ)]
-autoOwnershipCY <- count(hh, c("COUNTY", "HHVEH"), "finalweight")
+autoOwnershipCY <- plyr::count(hh, c("COUNTY", "HHVEH"), "finalweight")
 autoOwnershipCY <- cast(autoOwnershipCY, COUNTY~HHVEH, value = "freq", sum)
 write.csv(autoOwnershipCY, "autoOwnershipCY.csv", row.names = F)
 
 # Persons by person type
-pertypeDistbn <- count(per, c("PERTYPE"), "finalweight")
+pertypeDistbn <- plyr::count(per, c("PERTYPE"), "finalweight")
 write.csv(pertypeDistbn, "pertypeDistbn.csv", row.names = TRUE)
 
 
@@ -252,29 +252,28 @@ mandTourLengths <- rbind(mandTourLengths[!(mandTourLengths$District == "Total"),
 write.csv(mandTourLengths, "mandTourLengths.csv", row.names = F)
 # 
 # # Work from home [for each district and total]
-# districtWorkers <- ddply(per[per$is_worker=="True",c("HDISTRICT", "finalweight")], c("HDISTRICT"), summarise, workers = sum(finalweight))
-# districtWorkers_df <- merge(x = data.frame(HDISTRICT = districtList), y = districtWorkers, by = "HDISTRICT", all.x = TRUE)
-# districtWorkers_df[is.na(districtWorkers_df)] <- 0
-# 
-# districtWfh     <- ddply(per[per$is_worker=="True" & per$work_from_home=="True",c("HDISTRICT", "finalweight")], c("HDISTRICT"), summarise, wfh = sum(finalweight))
-# districtWfh_df <- merge(x = data.frame(HDISTRICT = districtList), y = districtWfh, by = "HDISTRICT", all.x = TRUE)
-# districtWfh_df[is.na(districtWfh_df)] <- 0
-# 
-# wfh_summary     <- cbind(districtWorkers_df, districtWfh_df$wfh)
-# colnames(wfh_summary) <- c("District", "Workers", "WFH")
-# totalwfh        <- data.frame("Total", sum((per$is_worker=="True")*per$finalweight), sum((per$is_worker=="True" & per$work_from_home=="True")*per$finalweight))
-# colnames(totalwfh) <- colnames(wfh_summary)
-# wfh_summary <- rbind(wfh_summary, totalwfh)
+districtWorkers <- ddply(per[per$is_worker=="True",c("HDISTRICT", "finalweight")], c("HDISTRICT"), summarise, workers = sum(finalweight))
+#districtWorkers$HDISTRICT = str_to_upper(districtWorkers$HDISTRICT)
+districtWorkers_df <- merge(x = data.frame(HDISTRICT = districtList), y = districtWorkers, by = "HDISTRICT", all.x = TRUE)
+districtWorkers_df[is.na(districtWorkers_df)] <- 0
 
-# fixme: no wfh info in asim output?
-wfh_summary = data.frame(District = '', Workers = 0, WFH = 0) # faking it with sandag data to avoid it
+districtWfh     <- ddply(per[per$is_worker=="True" & per$work_from_home=="True",c("HDISTRICT", "finalweight")], c("HDISTRICT"), summarise, wfh = sum(finalweight))
+#districtWfh$HDISTRICT = str_to_upper(districtWfh$HDISTRICT)
+districtWfh_df <- merge(x = data.frame(HDISTRICT = districtList), y = districtWfh, by = "HDISTRICT", all.x = TRUE)
+districtWfh_df[is.na(districtWfh_df)] <- 0
+
+wfh_summary     <- cbind(districtWorkers_df, districtWfh_df$wfh)
+colnames(wfh_summary) <- c("District", "Workers", "WFH")
+totalwfh        <- data.frame("Total", sum((per$is_worker=="True")*per$finalweight), sum((per$is_worker=="True" & per$work_from_home=="True")*per$finalweight))
+colnames(totalwfh) <- colnames(wfh_summary)
+wfh_summary <- rbind(wfh_summary, totalwfh)
 write.csv(wfh_summary, "wfh_summary.csv", row.names = F)
 
 # Telecommute Frequency
-# telecommuteFrequency <- count(per[!is.na(per$telecommute_frequency),], c("telecommute_frequency"), "finalweight")
+telecommuteFrequency <- count(per[!is.na(per$telecommute_frequency),], c("telecommute_frequency"), "finalweight")
 # #drop the empty rows count
-# telecommuteFrequency <- telecommuteFrequency[-c(1), ]
-# write.csv(telecommuteFrequency, "telecommuteFrequency.csv", row.names = TRUE)
+telecommuteFrequency <- telecommuteFrequency[-c(1), ]
+write.csv(telecommuteFrequency, "telecommuteFrequency.csv", row.names = TRUE)
 
 # County-County Flows
 countyFlows <- xtabs(finalweight~HDISTRICT+WDISTRICT, data = workers)
@@ -395,14 +394,14 @@ all_tours$tourdur[all_tours$tourdur<=1] = 1
 
 # Recode time bin windows
 
-bin_xwalk = data.frame(bin48 = seq(1:48), 
-                       bin23 = c(rep(5,6),
-                                 rep(6:22, each = 2),
-                                 rep(23, 8)))
+bin_xwalk = data.frame(bin48 = seq(1:24), 
+                       bin23 = c(rep(5,3),
+                                 rep(6:22, each = 1),
+                                 rep(23, 4)))
 
 
 # cap tour duration at 20 hours
-all_tours$tourdur[all_tours$tourdur>=40] = 40
+all_tours$tourdur[all_tours$tourdur>=20] = 20
 
 all_tours = merge(all_tours, bin_xwalk, by.x = 'start_hour', by.y = 'bin48', all.x = T)
 names(all_tours)[names(all_tours)=="bin23"]   = 'ANCHOR_DEPART_BIN_RECODE'
@@ -1969,7 +1968,7 @@ totals_df <- data.frame(name = totals_var, value = totals_val)
 write.csv(totals_df, "totals.csv", row.names = F)
 
 # HH Size distribution
-hhSizeDist <- count(hh[hh$TYPE == 1,], c("HHSIZE"), "finalweight") #only counting non-GQ households
+hhSizeDist <- plyr::count(hh[hh$HHT != 5 & hh$HHT != 7,], c("HHSIZE"), "finalweight") #only counting non-GQ households
 write.csv(hhSizeDist, "hhSizeDist.csv", row.names = F)
 
 # Active Persons by person type

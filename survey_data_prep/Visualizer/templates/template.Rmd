@@ -528,13 +528,13 @@ base_df <- base_data[[base_pos]]
 census_df = base_data[[which(base_csv_names=="hhSizeCensus")]]
 
 
-# build_pos <- which(build_csv_names=="hhSizeDist")
-# build_df <- build_data[[build_pos]]
+build_pos <- which(build_csv_names=="hhSizeDist")
+build_df <- build_data[[build_pos]]
 
 colnames(census_df) <- colnames(base_df)
 
-std_DF <- get_standardDF(data_df1 = base_df, data_df2 = census_df, x = "HHSIZE", y = c("freq"))
-p <- plotly_bar_plotter(data = std_DF, xlabel = "HH Size", ylabel = "Percent", ynames = c(BASE_SCENARIO_NAME, 'Census'), percent = T)
+std_DF <- get_standardDF(data_df1 = base_df, data_df2 = build_df, x = "HHSIZE", y = c("freq"))
+p <- plotly_bar_plotter(data = std_DF, xlabel = "HH Size", ylabel = "Percent", ynames = c(BASE_SCENARIO_NAME, BUILD_SCENARIO_NAME), percent = T)
 p
 
 ```
@@ -635,7 +635,7 @@ Chart Column 1 {data-width=200}
 ### Auto Ownership{data-height=265}
 ```{r Chart_Auto_Ownership}
 if(IS_BASE_SURVEY=="Yes"){
-  cat("Census source: ", AO_CENSUS_LONG)
+  #cat("Census source: ", AO_CENSUS_LONG)
   # [3/31/2020] DH No census data used for SEMCOG
   census_df <- base_data[[which(base_csv_names=="autoOwnershipCensus")]]
   # base_df <- base_data[[which(base_csv_names=="autoOwnership")]]
@@ -651,9 +651,9 @@ base_df$X = NULL
 colnames(build_df) <- colnames(census_df)
 colnames(base_df) <- colnames(census_df)
 
-std_DF <- get_standardDF(data_df1 = base_df, data_df2 = census_df, x = "HHVEH", y = c("freq"))
+std_DF <- get_standardDF(data_df1 = base_df, data_df2 = build_df, x = "HHVEH", y = c("freq"))
 
-p <- plotly_bar_plotter(data = std_DF, xlabel = "Number of Vehicles", ylabel = "Percent", ynames = c(BASE_SCENARIO_NAME, AO_CENSUS_SHORT), percent = T, height = 225)
+p <- plotly_bar_plotter(data = std_DF, xlabel = "Number of Vehicles", ylabel = "Percent", ynames = c(BASE_SCENARIO_NAME, BUILD_SCENARIO_NAME), percent = T, height = 225)
 p
 ```
 
@@ -669,6 +669,7 @@ base_df <- base_data[[which(base_csv_names=="wfh_summary")]]
 base_df$share <- base_df$WFH/base_df$Workers
 build_df <- build_data[[which(build_csv_names=="wfh_summary")]]
 build_df$share <- build_df$WFH/build_df$Workers
+build_df = build_df[which(str_to_upper(build_df$District) %in% str_to_upper(base_df$District)),]
 std_DF <- cbind(base_df[,c("District", "share")], build_df[,c("share")])
 colnames(std_DF) <- c("xvar", "prop1", "prop2")
 p <- plotly_bar_plotter(data = std_DF, xlabel = "District", ylabel = "Percent WFH", ynames = c(BASE_SCENARIO_NAME, BUILD_SCENARIO_NAME), percent = T, height = 275, tickangle = -320, bottom_offset = 25)

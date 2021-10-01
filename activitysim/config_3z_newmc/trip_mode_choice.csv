@@ -57,6 +57,7 @@ util_PNR_TRANSIT_Paths_logsums,PNR_TRANSIT - Path logsums,@tvpb_logsum_odt['DTW'
 util_PNR_TRANSIT_Destination_zone_densityIndex,PNR_TRANSIT - Destination zone densityIndex,@density_index_multiplier * df.dest_density_index,,,,,,,coef_ivt,,,
 #util_PNR_TRANSIT_Topology,PNR_TRANSIT - Topology,@coef_topology_trn_multiplier * df.trip_topology,,,,,,,coef_ivt,,,
 util_PNR_TRANSIT_Person_is_less_than_10_years_old,PNR_TRANSIT - Person is less than 10 years old,@(df.age < 10),,,,,,,coef_age010_trn,,,
+#util_PNR_TRANSIT_ParkingCost,PNR Parking cost,@df.PCOST,,,,,,,coef_PNR_TRANSIT_ParkingCost,,
 #KNR Transit
 #util_KNR_TRANSIT_Unavailable,KNR_TRANSIT - Unavailable,drive_transit_available == False,,,,,,,,-999,,,
 util_KNR_TRANSIT_Unavailable_for_zero_auto_households,KNR_TRANSIT - Unavailable for zero auto households,auto_ownership == 0,,,,,,,,-999,,,
@@ -142,11 +143,12 @@ util_joint_Ride_Hail_tour_mode_ASC_ride_hail_taxi,joint - Ride Hail tour mode AS
 util_joint_Ride_Hail_tour_mode_ASC_ride_hail_single,joint - Ride Hail tour mode ASC -- ride hail,@(df.is_joint & df.i_tour_mode.isin(I_RIDE_HAIL_MODES)),,,,,,,,,,,,joint_ride_hail_ASC_tnc_single,
 util_joint_Ride_Hail_tour_mode_ASC_ride_hail_shared,joint - Ride Hail tour mode ASC -- ride hail,@(df.is_joint & df.i_tour_mode.isin(I_RIDE_HAIL_MODES)),,,,,,,,,,,,,joint_ride_hail_ASC_tnc_shared
 #,#,,,,,,,,,,,,,,
-util_Walk_not_available_for_long_distances,Walk not available for long distances,@df.tour_mode_is_walk & (od_skims['DIST'] > 3),,,,,,,-999,,,,,,
-util_Bike_not_available_for_long_distances,Bike not available for long distances,@df.tour_mode_is_walk & (od_skims['DISTBIKE'] > 8),,,,,,,,-999,,,,,
+util_Walk_not_available_for_long_distances,Walk not available for long distances,@df.tour_mode_is_walk & (od_skims['DIST'] == 0) & (od_skims['DIST'] > 3),,,,-999,,,,,,
+util_Bike_not_available_for_long_distances,Bike not available for long distances,@df.tour_mode_is_walk & (od_skims['DISTBIKE'] == 0) & (od_skims['DISTBIKE'] > 8),,,,,-999,,,,,
 util_origin_density_index,Origin density index,@origin_density_applied*(origin_density_index_multiplier*df.origin_density_index).clip(origin_density_index_max),,,,,,,coef_ivt,coef_ivt,coef_ivt,coef_ivt,,coef_ivt,coef_ivt
 util_walk_express_penalty,Walk-express penalty for intermediate stops,@walk_express_penalty * ~(df.first_trip | df.first_trip),,,,,,,,,,,,,
 util_adjust_tnc_shared,TNC shared adjustment,@adjust_tnc_shared,,,,,,,,,,,,coef_ivt
 util_schbus_trip_not_tour,non-school bus trips on a school bus tour,tour_mode_is_schbus,-999,schbus_ASC_sbtourntrip_sr2,schbus_ASC_sbtourntrip_sr3,schbus_ASC_sbtourntrip_walk,-999,schbus_ASC_sbtourntrip_trnw,-999,schbus_ASC_sbtourntrip_trnknr,schbus_ASC_sbtourntrip_trntnc,schbus_ASC_sbtourntrip_taxi,schbus_ASC_sbtourntrip_tncsingle,schbus_ASC_sbtourntrip_tncshared,
-
+#SCHBUS
+util_SCHBUS_asc,school_tour,,,,,,,,,,,,,schbus_ASC
 util_schbus_notschooltour,,~school_tour,,,,,,,,,,,,,-999

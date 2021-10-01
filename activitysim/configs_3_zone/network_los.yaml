@@ -2,13 +2,13 @@ inherit_settings: True
 
 zone_system: 3
 
-skim_dict_factory: NumpyArraySkimFactory
-#skim_dict_factory: MemMapSkimFactory
+#skim_dict_factory: NumpyArraySkimFactory
+skim_dict_factory: MemMapSkimFactory
 
 # read cached skims (using numpy memmap) from output directory (memmap is faster than omx )
 read_skim_cache: True
 # write memmapped cached skims to output directory after reading from omx, for use in subsequent runs
-write_skim_cache: True
+write_skim_cache: False
 
 # rebuild and overwrite existing tap_tap_utilities cache
 rebuild_tvpb_cache: True
@@ -42,7 +42,7 @@ maz_to_maz:
     DIST: 5
     # blend distance of 0 means no blending
     DISTBIKE: 0
-    DISTWALK: 1
+    DISTWALK: 0
 
   # missing means use the skim value itself rather than DIST skim (e.g. DISTBIKE)
   blend_distance_skim_name: DIST
@@ -148,8 +148,10 @@ TVPB_SETTINGS:
           #- demographic_segment
           - drive_time
           - DIST
+          - PCOST
     CONSTANTS:
       C_LOW_INCOME_SEGMENT_ID: *low_income_segment_id
+      C_MID_INCOME_SEGMENT_ID: -1 #TODO: implement
       C_HIGH_INCOME_SEGMENT_ID: *high_income_segment_id
       TVPB_demographic_segments_by_income_segment:
         1: *low_income_segment_id
@@ -160,6 +162,9 @@ TVPB_SETTINGS:
       c_ivt_low_income: -0.0175
       c_cost_high_income: -0.00112
       c_cost_low_income: -0.00112
+      c_park_low_income: -0.1
+      c_park_med_income: -0.05
+      c_park_high_income: -0.01
       c_wait: 1.5
       c_walk: 1.7
       c_drive: 1.5

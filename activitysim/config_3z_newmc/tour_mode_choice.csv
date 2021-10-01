@@ -52,22 +52,23 @@ util_WALK_TRANSIT_Destination_zone_densityIndex,WALK_TRANSIT - Destination zone 
 util_WALK_TRANSIT_Topology,WALK_TRANSIT - Topology,@coef_topology_trn_multiplier * df.dest_topology,,,,,,coef_ivt,,,
 util_WALK_TRANSIT_Person_is_less_than_10_years_old,WALK_TRANSIT - Person is less than 10 years old,@(df.age <= 10),,,,,,coef_age010_trn_multiplier,,,
 #,Transit PNR,,,,,,,,,,,,,,
-util_PNR_TRANSIT_Unavailable,PNR_TRANSIT - Unavailable,pnr_transit_available == False,,,,,,,-999,,
+#util_PNR_TRANSIT_Unavailable,PNR_TRANSIT - Unavailable,pnr_transit_available == False,,,,,,,-999,,
 util_PNR_TRANSIT_Unavailable_for_zero_auto_households,PNR_TRANSIT - Unavailable for zero auto households,auto_ownership == 0,,,,,,,-999,,
 util_PNR_TRANSIT_Unavailable_for_persons_less_than_16,PNR_TRANSIT - Unavailable for persons less than 16,age < 16,,,,,,,-999,,
 util_PNR_TRANSIT_Paths_logsums,PNR_TRANSIT - Path logsums,@tvpb_logsum_odt['DTW'] + tvpb_logsum_dot['WTD'],,,,,,,coef_one,,
 util_PNR_TRANSIT_Destination_zone_densityIndex,PNR_TRANSIT - Destination zone densityIndex,@density_index_multiplier * df.dest_density_index,,,,,,,coef_ivt,,
 #util_PNR_TRANSIT_Topology,PNR_TRANSIT - Topology,@coef_topology_trn_multiplier * df.dest_topology,,,,,,,coef_ivt,,
+####util_PNR_TRANSIT_ParkingCost,PNR Parking cost,@df.PCOST,,,,,,,coef_PNR_TRANSIT_ParkingCost,,
 #,Transit KNR,,,,,,,,,,,,,,
-util_KNR_TRANSIT_Unavailable,KNR_TRANSIT - Unavailable,knr_transit_available == False,,,,,,,,-999,,
+#util_KNR_TRANSIT_Unavailable,KNR_TRANSIT - Unavailable,knr_transit_available == False,,,,,,,,-999,,
 util_KNR_TRANSIT_Unavailable_for_zero_auto_households,KNR_TRANSIT - Unavailable for zero auto households,auto_ownership == 0,,,,,,,,-999,,
 #util_KNR_TRANSIT_Unavailable_for_persons_less_than_16,KNR_TRANSIT - Unavailable for persons less than 16,age < 16,,,,,,,,-999,,
-util_KNR_TRANSIT_Paths_logsums,KNR_TRANSIT - Path logsums,@tvpb_logsum_odt['KTW'] + tvpb_logsum_dot['WTK'] * 1.0,,,,,,,,coef_one,,
+util_KNR_TRANSIT_Paths_logsums,KNR_TRANSIT - Path logsums,@tvpb_logsum_odt['KTW'] + tvpb_logsum_dot['WTK'],,,,,,,,coef_one,,
 util_KNR_TRANSIT_Destination_zone_densityIndex,KNR_TRANSIT - Destination zone densityIndex,@density_index_multiplier * df.dest_density_index,,,,,,,,coef_ivt,,
 #util_KNR_TRANSIT_Topology,KNR_TRANSIT - Topology,@coef_topology_trn_multiplier * df.dest_topology,,,,,,,,coef_ivt,,
 util_KNR_TRANSIT_Person_is_less_than_10_years_old,KNR_TRANSIT - Person is less than 10 years old,@(df.age < 10),,,,,,,,coef_age010_trn_multiplier,,
 #,Transit TNC,,,,,,,,,,,,,,
-util_TNC_TRANSIT_Unavailable,TNC_TRANSIT - Unavailable,tnc_transit_available == False,,,,,,,,,-999,,
+#util_TNC_TRANSIT_Unavailable,TNC_TRANSIT - Unavailable,tnc_transit_available == False,,,,,,,,,-999,,
 util_TNC_TRANSIT_Unavailable_for_zero_auto_households,TNC_TRANSIT - Unavailable for zero auto households,auto_ownership == 0,,,,,,,,,-999,,
 #util_TNC_TRANSIT_Unavailable_for_persons_less_than_16,TNC_TRANSIT - Unavailable for persons less than 16,age < 16,,,,,,,,,-999,,
 util_TNC_TRANSIT_Paths_logsums,TNC_TRANSIT - Path logsums,@tvpb_logsum_odt['NTW'] + tvpb_logsum_dot['WTN'],,,,,,,,,coef_one,,
@@ -95,8 +96,8 @@ util_TNC_Shared_Tolls,TNC Shared - Tolls,@ivt_cost_multiplier * df.ivot * (odt_s
 util_TNC_Shared_Bridge_toll,TNC Shared - Bridge toll,@ivt_cost_multiplier * df.ivot * (odt_skims['HOV2_M_TOLLCOST'] + odr_skims['HOV2_M_TOLLCOST'] + dot_skims['HOV2_M_TOLLCOST'] + dor_skims['HOV2_M_TOLLCOST']),,,,,,,,,,,,coef_ivt
 util_TNC_Shared_Cost,TNC Shared - Cost,"@ivt_cost_multiplier * df.ivot * np.maximum(TNC_shared_baseFare * 2 + (odt_skims['HOV2_M_DIST'] + dot_skims['HOV2_M_DIST']) * TNC_shared_costPerMile + (odt_skims['HOV2_M_TIME'] + dot_skims['HOV2_M_TIME']) * TNC_shared_costPerMinute, TNC_shared_costMinimum)",,,,,,,,,,,,coef_ivt
 #SCHBUS
-util_SCHBUS_unav,School bus unav,schbus_available == False,,,,,,,,,,,,,-999
-util_SCHBUS_In_vehicle_time,School bus - In-vehicle time,@odt_skims['SOV_NT_M_TIME'] + dot_skims['SOV_NT_M_TIME'],,,,,,,,,,,,,coef_ivt
+util_SCHBUS_unavailable,School bus unav,schbus_available == False,,,,,,,,,,,,,-999
+util_SCHBUS_asc,schbus_available,,,,,,,,,,,,,schbus_ASC
 #,indiv tour ASCs,,,,,,,,,,,,,, 
 util_Walk_ASC_Zero_auto,Walk ASC - Zero auto,@(df.is_indiv & (df.auto_ownership == 0)),,,,walk_ASC_no_auto,,,,,,
 util_Walk_ASC_Auto_deficient,Walk ASC - Auto deficient,@(df.is_indiv & (df.auto_ownership < df.num_workers) & (df.auto_ownership > 0)),,,,walk_ASC_auto_deficient,,,,,,
@@ -114,7 +115,7 @@ util_Walk_to_Transit_Zero_auto,Walk to Transit - Zero auto,@(df.is_indiv & (df.a
 util_Walk_to_Transit_Auto_deficient,Walk to Transit - Auto deficient,@(df.is_indiv & (df.auto_ownership < df.num_workers) & (df.auto_ownership > 0)),,,,,,walk_transit_ASC_auto_deficient,,,,
 util_Walk_to_Transit_Auto_sufficient,Walk to Transit - Auto sufficient,@(df.is_indiv & (df.auto_ownership >= df.num_workers)),,,,,,walk_transit_ASC_auto_sufficient,,,,
 util_Drive_to_Transit_Zero_auto,Drive to Transit - Zero auto,@(df.is_indiv & (df.auto_ownership == 0)),,,,,,,pnr_transit_ASC_no_auto,knr_transit_ASC_no_auto,tnc_transit_ASC_no_auto,
-util_Drive_to_Transit_Auto_deficient,Drive to Transit - Auto deficient,@(df.is_indiv & (df.auto_ownership < df.num_workers) & (df.auto_ownership > 0)),,,,,,,pnr_transit_ASC_auto_deficient,tnc_transit_ASC_auto_deficient,tnc_transit_ASC_auto_deficient,
+util_Drive_to_Transit_Auto_deficient,Drive to Transit - Auto deficient,@(df.is_indiv & (df.auto_ownership < df.num_workers) & (df.auto_ownership > 0)),,,,,,,pnr_transit_ASC_auto_deficient,knr_transit_ASC_auto_deficient,tnc_transit_ASC_auto_deficient,
 util_Drive_to_Transit_Auto_sufficient,Drive to Transit - Auto sufficient,@(df.is_indiv & (df.auto_ownership >= df.num_workers)),,,,,,,pnr_transit_ASC_auto_sufficient,knr_transit_ASC_auto_sufficient,tnc_transit_ASC_auto_sufficient,
 util_Taxi_Zero_auto,Taxi - Zero auto,@(df.is_indiv & (df.auto_ownership == 0)),,,,,,,,,,taxi_ASC_no_auto,,
 util_Taxi_Auto_deficient,Taxi - Auto deficient,@(df.is_indiv & (df.auto_ownership < df.num_workers) & (df.auto_ownership > 0)),,,,,,,,,,taxi_ASC_auto_deficient,,
@@ -125,7 +126,6 @@ util_TNC_Single_Auto_sufficient,TNC Single - Auto sufficient,@(df.is_indiv & (df
 util_TNC_Shared_Zero_auto,TNC Shared - Zero auto,@(df.is_indiv & (df.auto_ownership == 0)),,,,,,,,,,,,tnc_shared_ASC_no_auto
 util_TNC_Shared_Auto_deficient,TNC Shared - Auto deficient,@(df.is_indiv & (df.auto_ownership < df.num_workers) & (df.auto_ownership > 0)),,,,,,,,,,,,tnc_shared_ASC_auto_deficient
 util_TNC_Shared_Auto_sufficient,TNC Shared - Auto sufficient,@(df.is_indiv & (df.auto_ownership >= df.num_workers)),,,,,,,,,,,,tnc_shared_ASC_auto_sufficient
-SCHBUS_ASC,,schbus_available == False,,,,,,,,,,,,,-999
 #,joint tour ASCs,,,,,,,,,,,,,, 
 util_Joint_Walk_ASC_Zero_auto,Joint - Walk ASC - Zero auto,@(df.is_joint & (df.auto_ownership == 0)),,,,joint_walk_ASC_no_auto,,,,,
 util_Joint_Walk_ASC_Auto_deficient,Joint - Walk ASC - Auto deficient,@(df.is_joint & (df.auto_ownership < df.num_workers) & (df.auto_ownership > 0)),,,,joint_walk_ASC_auto_deficient,,,,,
@@ -143,7 +143,7 @@ util_Joint_Walk_to_Transit_Zero_auto,Joint - Walk to Transit - Zero auto,@(df.is
 util_Joint_Walk_to_Transit_Auto_deficient,Joint - Walk to Transit - Auto deficient,@(df.is_joint & (df.auto_ownership < df.num_workers) & (df.auto_ownership > 0)),,,,,,joint_walk_transit_ASC_auto_deficient,,,
 util_Joint_Walk_to_Transit_Auto_sufficient,Joint - Walk to Transit - Auto sufficient,@(df.is_joint & (df.auto_ownership >= df.num_workers)),,,,,,joint_walk_transit_ASC_auto_sufficient,,,
 util_Joint_Drive_to_Transit_Zero_auto,Joint - Drive to Transit - Zero auto,@(df.is_joint & (df.auto_ownership == 0)),,,,,,,joint_pnr_transit_ASC_no_auto,joint_knr_transit_ASC_no_auto,joint_tnc_transit_ASC_no_auto
-util_Joint_Drive_to_Transit_Auto_deficient,Joint - Drive to Transit - Auto deficient,@(df.is_joint & (df.auto_ownership < df.num_workers) & (df.auto_ownership > 0)),,,,,,,joint_pnr_transit_ASC_auto_deficient,joint_pnr_transit_ASC_auto_deficient,joint_tnc_transit_ASC_auto_deficient
+util_Joint_Drive_to_Transit_Auto_deficient,Joint - Drive to Transit - Auto deficient,@(df.is_joint & (df.auto_ownership < df.num_workers) & (df.auto_ownership > 0)),,,,,,,joint_pnr_transit_ASC_auto_deficient,joint_knr_transit_ASC_auto_deficient,joint_tnc_transit_ASC_auto_deficient
 util_Joint_Drive_to_Transit_Auto_sufficient,Joint - Drive to Transit - Auto sufficient,@(df.is_joint & (df.auto_ownership >= df.num_workers)),,,,,,,joint_pnr_transit_ASC_auto_sufficient,joint_knr_transit_ASC_auto_sufficient,joint_tnc_transit_ASC_auto_sufficient
 util_Joint_Taxi_Zero_auto,Joint - Taxi - Zero auto,@(df.is_joint & (df.auto_ownership == 0)),,,,,,,,,,joint_taxi_ASC_no_auto,,
 util_Joint_Taxi_Auto_deficient,Joint - Taxi - Auto deficient,@(df.is_joint & (df.auto_ownership < df.num_workers) & (df.auto_ownership > 0)),,,,,,,,,,joint_taxi_ASC_auto_deficient,,
@@ -158,7 +158,7 @@ util_Walk_to_Transit_dest_CBD,Walk to Transit dest CBD,@df.destination_in_cbd,,,
 util_Drive_to_Transit_dest_CBD,Drive to Transit dest CBD,@df.destination_in_cbd,,,,,,,pnr_transit_CBD_ASC,knr_transit_CBD_ASC,tnc_transit_CBD_ASC,
 util_Drive_to_Transit_distance_penalty,Drive to Transit - distance penalty,@drvtrn_distpen_0_multiplier * (1-od_skims['DIST']/drvtrn_distpen_max).clip(lower=0),,,,,,,coef_ivt,coef_ivt,coef_ivt,
 #, FIXME - skims aren't symmetrical,so we have to make sure they can get back,,,,,,,,,,,,,
-util_Walk_not_available_for_long_distances,Walk not available for long distances,@od_skims.max('DIST') > 3,,,,-999,,,,,
-util_Bike_not_available_for_long_distances,Bike not available for long distances,@od_skims.max('DISTBIKE') > 8,,,,,-999,,,,
+util_Walk_not_available_for_long_distances,Walk not available for long distances,@(od_skims['DIST'] > 3) & (od_skims['DIST'] == 0),,,,-999,,,,,
+util_Bike_not_available_for_long_distances,Bike not available for long distances,@(od_skims['DISTBIKE'] > 8) & (od_skims['DISTBIKE'] == 0),,,,,-999,,,,
 util_Drive_alone_not_available_for_escort_tours,Drive alone not available for escort tours,is_escort,-999,,,,,,,,
 ##, max(c_densityIndexOrigin*originDensityIndex,originDensityIndexMax),,,,,,,,,1,1,,,

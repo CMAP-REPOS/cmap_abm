@@ -9,7 +9,7 @@ args = commandArgs(trailingOnly = TRUE)
 if(length(args) > 0){
   settings_file = args[1]
 } else {
-  settings_file = 'N:/Projects/CMAP_Activitysim/cmap_abm_lf/survey_data_prep/cmap_inputs.yml'
+  settings_file = 'C:\\projects\\cmap_activitysim\\cmap_abm\\survey_data_prep\\cmap_inputs.yml'
 }
 
 library(yaml)
@@ -104,7 +104,7 @@ jutrips              = fread(file.path(Survey_Processed_Dir, "unique_joint_ultri
 jtours               = fread(file.path(Survey_Processed_Dir, "unique_joint_tours.csv"))
 
 
-zones = st_read(file.path(zone_dir, "zones17.shp"))
+zones = st_read(file.path(zone_dir, "zones17.shp"), stringsAsFactors = FALSE)
 zones09 = st_read(file.path(zone_dir, 'Zone09_CMAP_2009.shp'))
 zones_dt = setDT(zones)
 
@@ -375,19 +375,19 @@ countyFlows = xtabs(finalweight~HDISTRICT+WDISTRICT, data = countyFlowWorkers)
 countyFlows[is.na(countyFlows)] = 0
 countyFlows = addmargins(as.table(countyFlows))
 
-countyFlows = as.data.frame.matrix(countyFlows)
-colnames(countyFlows)[colnames(countyFlows)=="Sum"] = "Total"
-rownames(countyFlows)[rownames(countyFlows)=="Sum"] = "Total"
-
-countyFlows$order = c(1:7, 10, 12, 8:9, 11, 13)
-setDT(countyFlows, keep.rownames = TRUE)
-setcolorder(countyFlows,  c("rn", "Cook",     "DeKalb",   "DuPage",   
-                            "Grundy" ,  "Kane" ,  "Kendall", "Lake, IL",
-                            "McHenry"  , "Will"   , "Lake, IN",  "LaPorte",   "Porter" , "Total"   ))
-countyFlows = countyFlows[order(order)]
-setnames(countyFlows, "rn", "X")
-
-write.csv(countyFlows, "countyFlows.csv", row.names = F)
+# countyFlows = as.data.frame.matrix(countyFlows)
+# colnames(countyFlows)[colnames(countyFlows)=="Sum"] = "Total"
+# rownames(countyFlows)[rownames(countyFlows)=="Sum"] = "Total"
+# 
+# countyFlows$order = c(1:7, 10, 12, 8:9, 11, 13) #FIXME: Breaks here
+# setDT(countyFlows, keep.rownames = TRUE)
+# setcolorder(countyFlows,  c("rn", "Cook",     "DeKalb",   "DuPage",   
+#                             "Grundy" ,  "Kane" ,  "Kendall", "Lake, IL",
+#                             "McHenry"  , "Will"   , "Lake, IN",  "LaPorte",   "Porter" , "Total"   ))
+# countyFlows = countyFlows[order(order)]
+# setnames(countyFlows, "rn", "X")
+# 
+# write.csv(countyFlows, "countyFlows.csv", row.names = F)
 
 # wplace_employed = count(countyFlowWorkers, vars='WPLACE', wt_var='finalweight')  # what is WPLACE?
 
@@ -477,6 +477,9 @@ tours$TOUR_DUR_BIN[tours$TOUR_DUR_BIN>=40] = 40
 
 tours = merge(tours, bin_xwalk, by.x = 'ANCHOR_DEPART_BIN', by.y = 'bin48', all.x = T)
 names(tours)[names(tours)=="bin23"]   = 'ANCHOR_DEPART_BIN_RECODE'
+
+x = data.frame(i = 1:48)
+x$j = as.integer((x$i + 1) / 2)
 
 tours = merge(tours, bin_xwalk, by.x = 'ANCHOR_ARRIVE_BIN', by.y = 'bin48', all.x = T)
 names(tours)[names(tours)=="bin23"]   = 'ANCHOR_ARRIVE_BIN_RECODE'
@@ -2278,7 +2281,7 @@ names(trips_flow_total)[names(trips_flow_total) == "V1"] = "count"
 trips_flow = rbind(trips_flow, trips_flow_total[,c("OCOUNTY", "DCOUNTY", "trip_mode", "tour_purpose", "count")])
 
 
-write.table(trips_flow, paste(WD,"trips_flow.csv", sep = "//"), sep = ",", row.names = F)
+write.table(as.data.frame(trips_flow), paste(WD,"trips_flow.csv", sep = "//"), sep = ",", row.names = F)
 
 
 ### Employer Parking Provision

@@ -11,9 +11,10 @@
 #############################################################################################################################
 library(Rcpp)
 ### Read Command Line Arguments
-args                <- commandArgs(trailingOnly = TRUE)
-Parameters_File     <- args[1]
-# Parameters_File <- "N:/Projects/CMAP_Activitysim/cmap_abm_lf/survey_data_prep/Visualizer/runtime/parameters.csv"
+#FIXME: Redo this, it should be reading the commandArgs, ASR commented to run in RStudio
+#args                <- commandArgs(trailingOnly = TRUE)
+#Parameters_File     <- args[1]
+Parameters_File <- "C:\\projects\\cmap_activitysim\\cmap_abm\\survey_data_prep\\Visualizer\\runtime\\parameters.csv"
 #Run_switch          <- "FULL"
 
 ### Read parameters from Parameters_File
@@ -56,14 +57,14 @@ source(paste(WORKING_DIR, "scripts/_SYSTEM_VARIABLES.R", sep = "/"))
 base_csv_list <- "summaryFilesNames_survey_CMAP.csv"
 summaryFileList_base <- read.csv(paste(SYSTEM_TEMPLATES_PATH, base_csv_list, sep = "/"), as.is = T)
 summaryFileList_base <- as.list(summaryFileList_base$summaryFile)
-retVal <- copyFile(summaryFileList_base, sourceDir = BASE_SUMMARY_DIR, targetDir = BASE_DATA_PATH)
-if(retVal) q(save = "no", status = 11)
+#retVal <- copyFile(summaryFileList_base, sourceDir = BASE_SUMMARY_DIR, targetDir = BASE_DATA_PATH)
+#if(retVal) q(save = "no", status = 11)
 
 census_csv_list <- "summaryFilesNames_census_CMAP.csv"
 summaryFileList_census <- read.csv(paste(SYSTEM_TEMPLATES_PATH, census_csv_list, sep = '/'), as.is = T)
 summaryFileList_census <- as.list(summaryFileList_census$summaryFile)
-retVal <- copyFile(summaryFileList_census, sourceDir = BASE_SUMMARY_DIR, targetDir = BASE_DATA_PATH)
-if(retVal) q(save = "no", status = 11)
+#retVal <- copyFile(summaryFileList_census, sourceDir = BASE_SUMMARY_DIR, targetDir = BASE_DATA_PATH)
+#if(retVal) q(save = "no", status = 11)
 
 # calibration_csv_list <- "summaryFilesNames_calibration_SEMCOG.csv"
 # summaryFileList_calibration <- read.csv(paste(SYSTEM_TEMPLATES_PATH, calibration_csv_list, sep = '/'), as.is = T)
@@ -80,7 +81,7 @@ if(BUILD_SCENARIO_NAME == "SEMCOG_HTS") {
 summaryFileList_build <- read.csv(paste(SYSTEM_TEMPLATES_PATH, build_csv_list, sep = '/'), as.is = T)
 summaryFileList_build <- as.list(summaryFileList_build$summaryFile)
 retVal <- copyFile(summaryFileList_build, sourceDir = BUILD_SUMMARY_DIR, targetDir = BUILD_DATA_PATH)
-if(retVal) q(save = "no", status = 11)
+#if(retVal) q(save = "no", status = 11)
 
 ### Copy jpegs
 jpeg_list <- list.files(BUILD_SUMMARY_DIR, "*.jpeg")
@@ -91,7 +92,7 @@ SYSTEM_REPORT_PKGS <- c("DT", "flexdashboard", "leaflet", "geojsonio", "htmltool
                         "knitr", "mapview", "plotly", "RColorBrewer", "rgdal", "rgeos", "crosstalk","treemap", "htmlTable",
                         "rmarkdown", "scales", "stringr", "jsonlite", "pander", "ggplot2", "reshape", "raster", "dplyr")
 
-lib_inst <- suppressWarnings(suppressMessages(lapply(SYSTEM_REPORT_PKGS, function(x){if (x %in% rownames(installed.packages()) == FALSE) install.packages(x, lib=R_LIBRARY, repos='http://cran.us.r-project.org')})))
+lib_inst <- suppressWarnings(suppressMessages(lapply(SYSTEM_REPORT_PKGS, function(x){if (x %in% rownames(installed.packages()) == FALSE) install.packages(x, repos='http://cran.us.r-project.org')})))
 lib_sink <- suppressWarnings(suppressMessages(lapply(SYSTEM_REPORT_PKGS, library, character.only = TRUE)))
 
 ### Read Target and Output SUmmary files

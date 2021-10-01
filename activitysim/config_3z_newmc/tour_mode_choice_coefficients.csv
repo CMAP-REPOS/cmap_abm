@@ -336,3 +336,13 @@ tnc_transit_CBD_ASC_work,1.1,F
 tnc_transit_CBD_ASC_atwork,0.564,F
 schbus_ASC_eatout_escort_othdiscr_othmaint_shopping_social_univ_work_atwork,-999,T
 schbus_ASC_school,0.005,F
+coef_PNR_TRANSIT_ParkingCost_eatout,-0.0039,F
+coef_PNR_TRANSIT_ParkingCost_escort,-0.0039,F
+coef_PNR_TRANSIT_ParkingCost_othdiscr,-0.0039,F
+coef_PNR_TRANSIT_ParkingCost_othmaint,-0.0039,F
+coef_PNR_TRANSIT_ParkingCost_school,-0.0039,F
+coef_PNR_TRANSIT_ParkingCost_shopping,-0.0039,F
+coef_PNR_TRANSIT_ParkingCost_social,-0.0039,F
+coef_PNR_TRANSIT_ParkingCost_univ,-0.0039,F
+coef_PNR_TRANSIT_ParkingCost_work,-0.0039,F
+coef_PNR_TRANSIT_ParkingCost_atwork,-0.0039,F

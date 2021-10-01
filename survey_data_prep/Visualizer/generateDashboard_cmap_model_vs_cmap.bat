@@ -10,19 +10,19 @@
 :: #    with appropriate Census sources names wherever applicable
 :: ############################################################################
 @ECHO off
-SET WORKING_DIR= "D:\Projects\Clients\CMAP\Tasks\asim_setup\cmap_abm\survey_data_prep\Visualizer"
+SET WORKING_DIR= "C:/projects/cmap_activitysim/cmap_abm/survey_data_prep/Visualizer"
 
 :: User Inputs
 :: ###########
 :: Set up dependencies
 :: ###################
-SET R_SCRIPT="C:\Program Files\R\R-4.0.3\bin\x64\Rscript"
-SET R_LIBRARY=C:\Users\andrew.rohne\r_library
+SET R_SCRIPT="C:\Program Files\R\R-3.6.2\bin\rscript"
+::SET R_LIBRARY=C:\Users\andrew.rohne\r_library
 :: Set PANDOC path
-SET RSTUDIO_PANDOC=C:\Users\andrew.rohne\pandoc-2.14.2
+SET RSTUDIO_PANDOC=C:\projects\cmap_activitysim\pandoc-2.14.2
 :: Parameters file
-SET PARAMETERS_FILE=D:\Projects\Clients\CMAP\Tasks\asim_setup\cmap_abm\survey_data_prep\Visualizer\runtime\parameters.csv
-SET SETTINGS_FILE=D:\Projects\Clients\CMAP\Tasks\asim_setup\cmap_abm\survey_data_prep\cmap_inputs.yml
+SET PARAMETERS_FILE=C:/projects/cmap_activitysim/cmap_abm/survey_data_prep/Visualizer\runtime\parameters.csv
+SET SETTINGS_FILE=C:/projects/cmap_activitysim/cmap_abm/survey_data_prep\cmap_inputs.yml
 
 SET FULL_HTML_NAME=CMAP_visualizer
 
