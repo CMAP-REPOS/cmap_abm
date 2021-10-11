@@ -34,7 +34,7 @@ chunk_size: 400_000_000_000
 # and make sure to trim maz to tap max distances to a reasonable amount in network_los.yaml
 # cmap comfortable with running just 50% samples too
 
-chunk_training_mode: production
+chunk_training_mode: training
 
 num_processes: 24 
 
@@ -53,8 +53,8 @@ default_initial_rows_per_chunk: 10000
 
 # - tracing
 trace_od:
-trace_hh_id: 2720
-resume_after: non_mandatory_tour_scheduling
+#trace_hh_id: 1351147
+resume_after: initialize_tvpb
 
 # input tables
 input_table_list:
@@ -175,8 +175,9 @@ models:
   ### mp_summarize_step
   - write_data_dictionary
   - track_skim_usage
-  - write_trip_matrices
   - write_tables
+  #- write_trip_matrices
+  
 
 multiprocess_steps:
   - name: mp_initialize

@@ -34,7 +34,8 @@ coef_adjacent_window_exists_after_this_arrival_hour_first_tour_interaction,0.362
 coef_adjacent_window_exists_before_this_departure_hour_second_plus_tour_interaction,-0.2123,F
 coef_adjacent_window_exists_after_this_arrival_hour_second_plus_tour_interaction,-0.1012,F
 coef_remaining_tours_to_be_scheduled_div_number_of_unscheduled_hours,-18.68,F
-coef_departure_constants_early,-0.95272527,F
+#NOTE: Multiplied early and late constants by 4 
+coef_departure_constants_early,-3.81090108,F
 coef_departure_constants_am_peak_1,-0.616180906,F
 coef_departure_constants_am_peak_2,0,T
 coef_departure_constants_am_peak_3,-0.254714726,
@@ -43,7 +44,7 @@ coef_departure_constants_midday_1,-1.705868992,F
 coef_departure_constants_midday_2,-1.693570583,F
 coef_departure_constants_pm_peak,-1.439991962,F
 coef_departure_constants_evening,-1.610513243,F
-coef_departure_constants_late,-2.883415223,F
+coef_departure_constants_late,-11.53366089,F
 coef_arrival_constants_early,0,T
 coef_arrival_constants_am_peak,-1.854520626,F
 coef_arrival_constants_midday_1,-0.495972037,F

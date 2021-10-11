@@ -6,7 +6,7 @@ COEFFICIENTS: trip_scheduling_coefficients.csv
 
 # int to add to probs column index to get time period it represents.
 # e.g. depart_alt_base = 5 means first column (column 0) represents 5 am
-DEPART_ALT_BASE: 5
+DEPART_ALT_BASE: 3
 
 MAX_ITERATIONS: 100
 

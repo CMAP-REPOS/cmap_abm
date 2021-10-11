@@ -1435,10 +1435,6 @@ Chart Column 1{data-width=150}
 ```{r tourMode}
  # [3/31/2020] DH
 
-base_df$purpose <- as.character(base_df$purpose)
-base_df$purpose <- purpose_type_df$name[match(base_df$purpose, purpose_type_df$code)]
-
-
 if(BUILD_SCENARIO_NAME == "CMAP_OBS") {
   # if running HTS vs OBS mode comparison
   base_df <- base_data[[which(base_csv_names=="tmodeProfile_vis_HTS")]]
@@ -1452,6 +1448,8 @@ build_df$purpose <- as.character(build_df$purpose)
 build_df$purpose <- purpose_type_df$name[match(build_df$purpose, purpose_type_df$code)]
 colnames(build_df) <- colnames(base_df)
 
+base_df$purpose <- as.character(base_df$purpose)
+base_df$purpose <- purpose_type_df$name[match(base_df$purpose, purpose_type_df$code)]
 
 sd.pertype <- get_standardDF(data_df1=base_df, data_df2=build_df, x="id", y = c("freq_as0", "freq_as1", "freq_as2", "freq_all"), grp = "purpose", shared = T)
 p1 <- plotly_bar_plotter(data = sd.pertype, height = 375, xlabel = "Tour Mode [Zero Auto]", ylabel = "Percent", ynames = c(BASE_SCENARIO_NAME, BUILD_SCENARIO_NAME), percent = T, tickvals = seq(1,length(tourMode)), ticktext = tourMode, bottom_offset = 55, tickangle = 300)

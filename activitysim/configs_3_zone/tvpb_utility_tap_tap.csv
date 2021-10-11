@@ -2,24 +2,10 @@ Label,Description,Expression,fastest
 # fastest,,,
 util_transit_available_fastest,transit_available,"@~df.transit_available_fastest * C_UNAVAILABLE",1
 #,,, FIXME demonstrate that we can use path inor (access and egress modes here)
-util_bus_xfer_fastest,number of transfers,"@C_DRIVE_TRANSFER_PENALTY * (access_mode == 'drive') * (los.get_tappairs3d(df.btap, df.atap, df.tod, 'ALLPEN_XFERS')).clip(0)",1 
+util_bus_xfer_fastest,number of transfers,"@C_DRIVE_TRANSFER_PENALTY * (access_mode == 'drive') * (los.get_tappairs3d(df.btap, df.atap, df.tod, 'XFERS2')).clip(0)",1 
 #,,, local bus
-util_bus_ivt_fastest,local bus in vehicle time,"@C_FASTEST_IVT_MULTIPLIER * df.c_ivt_for_segment * los.get_tappairs3d(df.btap, df.atap, df.tod, 'ALLPEN_TOTALIVTT')",1 
-util_bus_wait_fastest,local bus wait time,"@C_FASTEST_IVT_MULTIPLIER * c_wait * df.c_ivt_for_segment * los.get_tappairs3d(df.btap, df.atap, df.tod, 'ALLPEN_FIRSTWAIT')",1 
-util_bus_xwait_fastest,local bus xwait time,"@C_FASTEST_IVT_MULTIPLIER * c_wait * df.c_ivt_for_segment * los.get_tappairs3d(df.btap, df.atap, df.tod, 'ALLPEN_XFERWAIT')",1 
-util_bus_fare_fastest,local bus fare,"@C_FASTEST_COST_MULTIPLIER * df.c_cost_for_segment * los.get_tappairs3d(df.btap, df.atap, df.tod, 'ALLPEN_FARE')",1 
-##,,, commuter bus
-#util_com_ivt_fastest,commuter bus in vehicle time,"@C_FASTEST_IVT_MULTIPLIER * df.c_ivt_for_segment * los.get_tappairs3d(df.btap, df.atap, df.tod, 'COM_TOTIVT_FAST')",1
-#util_com_wait_fastest,commuter bus wait time,"@C_FASTEST_IVT_MULTIPLIER * c_wait * df.c_ivt_for_segment * los.get_tappairs3d(df.btap, df.atap, df.tod, 'COM_IWAIT_FAST')",1
-#util_com_xwait_fastest,commuter bus xwait time,"@C_FASTEST_IVT_MULTIPLIER * c_wait * df.c_ivt_for_segment * los.get_tappairs3d(df.btap, df.atap, df.tod, 'COM_XWAIT_FAST')",1
-#util_com_fare_fastest,commuter bus fare,"@C_FASTEST_COST_MULTIPLIER * df.c_cost_for_segment * los.get_tappairs3d(df.btap, df.atap, df.tod, 'COM_FAR_FAST')",1
-##,,, express
-#util_exp_ivt_fastest,express in vehicle time,"@C_FASTEST_IVT_MULTIPLIER * df.c_ivt_for_segment * los.get_tappairs3d(df.btap, df.atap, df.tod, 'EXP_TOTIVT_FAST')",1
-#util_exp_wait_fastest,express wait time,"@C_FASTEST_IVT_MULTIPLIER * c_wait * df.c_ivt_for_segment * los.get_tappairs3d(df.btap, df.atap, df.tod, 'EXP_IWAIT_FAST')",1
-#util_exp_xwait_fastest,express bus xwait time,"@C_FASTEST_IVT_MULTIPLIER * c_wait * df.c_ivt_for_segment * los.get_tappairs3d(df.btap, df.atap, df.tod, 'EXP_XWAIT_FAST')",1
-#util_exp_fare_fastest,express fare,"@C_FASTEST_COST_MULTIPLIER * df.c_cost_for_segment * los.get_tappairs3d(df.btap, df.atap, df.tod, 'EXP_FAR_FAST')",1
-##,,, heavy
-#util_hvy_ivt_fastest,heavy in vehicle time,"@C_FASTEST_IVT_MULTIPLIER * df.c_ivt_for_segment * los.get_tappairs3d(df.btap, df.atap, df.tod, 'HVY_TOTIVT_FAST')",1
-#util_hvy_wait_fastest,heavy wait time,"@C_FASTEST_IVT_MULTIPLIER * c_wait * df.c_ivt_for_segment * los.get_tappairs3d(df.btap, df.atap, df.tod, 'HVY_IWAIT_FAST')",1
-#util_hvy_xwait_fastest,heavy bus xwait time,"@C_FASTEST_IVT_MULTIPLIER * c_wait * df.c_ivt_for_segment * los.get_tappairs3d(df.btap, df.atap, df.tod, 'HVY_XWAIT_FAST')",1
-#util_hvy_fare_fastest,heavy fare,"@C_FASTEST_COST_MULTIPLIER * df.c_cost_for_segment * los.get_tappairs3d(df.btap, df.atap, df.tod, 'HVY_FAR_FAST')",1
+util_bus_ivt_fastest,local bus in vehicle time,"@C_FASTEST_IVT_MULTIPLIER * df.c_ivt_for_segment * los.get_tappairs3d(df.btap, df.atap, df.tod, 'TOTALIVTT2')",1 
+util_bus_wait_fastest,local bus wait time,"@C_FASTEST_IVT_MULTIPLIER * c_wait * df.c_ivt_for_segment * los.get_tappairs3d(df.btap, df.atap, df.tod, 'FIRSTWAIT2')",1 
+util_bus_xwait_fastest,local bus xwait time,"@C_FASTEST_IVT_MULTIPLIER * c_wait * df.c_ivt_for_segment * los.get_tappairs3d(df.btap, df.atap, df.tod, 'XFERWAIT2')",1 
+util_bus_fare_fastest,local bus fare,"@C_FASTEST_COST_MULTIPLIER * df.c_cost_for_segment * los.get_tappairs3d(df.btap, df.atap, df.tod, 'FARE2')",1 
+#NOTE: Setup with three income class transit skims, using mid VoT skims... for now.

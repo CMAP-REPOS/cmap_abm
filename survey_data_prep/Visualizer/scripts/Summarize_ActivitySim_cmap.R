@@ -75,7 +75,7 @@ modeCodes <- data.frame(code = c(1, 1, 2, 2, 3, 3, 4, 5, 6, 7, 8, 9, 10, 11, 11,
                         name = c("DRIVEALONE", "DRIVEALONEPAY", "SHAREDRIDE2", "SHARED2PAY",
                                  "SHAREDRIDE3","SHARED3PAY", "WALK", "BIKE",
                                  "WALK_TRANSIT", "PNR_TRANSIT", "KNR_TRANSIT", "TNC_TRANSIT",
-                                 "SCHOOLBUS",                        # 9 = School Bus
+                                 "SCHBUS",                        # 9 = School Bus
                                  "TAXI", "TNC_SINGLE", "TNC_SHARED")) #10 = Ride hail
 
 tourcatCodes <- data.frame(code = c(0,1,3),

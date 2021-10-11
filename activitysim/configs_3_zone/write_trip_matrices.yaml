@@ -14,149 +14,318 @@ HH_EXPANSION_WEIGHT_COL: sample_rate  # added when households read in
 SAVE_TRIPS_TABLE: False
 
 MATRICES:
+  #EA
   - file_name: trips_ea.omx
     tables:
-      - name: DRIVEALONEFREE_EA
-        data_field: DRIVEALONEFREE_EA
-      - name: DRIVEALONEPAY_EA
-        data_field: DRIVEALONEPAY_EA
-      - name: SHARED2FREE_EA
-        data_field: SHARED2FREE_EA
-      - name: SHARED2PAY_EA
-        data_field: SHARED2PAY_EA
-      - name: SHARED3FREE_EA
-        data_field: SHARED3FREE_EA
-      - name: SHARED3PAY_EA
-        data_field: SHARED3PAY_EA
+      - name: DRIVEALONE_EA
+        data_field: DRIVEALONE_EA
+      - name: SHAREDRIDE2_EA
+        data_field: SHAREDRIDE2_EA
+      - name: SHAREDRIDE3_EA
+        data_field: SHAREDRIDE3_EA
       - name: WALK_EA
         data_field: WALK_EA
       - name: BIKE_EA
         data_field: BIKE_EA
+      - name: TAXI_EA
+        data_field: TAXI_EA
+      - name: TNC_SINGLE_EA
+        data_field: TNC_SINGLE_EA
+      - name: TNC_SHARED_EA
+        data_field: TNC_SHARED_EA
+      - name: SCHBUS_EA
+        data_field: SCHBUS_EA
+        
   - file_name: trips_ea_tap.omx
     is_tap: True
     tables:                
       - name: WALK_TRANSIT_EA
         data_field: WALK_TRANSIT_EA
-      - name: DRIVE_TRANSIT_EA
-        data_field: DRIVE_TRANSIT_EA
+      - name: PNR_TRANSIT_EA
+        data_field: PNR_TRANSIT_EA
+      - name: KNR_TRANSIT_EA
+        data_field: KNR_TRANSIT_EA
+      - name: TNC_TRANSIT_EA
+        data_field: TNC_TRANSIT_EA
+  #AM
   - file_name: trips_am.omx
     tables:
-      - name: DRIVEALONEFREE_AM
-        data_field: DRIVEALONEFREE_AM
-      - name: DRIVEALONEPAY_AM
-        data_field: DRIVEALONEPAY_AM
-      - name: SHARED2FREE_AM
-        data_field: SHARED2FREE_AM
-      - name: SHARED2PAY_AM
-        data_field: SHARED2PAY_AM
-      - name: SHARED3FREE_AM
-        data_field: SHARED3FREE_AM
-      - name: SHARED3PAY_AM
-        data_field: SHARED3PAY_AM
+      - name: DRIVAMLONE_AM
+        data_field: DRIVAMLONE_AM
+      - name: SHAREDRIDE2_AM
+        data_field: SHAREDRIDE2_AM
+      - name: SHAREDRIDE3_AM
+        data_field: SHAREDRIDE3_AM
       - name: WALK_AM
         data_field: WALK_AM
       - name: BIKE_AM
         data_field: BIKE_AM
+      - name: TAXI_AM
+        data_field: TAXI_AM
+      - name: TNC_SINGLE_AM
+        data_field: TNC_SINGLE_AM
+      - name: TNC_SHARED_AM
+        data_field: TNC_SHARED_AM
+      - name: SCHBUS_AM
+        data_field: SCHBUS_AM
+        
   - file_name: trips_am_tap.omx
-    is_tap: True  
+    is_tap: True
     tables:                
       - name: WALK_TRANSIT_AM
         data_field: WALK_TRANSIT_AM
-      - name: DRIVE_TRANSIT_AM
-        data_field: DRIVE_TRANSIT_AM
+      - name: PNR_TRANSIT_AM
+        data_field: PNR_TRANSIT_AM
+      - name: KNR_TRANSIT_AM
+        data_field: KNR_TRANSIT_AM
+      - name: TNC_TRANSIT_AM
+        data_field: TNC_TRANSIT_AM
+
+  #MM
+  - file_name: trips_mm.omx
+    tables:
+      - name: DRIVMMLONE_MM
+        data_field: DRIVMMLONE_MM
+      - name: SHAREDRIDE2_MM
+        data_field: SHAREDRIDE2_MM
+      - name: SHAREDRIDE3_MM
+        data_field: SHAREDRIDE3_MM
+      - name: WALK_MM
+        data_field: WALK_MM
+      - name: BIKE_MM
+        data_field: BIKE_MM
+      - name: TAXI_MM
+        data_field: TAXI_MM
+      - name: TNC_SINGLE_MM
+        data_field: TNC_SINGLE_MM
+      - name: TNC_SHARED_MM
+        data_field: TNC_SHARED_MM
+      - name: SCHBUS_MM
+        data_field: SCHBUS_MM
+        
+  - file_name: trips_mm_tap.omx
+    is_tap: True
+    tables:                
+      - name: WALK_TRANSIT_MM
+        data_field: WALK_TRANSIT_MM
+      - name: PNR_TRANSIT_MM
+        data_field: PNR_TRANSIT_MM
+      - name: KNR_TRANSIT_MM
+        data_field: KNR_TRANSIT_MM
+      - name: TNC_TRANSIT_MM
+        data_field: TNC_TRANSIT_MM
+  #MD
   - file_name: trips_md.omx
     tables:
-      - name: DRIVEALONEFREE_MD
-        data_field: DRIVEALONEFREE_MD
-      - name: DRIVEALONEPAY_MD
-        data_field: DRIVEALONEPAY_MD
-      - name: SHARED2FREE_MD
-        data_field: SHARED2FREE_MD
-      - name: SHARED2PAY_MD
-        data_field: SHARED2PAY_MD
-      - name: SHARED3FREE_MD
-        data_field: SHARED3FREE_MD
-      - name: SHARED3PAY_MD
-        data_field: SHARED3PAY_MD
+      - name: DRIVMDLONE_MD
+        data_field: DRIVMDLONE_MD
+      - name: SHAREDRIDE2_MD
+        data_field: SHAREDRIDE2_MD
+      - name: SHAREDRIDE3_MD
+        data_field: SHAREDRIDE3_MD
       - name: WALK_MD
         data_field: WALK_MD
       - name: BIKE_MD
         data_field: BIKE_MD
+      - name: TAXI_MD
+        data_field: TAXI_MD
+      - name: TNC_SINGLE_MD
+        data_field: TNC_SINGLE_MD
+      - name: TNC_SHARED_MD
+        data_field: TNC_SHARED_MD
+      - name: SCHBUS_MD
+        data_field: SCHBUS_MD
+        
   - file_name: trips_md_tap.omx
-    is_tap: True  
-    tables:        
+    is_tap: True
+    tables:                
       - name: WALK_TRANSIT_MD
         data_field: WALK_TRANSIT_MD
-      - name: DRIVE_TRANSIT_MD
-        data_field: DRIVE_TRANSIT_MD
+      - name: PNR_TRANSIT_MD
+        data_field: PNR_TRANSIT_MD
+      - name: KNR_TRANSIT_MD
+        data_field: KNR_TRANSIT_MD
+      - name: TNC_TRANSIT_MD
+        data_field: TNC_TRANSIT_MD
+
+  #AF
+  - file_name: trips_af.omx
+    tables:
+      - name: DRIVAFLONE_AF
+        data_field: DRIVAFLONE_AF
+      - name: SHAREDRIDE2_AF
+        data_field: SHAREDRIDE2_AF
+      - name: SHAREDRIDE3_AF
+        data_field: SHAREDRIDE3_AF
+      - name: WALK_AF
+        data_field: WALK_AF
+      - name: BIKE_AF
+        data_field: BIKE_AF
+      - name: TAXI_AF
+        data_field: TAXI_AF
+      - name: TNC_SINGLE_AF
+        data_field: TNC_SINGLE_AF
+      - name: TNC_SHARED_AF
+        data_field: TNC_SHARED_AF
+      - name: SCHBUS_AF
+        data_field: SCHBUS_AF
+        
+  - file_name: trips_af_tap.omx
+    is_tap: True
+    tables:                
+      - name: WALK_TRANSIT_AF
+        data_field: WALK_TRANSIT_AF
+      - name: PNR_TRANSIT_AF
+        data_field: PNR_TRANSIT_AF
+      - name: KNR_TRANSIT_AF
+        data_field: KNR_TRANSIT_AF
+      - name: TNC_TRANSIT_AF
+        data_field: TNC_TRANSIT_AF
+
+  #PM
   - file_name: trips_pm.omx
     tables:
-      - name: DRIVEALONEFREE_PM
-        data_field: DRIVEALONEFREE_PM
-      - name: DRIVEALONEPAY_PM
-        data_field: DRIVEALONEPAY_PM
-      - name: SHARED2FREE_PM
-        data_field: SHARED2FREE_PM
-      - name: SHARED2PAY_PM
-        data_field: SHARED2PAY_PM
-      - name: SHARED3FREE_PM
-        data_field: SHARED3FREE_PM
-      - name: SHARED3PAY_PM
-        data_field: SHARED3PAY_PM
+      - name: DRIVPMLONE_PM
+        data_field: DRIVPMLONE_PM
+      - name: SHAREDRIDE2_PM
+        data_field: SHAREDRIDE2_PM
+      - name: SHAREDRIDE3_PM
+        data_field: SHAREDRIDE3_PM
       - name: WALK_PM
         data_field: WALK_PM
       - name: BIKE_PM
         data_field: BIKE_PM
+      - name: TAXI_PM
+        data_field: TAXI_PM
+      - name: TNC_SINGLE_PM
+        data_field: TNC_SINGLE_PM
+      - name: TNC_SHARED_PM
+        data_field: TNC_SHARED_PM
+      - name: SCHBUS_PM
+        data_field: SCHBUS_PM
+        
   - file_name: trips_pm_tap.omx
-    is_tap: True  
-    tables:
+    is_tap: True
+    tables:                
       - name: WALK_TRANSIT_PM
         data_field: WALK_TRANSIT_PM
-      - name: DRIVE_TRANSIT_PM
-        data_field: DRIVE_TRANSIT_PM
+      - name: PNR_TRANSIT_PM
+        data_field: PNR_TRANSIT_PM
+      - name: KNR_TRANSIT_PM
+        data_field: KNR_TRANSIT_PM
+      - name: TNC_TRANSIT_PM
+        data_field: TNC_TRANSIT_PM
+
+  #EV
   - file_name: trips_ev.omx
     tables:
-      - name: DRIVEALONEFREE_EV
-        data_field: DRIVEALONEFREE_EV
-      - name: DRIVEALONEPAY_EV
-        data_field: DRIVEALONEPAY_EV
-      - name: SHARED2FREE_EV
-        data_field: SHARED2FREE_EV
-      - name: SHARED2PAY_EV
-        data_field: SHARED2PAY_EV
-      - name: SHARED3FREE_EV
-        data_field: SHARED3FREE_EV
-      - name: SHARED3PAY_EV
-        data_field: SHARED3PAY_EV
+      - name: DRIVEVLONE_EV
+        data_field: DRIVEVLONE_EV
+      - name: SHAREDRIDE2_EV
+        data_field: SHAREDRIDE2_EV
+      - name: SHAREDRIDE3_EV
+        data_field: SHAREDRIDE3_EV
       - name: WALK_EV
         data_field: WALK_EV
       - name: BIKE_EV
         data_field: BIKE_EV
+      - name: TAXI_EV
+        data_field: TAXI_EV
+      - name: TNC_SINGLE_EV
+        data_field: TNC_SINGLE_EV
+      - name: TNC_SHARED_EV
+        data_field: TNC_SHARED_EV
+      - name: SCHBUS_EV
+        data_field: SCHBUS_EV
+        
   - file_name: trips_ev_tap.omx
-    is_tap: True  
-    tables:
+    is_tap: True
+    tables:                
       - name: WALK_TRANSIT_EV
         data_field: WALK_TRANSIT_EV
-      - name: DRIVE_TRANSIT_EV
-        data_field: DRIVE_TRANSIT_EV
+      - name: PNR_TRANSIT_EV
+        data_field: PNR_TRANSIT_EV
+      - name: KNR_TRANSIT_EV
+        data_field: KNR_TRANSIT_EV
+      - name: TNC_TRANSIT_EV
+        data_field: TNC_TRANSIT_EV
+
+  #NT
+  - file_name: trips_nt.omx
+    tables:
+      - name: DRIVNTLONE_NT
+        data_field: DRIVNTLONE_NT
+      - name: SHAREDRIDE2_NT
+        data_field: SHAREDRIDE2_NT
+      - name: SHAREDRIDE3_NT
+        data_field: SHAREDRIDE3_NT
+      - name: WALK_NT
+        data_field: WALK_NT
+      - name: BIKE_NT
+        data_field: BIKE_NT
+      - name: TAXI_NT
+        data_field: TAXI_NT
+      - name: TNC_SINGLE_NT
+        data_field: TNC_SINGLE_NT
+      - name: TNC_SHARED_NT
+        data_field: TNC_SHARED_NT
+      - name: SCHBUS_NT
+        data_field: SCHBUS_NT
+        
+  - file_name: trips_nt_tap.omx
+    is_tap: True
+    tables:                
+      - name: WALK_TRANSIT_NT
+        data_field: WALK_TRANSIT_NT
+      - name: PNR_TRANSIT_NT
+        data_field: PNR_TRANSIT_NT
+      - name: KNR_TRANSIT_NT
+        data_field: KNR_TRANSIT_NT
+      - name: TNC_TRANSIT_NT
+        data_field: TNC_TRANSIT_NT
+
         
 CONSTANTS:
   time_periods:
+    #  periods: [0, 4, 5, 7, 8, 12, 14, 16, 18, 24]
+    #labels: &skim_time_period_labels ['VE', 'EA', 'AM', 'MM', 'MD', 'AF', 'PM', 'EV', 'NT']
+    # VE = 3a - 6a (same skim data as NT)
+    # EA = 6a - 7a
+    # AM = 7a - 9a
+    # MM = 9a - 10a
+    # MD = 10a - 2p
+    # AF = 2p - 4p
+    # PM = 4p - 6p
+    # EV = 6p - 8p
+    # NT = 8p - 3a
+    VE:
+      first_hour: 0
+      last_hour: 3
     EA:
-      first_hour: 3
-      last_hour: 5
+      first_hour: 4
+      last_hour: 4
     AM:
-      first_hour: 6
-      last_hour: 9
+      first_hour: 5
+      last_hour: 6
+    MM:
+      first_hour: 7
+      last_hour: 7
     MD:
-      first_hour: 10
-      last_hour: 14
+      first_hour: 8
+      last_hour: 11
+    AF:
+      first_hour: 12
+      last_hour: 13
     PM:
-      first_hour: 15
-      last_hour: 18
+      first_hour: 14
+      last_hour: 15
     EV:
-      first_hour: 19
-      last_hour: 2
+      first_hour: 16
+      last_hour: 17
+    NT:
+      first_hour: 18
+      last_hour: 24
+      
   # SHARED2 and SHARED3 Occupancies
   OCC_SHARED2: 2.0
   OCC_SHARED3: 3.33

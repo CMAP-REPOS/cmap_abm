@@ -78,6 +78,7 @@ if(BUILD_SCENARIO_NAME == "SEMCOG_HTS") {
   build_csv_list <- "summaryFilesNames_ActivitySim_CMAP.csv"
 }
 
+print(paste("Copying files from", BUILD_SUMMARY_DIR, "to", BUILD_DATA_PATH))
 summaryFileList_build <- read.csv(paste(SYSTEM_TEMPLATES_PATH, build_csv_list, sep = '/'), as.is = T)
 summaryFileList_build <- as.list(summaryFileList_build$summaryFile)
 retVal <- copyFile(summaryFileList_build, sourceDir = BUILD_SUMMARY_DIR, targetDir = BUILD_DATA_PATH)

@@ -28,7 +28,7 @@ popsim_folder_nirpc: 'C:/projects/cmap_activitysim/cmap_abm/survey_data_prep/nir
 
 obs_dir: 'C:/projects/cmap_activitysim/cmap_abm/obs_processing'
 
-abm_dir: 'C:/projects/cmap_activitysim/cmap_abm/activitysim/output2'
+abm_dir: 'C:/projects/cmap_activitysim/cmap_abm/activitysim/output'
 abm_summaries_dir: 'C:/projects/cmap_activitysim/cmap_abm/survey_data_prep/Visualizer/data/calibration_runs/summarized'
 
 R_LIBRARY: "C:/Users/andrew.rohne/r_library"

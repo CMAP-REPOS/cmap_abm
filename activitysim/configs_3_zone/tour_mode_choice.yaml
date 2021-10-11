@@ -2,13 +2,18 @@ LOGIT_TYPE: NL
 #LOGIT_TYPE: MNL
 
 tvpb_mode_path_types:
-  DRIVE_TRANSIT:
-    od: DTW
-    do: WTD
   WALK_TRANSIT:
     od: WTW
     do: WTW
-  
+  PNR_TRANSIT:
+    od: DTW
+    do: WTD
+  KNR_TRANSIT:
+    od: KTW
+    do: WTK
+  TNC_TRANSIT:
+    od: NTW
+    do: WTN
 
 NESTS:
   name: root
@@ -17,21 +22,9 @@ NESTS:
       - name: AUTO
         coefficient: coef_nest_AUTO
         alternatives:
-            - name: DRIVEALONE
-              coefficient: coef_nest_AUTO_DRIVEALONE
-              alternatives:
-                - DRIVEALONEFREE
-                - DRIVEALONEPAY
-            - name: SHAREDRIDE2
-              coefficient: coef_nest_AUTO_SHAREDRIDE2
-              alternatives:
-                - SHARED2FREE
-                - SHARED2PAY
-            - name: SHAREDRIDE3
-              coefficient: coef_nest_AUTO_SHAREDRIDE3
-              alternatives:
-                - SHARED3FREE
-                - SHARED3PAY
+          - DRIVEALONE
+          - SHAREDRIDE2
+          - SHAREDRIDE3
       - name: NONMOTORIZED
         coefficient: coef_nest_NONMOTORIZED
         alternatives:
@@ -41,13 +34,20 @@ NESTS:
         coefficient:  coef_nest_TRANSIT
         alternatives:
           - WALK_TRANSIT
-          - DRIVE_TRANSIT
+          - PNR_TRANSIT
+          - KNR_TRANSIT
+          - TNC_TRANSIT
       - name: RIDEHAIL
         coefficient: coef_nest_RIDEHAIL
         alternatives:
           - TAXI
           - TNC_SINGLE
           - TNC_SHARED
+      - name: SCHOOL_BUS
+        coefficient: coef_nest_SCHOOL_BUS
+        alternatives:
+          - SCHBUS
+        
 
 SPEC: tour_mode_choice.csv
 COEFFICIENTS: tour_mode_choice_coefficients.csv
@@ -120,11 +120,6 @@ CONSTANTS:
     max_waitTime: 50
 
     ivt_cost_multiplier: 0.6
-    ivt_lrt_multiplier: 0.9
-    ivt_ferry_multiplier: 0.8
-    ivt_exp_multiplier: 1
-    ivt_hvy_multiplier: 0.8
-    ivt_com_multiplier: 0.7
     walktimeshort_multiplier: 2
     walktimelong_multiplier: 10
     biketimeshort_multiplier: 4
@@ -179,5 +174,6 @@ LOGSUM_CHOOSER_COLUMNS:
   - demographic_segment
   - c_ivt_for_segment
   - c_cost_for_segment
+  - is_student
 
 MODE_CHOICE_LOGSUM_COLUMN_NAME: mode_choice_logsum
