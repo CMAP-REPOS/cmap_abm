@@ -33,10 +33,11 @@ Description,Target,Expression
 ,tour_mode_is_walk,i_tour_mode == I_WALK_MODE
 ,tour_mode_is_bike,i_tour_mode == I_BIKE_MODE
 ,tour_mode_is_walk_transit,i_tour_mode.isin(I_WALK_TRANSIT_MODES)
-,tour_mode_is_drive_transit,i_tour_mode.isin(I_DRIVE_TRANSIT_MODES)
+,tour_mode_is_pnr_transit,i_tour_mode == I_PNR_TRANSIT
+,tour_mode_is_knr_transit,i_tour_mode == I_KNR_TRANSIT
+,tour_mode_is_tnc_transit,i_tour_mode == I_TNC_TRANSIT
 ,tour_mode_is_ride_hail,i_tour_mode.isin(I_RIDE_HAIL_MODES)
 ,tour_mode_is_schbus,i_tour_mode == I_SCHBUS_MODE
-,tour_mode_is_tnctrn,i_tour_mode == I_TNC_TRN
 #,,
 ,inbound,~df.outbound
 ,first_trip,df.trip_num == 1

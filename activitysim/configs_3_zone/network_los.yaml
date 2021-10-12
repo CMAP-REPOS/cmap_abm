@@ -6,7 +6,7 @@ skim_dict_factory: NumpyArraySkimFactory
 #skim_dict_factory: MemMapSkimFactory
 
 # read cached skims (using numpy memmap) from output directory (memmap is faster than omx )
-read_skim_cache: False
+read_skim_cache: True
 # write memmapped cached skims to output directory after reading from omx, for use in subsequent runs
 write_skim_cache: False
 
@@ -79,8 +79,8 @@ skim_time_periods:
 
 demographic_segments: &demographic_segments
   - &low_income_segment_id 0
-  - &mid_income_segment_id -1
-  - &high_income_segment_id 1
+  - &mid_income_segment_id 1
+  - &high_income_segment_id 2
 
 # transit virtual path builder settings
 TVPB_SETTINGS:
@@ -152,12 +152,12 @@ TVPB_SETTINGS:
           - PCOST
     CONSTANTS:
       C_LOW_INCOME_SEGMENT_ID: *low_income_segment_id
-      C_MID_INCOME_SEGMENT_ID: *mid_income_segment_id #TODO: implement
+      C_MID_INCOME_SEGMENT_ID: *mid_income_segment_id 
       C_HIGH_INCOME_SEGMENT_ID: *high_income_segment_id
       TVPB_demographic_segments_by_income_segment:
         1: *low_income_segment_id
-        2: *low_income_segment_id
-        3: *high_income_segment_id
+        2: *mid_income_segment_id
+        3: *mid_income_segment_id
         4: *high_income_segment_id
       c_ivt_high_income: -0.028
       c_ivt_mid_income: -0.0119
@@ -174,14 +174,14 @@ TVPB_SETTINGS:
       c_auto_operating_cost_per_mile: 18.29
       C_UNAVAILABLE: -999
       #TODO: Check to see if the below can be removed
-      C_FASTEST_IVT_MULTIPLIER: 2
-      C_FASTEST_COST_MULTIPLIER: 1
-      C_CHEAPEST_IVT_MULTIPLIER: 1
-      C_CHEAPEST_COST_MULTIPLIER: 500
-      C_SHORTEST_IVT_MULTIPLIER: 1
-      C_SHORTEST_COST_MULTIPLIER: 1
-      C_SHORTEST_DIST_MULTIPLIER: 1
-      C_DRIVE_TRANSFER_PENALTY: -1
+      #C_FASTEST_IVT_MULTIPLIER: 2
+      #C_FASTEST_COST_MULTIPLIER: 1
+      #C_CHEAPEST_IVT_MULTIPLIER: 1
+      #C_CHEAPEST_COST_MULTIPLIER: 500
+      #C_SHORTEST_IVT_MULTIPLIER: 1
+      #C_SHORTEST_COST_MULTIPLIER: 1
+      #C_SHORTEST_DIST_MULTIPLIER: 1
+      #C_DRIVE_TRANSFER_PENALTY: -1
       # The below are correct for transit income class update
       #DOC: Drive transfer is assumed from previous, probably should be adjusted. IVT is based on 
       #example fast (was 2) vs. cheapest/shortest (was 1) - moved 1 to low VoT, 2 to high VoT, and

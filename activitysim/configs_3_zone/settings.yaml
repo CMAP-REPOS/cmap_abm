@@ -54,7 +54,7 @@ default_initial_rows_per_chunk: 10000
 # - tracing
 trace_od:
 #trace_hh_id: 1351147
-resume_after: initialize_tvpb
+resume_after: stop_frequency
 
 # input tables
 input_table_list:
@@ -176,7 +176,7 @@ models:
   - write_data_dictionary
   - track_skim_usage
   - write_tables
-  #- write_trip_matrices
+  - write_trip_matrices
   
 
 multiprocess_steps:

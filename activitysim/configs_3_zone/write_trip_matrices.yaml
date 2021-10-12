@@ -36,17 +36,41 @@ MATRICES:
       - name: SCHBUS_EA
         data_field: SCHBUS_EA
         
-  - file_name: trips_ea_tap.omx
+  - file_name: trips_ea_low_tap.omx
     is_tap: True
     tables:                
-      - name: WALK_TRANSIT_EA
-        data_field: WALK_TRANSIT_EA
-      - name: PNR_TRANSIT_EA
-        data_field: PNR_TRANSIT_EA
-      - name: KNR_TRANSIT_EA
-        data_field: KNR_TRANSIT_EA
-      - name: TNC_TRANSIT_EA
-        data_field: TNC_TRANSIT_EA
+      - name: WALK_TRANSIT_LOW_EA
+        data_field: WALK_TRANSIT_LOW_EA
+      - name: PNR_TRANSIT_LOW_EA
+        data_field: PNR_TRANSIT_LOW_EA
+      - name: KNR_TRANSIT_LOW_EA
+        data_field: KNR_TRANSIT_LOW_EA
+      - name: TNC_TRANSIT_LOW_EA
+        data_field: TNC_TRANSIT_LOW_EA
+        
+  - file_name: trips_ea_mid_tap.omx
+    is_tap: True
+    tables:                
+      - name: WALK_TRANSIT_MID_EA
+        data_field: WALK_TRANSIT_MID_EA
+      - name: PNR_TRANSIT_MID_EA
+        data_field: PNR_TRANSIT_MID_EA
+      - name: KNR_TRANSIT_MID_EA
+        data_field: KNR_TRANSIT_MID_EA
+      - name: TNC_TRANSIT_MID_EA
+        data_field: TNC_TRANSIT_MID_EA
+        
+  - file_name: trips_ea_hi_tap.omx
+    is_tap: True
+    tables:                
+      - name: WALK_TRANSIT_HI_EA
+        data_field: WALK_TRANSIT_HI_EA
+      - name: PNR_TRANSIT_HI_EA
+        data_field: PNR_TRANSIT_HI_EA
+      - name: KNR_TRANSIT_HI_EA
+        data_field: KNR_TRANSIT_HI_EA
+      - name: TNC_TRANSIT_HI_EA
+        data_field: TNC_TRANSIT_HI_EA
   #AM
   - file_name: trips_am.omx
     tables:
@@ -69,18 +93,41 @@ MATRICES:
       - name: SCHBUS_AM
         data_field: SCHBUS_AM
         
-  - file_name: trips_am_tap.omx
+  - file_name: trips_am_low_tap.omx
     is_tap: True
     tables:                
-      - name: WALK_TRANSIT_AM
-        data_field: WALK_TRANSIT_AM
-      - name: PNR_TRANSIT_AM
-        data_field: PNR_TRANSIT_AM
-      - name: KNR_TRANSIT_AM
-        data_field: KNR_TRANSIT_AM
-      - name: TNC_TRANSIT_AM
-        data_field: TNC_TRANSIT_AM
+      - name: WALK_TRANSIT_LOW_AM
+        data_field: WALK_TRANSIT_LOW_AM
+      - name: PNR_TRANSIT_LOW_AM
+        data_field: PNR_TRANSIT_LOW_AM
+      - name: KNR_TRANSIT_LOW_AM
+        data_field: KNR_TRANSIT_LOW_AM
+      - name: TNC_TRANSIT_LOW_AM
+        data_field: TNC_TRANSIT_LOW_AM
 
+  - file_name: trips_am_mid_tap.omx
+    is_tap: True
+    tables:                
+      - name: WALK_TRANSIT_MID_AM
+        data_field: WALK_TRANSIT_MID_AM
+      - name: PNR_TRANSIT_MID_AM
+        data_field: PNR_TRANSIT_MID_AM
+      - name: KNR_TRANSIT_MID_AM
+        data_field: KNR_TRANSIT_MID_AM
+      - name: TNC_TRANSIT_MID_AM
+        data_field: TNC_TRANSIT_MID_AM
+        
+  - file_name: trips_am_hi_tap.omx
+    is_tap: True
+    tables:                
+      - name: WALK_TRANSIT_HI_AM
+        data_field: WALK_TRANSIT_HI_AM
+      - name: PNR_TRANSIT_HI_AM
+        data_field: PNR_TRANSIT_HI_AM
+      - name: KNR_TRANSIT_HI_AM
+        data_field: KNR_TRANSIT_HI_AM
+      - name: TNC_TRANSIT_HI_AM
+        data_field: TNC_TRANSIT_HI_AM
   #MM
   - file_name: trips_mm.omx
     tables:
@@ -103,17 +150,41 @@ MATRICES:
       - name: SCHBUS_MM
         data_field: SCHBUS_MM
         
-  - file_name: trips_mm_tap.omx
+  - file_name: trips_mm_low_tap.omx
     is_tap: True
     tables:                
-      - name: WALK_TRANSIT_MM
-        data_field: WALK_TRANSIT_MM
-      - name: PNR_TRANSIT_MM
-        data_field: PNR_TRANSIT_MM
-      - name: KNR_TRANSIT_MM
-        data_field: KNR_TRANSIT_MM
-      - name: TNC_TRANSIT_MM
-        data_field: TNC_TRANSIT_MM
+      - name: WALK_TRANSIT_LOW_MM
+        data_field: WALK_TRANSIT_LOW_MM
+      - name: PNR_TRANSIT_LOW_MM
+        data_field: PNR_TRANSIT_LOW_MM
+      - name: KNR_TRANSIT_LOW_MM
+        data_field: KNR_TRANSIT_LOW_MM
+      - name: TNC_TRANSIT_LOW_MM
+        data_field: TNC_TRANSIT_LOW_MM
+
+  - file_name: trips_mm_mid_tap.omx
+    is_tap: True
+    tables:                
+      - name: WALK_TRANSIT_MID_MM
+        data_field: WALK_TRANSIT_MID_MM
+      - name: PNR_TRANSIT_MID_MM
+        data_field: PNR_TRANSIT_MID_MM
+      - name: KNR_TRANSIT_MID_MM
+        data_field: KNR_TRANSIT_MID_MM
+      - name: TNC_TRANSIT_MID_MM
+        data_field: TNC_TRANSIT_MID_MM
+        
+  - file_name: trips_mm_hi_tap.omx
+    is_tap: True
+    tables:                
+      - name: WALK_TRANSIT_HI_MM
+        data_field: WALK_TRANSIT_HI_MM
+      - name: PNR_TRANSIT_HI_MM
+        data_field: PNR_TRANSIT_HI_MM
+      - name: KNR_TRANSIT_HI_MM
+        data_field: KNR_TRANSIT_HI_MM
+      - name: TNC_TRANSIT_HI_MM
+        data_field: TNC_TRANSIT_HI_MM
   #MD
   - file_name: trips_md.omx
     tables:
@@ -136,17 +207,41 @@ MATRICES:
       - name: SCHBUS_MD
         data_field: SCHBUS_MD
         
-  - file_name: trips_md_tap.omx
+  - file_name: trips_md_low_tap.omx
     is_tap: True
     tables:                
-      - name: WALK_TRANSIT_MD
-        data_field: WALK_TRANSIT_MD
-      - name: PNR_TRANSIT_MD
-        data_field: PNR_TRANSIT_MD
-      - name: KNR_TRANSIT_MD
-        data_field: KNR_TRANSIT_MD
-      - name: TNC_TRANSIT_MD
-        data_field: TNC_TRANSIT_MD
+      - name: WALK_TRANSIT_LOW_MD
+        data_field: WALK_TRANSIT_LOW_MD
+      - name: PNR_TRANSIT_LOW_MD
+        data_field: PNR_TRANSIT_LOW_MD
+      - name: KNR_TRANSIT_LOW_MD
+        data_field: KNR_TRANSIT_LOW_MD
+      - name: TNC_TRANSIT_LOW_MD
+        data_field: TNC_TRANSIT_LOW_MD
+
+  - file_name: trips_md_mid_tap.omx
+    is_tap: True
+    tables:                
+      - name: WALK_TRANSIT_MID_MD
+        data_field: WALK_TRANSIT_MID_MD
+      - name: PNR_TRANSIT_MID_MD
+        data_field: PNR_TRANSIT_MID_MD
+      - name: KNR_TRANSIT_MID_MD
+        data_field: KNR_TRANSIT_MID_MD
+      - name: TNC_TRANSIT_MID_MD
+        data_field: TNC_TRANSIT_MID_MD
+        
+  - file_name: trips_md_hi_tap.omx
+    is_tap: True
+    tables:                
+      - name: WALK_TRANSIT_HI_MD
+        data_field: WALK_TRANSIT_HI_MD
+      - name: PNR_TRANSIT_HI_MD
+        data_field: PNR_TRANSIT_HI_MD
+      - name: KNR_TRANSIT_HI_MD
+        data_field: KNR_TRANSIT_HI_MD
+      - name: TNC_TRANSIT_HI_MD
+        data_field: TNC_TRANSIT_HI_MD
 
   #AF
   - file_name: trips_af.omx
@@ -170,17 +265,41 @@ MATRICES:
       - name: SCHBUS_AF
         data_field: SCHBUS_AF
         
-  - file_name: trips_af_tap.omx
+  - file_name: trips_af_low_tap.omx
     is_tap: True
     tables:                
-      - name: WALK_TRANSIT_AF
-        data_field: WALK_TRANSIT_AF
-      - name: PNR_TRANSIT_AF
-        data_field: PNR_TRANSIT_AF
-      - name: KNR_TRANSIT_AF
-        data_field: KNR_TRANSIT_AF
-      - name: TNC_TRANSIT_AF
-        data_field: TNC_TRANSIT_AF
+      - name: WALK_TRANSIT_LOW_AF
+        data_field: WALK_TRANSIT_LOW_AF
+      - name: PNR_TRANSIT_LOW_AF
+        data_field: PNR_TRANSIT_LOW_AF
+      - name: KNR_TRANSIT_LOW_AF
+        data_field: KNR_TRANSIT_LOW_AF
+      - name: TNC_TRANSIT_LOW_AF
+        data_field: TNC_TRANSIT_LOW_AF
+
+  - file_name: trips_af_mid_tap.omx
+    is_tap: True
+    tables:                
+      - name: WALK_TRANSIT_MID_AF
+        data_field: WALK_TRANSIT_MID_AF
+      - name: PNR_TRANSIT_MID_AF
+        data_field: PNR_TRANSIT_MID_AF
+      - name: KNR_TRANSIT_MID_AF
+        data_field: KNR_TRANSIT_MID_AF
+      - name: TNC_TRANSIT_MID_AF
+        data_field: TNC_TRANSIT_MID_AF
+        
+  - file_name: trips_af_hi_tap.omx
+    is_tap: True
+    tables:                
+      - name: WALK_TRANSIT_HI_AF
+        data_field: WALK_TRANSIT_HI_AF
+      - name: PNR_TRANSIT_HI_AF
+        data_field: PNR_TRANSIT_HI_AF
+      - name: KNR_TRANSIT_HI_AF
+        data_field: KNR_TRANSIT_HI_AF
+      - name: TNC_TRANSIT_HI_AF
+        data_field: TNC_TRANSIT_HI_AF
 
   #PM
   - file_name: trips_pm.omx
@@ -204,17 +323,41 @@ MATRICES:
       - name: SCHBUS_PM
         data_field: SCHBUS_PM
         
-  - file_name: trips_pm_tap.omx
+  - file_name: trips_pm_low_tap.omx
     is_tap: True
     tables:                
-      - name: WALK_TRANSIT_PM
-        data_field: WALK_TRANSIT_PM
-      - name: PNR_TRANSIT_PM
-        data_field: PNR_TRANSIT_PM
-      - name: KNR_TRANSIT_PM
-        data_field: KNR_TRANSIT_PM
-      - name: TNC_TRANSIT_PM
-        data_field: TNC_TRANSIT_PM
+      - name: WALK_TRANSIT_LOW_PM
+        data_field: WALK_TRANSIT_LOW_PM
+      - name: PNR_TRANSIT_LOW_PM
+        data_field: PNR_TRANSIT_LOW_PM
+      - name: KNR_TRANSIT_LOW_PM
+        data_field: KNR_TRANSIT_LOW_PM
+      - name: TNC_TRANSIT_LOW_PM
+        data_field: TNC_TRANSIT_LOW_PM
+
+  - file_name: trips_pm_mid_tap.omx
+    is_tap: True
+    tables:                
+      - name: WALK_TRANSIT_MID_PM
+        data_field: WALK_TRANSIT_MID_PM
+      - name: PNR_TRANSIT_MID_PM
+        data_field: PNR_TRANSIT_MID_PM
+      - name: KNR_TRANSIT_MID_PM
+        data_field: KNR_TRANSIT_MID_PM
+      - name: TNC_TRANSIT_MID_PM
+        data_field: TNC_TRANSIT_MID_PM
+        
+  - file_name: trips_pm_hi_tap.omx
+    is_tap: True
+    tables:                
+      - name: WALK_TRANSIT_HI_PM
+        data_field: WALK_TRANSIT_HI_PM
+      - name: PNR_TRANSIT_HI_PM
+        data_field: PNR_TRANSIT_HI_PM
+      - name: KNR_TRANSIT_HI_PM
+        data_field: KNR_TRANSIT_HI_PM
+      - name: TNC_TRANSIT_HI_PM
+        data_field: TNC_TRANSIT_HI_PM
 
   #EV
   - file_name: trips_ev.omx
@@ -238,17 +381,41 @@ MATRICES:
       - name: SCHBUS_EV
         data_field: SCHBUS_EV
         
-  - file_name: trips_ev_tap.omx
+  - file_name: trips_ev_low_tap.omx
     is_tap: True
     tables:                
-      - name: WALK_TRANSIT_EV
-        data_field: WALK_TRANSIT_EV
-      - name: PNR_TRANSIT_EV
-        data_field: PNR_TRANSIT_EV
-      - name: KNR_TRANSIT_EV
-        data_field: KNR_TRANSIT_EV
-      - name: TNC_TRANSIT_EV
-        data_field: TNC_TRANSIT_EV
+      - name: WALK_TRANSIT_LOW_EV
+        data_field: WALK_TRANSIT_LOW_EV
+      - name: PNR_TRANSIT_LOW_EV
+        data_field: PNR_TRANSIT_LOW_EV
+      - name: KNR_TRANSIT_LOW_EV
+        data_field: KNR_TRANSIT_LOW_EV
+      - name: TNC_TRANSIT_LOW_EV
+        data_field: TNC_TRANSIT_LOW_EV
+
+  - file_name: trips_ev_mid_tap.omx
+    is_tap: True
+    tables:                
+      - name: WALK_TRANSIT_MID_EV
+        data_field: WALK_TRANSIT_MID_EV
+      - name: PNR_TRANSIT_MID_EV
+        data_field: PNR_TRANSIT_MID_EV
+      - name: KNR_TRANSIT_MID_EV
+        data_field: KNR_TRANSIT_MID_EV
+      - name: TNC_TRANSIT_MID_EV
+        data_field: TNC_TRANSIT_MID_EV
+        
+  - file_name: trips_ev_hi_tap.omx
+    is_tap: True
+    tables:                
+      - name: WALK_TRANSIT_HI_EV
+        data_field: WALK_TRANSIT_HI_EV
+      - name: PNR_TRANSIT_HI_EV
+        data_field: PNR_TRANSIT_HI_EV
+      - name: KNR_TRANSIT_HI_EV
+        data_field: KNR_TRANSIT_HI_EV
+      - name: TNC_TRANSIT_HI_EV
+        data_field: TNC_TRANSIT_HI_EV
 
   #NT
   - file_name: trips_nt.omx
@@ -272,17 +439,41 @@ MATRICES:
       - name: SCHBUS_NT
         data_field: SCHBUS_NT
         
-  - file_name: trips_nt_tap.omx
+  - file_name: trips_nt_low_tap.omx
     is_tap: True
     tables:                
-      - name: WALK_TRANSIT_NT
-        data_field: WALK_TRANSIT_NT
-      - name: PNR_TRANSIT_NT
-        data_field: PNR_TRANSIT_NT
-      - name: KNR_TRANSIT_NT
-        data_field: KNR_TRANSIT_NT
-      - name: TNC_TRANSIT_NT
-        data_field: TNC_TRANSIT_NT
+      - name: WALK_TRANSIT_LOW_NT
+        data_field: WALK_TRANSIT_LOW_NT
+      - name: PNR_TRANSIT_LOW_NT
+        data_field: PNR_TRANSIT_LOW_NT
+      - name: KNR_TRANSIT_LOW_NT
+        data_field: KNR_TRANSIT_LOW_NT
+      - name: TNC_TRANSIT_LOW_NT
+        data_field: TNC_TRANSIT_LOW_NT
+
+  - file_name: trips_nt_mid_tap.omx
+    is_tap: True
+    tables:                
+      - name: WALK_TRANSIT_MID_NT
+        data_field: WALK_TRANSIT_MID_NT
+      - name: PNR_TRANSIT_MID_NT
+        data_field: PNR_TRANSIT_MID_NT
+      - name: KNR_TRANSIT_MID_NT
+        data_field: KNR_TRANSIT_MID_NT
+      - name: TNC_TRANSIT_MID_NT
+        data_field: TNC_TRANSIT_MID_NT
+        
+  - file_name: trips_nt_hi_tap.omx
+    is_tap: True
+    tables:                
+      - name: WALK_TRANSIT_HI_NT
+        data_field: WALK_TRANSIT_HI_NT
+      - name: PNR_TRANSIT_HI_NT
+        data_field: PNR_TRANSIT_HI_NT
+      - name: KNR_TRANSIT_HI_NT
+        data_field: KNR_TRANSIT_HI_NT
+      - name: TNC_TRANSIT_HI_NT
+        data_field: TNC_TRANSIT_HI_NT
 
         
 CONSTANTS:

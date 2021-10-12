@@ -9,7 +9,7 @@ Description,Target,Expression
 ,is_md,"trips.depart.between(time_periods['MD']['first_hour'], time_periods['MD']['last_hour'])"
 ,is_ea,"trips.depart.between(time_periods['AF']['first_hour'], time_periods['AF']['last_hour'])"
 ,is_pm,"trips.depart.between(time_periods['PM']['first_hour'], time_periods['PM']['last_hour'])"
-,is_ev,"trips.depart.between(time_periods['EV']['first_hour'], time_periods['EV']['last_hour'])
+,is_ev,"trips.depart.between(time_periods['EV']['first_hour'], time_periods['EV']['last_hour'])"
 ,is_nt,"(trips.depart.between(time_periods['VE']['first_hour'], time_periods['VE']['last_hour'])) | (trips.depart.between(time_periods['NT']['first_hour'], time_periods['NT']['last_hour']))"
 # ea trips,,
 ,DRIVEALONE_EA,((trips.trip_mode == 'DRIVEALONE') & is_ea) * tour_participants
