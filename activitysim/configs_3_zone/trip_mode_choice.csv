@@ -154,3 +154,4 @@ util_schbus_trip_not_tour,non-school bus trips on a school bus tour,tour_mode_is
 #SCHBUS
 util_SCHBUS_asc,school_tour,,,,,,,,,,,,,schbus_ASC
 util_schbus_notschooltour,,~school_tour,,,,,,,,,,,,,-999
+util_schbus_notschbustour,,~tour_mode_is_schbus,,,,,,,,,,,,,-999

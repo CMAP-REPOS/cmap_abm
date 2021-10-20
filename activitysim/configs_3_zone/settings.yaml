@@ -34,7 +34,7 @@ chunk_size: 400_000_000_000
 # and make sure to trim maz to tap max distances to a reasonable amount in network_los.yaml
 # cmap comfortable with running just 50% samples too
 
-chunk_training_mode: training
+chunk_training_mode: production
 
 num_processes: 24 
 
@@ -53,8 +53,8 @@ default_initial_rows_per_chunk: 10000
 
 # - tracing
 trace_od:
-#trace_hh_id: 1351147
-resume_after: stop_frequency
+trace_hh_id: 1923051
+#resume_after: mandatory_tour_frequency
 
 # input tables
 input_table_list:

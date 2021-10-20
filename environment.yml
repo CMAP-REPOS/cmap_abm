@@ -272,5 +272,6 @@ dependencies:
     - openmatrix==0.3.5.0
     - requests==2.26.0
     - zbox==1.2.0
+    - pandana==0.6.1
 prefix: C:\Users\andrew.rohne\.conda\envs\cmapasim
 

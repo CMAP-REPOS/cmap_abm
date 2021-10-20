@@ -6,9 +6,9 @@ skim_dict_factory: NumpyArraySkimFactory
 #skim_dict_factory: MemMapSkimFactory
 
 # read cached skims (using numpy memmap) from output directory (memmap is faster than omx )
-read_skim_cache: True
+read_skim_cache: False
 # write memmapped cached skims to output directory after reading from omx, for use in subsequent runs
-write_skim_cache: False
+write_skim_cache: True
 
 # rebuild and overwrite existing tap_tap_utilities cache
 rebuild_tvpb_cache: True
@@ -63,9 +63,9 @@ maz_to_tap:
 
 skim_time_periods:
     time_window: 1440
-    period_minutes: 60
+    period_minutes: 30
     #Index is 3 AM! 
-    periods: [0, 4, 5, 7, 8, 12, 14, 16, 18, 24]
+    periods: [0, 7, 9, 13, 15, 23, 27, 31, 35, 48]
     labels: &skim_time_period_labels ['VE', 'EA', 'AM', 'MM', 'MD', 'AF', 'PM', 'EV', 'NT']
     # VE = 3a - 6a (same skim data as NT)
     # EA = 6a - 7a
@@ -186,7 +186,7 @@ TVPB_SETTINGS:
       #DOC: Drive transfer is assumed from previous, probably should be adjusted. IVT is based on 
       #example fast (was 2) vs. cheapest/shortest (was 1) - moved 1 to low VoT, 2 to high VoT, and
       #shot the middle for middle VoT. Cost is wierd, since the example fastest and shortest was 
-      #1 and cheapest is 500 (!!). Left at 1. These should be checked and 
+      #1 and cheapest is 500 (!!). Left at 1. These should be checked and updated
       C_DRIVE_TRANSFER_PENALTY_LOW: -1
       C_DRIVE_TRANSFER_PENALTY_MID: -1
       C_DRIVE_TRANSFER_PENALTY_HI: -1

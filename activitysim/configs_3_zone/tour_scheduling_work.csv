@@ -19,8 +19,8 @@ util_destination_in_cbd_late_arrival_interaction,Destination in CBD -- Late arri
 util_rural_household_early_departure_interaction,Rural household -- Early departure interaction,home_is_rural & (start < 4),coef_rural_household_early_departure_interaction
 util_rural_household_late_arrival_interaction,Rural household -- Late arrival interaction,home_is_rural & (end > 19),coef_rural_household_late_arrival_interaction
 util_full_time_worker_duration_lt_9_hours_interaction,Full-time worker -- duration < 9 hours interaction,(ptype == 1) & (duration < 9),coef_full_time_worker_duration_lt_9_hours_interaction
-util_full_time_worker_10_to_12_departure_interaction,Full-time worker -- 10 to 12 departure interaction,(ptype == 1) & (start > 7) & (start < 12),coef_full_time_worker_10_to_12_departure_interaction
-util_worker_13_to_15_arrival_interaction,Part-time worker -- 13 to 15 arrival interaction,(ptype == 2) & (end > 11) & (end < 15),coef_part_time_worker_13_to_15_arrival_interaction
+util_full_time_worker_10_to_12_departure_interaction,Full-time worker -- 10 to 12 departure interaction,(ptype == 1) & (start > 7) & (start < 11),coef_full_time_worker_10_to_12_departure_interaction
+util_worker_13_to_15_arrival_interaction,Part-time worker -- 13 to 15 arrival interaction,(ptype == 2) & (end > 10) & (end < 14),coef_part_time_worker_13_to_15_arrival_interaction
 util_first_of_2plus_work_tours_duration_lt_8_hrs,First of 2+ work tours- duration<8 hrs,((tour_count>1) & (tour_num == 1)) & (duration < 8),coef_first_of_2plus_work_tours_duration_lt_8_hrs
 util_subsequent_of_2plus_work_tours_duration_lt_8_hrs,Subsequent of 2+ work tours- duration<8 hrs,(tour_num == 2) & (duration < 8),coef_subsequent_of_2plus_work_tours_duration_lt_8_hrs
 util_tours_by_worker_duration_lt_8_hrs,Work+school tours by worker- duration<8 hrs,(mandatory_tour_frequency == 'work_and_school') & is_worker & (duration < 8),coef_tours_by_worker_duration_lt_8_hrs

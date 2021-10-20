@@ -1365,11 +1365,11 @@ sd.purpose <- get_sharedData(data_df1 = base_df, data_df2 = build_df, run1_name 
                              run2_name = BUILD_SCENARIO_NAME, x = "id", y = c("freq_dep", "freq_arr", "freq_dur"), grp = "purpose")
 
 p1 <- plotly_density_plotter(sd.purpose, index = "one", xlabel = "Tour Departure", percent = T, left_offset = 25,
-                             tickvals = seq(1,19), ticktext = todBins, bottom_offset = 150, tickangle = 315, height = 275)
+                             tickvals = seq(1,24), ticktext = todBins, bottom_offset = 150, tickangle = 315, height = 275)
 p2 <- plotly_density_plotter(sd.purpose, index = "two", xlabel = "Tour Arrival", percent = T, left_offset = 25,
-                             tickvals = seq(1,19), ticktext = todBins, bottom_offset = 150, tickangle = 315, height = 275)
+                             tickvals = seq(1,24), ticktext = todBins, bottom_offset = 150, tickangle = 315, height = 275)
 p3 <- plotly_density_plotter(sd.purpose, index = "three", xlabel = "Tour Duration", percent = T, left_offset = 25,
-                             tickvals = seq(1,19), ticktext = durBins, bottom_offset = 50, tickangle = 315, height = 225)
+                             tickvals = seq(1,24), ticktext = durBins, bottom_offset = 50, tickangle = 315, height = 225)
 
 bscols(widths=c(2,10),
   filter_select("Tour Purpose", "Select Tour Purpose", sd.purpose, ~grp_var,multiple=F),
