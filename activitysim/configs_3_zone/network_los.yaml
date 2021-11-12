@@ -6,9 +6,9 @@ skim_dict_factory: NumpyArraySkimFactory
 #skim_dict_factory: MemMapSkimFactory
 
 # read cached skims (using numpy memmap) from output directory (memmap is faster than omx )
-read_skim_cache: False
+read_skim_cache: True
 # write memmapped cached skims to output directory after reading from omx, for use in subsequent runs
-write_skim_cache: True
+write_skim_cache: False
 
 # rebuild and overwrite existing tap_tap_utilities cache
 rebuild_tvpb_cache: True
@@ -91,28 +91,28 @@ TVPB_SETTINGS:
       WTW:
         access: walk
         egress: walk
-        max_paths_across_tap_sets: 3
-        max_paths_per_tap_set: 1
+        max_paths_across_tap_sets: 1
+        max_paths_per_tap_set: 3
       DTW:
         access: drive
         egress: walk
-        max_paths_across_tap_sets: 3
-        max_paths_per_tap_set: 1
+        max_paths_across_tap_sets: 1
+        max_paths_per_tap_set: 3
       WTD:
         access: walk
         egress: drive
-        max_paths_across_tap_sets: 3
-        max_paths_per_tap_set: 1
+        max_paths_across_tap_sets: 1
+        max_paths_per_tap_set: 3
       KTW:
         access: drive
         egress: walk
-        max_paths_across_tap_sets: 3
-        max_paths_per_tap_set: 1
+        max_paths_across_tap_sets: 1
+        max_paths_per_tap_set: 3
       WTK:
         access: walk
         egress: drive
-        max_paths_across_tap_sets: 3
-        max_paths_per_tap_set: 1
+        max_paths_across_tap_sets: 1
+        max_paths_per_tap_set: 3
       NTW:
         access: drive
         egress: walk
@@ -159,9 +159,9 @@ TVPB_SETTINGS:
         2: *mid_income_segment_id
         3: *mid_income_segment_id
         4: *high_income_segment_id
-      c_ivt_high_income: -0.028
-      c_ivt_mid_income: -0.0119
-      c_ivt_low_income: -0.0175
+      c_ivt_high_income: -0.0448 # -0.028
+      c_ivt_mid_income: -0.01344 #-0.0119
+      c_ivt_low_income: -0.00429 #-0.0175
       c_cost_high_income: -0.00112
       c_cost_mid_income: -0.00112
       c_cost_low_income: -0.00112
@@ -192,7 +192,7 @@ TVPB_SETTINGS:
       C_DRIVE_TRANSFER_PENALTY_HI: -1
       C_IVT_MULTIPLIER_LOW: 1
       C_IVT_MULTIPLIER_MID: 1.5
-      C_IVT_MULTIPLIER_HI: 2
+      C_IVT_MULTIPLIER_HI: 1 #2
       C_COST_MULTIPLIER_LOW: 1
       C_COST_MULTIPLIER_MID: 1
       C_COST_MULTIPLIER_HI: 1

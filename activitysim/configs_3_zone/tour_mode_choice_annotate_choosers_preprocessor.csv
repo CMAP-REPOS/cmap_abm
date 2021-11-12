@@ -7,8 +7,8 @@ local,_DF_IS_TOUR,'tour_type' in df.columns
 # TVPB,,
 #,,
 ,demographic_segment,df.income_segment.map(TVPB_demographic_segments_by_income_segment)
-,c_ivt_for_segment,"np.where(demographic_segment==C_LOW_INCOME_SEGMENT_ID,c_ivt_low_income, c_ivt_high_income)"
-,c_cost_for_segment,"np.where(demographic_segment==C_LOW_INCOME_SEGMENT_ID,c_cost_low_income, c_cost_high_income)"
+,c_ivt_for_segment,"np.where(demographic_segment==C_LOW_INCOME_SEGMENT_ID, c_ivt_low_income, np.where(demographic_segment==C_MID_INCOME_SEGMENT_ID, c_ivt_mid_income, c_ivt_high_income))"
+,c_cost_for_segment,"np.where(demographic_segment==C_LOW_INCOME_SEGMENT_ID, c_cost_low_income, np.where(demographic_segment==C_MID_INCOME_SEGMENT_ID, c_cost_mid_income, c_cost_high_income))"
 
 #,,
  local,_HAVE_PARENT_TOURS,'parent_tour_id' in df.columns

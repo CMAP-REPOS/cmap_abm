@@ -30,3 +30,6 @@ non_family,non_family,households.HHT.isin(HHT_NONFAMILY)
 family,family,households.HHT.isin(HHT_FAMILY)
 home_is_urban,home_is_urban,"reindex(land_use.areatype, households.home_zone_id) < setting('urban_threshold')"
 home_is_rural,home_is_rural,"reindex(land_use.areatype, households.home_zone_id) > setting('rural_threshold')"
+,num_predrive_child,"_PERSON_COUNT('ptype == 7', persons, households)"
+,num_nonworker_adults,"_PERSON_COUNT('ptype == 4', persons, households)"
+,num_fullTime_workers,"_PERSON_COUNT('ptype == 1', persons, households)"

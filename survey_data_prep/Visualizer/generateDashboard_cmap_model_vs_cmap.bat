@@ -17,7 +17,7 @@ SET WORKING_DIR= "C:/projects/cmap_activitysim/cmap_abm/survey_data_prep/Visuali
 :: Set up dependencies
 :: ###################
 SET R_SCRIPT="C:\Program Files\R\R-3.6.2\bin\rscript"
-::SET R_LIBRARY=C:\Users\andrew.rohne\r_library
+SET R_LIBRARY=C:\Users\andrew.rohne\r_library
 :: Set PANDOC path
 SET RSTUDIO_PANDOC=C:\projects\cmap_activitysim\pandoc-2.14.2
 :: Parameters file
@@ -32,7 +32,7 @@ SET BUILD_SCENARIO_NAME=ASim
 SET IS_BASE_SURVEY=Yes
 SET MAX_ITER=1
 SET BASE_SAMPLE_RATE=1.0
-SET BUILD_SAMPLE_RATE=1.0
+SET BUILD_SAMPLE_RATE=0.00662696196
 
 SET CT_ZERO_AUTO_FILE_NAME=ct_zero_auto.shp
 

@@ -43,7 +43,7 @@ min_available_chunk_ratio: 0.05
 # method to calculate memory overhead when chunking is enabled (chunk_size > 0)
 chunk_method: hybrid_uss
 # whether to preserve or delete subprocess chunk and mem logs when they are consolidated at end of multiprocess run
-keep_chunk_logs: True
+keep_chunk_logs: False #Should be false when chunk_training_mode = production?
 keep_mem_logs: True
 
 # initial number of chooser rows for first chunk in training mode
@@ -53,8 +53,8 @@ default_initial_rows_per_chunk: 10000
 
 # - tracing
 trace_od:
-trace_hh_id: 1923051
-#resume_after: mandatory_tour_frequency
+trace_hh_id: 17892
+resume_after: cdap_simulate
 
 # input tables
 input_table_list:
@@ -68,6 +68,7 @@ input_table_list:
       VEHICL: auto_ownership
       maz: home_zone_id
       HINC: income
+      hunittype: TYPE
     keep_columns:
       - home_zone_id
       - income
@@ -76,6 +77,7 @@ input_table_list:
       - auto_ownership
       - num_workers
       - TAZ
+      - TYPE
   - tablename: persons
     filename: persons.csv
     index_col: person_id
@@ -207,6 +209,7 @@ output_tables:
     - persons
     - tours
     - trips
+    - joint_tour_participants
 #    - school_shadow_prices
 #    - workplace_shadow_prices
-    - joint_tour_participants
+
