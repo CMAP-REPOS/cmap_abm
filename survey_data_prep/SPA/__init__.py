@@ -19,7 +19,7 @@ import yaml as yaml
 
 ################## definitions defined for the application ##########################################
 
-with open(r'N:/Projects/CMAP_Activitysim/cmap_abm_lf/survey_data_prep/cmap_inputs.yml') as file:
+with open(r'C:\projects\cmap_activitysim\cmap_abm\survey_data_prep\cmap_inputs.yml') as file:
     settings = yaml.full_load(file)
 
 os.chdir(settings['SPA_code_dir']) # be sure we're in this directory

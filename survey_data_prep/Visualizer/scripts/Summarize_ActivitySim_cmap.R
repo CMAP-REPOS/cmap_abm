@@ -33,10 +33,12 @@ settings = yaml.load_file(settings_file)
 ABM_DIR             <- settings$abm_dir
 ABM_SUMMARY_DIR     <- settings$abm_summaries_dir
 # SKIMS_FILEPATH           <- settings$skims_file
-SKIMS_FILEPATH = file.path(settings$skims_dir, settings$skims_filename)
+SKIMS_FILEPATH = file.path(settings$abm_inputs, settings$skims_filename)
 # ZONES_DIR           <- settings$zone_dir
 ZONES_DIR = settings$zone_dir # when using sandag example 
 # R_LIBRARY           <- trimws(paste(parameters$Value[parameters$Key=="R_LIBRARY"]))
+
+ABM_INPUTS = settings$abm_inputs
 
 # .libPaths(R_LIBRARY)
 library(omxr)
@@ -146,6 +148,8 @@ per$PERTYPE <- per$ptype
 per$HDISTRICT <- xwalk$COUNTY_NAME[match(per$home_zone_id, xwalk$MAZ)]
 per$WDISTRICT <- xwalk$COUNTY_NAME[match(per$workplace_zone_id, xwalk$MAZ)]
 
+hh$HDISTRICT <- xwalk$COUNTY_NAME[match(hh$home_zone_id, xwalk$MAZ)]
+
 #Workers in the HH
 hh$WORKERS <- hh$num_workers
 #Adults in the HH
@@ -154,12 +158,33 @@ hh$ADULTS <- hh$num_adults
 # HHVEH X Workers CrossTab
 write.csv(xtabs(finalweight~HHVEH+WORKERS, data = hh), "xtab_HHVEH_WORKERS.csv", row.names = T)
 
+# Workers vs. employees by zone and county ####
+tazdat = read.csv(file.path(ABM_INPUTS, "land_use.csv"), header = TRUE)
+
+tazdat$WDISTRICT = xwalk$COUNTY_NAME[match(tazdat$maz, xwalk$MAZ)]
+emp_co = plyr::count(tazdat, c("WDISTRICT"), "emp")
+emp_taz = plyr::count(tazdat, c("taz"), "emp")
+
+write.csv(emp_taz, "employees_per_taz.csv")
+write.csv(emp_co, "employees_per_co.csv")
+
+
+per$worktaz <- xwalk$TAZ[match(per$workplace_zone_id, xwalk$MAZ)]
+wrk_taz = plyr::count(per[per$workplace_zone_id > 0,], c("worktaz"), "finalweight")
+wrk_co = plyr::count(per[per$workplace_zone_id > 0,], c("WDISTRICT"), "finalweight")
+
+write.csv(wrk_taz, "workers_per_taz.csv")
+write.csv(wrk_co, "workers_per_co.csv")
 
 #--------------------------------------------------
 # Compute Summary Statistics
 
 # Auto ownership
-autoOwnership <- plyr::count(hh, c("HHVEH"), "finalweight")
+autoOwnership <- plyr::count(hh, c("HDISTRICT", "HHVEH"), "finalweight")
+autoOwnershipT = plyr::count(hh, c("HHVEH"), "finalweight")
+autoOwnershipT$HDISTRICT = "Total"
+autoOwnership = rbind(autoOwnership, autoOwnershipT)
+
 write.csv(autoOwnership, "autoOwnership.csv", row.names = TRUE)
 
 hh$COUNTY <- xwalk$COUNTY_NAME[match(hh$home_zone_id, xwalk$MAZ)]

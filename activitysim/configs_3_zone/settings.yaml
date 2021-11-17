@@ -54,7 +54,7 @@ default_initial_rows_per_chunk: 10000
 # - tracing
 trace_od:
 trace_hh_id: 17892
-resume_after: cdap_simulate
+#resume_after: cdap_simulate
 
 # input tables
 input_table_list:

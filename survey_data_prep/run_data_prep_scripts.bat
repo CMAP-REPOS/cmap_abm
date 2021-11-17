@@ -13,9 +13,9 @@ SET R_LIBRARY=C:\Users\andrew.rohne\r_library
 ::python SPA\__init__.py %SETTINGS_FILE%
 
 ::Rscript Visualizer\scripts\install_packages.R
-::%R_SCRIPT% Visualizer\scripts\CMAP_visualizer_prep.R %SETTINGS_FILE%
-::Rscript Visualizer\scripts\Get_census_data_CMAP %SETTINGS_FILE%
-::Rscript Visualizer\scripts\AutoOwnership_Census_CMAP %SETTINGS_FILE%
+%R_SCRIPT% Visualizer\scripts\CMAP_visualizer_prep.R %SETTINGS_FILE%
+Rscript Visualizer\scripts\Get_census_data_CMAP %SETTINGS_FILE%
+Rscript Visualizer\scripts\AutoOwnership_Census_CMAP %SETTINGS_FILE%
 %R_SCRIPT% Visualizer\scripts\Summarize_ActivitySim_cmap.R %SETTINGS_FILE%
 
 call Visualizer\generateDashboard_cmap_model_vs_cmap.bat

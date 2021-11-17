@@ -110,7 +110,7 @@ zones_dt = setDT(zones)
 
 # source(file.path(settings$visualizer_dir, 'scripts', 'ZMX.R'))
 
-SKIMS_FILEPATH = file.path(settings$skims_dir, settings$skims_filename)
+SKIMS_FILEPATH = file.path(settings$abm_inputs, settings$skims_filename)
 skimMat = read_omx(SKIMS_FILEPATH, "DIST")
 
 
@@ -246,8 +246,20 @@ per$hhtaz = hh$HH_ZONE_17[match(per$SAMPN, hh$SAMPN)]
 print("Computing summary statistics...")
 
 # Auto ownership
-autoOwnership = plyr::count(hh[!is.na(hh$HHVEH),], c("HHVEH"), "finalweight")
+autoOwnership = plyr::count(hh[!is.na(hh$HHVEH),], c("HDISTRICT", "HHVEH"), "finalweight")
+autoOwnershipT = plyr::count(hh, c("HHVEH"), "finalweight")
+autoOwnershipT$HDISTRICT = "Total"
+
+autoOwnership = rbind(autoOwnership, autoOwnershipT)
+
 write.csv(autoOwnership, "autoOwnership.csv", row.names = TRUE)
+
+# Workers vs. employees by zone and county ####
+wrk_taz = plyr::count(per[per$PER_WK_ZONE_17 > 0,], c("PER_WK_ZONE_17"), "finalweight")
+wrk_co = plyr::count(per[per$WDISTRICT != "",], c("WDISTRICT"), "finalweight")
+
+write.csv(wrk_taz, "workers_per_taz.csv")
+write.csv(wrk_co, "workers_per_co.csv")
 
 # Persons by person type
 pertypeDistbn = plyr::count(per[!is.na(per$PERTYPE),], c("PERTYPE"), "finalweight")

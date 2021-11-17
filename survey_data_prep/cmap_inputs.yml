@@ -17,7 +17,7 @@ county_flows_csv: 'C:/projects/cmap_activitysim/cmap_abm/survey_data_prep/acs_co
 
 
 visualizer_dir: 'C:/projects/cmap_activitysim/cmap_abm/survey_data_prep/Visualizer'
-visualizer_summaries: 'C:/projects/cmap_activitysim/cmap_abm/survey_data_prep/Visualizer/summaries'
+visualizer_summaries: 'C:/projects/cmap_activitysim/cmap_abm/survey_data_prep/Visualizer/data/base'
 
 skims_dir: 'C:/projects/cmap_activitysim/cmap_abm/survey_data_prep/zone_data'
 skims_filename: 'TAZ_skims.omx'
@@ -28,6 +28,7 @@ popsim_folder_nirpc: 'C:/projects/cmap_activitysim/cmap_abm/survey_data_prep/nir
 
 obs_dir: 'C:/projects/cmap_activitysim/cmap_abm/obs_processing'
 
+abm_inputs: 'C:/projects/cmap_activitysim/cmap_abm/activitysim/data'
 abm_dir: 'C:/projects/cmap_activitysim/cmap_abm/activitysim/output'
 abm_summaries_dir: 'C:/projects/cmap_activitysim/cmap_abm/survey_data_prep/Visualizer/data/calibration_runs/summarized'
 

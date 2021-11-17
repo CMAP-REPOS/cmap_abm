@@ -40,7 +40,7 @@ args = commandArgs(trailingOnly = TRUE)
 if(length(args) > 0){
   settings_file = args[1]
 } else {
-  settings_file = 'N:/Projects/CMAP_Activitysim/cmap_abm_lf/survey_data_prep/cmap_inputs.yml'
+  settings_file = 'C:\\projects\\cmap_activitysim\\cmap_abm\\survey_data_prep\\cmap_inputs.yml'
 }
 
 settings = yaml.load_file(settings_file)
@@ -140,6 +140,11 @@ codebook[, NAME := tolower(NAME)]
 zones09 = st_read(file.path(settings$zone_dir, 'Zone09_CMAP_2009.shp'))
 zones09 = st_transform(zones09, st_crs("+proj=longlat +ellps=GRS80"))
 
+# 2017 skims
+SKIMS_FILEPATH = file.path(settings$abm_inputs, settings$skims_filename)
+skimMat = read_omx(SKIMS_FILEPATH, "DIST")
+
+
 # Checking Value Counts
 #----------------------------
 print("Household size value counts: ")
@@ -193,22 +198,22 @@ hh_raw[location_raw[loctype == 1], `:=` (HH_ZONE_ID = zone17,
                                          home_tract_fips = paste0(state_fips, str_pad(county_fips, width = 3, pad = '0'),
                                                                   str_pad(tract_fips, width = 6, pad = '0'))), on = .(sampno)]
 # geocode 09 zone 
-home_coords = st_as_sf(hh_raw[, .(sampno, home_lon, home_lat)], 
-                      coords = c(x = "home_lon", y = "home_lat"), 
-                      crs = st_crs(zones09))
-
-home_zones_09 = setDT(st_join(home_coords, zones09))
+# home_coords = st_as_sf(hh_raw[, .(sampno, home_lon, home_lat)], 
+#                       coords = c(x = "home_lon", y = "home_lat"), 
+#                       crs = st_crs(zones09))
+# 
+# home_zones_09 = setDT(st_join(home_coords, zones09))
 
 rows = nrow(hh_raw)
-hh_raw = hh_raw[home_zones_09[, .(sampno, zone09, ZONE07)], on = .(sampno)]
+#hh_raw = hh_raw[home_zones_09[, .(sampno, zone09, ZONE07)], on = .(sampno)]
 
-stopifnot('bad join to geocoded 09 zones!' = rows == nrow(hh_raw))
+#stopifnot('bad join to geocoded 09 zones!' = rows == nrow(hh_raw))
 
 
-na_zones_17 = unique(hh_raw[is.na(zone09) & HH_ZONE_ID != -9999,HH_ZONE_ID])
-lookup = hh_raw[HH_ZONE_ID %in% na_zones_17 & !is.na(zone09), .N, .(zone09, HH_ZONE_ID)]
+#na_zones_17 = unique(hh_raw[is.na(zone09) & HH_ZONE_ID != -9999,HH_ZONE_ID])
+#lookup = hh_raw[HH_ZONE_ID %in% na_zones_17 & !is.na(zone09), .N, .(zone09, HH_ZONE_ID)]
 
-hh_raw[lookup, zone09 := ifelse(is.na(zone09), i.zone09, zone09), on = .(HH_ZONE_ID)]
+#hh_raw[lookup, zone09 := ifelse(is.na(zone09), i.zone09, zone09), on = .(HH_ZONE_ID)]
 
 # Add counts of EV, hybrids per HH
 # codebook[NAME == 'fuel'
@@ -232,8 +237,7 @@ HH = hh_raw[, .(SAMPN = sampno,
                 HH_DRIVERS_CAT = fifelse(HH_DRIVERS >= 3, 3, HH_DRIVERS),
                 HHEXPFAC = wthhfin, 
                 HH_UNO = 1,  
-                HH_ZONE_ID = zone09,
-                HH_ZONE_17 = HH_ZONE_ID,
+                HH_ZONE_ID = HH_ZONE_ID,
                 HH_TRACT_FIPS = home_tract_fips,
                 AREA = 0)]
   
@@ -300,45 +304,45 @@ per_raw[location_raw[loctype == 2], `:=` (PER_WK_ZONE_ID = zone17,
                                           work_lon = longitude), on = .(perno, sampno)]
 
 # geocode 09 zone 
-school_coords = st_as_sf(per_raw[!is.na(school_lat), .(sampno, perno, school_lon, school_lat)], 
-                       coords = c(x = "school_lon", y = "school_lat"), 
-                       crs = st_crs(zones09))
-
-school_zones_09 = setDT(st_join(school_coords, zones09))
-
-rows = nrow(per_raw)
-per_raw = school_zones_09[, .(sampno, perno, school_zone_09 = zone09, school_zone_07 = ZONE07)][per_raw, on = .(sampno, perno)]
-
-stopifnot('bad join to geocoded school 09 zones!' = rows == nrow(per_raw))
-
-
-na_zones_17 = unique(per_raw[is.na(school_zone_09) & PER_SCHL_ZONE_ID != -9999, PER_SCHL_ZONE_ID])
-lookup = per_raw[PER_SCHL_ZONE_ID %in% na_zones_17 & !is.na(school_zone_09), .N, .(school_zone_09, PER_SCHL_ZONE_ID)]
-
-per_raw[lookup, school_zone_09 := ifelse(is.na(school_zone_09), i.school_zone_09, school_zone_09), on = .(PER_SCHL_ZONE_ID)]
-per_raw[is.na(school_zone_09) & !is.na(school_lat), school_zone_09 := -9999]
+# school_coords = st_as_sf(per_raw[!is.na(school_lat), .(sampno, perno, school_lon, school_lat)], 
+#                        coords = c(x = "school_lon", y = "school_lat"), 
+#                        crs = st_crs(zones09))
+# 
+# school_zones_09 = setDT(st_join(school_coords, zones09))
+# 
+# rows = nrow(per_raw)
+# per_raw = school_zones_09[, .(sampno, perno, school_zone_09 = zone09, school_zone_07 = ZONE07)][per_raw, on = .(sampno, perno)]
+# 
+# stopifnot('bad join to geocoded school 09 zones!' = rows == nrow(per_raw))
 
 
-work_coords = st_as_sf(per_raw[!is.na(work_lat), .(sampno, perno, work_lon, work_lat)], 
-                         coords = c(x = "work_lon", y = "work_lat"), 
-                         crs = st_crs(zones09))
-
-work_zones_09 = setDT(st_join(work_coords, zones09))
-
-rows = nrow(per_raw)
-per_raw = work_zones_09[, .(sampno, perno, work_zone_09 = zone09, work_zone_07 = ZONE07)][per_raw, 
-                  on = .(sampno, perno)]
-
-stopifnot('bad join to geocoded school 09 zones!' = rows == nrow(per_raw))
+# na_zones_17 = unique(per_raw[is.na(school_zone_09) & PER_SCHL_ZONE_ID != -9999, PER_SCHL_ZONE_ID])
+# lookup = per_raw[PER_SCHL_ZONE_ID %in% na_zones_17 & !is.na(school_zone_09), .N, .(school_zone_09, PER_SCHL_ZONE_ID)]
+# 
+# per_raw[lookup, school_zone_09 := ifelse(is.na(school_zone_09), i.school_zone_09, school_zone_09), on = .(PER_SCHL_ZONE_ID)]
+# per_raw[is.na(school_zone_09) & !is.na(school_lat), school_zone_09 := -9999]
 
 
-na_zones_17 = unique(per_raw[is.na(work_zone_09) & PER_WK_ZONE_ID != -9999, PER_WK_ZONE_ID])
-lookup = per_raw[PER_WK_ZONE_ID %in% na_zones_17 & !is.na(work_zone_09), .N,
-                 .(work_zone_09, PER_WK_ZONE_ID)]
-
-per_raw[lookup, work_zone_09 := ifelse(is.na(work_zone_09), i.work_zone_09, work_zone_09), 
-        on = .(PER_WK_ZONE_ID)]
-per_raw[is.na(work_zone_09) & !is.na(work_lat), work_zone_09 := -9999]
+# work_coords = st_as_sf(per_raw[!is.na(work_lat), .(sampno, perno, work_lon, work_lat)], 
+#                          coords = c(x = "work_lon", y = "work_lat"), 
+#                          crs = st_crs(zones09))
+# 
+# work_zones_09 = setDT(st_join(work_coords, zones09))
+# 
+# rows = nrow(per_raw)
+# per_raw = work_zones_09[, .(sampno, perno, work_zone_09 = zone09, work_zone_07 = ZONE07)][per_raw, 
+#                   on = .(sampno, perno)]
+# 
+# stopifnot('bad join to geocoded school 09 zones!' = rows == nrow(per_raw))
+# 
+# 
+# na_zones_17 = unique(per_raw[is.na(work_zone_09) & PER_WK_ZONE_ID != -9999, PER_WK_ZONE_ID])
+# lookup = per_raw[PER_WK_ZONE_ID %in% na_zones_17 & !is.na(work_zone_09), .N,
+#                  .(work_zone_09, PER_WK_ZONE_ID)]
+# 
+# per_raw[lookup, work_zone_09 := ifelse(is.na(work_zone_09), i.work_zone_09, work_zone_09), 
+#         on = .(PER_WK_ZONE_ID)]
+# per_raw[is.na(work_zone_09) & !is.na(work_lat), work_zone_09 := -9999]
 
 
 PER = per_raw[, .(PERNO = perno,
@@ -351,10 +355,8 @@ PER = per_raw[, .(PERNO = perno,
                   STUDE,
                   SCHOL,
                   PER_WFH = fifelse(PER_EMPLY_LOC_TYPE == 2, 1, 0),
-                  PER_SCHL_ZONE_ID = school_zone_09,
-                  PER_WK_ZONE_ID = work_zone_09,
-                  PER_SCHL_ZONE_17 = PER_SCHL_ZONE_ID,
-                  PER_WK_ZONE_17 = PER_WK_ZONE_ID,
+                  PER_SCHL_ZONE_ID = PER_SCHL_ZONE_ID,
+                  PER_WK_ZONE_ID = PER_WK_ZONE_ID,
                   PEREXPFAC = wtperfin
                   )]
 
@@ -609,27 +611,27 @@ place_raw[location_raw[loctype  == 1], `:=` (home_lat = latitude, home_lon = lon
 # location info 
 place_raw[location_raw, PLACE_ZONE_ID := zone17, on = .(sampno, locno)]
 place_raw[location_raw, PLACE_NAME := locname, on = .(sampno, locno)]
-
-
-place_coords = st_as_sf(location_raw[, .(sampno, locno, lon = longitude, lat = latitude)], 
-                       coords = c(x = "lon", y = "lat"), 
-                       crs = st_crs(zones09))
-
-place_zones_09 = setDT(st_join(place_coords, zones09))
-
-rows = nrow(place_raw)
-place_raw = place_zones_09[, .(sampno, locno, zone_09 = zone09, zone_07 = ZONE07)][place_raw, 
-                                                                                          on = .(sampno, locno)]
-
-stopifnot('bad join to geocoded  09 zones!' = rows == nrow(place_raw))
-
-
-na_zones_17 = unique(place_raw[is.na(zone_09) & PLACE_ZONE_ID != -9999, PLACE_ZONE_ID])
-lookup = place_raw[PLACE_ZONE_ID %in% na_zones_17 & !is.na(zone_09), .N,
-                 .(zone_09, PLACE_ZONE_ID)]
-place_raw[lookup, zone_09 := ifelse(is.na(zone_09), i.zone_09, zone_09), 
-        on = .(PLACE_ZONE_ID)]
-place_raw[is.na(zone_09), zone_09 := -9999]
+# 
+# 
+# place_coords = st_as_sf(location_raw[, .(sampno, locno, lon = longitude, lat = latitude)], 
+#                        coords = c(x = "lon", y = "lat"), 
+#                        crs = st_crs(zones09))
+# 
+# place_zones_09 = setDT(st_join(place_coords, zones09))
+# 
+# rows = nrow(place_raw)
+# place_raw = place_zones_09[, .(sampno, locno, zone_09 = zone09, zone_07 = ZONE07)][place_raw, 
+#                                                                                           on = .(sampno, locno)]
+# 
+# stopifnot('bad join to geocoded  09 zones!' = rows == nrow(place_raw))
+# 
+# 
+# na_zones_17 = unique(place_raw[is.na(zone_09) & PLACE_ZONE_ID != -9999, PLACE_ZONE_ID])
+# lookup = place_raw[PLACE_ZONE_ID %in% na_zones_17 & !is.na(zone_09), .N,
+#                  .(zone_09, PLACE_ZONE_ID)]
+# place_raw[lookup, zone_09 := ifelse(is.na(zone_09), i.zone_09, zone_09), 
+#         on = .(PLACE_ZONE_ID)]
+# place_raw[is.na(zone_09), zone_09 := -9999]
 
 #investigate change mode purposes
 union_coords = c(-87.64058666867223, 41.8831654811658) # union st
@@ -792,8 +794,7 @@ place_raw[is.na(TOTTR_NEXT), TOTTR_NEXT := 0]
 PLACE = place_raw[MODE != -9 | placeno == 1, .(SAMPN = sampno,
                       PLANO = placeno,
                       PERNO = perno,
-                      TAZ = zone_09,
-                      TAZ17 = PLACE_ZONE_ID,
+                      TAZ = PLACE_ZONE_ID,
                       DEP_HR,
                       DEP_MIN,
                       ARR_HR,

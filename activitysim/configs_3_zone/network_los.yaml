@@ -159,40 +159,30 @@ TVPB_SETTINGS:
         2: *mid_income_segment_id
         3: *mid_income_segment_id
         4: *high_income_segment_id
-      c_ivt_high_income: -0.0448 # -0.028
-      c_ivt_mid_income: -0.01344 #-0.0119
-      c_ivt_low_income: -0.00429 #-0.0175
-      c_cost_high_income: -0.00112
-      c_cost_mid_income: -0.00112
-      c_cost_low_income: -0.00112
-      c_park_low_income: -0.1
-      c_park_mid_income: -0.05
-      c_park_high_income: -0.01
+      c_ivt_high_income: -0.035
+      c_ivt_mid_income: -0.035
+      c_ivt_low_income: -0.035
+      c_cost_high_income: -0.0009
+      c_cost_mid_income: -0.0029
+      c_cost_low_income: -0.0091
       c_wait: 1.5
       c_walk: 1.7
       c_drive: 1.5
+      c_xferwait: 2.0
       c_auto_operating_cost_per_mile: 18.29
       C_UNAVAILABLE: -999
-      #TODO: Check to see if the below can be removed
-      #C_FASTEST_IVT_MULTIPLIER: 2
-      #C_FASTEST_COST_MULTIPLIER: 1
-      #C_CHEAPEST_IVT_MULTIPLIER: 1
-      #C_CHEAPEST_COST_MULTIPLIER: 500
-      #C_SHORTEST_IVT_MULTIPLIER: 1
-      #C_SHORTEST_COST_MULTIPLIER: 1
-      #C_SHORTEST_DIST_MULTIPLIER: 1
-      #C_DRIVE_TRANSFER_PENALTY: -1
+
       # The below are correct for transit income class update
       #DOC: Drive transfer is assumed from previous, probably should be adjusted. IVT is based on 
       #example fast (was 2) vs. cheapest/shortest (was 1) - moved 1 to low VoT, 2 to high VoT, and
       #shot the middle for middle VoT. Cost is wierd, since the example fastest and shortest was 
       #1 and cheapest is 500 (!!). Left at 1. These should be checked and updated
-      C_DRIVE_TRANSFER_PENALTY_LOW: -1
-      C_DRIVE_TRANSFER_PENALTY_MID: -1
-      C_DRIVE_TRANSFER_PENALTY_HI: -1
+      C_DRIVE_TRANSFER_PENALTY_LOW: -0.00117
+      C_DRIVE_TRANSFER_PENALTY_MID: -0.00117
+      C_DRIVE_TRANSFER_PENALTY_HI: -0.00117
       C_IVT_MULTIPLIER_LOW: 1
-      C_IVT_MULTIPLIER_MID: 1.5
-      C_IVT_MULTIPLIER_HI: 1 #2
+      C_IVT_MULTIPLIER_MID: 1
+      C_IVT_MULTIPLIER_HI: 1
       C_COST_MULTIPLIER_LOW: 1
       C_COST_MULTIPLIER_MID: 1
       C_COST_MULTIPLIER_HI: 1

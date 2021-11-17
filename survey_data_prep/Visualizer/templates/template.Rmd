@@ -648,13 +648,26 @@ if(IS_BASE_SURVEY=="Yes"){
 build_df <- build_data[[which(build_csv_names=="autoOwnership")]]
 build_df$X = NULL
 base_df$X = NULL
-colnames(build_df) <- colnames(census_df)
-colnames(base_df) <- colnames(census_df)
+#colnames(build_df) <- colnames(census_df)
+#colnames(base_df) <- colnames(census_df)
 
-std_DF <- get_standardDF(data_df1 = base_df, data_df2 = build_df, x = "HHVEH", y = c("freq"))
+base_df$HDISTRICT = levels(base_df$HDISTRICT)[base_df$HDISTRICT]
+build_df$HDISTRICT = levels(build_df$HDISTRICT)[build_df$HDISTRICT]
 
-p <- plotly_bar_plotter(data = std_DF, xlabel = "Number of Vehicles", ylabel = "Percent", ynames = c(BASE_SCENARIO_NAME, BUILD_SCENARIO_NAME), percent = T, height = 225)
-p
+# Limit to surveyed counties
+build_df = build_df[build_df$HDISTRICT %in% base_df$HDISTRICT,]
+
+sd.autoown <- get_standardDF(data_df1 = base_df, data_df2 = build_df, x = "HHVEH", y = c("freq"), grp = "HDISTRICT", shared = T)
+
+p <- plotly_bar_plotter(data = sd.autoown, xlabel = "Number of Vehicles", ylabel = "Percent", ynames = c(AO_CENSUS_LONG, BUILD_SCENARIO_NAME), percent = T, height = 225)
+
+bscols(widths=c(3,9),
+  list(
+    filter_select("ao_cname", "Select County", sd.autoown, ~grp_var, multiple=F)),
+    p
+  )
+
+#p
 ```
 
 ### {data-height=140}
@@ -830,7 +843,7 @@ Only for build scenario.
 Chart Column 2{.tabset}
 --------------------------------------------
 
-### By County{data-height=575}
+### By County{data-height=575} 
 <!-- ```{r job_wrk1a}
 bscols(widths=c(6,6),
   include_graphics(file.path(SYSTEM_JPEG_PATH, "workersByCounty.jpeg")),
@@ -843,11 +856,66 @@ bscols(widths=c(6,6),
 ```{r job_wrk1a}
 #knitr::include_graphics(file.path(SYSTEM_JPEG_PATH, "workersByCounty.jpeg"))
 # knitr::include_graphics(file.path(SYSTEM_JPEG_PATH, "workersByTAZ_County.jpeg"))
+
+#workers_per_co.csv
+#workers_per_taz.csv
+
+base_df <- build_data[[which(build_csv_names=="employees_per_co")]]
+build_df <- build_data[[which(build_csv_names=="workers_per_co")]]
+
+base_df$WDISTRICT = levels(base_df$WDISTRICT)[base_df$WDISTRICT]
+build_df$WDISTRICT = levels(build_df$WDISTRICT)[build_df$WDISTRICT]
+build_df = build_df[build_df$WDISTRICT %in% base_df$WDISTRICT,]
+base_df = base_df[base_df$WDISTRICT %in% build_df$WDISTRICT,]
+
+#colnames(base_df)[which(colnames(base_df) == "freq")] = BASE_SCENARIO_NAME
+#colnames(build_df)[which(colnames(build_df) == "freq")] = BUILD_SCENARIO_NAME
+
+df = base_df
+df$freq_build = build_df$freq[which(df$WDISTRICT == build_df$WDISTRICT)]/BUILD_SAMPLE_RATE
+
+co_cor = cor(df$freq, df$freq_build)^2
+co_lm = lm(freq_build ~ freq, df)
+
+text1 = paste("r2 =", round(co_cor, 4))
+text2 = paste("y = ", round(co_lm$coefficients[['freq']], 4), "x  + ", round(co_lm$coefficients[['(Intercept)']], 2), sep = "")
+
+ggplot(df, aes(x = freq, y = freq_build, label = WDISTRICT)) + geom_point() +
+  geom_abline(slope = 1, intercept = 0, color = "red") +
+  geom_text(vjust = 0, nudge_y = 0.1, check_overlap = TRUE) +
+  scale_x_log10("SEDATA Input", labels = comma, limits = c(10000, max(df$freq, df$build_freq))) +
+  scale_y_log10("ActivitySim", labels = comma, limits = c(10000, max(df$freq, df$build_freq))) +
+  annotate("text", x=500000, y=c(20000, 15000), label= c(text1, text2))
+
+
 ```
 
 ### By TAZ{data-height=575}
 ```{r job_wrk_taz}
  #knitr::include_graphics(file.path(SYSTEM_JPEG_PATH, "workersByTAZ.jpeg"))
+base_df <- build_data[[which(build_csv_names=="employees_per_taz")]]
+build_df <- build_data[[which(build_csv_names=="workers_per_taz")]]
+
+
+df = data.frame(taz = 1:3632) %>%
+  dplyr::left_join(base_df, by = "taz") %>%
+  dplyr::left_join(build_df, by = c("taz" = "worktaz")) %>%
+  rename(base = freq.x) %>%
+  mutate(build = freq.y/BUILD_SAMPLE_RATE) %>%
+  mutate(build = ifelse(is.na(build), 0, build),
+         base = ifelse(is.na(base), 0, base))
+
+co_cor = cor(df$base, df$build)^2
+co_lm = lm(build ~ base, df)
+
+text1 = paste("r2 =", round(co_cor, 4))
+text2 = paste("y = ", round(co_lm$coefficients[['base']], 4), "x  + ", round(co_lm$coefficients[['(Intercept)']], 2), sep = "")
+
+ggplot(df, aes(x = base, y = build)) + geom_point(alpha = 0.3) +
+  geom_abline(slope = 1, intercept = 0, color = "red") +
+  scale_x_continuous("SEDATA Input", labels = comma, limits = c(0, max(df$freq, df$build_freq))) +
+  scale_y_continuous("ActivitySim", labels = comma, limits = c(0, max(df$freq, df$build_freq))) +
+  annotate("text", x=60000, y=c(4000, 1500), label= c(text1, text2))
 ```
 
 ### Low Income{data-height=575}
