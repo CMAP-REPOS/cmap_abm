@@ -14,7 +14,7 @@ args = commandArgs(trailingOnly = TRUE)
 if(length(args) > 0){
   settings_file = args[1]
 } else {
-  settings_file = 'N:/Projects/CMAP_Activitysim/cmap_abm/survey_data_prep/cmap_inputs.yml'
+  settings_file = 'C:\\projects\\cmap_activitysim\\cmap_abm\\survey_data_prep\\cmap_inputs.yml'
 }
 
 settings = yaml.load_file(settings_file)
@@ -94,14 +94,17 @@ acs_veh = data.table(
 
 acs_veh = acs_veh[substr(GEOID, 0, 5) %in% counties[, county_fip]]
 acs_veh[, GEOID := as.numeric(GEOID)]
+acs_veh$COUNTY = counties$county_name[match(substr(acs_veh$GEOID, 0, 5), levels(counties$county_fip)[counties$county_fip])]
+acs_veh = acs_veh[!is.na(acs_veh$COUNTY),]
 
 acs_vars = data.table(load_variables(year = 2017, "acs5", cache = FALSE))
 acs_vars_veh = acs_vars[name %like% "B08201"]
 
 auto_ownership = dcast(acs_veh[variable %in% c('B08201_002', 'B08201_003', 'B08201_004', 'B08201_005', 'B08201_006')],
-                       variable ~ '', value.var = 'estimate', fun = sum )
+                       COUNTY + variable ~ '', value.var = 'estimate', fun = sum )
 
-setnames(auto_ownership, c('variable', '.'), c('HHVEH', 'freq'))
+setnames(auto_ownership, c('COUNTY','variable', '.'), 
+         c('COUNTY', 'HHVEH', 'freq'))
 
 auto_ownership[, HHVEH := as.numeric(gsub('B08201_00', '', HHVEH)) - 2]
 auto_ownership = auto_ownership[HHVEH <= 4]
@@ -115,6 +118,10 @@ acs_veh_t = acs_veh_t[, c('TractID', 'Census_HH',	'Census_A0',	'Census_A1',	'Cen
 
 fwrite(auto_ownership, file.path(settings$visualizer_summaries, 'autoOwnershipCensus.csv'))
 fwrite(acs_veh_t, file.path(settings$visualizer_summaries, 'ACS_2018_5yr_AutoOwn.csv'))
+
+acs_veh_t$COUNTY = counties$county_name[match(substr(acs_veh_t$TractID, 0, 5), levels(counties$county_fip)[counties$county_fip])]
+
+hh_census_co = dcast(acs_veh_t, COUNTY ~ ., value.var = "Census_HH", fun = sum)
 
 ## hh size
 

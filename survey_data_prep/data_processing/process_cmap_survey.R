@@ -7,9 +7,9 @@
 ##########################################################################################################################
 
 if (!"data.table" %in% installed.packages()) install.packages("data.table")
-if (!"readxl" %in% installed.packages()) install.packages("lubridate")
-if (!"magrittr" %in% installed.packages()) install.packages("lubridate")
-if (!"sf" %in% installed.packages()) install.packages("lubridate")
+if (!"readxl" %in% installed.packages()) install.packages("readxl")
+if (!"magrittr" %in% installed.packages()) install.packages("magrittr")
+if (!"sf" %in% installed.packages()) install.packages("sf")
 
 # library(foreign)
 # library(dplyr)

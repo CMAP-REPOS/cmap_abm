@@ -28,3 +28,15 @@ util_retail_transit_workers,"Retail accessibility (0.66*PK + 0.34*OP) by transit
 util_retail_non_motor_no_workers,"Retail accessibility by non-motorized, if 0 workers",(num_workers==0)*nmRetail,,coef_retail_non_motor,coef_retail_non_motor,coef_retail_non_motor,coef_retail_non_motor
 util_retail_non_motor_workers,"Retail accessibility by non-motorized, if 1+ workers",(num_workers>0)*nmRetail,,coef_retail_non_motor,coef_retail_non_motor,coef_retail_non_motor,coef_retail_non_motor
 util_auto_time_saving_per_worker,Auto time savings per worker to work,"@np.where(df.num_workers > 0, df.hh_work_auto_savings_ratio / df.num_workers, 0)",,coef_cars1_auto_time_saving_per_worker,coef_cars2_auto_time_saving_per_worker,coef_cars3_auto_time_saving_per_worker,coef_cars4_auto_time_saving_per_worker
+util_asc_cook,Cook County,@df.county == 17031,,coef_cars1_cook,coef_cars2_cook,coef_cars3_cook,coef_cars4_cook
+util_asc_dupage,DuPage County,@df.county == 17043,,coef_cars1_dupage,coef_cars2_dupage,coef_cars3_dupage,coef_cars4_dupage
+util_asc_kane,Kane County,@df.county == 17089,,coef_cars1_kane,coef_cars2_kane,coef_cars3_kane,coef_cars4_kane
+util_asc_kendall,Kendall County,@df.county == 17093,,coef_cars1_kendall,coef_cars2_kendall,coef_cars3_kendall,coef_cars4_kendall
+util_asc_lakeil,Lake County IL,@df.county == 17097,,coef_cars1_lakeil,coef_cars2_lakeil,coef_cars3_lakeil,coef_cars4_lakeil
+util_asc_mchenry,McHenry County,@df.county == 17111,,coef_cars1_mchenry,coef_cars2_mchenry,coef_cars3_mchenry,coef_cars4_mchenry
+util_asc_will,Will County,@df.county == 17197,,coef_cars1_will,coef_cars2_will,coef_cars3_will,coef_cars4_will
+util_asc_grundy,Grundy County,@df.county == 17063,,coef_cars1_grundy,coef_cars2_grundy,coef_cars3_grundy,coef_cars4_grundy
+util_asc_dekalb,DeKalb County,@df.county == 17037,,coef_cars1_dekalb,coef_cars2_dekalb,coef_cars3_dekalb,coef_cars4_dekalb
+util_asc_lakein,Lake County IN,@df.county == 18089,,coef_cars1_lakein,coef_cars2_lakein,coef_cars3_lakein,coef_cars4_lakein
+util_asc_laporte,LaPorte County,@df.county == 18091,,coef_cars1_laporte,coef_cars2_laporte,coef_cars3_laporte,coef_cars4_laporte
+util_asc_porter,Porter County,@df.county == 18127,,coef_cars1_porter,coef_cars2_porter,coef_cars3_porter,coef_cars4_porter

@@ -5,8 +5,8 @@ workplace_in_cbd,workplace_in_cbd,"reindex(land_use.areatype, persons.workplace_
 work_zone_area_type,work_zone_area_type,"reindex(land_use.areatype, persons.workplace_zone_id)"
 #,, auto time to work - free flow travel time in both directions. MTC TM1 was MD and MD
 #,,roundtrip_auto_time_to_work
-,_auto_time_home_to_work,"skim_dict.lookup(persons.home_zone_id, persons.workplace_zone_id, ('SOV_NT_M_TIME', 'MD'))"
-,_auto_time_work_to_home,"skim_dict.lookup(persons.workplace_zone_id, persons.home_zone_id, ('SOV_NT_M_TIME', 'MD'))"
+,_auto_time_home_to_work,"skim_dict.lookup(persons.home_zone_id, persons.workplace_zone_id, ('SOV_NT_M_FTIME', 'MD'))"
+,_auto_time_work_to_home,"skim_dict.lookup(persons.workplace_zone_id, persons.home_zone_id, ('SOV_NT_M_FTIME', 'MD'))"
 ,roundtrip_auto_time_to_work,"np.where(persons.workplace_zone_id>=0,_auto_time_home_to_work + _auto_time_work_to_home,0)"
 #,,_roundtrip_walk_time_to_work
 ,_MAX_TIME_TO_WORK,999

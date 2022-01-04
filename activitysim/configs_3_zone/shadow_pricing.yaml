@@ -7,7 +7,7 @@ shadow_pricing_models:
 LOAD_SAVED_SHADOW_PRICES: True
 
 # number of shadow price iterations for cold start
-MAX_ITERATIONS: 10
+MAX_ITERATIONS: 5
 
 # number of shadow price iterations for warm start (after loading saved shadow_prices)
 MAX_ITERATIONS_SAVED: 1

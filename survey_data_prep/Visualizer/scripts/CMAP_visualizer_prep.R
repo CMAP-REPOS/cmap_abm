@@ -141,10 +141,9 @@ DST_SKM = setDT(DST_SKM)
 # DST_SKM[o==d, dist := dist_to_nearest_zone/2]
 # DST_SKM[o == d, dist := sqrt(area)/2]
 
-hh$hhtaz = hh$HH_ZONE_17
-per$pwtaz = per$PER_WK_ZONE_17
-per$pstaz = per$PER_SCHL_ZONE_17
-
+hh$hhtaz = hh$HH_ZONE_ID
+per$pwtaz = per$PER_WK_ZONE_ID
+per$pstaz = per$PER_SCHL_ZONE_ID
 hh$hhtaz[is.na(hh$hhtaz)] = 0
 per$pwtaz[is.na(per$pwtaz)] = 0
 per$pstaz[is.na(per$pstaz)] = 0
@@ -200,17 +199,17 @@ county_fips_lookup[, county_fip := as.numeric(county_fip)]
 zones_dt[, county_fip := as.numeric(county_fip)]
 zones_dt[county_fips_lookup, county_nam := i.county_name, on = .(county_fip)]
 
-place[, O_TAZ := shift(TAZ17, type = 'lag'), by = .(SAMPN, PERNO)]
+place[, O_TAZ := shift(TAZ, type = 'lag'), by = .(SAMPN, PERNO)]
 place[zones_dt, OCOUNTY := i.county_nam, on = .(O_TAZ = zone17)]
-place[zones_dt, DCOUNTY := i.county_nam, on = .(TAZ17 = zone17)]
+place[zones_dt, DCOUNTY := i.county_nam, on = .(TAZ = zone17)]
 
 trips[place, OCOUNTY := i.OCOUNTY, on = .(HH_ID = SAMPN, PER_ID = PERNO, DEST_PLACENO = PLANO)]
 trips[place, DCOUNTY := i.DCOUNTY, on = .(HH_ID = SAMPN, PER_ID = PERNO, DEST_PLACENO = PLANO)]
 
-hh[zones_dt, HDISTRICT := i.county_nam, on = .(HH_ZONE_17 = zone17)]
+hh[zones_dt, HDISTRICT := i.county_nam, on = .(HH_ZONE_ID = zone17)]
 per[hh, HDISTRICT := i.HDISTRICT, on = .(SAMPN)]
-per[zones_dt, WDISTRICT := i.county_nam, on = .(PER_WK_ZONE_17 = zone17)]
-per[zones_dt, SCHOOL_COUNTY := i.county_nam, on = .(PER_SCHL_ZONE_17 = zone17)]
+per[zones_dt, WDISTRICT := i.county_nam, on = .(PER_WK_ZONE_ID = zone17)]
+per[zones_dt, SCHOOL_COUNTY := i.county_nam, on = .(PER_SCHL_ZONE_ID = zone17)]
 
 # Join weight
 
@@ -239,7 +238,7 @@ hh$ADULTS[is.na(hh$ADULTS)] = 0
 
 
 per[processedPerson, PERTYPE := i.PERSONTYPE, on = .(SAMPN = HHID, PERNO = PERID)]
-per$hhtaz = hh$HH_ZONE_17[match(per$SAMPN, hh$SAMPN)]
+per$hhtaz = hh$HH_ZONE_ID[match(per$SAMPN, hh$SAMPN)]
 
 ##-------Compute Summary Statistics-------
 ##########################################
@@ -255,7 +254,7 @@ autoOwnership = rbind(autoOwnership, autoOwnershipT)
 write.csv(autoOwnership, "autoOwnership.csv", row.names = TRUE)
 
 # Workers vs. employees by zone and county ####
-wrk_taz = plyr::count(per[per$PER_WK_ZONE_17 > 0,], c("PER_WK_ZONE_17"), "finalweight")
+wrk_taz = plyr::count(per[per$PER_WK_ZONE_ID > 0,], c("PER_WK_ZONE_ID"), "finalweight")
 wrk_co = plyr::count(per[per$WDISTRICT != "",], c("WDISTRICT"), "finalweight")
 
 write.csv(wrk_taz, "workers_per_taz.csv")
@@ -270,12 +269,12 @@ write.csv(pertypeDistbn, "pertypeDistbn.csv", row.names = TRUE)
 # per$empl_loc_type = per_raw$empl_loc_type[match(paste(per$SAMPN, per$PERNO, sep = "-"), paste(per_raw$sampno, per_raw$perno, sep = "-"))]
 per$empl_loc_type = per$PER_EMPLY_LOC_TYPE
 per$empl_loc_type[is.na(per$empl_loc_type)] = 0
-workers = per[PER_WK_ZONE_17 > 0 & (PERTYPE<=3 | PERTYPE==6) & empl_loc_type!=2, c("SAMPN", "PERNO", "hhtaz", "PER_WK_ZONE_17", "empl_loc_type","PERTYPE", "HDISTRICT", "WDISTRICT", "finalweight")]
+workers = per[PER_WK_ZONE_ID > 0 & (PERTYPE<=3 | PERTYPE==6) & empl_loc_type!=2, c("SAMPN", "PERNO", "hhtaz", "PER_WK_ZONE_ID", "empl_loc_type","PERTYPE", "HDISTRICT", "WDISTRICT", "finalweight")]
 
 # todo: replace when have skims
 
 #workers$WDIST = 0
-workers$WDIST = DST_SKM$dist[match(paste(workers$hhtaz, workers$PER_WK_ZONE_17, sep = "-"), paste(DST_SKM$o, DST_SKM$d, sep = "-"))]
+workers$WDIST = DST_SKM$dist[match(paste(workers$hhtaz, workers$PER_WK_ZONE_ID, sep = "-"), paste(DST_SKM$o, DST_SKM$d, sep = "-"))]
 workers = na.omit(workers)
 
 

@@ -419,8 +419,7 @@ Base Highlights {data-width=90}
 ###
 
 ```{r Run_Date1_ValueBox}
-sample_rate <- ifelse(IS_BASE_SURVEY=="Yes", "", as.character(BASE_SAMPLE_RATE*100))
-valueBox(BASE_SCENARIO_NAME, paste("Sample Rate: ", sample_rate, "%", sep = ""), color = "DarkOrange")
+valueBox(BASE_SCENARIO_NAME, paste("Sample Rate: ", round(BASE_SAMPLE_RATE*100,2), "%", sep = ""), color = "DarkOrange")
 base_pos <- which(base_csv_names=="totals")
 base_df <- base_data[[base_pos]]
 ```
@@ -463,7 +462,7 @@ Build Highlights {data-width=90}
 ###
 
 ```{r Run_Date2_ValueBox}
-valueBox(BUILD_SCENARIO_NAME, paste("Sample Rate: ", BUILD_SAMPLE_RATE*100, "%", sep = ""), color = "DarkOrange")
+valueBox(BUILD_SCENARIO_NAME, paste("Sample Rate: ", round(BUILD_SAMPLE_RATE*100,2), "%", sep = ""), color = "DarkOrange")
 build_pos <- which(build_csv_names=="totals")
 build_df <- build_data[[build_pos]]
 ```
@@ -630,7 +629,7 @@ Results of work and school location choice models.
 
 Distribution of workers by distance between home and usual work place, and students by distance between home and school location.
 
-Chart Column 1 {data-width=200}
+Chart Column 1 {data-width=300}
 --------------------------------------------
 ### Auto Ownership{data-height=265}
 ```{r Chart_Auto_Ownership}
@@ -756,7 +755,6 @@ Note: Districts can be Tract, County, District etc.
 Average tour length to workplace by District of residence
 
 
-
 Chart Column 1
 --------------------------------------------
 
@@ -764,12 +762,8 @@ Chart Column 1
 ```{r Table1_CountyFlows, eval  = TRUE}
 cat("County - County Flow of Workers")
 
-if(IS_BASE_SURVEY=="Yes"){
-  base_df <- base_data[[which(base_csv_names=="countyFlows")]]
-  # base_df <- base_data[[which(base_csv_names=="countyFlows")]]
-}else{
-  base_df <- base_data[[which(base_csv_names=="countyFlowsCensus")]]
-}
+base_df <- base_data[[which(base_csv_names=="countyFlowsCensus")]]
+
 
 base_df[,!colnames(base_df) %in% c("X")] <- base_df[,!colnames(base_df) %in% c("X")]/BASE_SAMPLE_RATE
 t1 <- kable(base_df, format = 'html', caption = DISTRICT_FLOW_CENSUS, digits = 0, row.names = F, align = 'r', format.args = list(big.mark = ',')) %>%
@@ -795,13 +789,20 @@ t1
 
 
 Chart Column 1
---------------------------------------------
+-------------------------------------------- 
+
 ### {data-height=300}
 ```{r Table2_CountyFlows, eval = TRUE}
 cat("County - County Flow of Workers")
 
+base_df <- base_data[[which(base_csv_names=="countyFlowsCensus")]]
+
 build_pos <- which(build_csv_names=="countyFlows")
 build_df <- build_data[[build_pos]]
+
+build_df = build_df[levels(build_df$X) %in% levels(base_df$X),colnames(build_df) %in% colnames(base_df)]
+
+
 build_df[,!colnames(build_df) %in% c("X")] <- build_df[,!colnames(build_df) %in% c("X")]/BUILD_SAMPLE_RATE
 t2 <- kable(build_df, format = 'html', caption = BUILD_SCENARIO_NAME, digits = 0, row.names = F, align = 'r', format.args = list(big.mark = ',')) %>%
   kable_styling('striped', font_size = 10)
@@ -812,8 +813,10 @@ t2
 ```{r Table2_MandTripLengths}
 cat("Average Mandatory Tour Lengths")
 
+base_df <- base_data[[which(base_csv_names=="mandTripLengths")]]
+
 build_df <- build_data[[which(build_csv_names=="mandTourLengths")]]
-df <- build_df
+df <- build_df[levels(build_df$District)[build_df$District] %in% levels(base_df$District)[base_df$District],]
 colnames(df) <- c("Home District", "Work","University","School")
 
 eval_expr <- paste("t2 <- kable(df, format = 'html', digits = 2, row.names = F, align = 'r', format.args = list(big.mark = ',')) %>%
@@ -821,6 +824,128 @@ eval_expr <- paste("t2 <- kable(df, format = 'html', digits = 2, row.names = F, 
   add_header_above(c(' ' = 1, '", BUILD_SCENARIO_NAME, "' = 3))", sep = "")
 eval(parse(text = eval_expr))
 t2
+```
+
+
+Work Tours{data-navmenu="Long Term"}
+============================================
+
+Description {.sidebar data-width=135}
+--------------------------------------------
+
+**Tour Productions by County**
+
+Comparison of work productions
+
+Note: Districts can be Tract, County, District etc.
+
+**Tour Attractions by County**
+
+Comparison of work attractions
+
+Chart Column 1
+--------------------------------------------
+### Tour Production Comparison {data-height=300}
+```{r aWorkTourProds}
+
+base_df <- base_data[[which(base_csv_names=="countyFlowsCensus")]]
+
+build_pos <- which(build_csv_names=="countyFlows")
+build_df <- build_data[[build_pos]]
+
+build_df = build_df[levels(build_df$X)[build_df$X] %in% levels(base_df$X)[base_df$X],colnames(build_df) %in% colnames(base_df)]
+
+wp_df = data.frame(County = base_df[,"X"], ACSWorkProds = rowSums(base_df[,2:ncol(base_df)]))
+wp_dfb = data.frame(County = build_df[,"X"], ModWorkProds = round(rowSums(build_df[,2:ncol(build_df)])/BUILD_SAMPLE_RATE))
+wp_df$ModWorkProds = wp_dfb$ModWorkProds[match(levels(wp_df$County)[wp_df$County], levels(wp_dfb$County)[wp_dfb$County])]
+
+wp_df = wp_df[!wp_df$County == "Total",]
+wp_df$County = levels(wp_df$County)[wp_df$County]
+
+colnames(wp_df) = c("xvar", "yvar1", "yvar2")
+
+p <- plotly_bar_plotter(data = wp_df, xlabel = "County", ylabel = "Tours", ynames = c(AO_CENSUS_LONG, BUILD_SCENARIO_NAME), percent = F, height = 275, tickangle = -320, bottom_offset = 25)
+p
+
+```
+
+### {data-height=280}
+```{r aWorkTourProdTable}
+
+base_df <- base_data[[which(base_csv_names=="countyFlowsCensus")]]
+
+build_pos <- which(build_csv_names=="countyFlows")
+build_df <- build_data[[build_pos]]
+
+build_df = build_df[levels(build_df$X)[build_df$X] %in% levels(base_df$X)[base_df$X],colnames(build_df) %in% colnames(base_df)]
+
+wp_df = data.frame(County = base_df[,"X"], ACSWorkProds = rowSums(base_df[,2:ncol(base_df)]))
+wp_dfb = data.frame(County = build_df[,"X"], ModWorkProds = round(rowSums(build_df[,2:ncol(build_df)])/BUILD_SAMPLE_RATE))
+wp_df$ModWorkProds = wp_dfb$ModWorkProds[match(levels(wp_df$County)[wp_df$County], levels(wp_dfb$County)[wp_dfb$County])]
+
+wp_df = wp_df[!wp_df$County == "Total",]
+wp_df$County = levels(wp_df$County)[wp_df$County]
+
+colnames(wp_df) = c('County', 'ACS', 'ASim')
+
+eval_expr <- paste("tworktourprod <- kable(wp_df, format = 'html', digits = 2, row.names = F, align = 'r', format.args = list(big.mark = ',')) %>%
+  kable_styling('striped', font_size = 10, full_width=F, position='center') ", sep = "")
+eval(parse(text = eval_expr))
+tworktourprod
+
+```
+
+Chart Column 1
+--------------------------------------------
+
+### Tour Attraction Comparison {data-height=300}
+```{r aWorkTourAttrs}
+
+base_df <- base_data[[which(base_csv_names=="countyFlowsCensus")]]
+
+build_pos <- which(build_csv_names=="countyFlows")
+build_df <- build_data[[build_pos]]
+
+build_df = build_df[levels(build_df$X)[build_df$X] %in% levels(base_df$X)[base_df$X],colnames(build_df) %in% colnames(base_df)]
+
+wp_df = data.frame(County = base_df[,"X"], ACSWorkAttr = colSums(base_df[,2:ncol(base_df)]))
+wp_dfb = data.frame(County = build_df[,"X"], ModWorkAttr = round(colSums(build_df[,2:ncol(build_df)])/BUILD_SAMPLE_RATE))
+wp_df$ModWorkAttrs = wp_dfb$ModWorkAttr[match(levels(wp_df$County)[wp_df$County], levels(wp_dfb$County)[wp_dfb$County])]
+
+wp_df = wp_df[!wp_df$County == "Total",]
+wp_df$County = levels(wp_df$County)[wp_df$County]
+
+colnames(wp_df) = c("xvar", "yvar1", "yvar2")
+
+p <- plotly_bar_plotter(data = wp_df, xlabel = "County", ylabel = "Tours", ynames = c(AO_CENSUS_LONG, BUILD_SCENARIO_NAME), percent = F, height = 275, tickangle = -320, bottom_offset = 25)
+p
+
+```
+
+### {data-height=280}
+
+```{r aWorkTourAttrTable}
+base_df <- base_data[[which(base_csv_names=="countyFlowsCensus")]]
+
+build_pos <- which(build_csv_names=="countyFlows")
+build_df <- build_data[[build_pos]]
+
+build_df = build_df[levels(build_df$X)[build_df$X] %in% levels(base_df$X)[base_df$X],colnames(build_df) %in% colnames(base_df)]
+
+wp_df = data.frame(County = base_df[,"X"], ACSWorkAttr = colSums(base_df[,2:ncol(base_df)]))
+wp_dfb = data.frame(County = build_df[,"X"], ModWorkAttr = round(colSums(build_df[,2:ncol(build_df)])/BUILD_SAMPLE_RATE))
+wp_df$ModWorkAttrs = wp_dfb$ModWorkAttr[match(levels(wp_df$County)[wp_df$County], levels(wp_dfb$County)[wp_dfb$County])]
+
+wp_df = wp_df[!wp_df$County == "Total",]
+wp_df$County = levels(wp_df$County)[wp_df$County]
+
+colnames(wp_df) = c('County', 'ACS', 'ASim')
+
+eval_expr <- paste("tworktourattr <- kable(wp_df, format = 'html', digits = 2, row.names = F, align = 'r', format.args = list(big.mark = ',')) %>%
+  kable_styling('striped', font_size = 10, full_width=F, position='center') ", sep = "")
+eval(parse(text = eval_expr))
+tworktourattr
+
 ```
 
 Employment vs Workers{data-navmenu="Long Term"}

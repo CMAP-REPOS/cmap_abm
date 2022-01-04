@@ -38,11 +38,11 @@ SHP_FILE_NAME           = settings$zone_shp_file
 # INPUTS
 ########
 # CensusData      = "E:/Projects/Clients/SEMCOG/Tasks/Task5_Visualizer/data/census/ACS_2017_5yr_MI_CT_AutoOwn.csv"
-CensusData      = file.path(settings$visualizer_summaries, 'ACS_2018_5yr_AutoOwn.csv')
+CensusData      = file.path(settings$visualizer_census, 'ACS_2018_5yr_AutoOwn.csv')
 # hh_file       =  file.path(ABM_DIR, "final_households.csv")
 hh_file         = file.path(settings$SPA_input_dir, 'HH_SPA_INPUT.csv')
 
-tract_to_taz_file = file.path(settings$zone_dir, zone_shp_file)
+tract_to_taz_file = file.path(settings$zone_dir, SHP_FILE_NAME)
 
 hh = read.csv(hh_file)
 census = read.csv(CensusData, stringsAsFactors = F)

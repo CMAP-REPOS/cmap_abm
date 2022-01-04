@@ -22,12 +22,12 @@ fail_fast: True
 multiprocess: True
 strict: False
 mem_tick: 30
-use_shadow_pricing: False
+use_shadow_pricing: True
 
 ## - example sample
 
-households_sample_size: 24000 #100000
-chunk_size: 400_000_000_000
+households_sample_size: 2000000 #100000
+chunk_size: 450_000_000_000
 
 # 100 percent sample full scale won't fit in 512GB with chunking disabled
 # so train with 100,000 HHs and then run production mode
@@ -36,7 +36,7 @@ chunk_size: 400_000_000_000
 
 chunk_training_mode: production
 
-num_processes: 24 
+num_processes: 32 
 
 # minimum fraction of total chunk_size to reserve for adaptive chunking
 min_available_chunk_ratio: 0.05
@@ -44,7 +44,7 @@ min_available_chunk_ratio: 0.05
 chunk_method: hybrid_uss
 # whether to preserve or delete subprocess chunk and mem logs when they are consolidated at end of multiprocess run
 keep_chunk_logs: False #Should be false when chunk_training_mode = production?
-keep_mem_logs: True
+keep_mem_logs: False
 
 # initial number of chooser rows for first chunk in training mode
 # when there is no pre-existing chunk_cache to set initial value
@@ -53,8 +53,8 @@ default_initial_rows_per_chunk: 10000
 
 # - tracing
 trace_od:
-trace_hh_id: 17892
-#resume_after: cdap_simulate
+trace_hh_id: 1325221
+#resume_after: write_data_dictionary
 
 # input tables
 input_table_list:
@@ -122,6 +122,7 @@ input_table_list:
       - lg_college
       - small_coll
       - PRKCST
+      - county
 
 output_tables:
   h5_store: True
@@ -210,6 +211,6 @@ output_tables:
     - tours
     - trips
     - joint_tour_participants
-#    - school_shadow_prices
-#    - workplace_shadow_prices
+    - school_shadow_prices
+    - workplace_shadow_prices
 
