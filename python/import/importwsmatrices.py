@@ -15,10 +15,10 @@ import json as _json
 import inro.emme.desktop.app as _app
 
 HSCENS = [1,2,3,4,5,6,7,8]
-TSCENS_TO_EXPORT = [201,202,203,204,205,206,207,208]
+TSCENS = [201,202,203,204,205,206,207,208]
 
-WORK_FOLDER = "C:\\projects\\cmap_activitysim\\cmap_abm\\emme_inputs\\wsmatrixes\\"
-PROJECT = "C:\\projects\\cmap_activitysim\\cmap_abm\\CMAP-ABM\\CMAP-ABM.emp"
+WORK_FOLDER = os.environ["WARM_START"] + os.sep + "wsmatrices"
+PROJECT = os.environ["EMMEBANK"]
 
 desktop = _app.start_dedicated(project=PROJECT, visible=True, user_initials="ASR")
 modeller = _m.Modeller(desktop)
@@ -26,9 +26,11 @@ databank = desktop.data_explorer().active_database().core_emmebank
 
 createMatrix = _m.Modeller().tool("inro.emme.data.matrix.create_matrix")
 importOMX = _m.Modeller().tool("inro.emme.data.matrix.import_from_omx")
+deleteMatrix = _m.Modeller().tool("inro.emme.data.matrix.delete_matrix")
 
 per = {1: "NT", 2: "EA", 3: "AM", 4: "MM", 5: "MD", 6: "AF", 7: "PM", 8: "EV"}
 
+# Import Highway Warm Start
 for scen in HSCENS:
     period = per[scen]
     matsToImport = {
@@ -51,4 +53,23 @@ for scen in HSCENS:
     scenario = databank.scenario(scen)    
     for n, m in matsToImport.items():
         createMatrix(matrix_id = m, matrix_name = n, scenario = scenario, overwrite = True)
-    importOMX(file_path = "%s\\warmstart0%s.omx"%(WORK_FOLDER, scen), matrices = matsToImport, scenario = scenario)
+    #importOMX(file_path = "%s\\trips_%s_taz.omx"%(WORK_FOLDER, period), matrices = matsToImport, scenario = scenario)
+
+# Import Transit Warm Start    
+for scen in TSCENS:
+    scenario = databank.scenario(scen)
+    period = per[scen-200]
+    for vclass, mn in zip(['Low', 'Mid', 'Hi'], [362, 363, 364]):
+        #matsToImport = {"TRNPerTrp_%s_%s"%(period, vclass[0:1]): "mf%s%s"%(scen-200, mn)}
+        matsToImport = {"TRN_%s_%s"%(vclass.upper(), period): "mf%s%s"%(scen-200, mn)}
+        for n, m in matsToImport.items():
+            createMatrix(matrix_id = m, matrix_name = n, scenario = scenario, overwrite = True)
+        #importOMX(file_path = "%s\\trips_%s_%s_tap.omx"%(WORK_FOLDER, period, vclass), matrices = matsToImport, scenario = scenario)
+
+# Delete any old skims
+for scen in HSCENS:
+    for skid in range(600, 660):
+        try:
+            deleteMatrix(matrix = databank.matrix("mf%s%s"%(scen, skid)))
+        except:
+            pass

@@ -16,609 +16,609 @@ SAVE_TRIPS_TABLE: True
 
 MATRICES:
   #EA
-  # - file_name: trips_ea_taz.omx
-    # tables:
-      # - name: SOV_TR_L_EA
-        # data_field: SOV_TR_L_EA
-      # - name: SOV_NT_L_EA
-        # data_field: SOV_NT_L_EA
-      # - name: HOV2_L_EA
-        # data_field: HOV2_L_EA
-      # - name: HOV3_L_EA
-        # data_field: HOV3_L_EA
-      # - name: SOV_TR_M_EA
-        # data_field: SOV_TR_M_EA
-      # - name: SOV_NT_M_EA
-        # data_field: SOV_NT_M_EA
-      # - name: HOV2_M_EA
-        # data_field: HOV2_M_EA
-      # - name: HOV3_M_EA
-        # data_field: HOV3_M_EA
-      # - name: SOV_TR_H_EA
-        # data_field: SOV_TR_H_EA
-      # - name: SOV_NT_H_EA
-        # data_field: SOV_NT_H_EA
-      # - name: HOV2_H_EA
-        # data_field: HOV2_H_EA
-      # - name: HOV3_H_EA
-        # data_field: HOV3_H_EA
-      # - name: WALK_EA
-        # data_field: WALK_EA
-      # - name: BIKE_EA
-        # data_field: BIKE_EA
-      # - name: SCHBUS_EA
-        # data_field: SCHBUS_EA
+  - file_name: trips_ea_taz.omx
+    tables:
+      - name: EA_SOV_NT_L
+        data_field: SOV_NT_L_EA
+      - name: EA_SOV_TR_L
+        data_field: SOV_TR_L_EA
+      - name: EA_HOV2_L
+        data_field: HOV2_L_EA
+      - name: EA_HOV3_L
+        data_field: HOV3_L_EA
+      - name: EA_SOV_NT_M
+        data_field: SOV_NT_M_EA
+      - name: EA_SOV_TR_M
+        data_field: SOV_TR_M_EA
+      - name: EA_HOV2_M
+        data_field: HOV2_M_EA
+      - name: EA_HOV3_M
+        data_field: HOV3_M_EA
+      - name: EA_SOV_NT_H
+        data_field: SOV_NT_H_EA
+      - name: EA_SOV_TR_H
+        data_field: SOV_TR_H_EA
+      - name: EA_HOV2_H
+        data_field: HOV2_H_EA
+      - name: EA_HOV3_H
+        data_field: HOV3_H_EA
+      - name: EA_WAL
+        data_field: WALK_EA
+      - name: EA_BIKE
+        data_field: BIKE_EA
+      - name: EA_SCHBUS
+        data_field: SCHBUS_EA
 
-  # - file_name: trips_ea_low_tap.omx
-    # is_tap: True
-    # tables:       
-      # - name: TRN_WALK_LOW_EA
-        # data_field: TRN_WALK_LOW_EA
-      # - name: TRN_PNR_LOW_EA
-        # data_field: TRN_PNR_LOW_EA
-      # - name: TRN_KNR_LOW_EA
-        # data_field: TRN_KNR_LOW_EA
-      # - name: TRN_TNC_LOW_EA
-        # data_field: TRN_TNC_LOW_EA
-      # - name: TRN_LOW_EA
-        # data_field: TRN_LOW_TOT_EA
+  - file_name: trips_ea_low_tap.omx
+    is_tap: True
+    tables:       
+      - name: EA_TRN_WALK_L
+        data_field: TRN_WALK_LOW_EA
+      - name: EA_TRN_PNR_L
+        data_field: TRN_PNR_LOW_EA
+      - name: EA_TRN_KNR_L
+        data_field: TRN_KNR_LOW_EA
+      - name: EA_TRN_TNC_L
+        data_field: TRN_TNC_LOW_EA
+      - name: TRNPerTrp_EA_L
+        data_field: TRN_LOW_TOT_EA
 
-  # - file_name: trips_ea_mid_tap.omx
-    # is_tap: True
-    # tables:
-      # - name: TRN_WALK_MID_EA    
-        # data_field: TRN_WALK_MID_EA
-      # - name: TRN_PNR_MID_EA
-        # data_field: TRN_PNR_MID_EA
-      # - name: TRN_KNR_MID_EA
-        # data_field: TRN_KNR_MID_EA
-      # - name: TRN_TNC_MID_EA
-        # data_field: TRN_TNC_MID_EA
-      # - name: TRN_MID_EA
-        # data_field: TRN_MID_TOT_EA
+  - file_name: trips_ea_mid_tap.omx
+    is_tap: True
+    tables:
+      - name: EA_TRN_WALK_M    
+        data_field: TRN_WALK_MID_EA
+      - name: EA_TRN_PNR_M
+        data_field: TRN_PNR_MID_EA
+      - name: EA_TRN_KNR_M
+        data_field: TRN_KNR_MID_EA
+      - name: EA_TRN_TNC_M
+        data_field: TRN_TNC_MID_EA
+      - name: TRNPerTrp_EA_M
+        data_field: TRN_MID_TOT_EA
  
-  # - file_name: trips_ea_hi_tap.omx
-    # is_tap: True
-    # tables: 
-      # - name: TRN_WALK_HI_EA    
-        # data_field: TRN_WALK_HI_EA
-      # - name: TRN_PNR_HI_EA
-        # data_field: TRN_PNR_HI_EA
-      # - name: TRN_KNR_HI_EA
-        # data_field: TRN_KNR_HI_EA
-      # - name: TRN_TNC_HI_EA
-        # data_field: TRN_TNC_HI_EA
-      # - name: TRN_HI_EA
-        # data_field: TRN_HI_TOT_EA
+  - file_name: trips_ea_hi_tap.omx
+    is_tap: True
+    tables: 
+      - name: EA_TRN_WALK_H    
+        data_field: TRN_WALK_HI_EA
+      - name: EA_TRN_PNR_H
+        data_field: TRN_PNR_HI_EA
+      - name: EA_TRN_KNR_H
+        data_field: TRN_KNR_HI_EA
+      - name: EA_TRN_TNC_H
+        data_field: TRN_TNC_HI_EA
+      - name: TRNPerTrp_EA_H
+        data_field: TRN_HI_TOT_EA
 #AM
   - file_name: trips_am_taz.omx
     tables:
-      - name: SOV_TR_L_AM
-        data_field: SOV_TR_L_AM
-      - name: SOV_NT_L_AM
+      - name: AM_SOV_NT_L
         data_field: SOV_NT_L_AM
-      - name: HOV2_L_AM
+      - name: AM_SOV_TR_L
+        data_field: SOV_TR_L_AM
+      - name: AM_HOV2_L
         data_field: HOV2_L_AM
-      - name: HOV3_L_AM
+      - name: AM_HOV3_L
         data_field: HOV3_L_AM
-      - name: SOV_TR_M_AM
-        data_field: SOV_TR_M_AM
-      - name: SOV_NT_M_AM
+      - name: AM_SOV_NT_MM
         data_field: SOV_NT_M_AM
-      - name: HOV2_M_AM
+      - name: AM_SOV_TR_M
+        data_field: SOV_TR_M_AM
+      - name: AM_HOV2_M
         data_field: HOV2_M_AM
-      - name: HOV3_M_AM
+      - name: AM_HOV3_M
         data_field: HOV3_M_AM
-      - name: SOV_TR_H_AM
-        data_field: SOV_TR_H_AM
-      - name: SOV_NT_H_AM
+      - name: AM_SOV_NT_H
         data_field: SOV_NT_H_AM
-      - name: HOV2_H_AM
+      - name: AM_SOV_TR_H
+        data_field: SOV_TR_H_AM
+      - name: AM_HOV2_H
         data_field: HOV2_H_AM
-      - name: HOV3_H_AM
+      - name: AM_HOV3_H
         data_field: HOV3_H_AM
-      - name: WALK_AM
+      - name: AM_WALK
         data_field: WALK_AM
-      - name: BIKE_AM
+      - name: AM_BIKE
         data_field: BIKE_AM
-      - name: SCHBUS_AM
+      - name: AM_SCHBUS
         data_field: SCHBUS_AM
         
   - file_name: trips_am_low_tap.omx
     is_tap: True
     tables:       
-      - name: TRN_WALK_LOW_AM
+      - name: AM_TRN_WALK_L
         data_field: TRN_WALK_LOW_AM
-      - name: TRN_PNR_LOW_AM
+      - name: AM_TRN_PNR_L
         data_field: TRN_PNR_LOW_AM
-      - name: TRN_KNR_LOW_AM
+      - name: AM_TRN_KNR_L
         data_field: TRN_KNR_LOW_AM
-      - name: TRN_TNC_LOW_AM
+      - name: AM_TRN_TNC_L
         data_field: TRN_TNC_LOW_AM
-      - name: TRN_LOW_AM
+      - name: TRNPerTrp_AM_L
         data_field: TRN_LOW_TOT_AM
   
   - file_name: trips_am_mid_tap.omx
     is_tap: True
     tables:     
-      - name: TRN_WALK_MID_AM
+      - name: AM_TRN_WALK_M
         data_field: TRN_WALK_MID_AM
-      - name: TRN_PNR_MID_AM
+      - name: AM_TRN_PNR_M
         data_field: TRN_PNR_MID_AM
-      - name: TRN_KNR_MID_AM
+      - name: AM_TRN_KNR_M
         data_field: TRN_KNR_MID_AM
-      - name: TRN_TNC_MID_AM
+      - name: AM_TRN_TNC_M
         data_field: TRN_TNC_MID_AM
-      - name: TRN_MID_AM
+      - name: TRNPerTrp_AM_M
         data_field: TRN_MID_TOT_AM
 
   - file_name: trips_am_hi_tap.omx
     is_tap: True
     tables: 
-      - name: TRN_WALK_HI_AM    
+      - name: AM_TRN_WALK_H    
         data_field: TRN_WALK_HI_AM
-      - name: TRN_PNR_HI_AM
+      - name: AM_TRN_PNR_H
         data_field: TRN_PNR_HI_AM
-      - name: TRN_KNR_HI_AM
+      - name: AM_TRN_KNR_H
         data_field: TRN_KNR_HI_AM
-      - name: TRN_TNC_HI_AM
+      - name: AM_TRN_TNC_H
         data_field: TRN_TNC_HI_AM
-      - name: TRN_HI_AM
+      - name: TRNPerTrp_AM_H
         data_field: TRN_HI_TOT_AM
   #MM
-  # - file_name: trips_mm_taz.omx
-    # tables:
-      # - name: SOV_TR_L_MM
-        # data_field: SOV_TR_L_MM
-      # - name: SOV_NT_L_MM
-        # data_field: SOV_NT_L_MM
-      # - name: HOV2_L_MM
-        # data_field: HOV2_L_MM
-      # - name: HOV3_L_MM
-        # data_field: HOV3_L_MM
-      # - name: SOV_TR_M_MM
-        # data_field: SOV_TR_M_MM
-      # - name: SOV_NT_M_MM
-        # data_field: SOV_NT_M_MM
-      # - name: HOV2_M_MM
-        # data_field: HOV2_M_MM
-      # - name: HOV3_M_MM
-        # data_field: HOV3_M_MM
-      # - name: SOV_TR_H_MM
-        # data_field: SOV_TR_H_MM
-      # - name: SOV_NT_H_MM
-        # data_field: SOV_NT_H_MM
-      # - name: HOV2_H_MM
-        # data_field: HOV2_H_MM
-      # - name: HOV3_H_MM
-        # data_field: HOV3_H_MM
-      # - name: WALK_MM
-        # data_field: WALK_MM
-      # - name: BIKE_MM
-        # data_field: BIKE_MM
-      # - name: SCHBUS_MM
-        # data_field: SCHBUS_MM
+  - file_name: trips_mm_taz.omx
+    tables:
+      - name: MM_SOV_NT_L
+        data_field: SOV_NT_L_MM
+      - name: MM_SOV_TR_L
+        data_field: SOV_TR_L_MM
+      - name: MM_HOV2_L
+        data_field: HOV2_L_MM
+      - name: MM_HOV3_L
+        data_field: HOV3_L_MM
+      - name: MM_SOV_NT_M
+        data_field: SOV_NT_M_MM
+      - name: MM_SOV_TR_M
+        data_field: SOV_TR_M_MM
+      - name: MM_HOV2_M
+        data_field: HOV2_M_MM
+      - name: MM_HOV3_M
+        data_field: HOV3_M_MM
+      - name: MM_SOV_NT_H
+        data_field: SOV_NT_H_MM
+      - name: MM_SOV_TR_H
+        data_field: SOV_TR_H_MM
+      - name: MM_HOV2_H
+        data_field: HOV2_H_MM
+      - name: MM_HOV3_H
+        data_field: HOV3_H_MM
+      - name: MM_WALK
+        data_field: WALK_MM
+      - name: MM_BIKE
+        data_field: BIKE_MM
+      - name: MM_SCHBUS
+        data_field: SCHBUS_MM
 
-  # - file_name: trips_mm_low_tap.omx
-    # is_tap: True
-    # tables:                
-      # - name: TRN_WALK_LOW_MM
-        # data_field: TRN_WALK_LOW_MM
-      # - name: TRN_PNR_LOW_MM
-        # data_field: TRN_PNR_LOW_MM
-      # - name: TRN_KNR_LOW_MM
-        # data_field: TRN_KNR_LOW_MM
-      # - name: TRN_TNC_LOW_MM
-        # data_field: TRN_TNC_LOW_MM
-      # - name: TRN_LOW_MM
-        # data_field: TRN_LOW_TOT_MM
+  - file_name: trips_mm_low_tap.omx
+    is_tap: True
+    tables:                
+      - name: MM_TRN_WALK_L
+        data_field: TRN_WALK_LOW_MM
+      - name: MM_TRN_PNR_L
+        data_field: TRN_PNR_LOW_MM
+      - name: MM_TRN_KNR_L
+        data_field: TRN_KNR_LOW_MM
+      - name: MM_TRN_TNC_L
+        data_field: TRN_TNC_LOW_MM
+      - name: TRNPerTrp_MM_L
+        data_field: TRN_LOW_TOT_MM
 
-  # - file_name: trips_mm_mid_tap.omx
-    # is_tap: True
-    # tables:                
-      # - name: TRN_WALK_MID_MM
-        # data_field: TRN_WALK_MID_MM
-      # - name: TRN_PNR_MID_MM
-        # data_field: TRN_PNR_MID_MM
-      # - name: TRN_KNR_MID_MM
-        # data_field: TRN_KNR_MID_MM
-      # - name: TRN_TNC_MID_MM
-        # data_field: TRN_TNC_MID_MM
-      # - name: TRN_MID_MM
-        # data_field: TRN_MID_TOT_MM
+  - file_name: trips_mm_mid_tap.omx
+    is_tap: True
+    tables:                
+      - name: MM_TRN_WALK_M
+        data_field: TRN_WALK_MID_MM
+      - name: MM_TRN_PNR_M
+        data_field: TRN_PNR_MID_MM
+      - name: MM_TRN_KNR_M
+        data_field: TRN_KNR_MID_MM
+      - name: MM_TRN_TNC_M
+        data_field: TRN_TNC_MID_MM
+      - name: TRNPerTrp_MM_M
+        data_field: TRN_MID_TOT_MM
         
-  # - file_name: trips_mm_hi_tap.omx
-    # is_tap: True
-    # tables:                
-      # - name: TRN_WALK_HI_MM
-        # data_field: TRN_WALK_HI_MM
-      # - name: TRN_PNR_HI_MM
-        # data_field: TRN_PNR_HI_MM
-      # - name: TRN_KNR_HI_MM
-        # data_field: TRN_KNR_HI_MM
-      # - name: TRN_TNC_HI_MM
-        # data_field: TRN_TNC_HI_MM
-      # - name: TRN_HI_MM
-        # data_field: TRN_HI_TOT_MM
+  - file_name: trips_mm_hi_tap.omx
+    is_tap: True
+    tables:                
+      - name: MM_TRN_WALK_H
+        data_field: TRN_WALK_HI_MM
+      - name: MM_TRN_PNR_H
+        data_field: TRN_PNR_HI_MM
+      - name: MM_TRN_KNR_H
+        data_field: TRN_KNR_HI_MM
+      - name: MM_TRN_TNC_H
+        data_field: TRN_TNC_HI_MM
+      - name: TRNPerTrp_MM_H
+        data_field: TRN_HI_TOT_MM
   # #MD
-  # - file_name: trips_md_taz.omx
-    # tables:
-      # - name: SOV_TR_L_MD
-        # data_field: SOV_TR_L_MD
-      # - name: SOV_NT_L_MD
-        # data_field: SOV_NT_L_MD
-      # - name: HOV2_L_MD
-        # data_field: HOV2_L_MD
-      # - name: HOV3_L_MD
-        # data_field: HOV3_L_MD
-      # - name: SOV_TR_M_MD
-        # data_field: SOV_TR_M_MD
-      # - name: SOV_NT_M_MD
-        # data_field: SOV_NT_M_MD
-      # - name: HOV2_M_MD
-        # data_field: HOV2_M_MD
-      # - name: HOV3_M_MD
-        # data_field: HOV3_M_MD
-      # - name: SOV_TR_H_MD
-        # data_field: SOV_TR_H_MD
-      # - name: SOV_NT_H_MD
-        # data_field: SOV_NT_H_MD
-      # - name: HOV2_H_MD
-        # data_field: HOV2_H_MD
-      # - name: HOV3_H_MD
-        # data_field: HOV3_H_MD
-      # - name: WALK_MD
-        # data_field: WALK_MD
-      # - name: BIKE_MD
-        # data_field: BIKE_MD
-      # - name: SCHBUS_MD
-        # data_field: SCHBUS_MD
+  - file_name: trips_md_taz.omx
+    tables:
+      - name: MD_SOV_NT_L
+        data_field: SOV_NT_L_MD
+      - name: MD_SOV_TR_L
+        data_field: SOV_TR_L_MD
+      - name: MD_HOV2_L
+        data_field: HOV2_L_MD
+      - name: MD_HOV3_L
+        data_field: HOV3_L
+      - name: MD_SOV_NT_M
+        data_field: SOV_NT_M_MD
+      - name: MD_SOV_TR_M
+        data_field: SOV_TR_M_MD
+      - name: MD_HOV2_M
+        data_field: HOV2_M_MD
+      - name: MD_HOV3_M
+        data_field: HOV3_M_MD
+      - name: MD_SOV_NT_H
+        data_field: SOV_NT_H_MD
+      - name: MD_SOV_TR_H
+        data_field: SOV_TR_H_MD
+      - name: MD_HOV2_H
+        data_field: HOV2_H_MD
+      - name: MD_HOV3_H
+        data_field: HOV3_H_MD
+      - name: MD_WALK
+        data_field: WALK_MD
+      - name: MD_BIKE
+        data_field: BIKE_MD
+      - name: MD_SCHBUS
+        data_field: SCHBUS_MD
  
-  # - file_name: trips_md_low_tap.omx
-    # is_tap: True
-    # tables:                
-      # - name: TRN_WALK_LOW_MD
-        # data_field: TRN_WALK_LOW_MD
-      # - name: TRN_PNR_LOW_MD
-        # data_field: TRN_PNR_LOW_MD
-      # - name: TRN_KNR_LOW_MD
-        # data_field: TRN_KNR_LOW_MD
-      # - name: TRN_TNC_LOW_MD
-        # data_field: TRN_TNC_LOW_MD
-      # - name: TRN_LOW_MD
-        # data_field: TRN_LOW_TOT_MD
+  - file_name: trips_md_low_tap.omx
+    is_tap: True
+    tables:                
+      - name: MD_TRN_WALK_L
+        data_field: TRN_WALK_LOW_MD
+      - name: MD_TRN_PNR_L
+        data_field: TRN_PNR_LOW_MD
+      - name: MD_TRN_KNR_L
+        data_field: TRN_KNR_LOW_MD
+      - name: MD_TRN_TNC_L
+        data_field: TRN_TNC_LOW_MD
+      - name: TRNPerTrp_MD_L
+        data_field: TRN_LOW_TOT_MD
 
-  # - file_name: trips_md_mid_tap.omx
-    # is_tap: True
-    # tables:                
-      # - name: TRN_WALK_MID_MD
-        # data_field: TRN_WALK_MID_MD
-      # - name: TRN_PNR_MID_MD
-        # data_field: TRN_PNR_MID_MD
-      # - name: TRN_KNR_MID_MD
-        # data_field: TRN_KNR_MID_MD
-      # - name: TRN_TNC_MID_MD
-        # data_field: TRN_TNC_MID_MD
-      # - name: TRN_MID_MD
-        # data_field: TRN_MID_TOT_MD
+  - file_name: trips_md_mid_tap.omx
+    is_tap: True
+    tables:                
+      - name: MD_TRN_WALK_M
+        data_field: TRN_WALK_MID_MD
+      - name: MD_TRN_PNR_M
+        data_field: TRN_PNR_MID_MD
+      - name: MD_TRN_KNR_M
+        data_field: TRN_KNR_MID_MD
+      - name: MD_TRN_TNC_M
+        data_field: TRN_TNC_MID_MD
+      - name: TRNPerTrp_MD_M
+        data_field: TRN_MID_TOT_MD
         
-  # - file_name: trips_md_hi_tap.omx
-    # is_tap: True
-    # tables:                
-      # - name: TRN_WALK_HI_MD
-        # data_field: TRN_WALK_HI_MD
-      # - name: TRN_PNR_HI_MD
-        # data_field: TRN_PNR_HI_MD
-      # - name: TRN_KNR_HI_MD
-        # data_field: TRN_KNR_HI_MD
-      # - name: TRN_TNC_HI_MD
-        # data_field: TRN_TNC_HI_MD
-      # - name: TRN_HI_MD
-        # data_field: TRN_HI_TOT_MD
+  - file_name: trips_md_hi_tap.omx
+    is_tap: True
+    tables:                
+      - name: MD_TRN_WALK_H
+        data_field: TRN_WALK_HI_MD
+      - name: MD_TRN_PNR_H
+        data_field: TRN_PNR_HI_MD
+      - name: MD_TRN_KNR_H
+        data_field: TRN_KNR_HI_MD
+      - name: MD_TRN_TNC_H
+        data_field: TRN_TNC_HI_MD
+      - name: TRNPerTrp_MD_H
+        data_field: TRN_HI_TOT_MD
 
-  # #AF
-  # - file_name: trips_af_taz.omx
-    # tables:
-      # - name: SOV_TR_L_AF
-        # data_field: SOV_TR_L_AF
-      # - name: SOV_NT_L_AF
-        # data_field: SOV_NT_L_AF
-      # - name: HOV2_L_AF
-        # data_field: HOV2_L_AF
-      # - name: HOV3_L_AF
-        # data_field: HOV3_L_AF
-      # - name: SOV_TR_M_AF
-        # data_field: SOV_TR_M_AF
-      # - name: SOV_NT_M_AF
-        # data_field: SOV_NT_M_AF
-      # - name: HOV2_M_AF
-        # data_field: HOV2_M_AF
-      # - name: HOV3_M_AF
-        # data_field: HOV3_M_AF
-      # - name: SOV_TR_H_AF
-        # data_field: SOV_TR_H_AF
-      # - name: SOV_NT_H_AF
-        # data_field: SOV_NT_H_AF
-      # - name: HOV2_H_AF
-        # data_field: HOV2_H_AF
-      # - name: HOV3_H_AF
-        # data_field: HOV3_H_AF
-      # - name: WALK_AF
-        # data_field: WALK_AF
-      # - name: BIKE_AF
-        # data_field: BIKE_AF
-      # - name: SCHBUS_AF
-        # data_field: SCHBUS_AF
+  #AF
+  - file_name: trips_af_taz.omx
+    tables:
+      - name: AF_SOV_NT_L
+        data_field: SOV_NT_L_AF
+      - name: AF_SOV_TR_L
+        data_field: SOV_TR_L_AF
+      - name: AF_HOV2_L
+        data_field: HOV2_L_AF
+      - name: AF_HOV3_L
+        data_field: HOV3_L_AF
+      - name: AF_SOV_NT_M
+        data_field: SOV_NT_M_AF
+      - name: AF_SOV_TR_M
+        data_field: SOV_TR_M_AF
+      - name: AF_HOV2_M
+        data_field: HOV2_M_AF
+      - name: AF_HOV3_M
+        data_field: HOV3_M_AF
+      - name: AF_SOV_NT_H
+        data_field: SOV_NT_H_AF
+      - name: AF_SOV_TR_H
+        data_field: SOV_TR_H_AF
+      - name: AF_HOV2_H
+        data_field: HOV2_H_AF
+      - name: AF_HOV3_H
+        data_field: HOV3_H_AF
+      - name: AF_WALK
+        data_field: WALK_AF
+      - name: AF_BIKE
+        data_field: BIKE_AF
+      - name: AF_SCHBUS
+        data_field: SCHBUS_AF
      
-  # - file_name: trips_af_low_tap.omx
-    # is_tap: True
-    # tables:                
-      # - name: TRN_WALK_LOW_AF
-        # data_field: TRN_WALK_LOW_AF
-      # - name: TRN_PNR_LOW_AF
-        # data_field: TRN_PNR_LOW_AF
-      # - name: TRN_KNR_LOW_AF
-        # data_field: TRN_KNR_LOW_AF
-      # - name: TRN_TNC_LOW_AF
-        # data_field: TRN_TNC_LOW_AF
-      # - name: TRN_LOW_AF
-        # data_field: TRN_LOW_TOT_AF
+  - file_name: trips_af_low_tap.omx
+    is_tap: True
+    tables:                
+      - name: AF_TRN_WALK_L
+        data_field: TRN_WALK_LOW_AF
+      - name: AF_TRN_PNR_L
+        data_field: TRN_PNR_LOW_AF
+      - name: AF_TRN_KNR_L
+        data_field: TRN_KNR_LOW_AF
+      - name: AF_TRN_TNC_L
+        data_field: TRN_TNC_LOW_AF
+      - name: TRNPerTrp_AF_L
+        data_field: TRN_LOW_TOT_AF
 
-  # - file_name: trips_af_mid_tap.omx
-    # is_tap: True
-    # tables:                
-      # - name: TRN_WALK_MID_AF
-        # data_field: TRN_WALK_MID_AF
-      # - name: TRN_PNR_MID_AF
-        # data_field: TRN_PNR_MID_AF
-      # - name: TRN_KNR_MID_AF
-        # data_field: TRN_KNR_MID_AF
-      # - name: TRN_TNC_MID_AF
-        # data_field: TRN_TNC_MID_AF
-      # - name: TRN_MID_AF
-        # data_field: TRN_MID_TOT_AF
+  - file_name: trips_af_mid_tap.omx
+    is_tap: True
+    tables:                
+      - name: AF_TRN_WALK_M
+        data_field: TRN_WALK_MID_AF
+      - name: AF_TRN_PNR_M
+        data_field: TRN_PNR_MID_AF
+      - name: AF_TRN_KNR_M
+        data_field: TRN_KNR_MID_AF
+      - name: AF_TRN_TNC_M
+        data_field: TRN_TNC_MID_AF
+      - name: TRNPerTrp_AF_M
+        data_field: TRN_MID_TOT_AF
         
-  # - file_name: trips_af_hi_tap.omx
-    # is_tap: True
-    # tables:                
-      # - name: TRN_WALK_HI_AF
-        # data_field: TRN_WALK_HI_AF
-      # - name: TRN_PNR_HI_AF
-        # data_field: TRN_PNR_HI_AF
-      # - name: TRN_KNR_HI_AF
-        # data_field: TRN_KNR_HI_AF
-      # - name: TRN_TNC_HI_AF
-        # data_field: TRN_TNC_HI_AF
-      # - name: TRN_HI_AF
-        # data_field: TRN_HI_TOT_AF
+  - file_name: trips_af_hi_tap.omx
+    is_tap: True
+    tables:                
+      - name: AF_TRN_WALK_H
+        data_field: TRN_WALK_HI_AF
+      - name: AF_TRN_PNR_H
+        data_field: TRN_PNR_HI_AF
+      - name: AF_TRN_KNR_H
+        data_field: TRN_KNR_HI_AF
+      - name: AF_TRN_TNC_H
+        data_field: TRN_TNC_HI_AF
+      - name: TRNPerTrp_AF_H
+        data_field: TRN_HI_TOT_AF
 
-  # #PM
-  # - file_name: trips_pm_taz.omx
-    # tables:
-      # - name: SOV_TR_L_PM
-        # data_field: SOV_TR_L_PM
-      # - name: SOV_NT_L_PM
-        # data_field: SOV_NT_L_PM
-      # - name: HOV2_L_PM
-        # data_field: HOV2_L_PM
-      # - name: HOV3_L_PM
-        # data_field: HOV3_L_PM
-      # - name: SOV_TR_M_PM
-        # data_field: SOV_TR_M_PM
-      # - name: SOV_NT_M_PM
-        # data_field: SOV_NT_M_PM
-      # - name: HOV2_M_PM
-        # data_field: HOV2_M_PM
-      # - name: HOV3_M_PM
-        # data_field: HOV3_M_PM
-      # - name: SOV_TR_H_PM
-        # data_field: SOV_TR_H_PM
-      # - name: SOV_NT_H_PM
-        # data_field: SOV_NT_H_PM
-      # - name: HOV2_H_PM
-        # data_field: HOV2_H_PM
-      # - name: HOV3_H_PM
-        # data_field: HOV3_H_PM
-      # - name: WALK_PM
-        # data_field: WALK_PM
-      # - name: BIKE_PM
-        # data_field: BIKE_PM
-      # - name: SCHBUS_PM
-        # data_field: SCHBUS_PM
+  #PM
+  - file_name: trips_pm_taz.omx
+    tables:
+      - name: PM_SOV_NT_L
+        data_field: SOV_NT_L_PM
+      - name: PM_SOV_TR_L
+        data_field: SOV_TR_L_PM
+      - name: PM_HOV2_L
+        data_field: HOV2_L_PM
+      - name: PM_HOV3_L
+        data_field: HOV3_L_PM
+      - name: PM_SOV_NT_M
+        data_field: SOV_NT_M_PM
+      - name: PM_SOV_TR_M
+        data_field: SOV_TR_M_PM
+      - name: PM_HOV2_M
+        data_field: HOV2_M_PM
+      - name: PM_HOV3_M
+        data_field: HOV3_M_PM
+      - name: PM_SOV_NT_H
+        data_field: SOV_NT_H_PM
+      - name: PM_SOV_TR_H
+        data_field: SOV_TR_H_PM
+      - name: PM_HOV2_H
+        data_field: HOV2_H_PM
+      - name: PM_HOV3_H
+        data_field: HOV3_H_PM
+      - name: PM_WALK
+        data_field: WALK_PM
+      - name: PM_BIKE
+        data_field: BIKE_PM
+      - name: PM_SCHBUS
+        data_field: SCHBUS_PM
 
-  # - file_name: trips_pm_low_tap.omx
-    # is_tap: True
-    # tables:                
-      # - name: TRN_WALK_LOW_PM
-        # data_field: TRN_WALK_LOW_PM
-      # - name: TRN_PNR_LOW_PM
-        # data_field: TRN_PNR_LOW_PM
-      # - name: TRN_KNR_LOW_PM
-        # data_field: TRN_KNR_LOW_PM
-      # - name: TRN_TNC_LOW_PM
-        # data_field: TRN_TNC_LOW_PM
-      # - name: TRN_LOW_PM
-        # data_field: TRN_LOW_TOT_PM
+  - file_name: trips_pm_low_tap.omx
+    is_tap: True
+    tables:                
+      - name: PM_TRN_WALK_L
+        data_field: TRN_WALK_LOW_PM
+      - name: PM_TRN_PNR_L
+        data_field: TRN_PNR_LOW_PM
+      - name: PM_TRN_KNR_L
+        data_field: TRN_KNR_LOW_PM
+      - name: PM_TRN_TNC_L
+        data_field: TRN_TNC_LOW_PM
+      - name: TRNPerTrp_PM_L
+        data_field: TRN_LOW_TOT_PM
 
-  # - file_name: trips_pm_mid_tap.omx
-    # is_tap: True
-    # tables:                
-      # - name: TRN_WALK_MID_PM
-        # data_field: TRN_WALK_MID_PM
-      # - name: TRN_PNR_MID_PM
-        # data_field: TRN_PNR_MID_PM
-      # - name: TRN_KNR_MID_PM
-        # data_field: TRN_KNR_MID_PM
-      # - name: TRN_TNC_MID_PM
-        # data_field: TRN_TNC_MID_PM
-      # - name: TRN_MID_PM
-        # data_field: TRN_MID_TOT_PM
+  - file_name: trips_pm_mid_tap.omx
+    is_tap: True
+    tables:                
+      - name: PM_TRN_WALK_M
+        data_field: TRN_WALK_MID_PM
+      - name: PM_TRN_PNR_M
+        data_field: TRN_PNR_MID_PM
+      - name: PM_TRN_KNR_M
+        data_field: TRN_KNR_MID_PM
+      - name: PM_TRN_TNC_M
+        data_field: TRN_TNC_MID_PM
+      - name: TRNPerTrp_PM_M
+        data_field: TRN_MID_TOT_PM
         
-  # - file_name: trips_pm_hi_tap.omx
-    # is_tap: True
-    # tables:                
-      # - name: TRN_WALK_HI_PM
-        # data_field: TRN_WALK_HI_PM
-      # - name: TRN_PNR_HI_PM
-        # data_field: TRN_PNR_HI_PM
-      # - name: TRN_KNR_HI_PM
-        # data_field: TRN_KNR_HI_PM
-      # - name: TRN_TNC_HI_PM
-        # data_field: TRN_TNC_HI_PM
-      # - name: TRN_HI_PM
-        # data_field: TRN_HI_TOT_PM
+  - file_name: trips_pm_hi_tap.omx
+    is_tap: True
+    tables:                
+      - name: PM_TRN_WALK_H
+        data_field: TRN_WALK_HI_PM
+      - name: PM_TRN_PNR_H
+        data_field: TRN_PNR_HI_PM
+      - name: PM_TRN_KNR_H
+        data_field: TRN_KNR_HI_PM
+      - name: PM_TRN_TNC_H
+        data_field: TRN_TNC_HI_PM
+      - name: TRNPerTrp_PM_H
+        data_field: TRN_HI_TOT_PM
 
-  # #EV
-  # - file_name: trips_ev_taz.omx
-    # tables:
-      # - name: SOV_TR_L_EV
-        # data_field: SOV_TR_L_EV
-      # - name: SOV_NT_L_EV
-        # data_field: SOV_NT_L_EV
-      # - name: HOV2_L_EV
-        # data_field: HOV2_L_EV
-      # - name: HOV3_L_EV
-        # data_field: HOV3_L_EV
-      # - name: SOV_TR_M_EV
-        # data_field: SOV_TR_M_EV
-      # - name: SOV_NT_M_EV
-        # data_field: SOV_NT_M_EV
-      # - name: HOV2_M_EV
-        # data_field: HOV2_M_EV
-      # - name: HOV3_M_EV
-        # data_field: HOV3_M_EV
-      # - name: SOV_TR_H_EV
-        # data_field: SOV_TR_H_EV
-      # - name: SOV_NT_H_EV
-        # data_field: SOV_NT_H_EV
-      # - name: HOV2_H_EV
-        # data_field: HOV2_H_EV
-      # - name: HOV3_H_EV
-        # data_field: HOV3_H_EV
-      # - name: WALK_EV
-        # data_field: WALK_EV
-      # - name: BIKE_EV
-        # data_field: BIKE_EV
-      # - name: SCHBUS_EV
-        # data_field: SCHBUS_EV
+  #EV
+  - file_name: trips_ev_taz.omx
+    tables:
+      - name: EV_SOV_NT_L
+        data_field: SOV_NT_L_EV
+      - name: EV_SOV_TR_L
+        data_field: SOV_TR_L_EV
+      - name: EV_HOV2_L
+        data_field: HOV2_L_EV
+      - name: EV_HOV3_L
+        data_field: HOV3_L_EV
+      - name: EV_SOV_NT_M
+        data_field: SOV_NT_M_EV
+      - name: EV_SOV_TR_M
+        data_field: SOV_TR_M_EV
+      - name: EV_HOV2_M
+        data_field: HOV2_M_EV
+      - name: EV_HOV3_M
+        data_field: HOV3_M_EV
+      - name: EV_SOV_NT_H
+        data_field: SOV_NT_H_EV
+      - name: EV_SOV_TR_H
+        data_field: SOV_TR_H_EV
+      - name: EV_HOV2_H
+        data_field: HOV2_H_EV
+      - name: EV_HOV3_H
+        data_field: HOV3_H_EV
+      - name: EV_WALK
+        data_field: WALK_EV
+      - name: EV_BIKE
+        data_field: BIKE_EV
+      - name: EV_SCHBUS
+        data_field: SCHBUS_EV
                 
-  # - file_name: trips_ev_low_tap.omx
-    # is_tap: True
-    # tables:                
-      # - name: TRN_WALK_LOW_EV
-        # data_field: TRN_WALK_LOW_EV
-      # - name: TRN_PNR_LOW_EV
-        # data_field: TRN_PNR_LOW_EV
-      # - name: TRN_KNR_LOW_EV
-        # data_field: TRN_KNR_LOW_EV
-      # - name: TRN_TNC_LOW_EV
-        # data_field: TRN_TNC_LOW_EV
-      # - name: TRN_LOW_EV
-        # data_field: TRN_LOW_TOT_EV
+  - file_name: trips_ev_low_tap.omx
+    is_tap: True
+    tables:                
+      - name: EV_TRN_WALK_L
+        data_field: TRN_WALK_LOW_EV
+      - name: EV_TRN_PNR_L
+        data_field: TRN_PNR_LOW_EV
+      - name: EV_TRN_KNR_L
+        data_field: TRN_KNR_LOW_EV
+      - name: EV_TRN_TNC_L
+        data_field: TRN_TNC_LOW_EV
+      - name: TRNPerTrp_EV_L
+        data_field: TRN_LOW_TOT_EV
 
-  # - file_name: trips_ev_mid_tap.omx
-    # is_tap: True
-    # tables:                
-      # - name: TRN_WALK_MID_EV
-        # data_field: TRN_WALK_MID_EV
-      # - name: TRN_PNR_MID_EV
-        # data_field: TRN_PNR_MID_EV
-      # - name: TRN_KNR_MID_EV
-        # data_field: TRN_KNR_MID_EV
-      # - name: TRN_TNC_MID_EV
-        # data_field: TRN_TNC_MID_EV
-      # - name: TRN_MID_EV
-        # data_field: TRN_MID_TOT_EV
+  - file_name: trips_ev_mid_tap.omx
+    is_tap: True
+    tables:                
+      - name: EV_TRN_WALK_M
+        data_field: TRN_WALK_MID_EV
+      - name: EV_TRN_PNR_M
+        data_field: TRN_PNR_MID_EV
+      - name: EV_TRN_KNR_M
+        data_field: TRN_KNR_MID_EV
+      - name: EV_TRN_TNC_M
+        data_field: TRN_TNC_MID_EV
+      - name: TRNPerTrp_EV_M
+        data_field: TRN_MID_TOT_EV
         
-  # - file_name: trips_ev_hi_tap.omx
-    # is_tap: True
-    # tables:                
-      # - name: TRN_WALK_HI_EV
-        # data_field: TRN_WALK_HI_EV
-      # - name: TRN_PNR_HI_EV
-        # data_field: TRN_PNR_HI_EV
-      # - name: TRN_KNR_HI_EV
-        # data_field: TRN_KNR_HI_EV
-      # - name: TRN_TNC_HI_EV
-        # data_field: TRN_TNC_HI_EV
-      # - name: TRN_HI_EV
-        # data_field: TRN_HI_TOT_EV
+  - file_name: trips_ev_hi_tap.omx
+    is_tap: True
+    tables:                
+      - name: EV_TRN_WALK_H
+        data_field: TRN_WALK_HI_EV
+      - name: EV_TRN_PNR_H
+        data_field: TRN_PNR_HI_EV
+      - name: EV_TRN_KNR_H
+        data_field: TRN_KNR_HI_EV
+      - name: EV_TRN_TNC_H
+        data_field: TRN_TNC_HI_EV
+      - name: TRNPerTrp_EV_H
+        data_field: TRN_HI_TOT_EV
 
-  # #NT
-  # - file_name: trips_nt_taz.omx
-    # tables:
-      # - name: SOV_TR_L_NT
-        # data_field: SOV_TR_L_NT
-      # - name: SOV_NT_L_NT
-        # data_field: SOV_NT_L_NT
-      # - name: HOV2_L_NT
-        # data_field: HOV2_L_NT
-      # - name: HOV3_L_NT
-        # data_field: HOV3_L_NT
-      # - name: SOV_TR_M_NT
-        # data_field: SOV_TR_M_NT
-      # - name: SOV_NT_M_NT
-        # data_field: SOV_NT_M_NT
-      # - name: HOV2_M_NT
-        # data_field: HOV2_M_NT
-      # - name: HOV3_M_NT
-        # data_field: HOV3_M_NT
-      # - name: SOV_TR_H_NT
-        # data_field: SOV_TR_H_NT
-      # - name: SOV_NT_H_NT
-        # data_field: SOV_NT_H_NT
-      # - name: HOV2_H_NT
-        # data_field: HOV2_H_NT
-      # - name: HOV3_H_NT
-        # data_field: HOV3_H_NT
-      # - name: WALK_NT
-        # data_field: WALK_NT
-      # - name: BIKE_NT
-        # data_field: BIKE_NT
-      # - name: SCHBUS_NT
-        # data_field: SCHBUS_NT
+  #NT
+  - file_name: trips_nt_taz.omx
+    tables:
+      - name: NT_SOV_NT_L
+        data_field: SOV_NT_L_NT
+      - name: NT_SOV_TR_L
+        data_field: SOV_TR_L_NT
+      - name: NT_HOV2_L
+        data_field: HOV2_L_NT
+      - name: NT_HOV3_L
+        data_field: HOV3_L_NT
+      - name: NT_SOV_NT_M
+        data_field: SOV_NT_M_NT
+      - name: NT_SOV_TR_M
+        data_field: SOV_TR_M_NT
+      - name: NT_HOV2_M
+        data_field: HOV2_M_NT
+      - name: NT_HOV3_M
+        data_field: HOV3_M_NT
+      - name: NT_SOV_NT_H
+        data_field: SOV_NT_H_NT
+      - name: NT_SOV_TR_H
+        data_field: SOV_TR_H_NT
+      - name: NT_HOV2_H
+        data_field: HOV2_H_NT
+      - name: NT_HOV3_H
+        data_field: HOV3_H_NT
+      - name: NT_WALK
+        data_field: WALK_NT
+      - name: NT_BIKE
+        data_field: BIKE_NT
+      - name: NT_SCHBUS
+        data_field: SCHBUS_NT
 
-  # - file_name: trips_nt_low_tap.omx
-    # is_tap: True
-    # tables:                
-      # - name: TRN_WALK_LOW_NT
-        # data_field: TRN_WALK_LOW_NT
-      # - name: TRN_PNR_LOW_NT
-        # data_field: TRN_PNR_LOW_NT
-      # - name: TRN_KNR_LOW_NT
-        # data_field: TRN_KNR_LOW_NT
-      # - name: TRN_TNC_LOW_NT
-        # data_field: TRN_TNC_LOW_NT
-      # - name: TRN_LOW_NT
-        # data_field: TRN_LOW_TOT_NT
+  - file_name: trips_nt_low_tap.omx
+    is_tap: True
+    tables:                
+      - name: NT_TRN_WALK_L
+        data_field: TRN_WALK_LOW_NT
+      - name: NT_TRN_PNR_L
+        data_field: TRN_PNR_LOW_NT
+      - name: NT_TRN_KNR_L
+        data_field: TRN_KNR_LOW_NT
+      - name: NT_TRN_TNC_L
+        data_field: TRN_TNC_LOW_NT
+      - name: TRNPerTrp_NT_L
+        data_field: TRN_LOW_TOT_NT
 
-  # - file_name: trips_nt_mid_tap.omx
-    # is_tap: True
-    # tables:                
-      # - name: TRN_WALK_MID_NT
-        # data_field: TRN_WALK_MID_NT
-      # - name: TRN_PNR_MID_NT
-        # data_field: TRN_PNR_MID_NT
-      # - name: TRN_KNR_MID_NT
-        # data_field: TRN_KNR_MID_NT
-      # - name: TRN_TNC_MID_NT
-        # data_field: TRN_TNC_MID_NT
-      # - name: TRN_MID_NT
-        # data_field: TRN_MID_TOT_NT
+  - file_name: trips_nt_mid_tap.omx
+    is_tap: True
+    tables:                
+      - name: NT_TRN_WALK_M
+        data_field: TRN_WALK_MID_NT
+      - name: NT_TRN_PNR_M
+        data_field: TRN_PNR_MID_NT
+      - name: NT_TRN_KNR_M
+        data_field: TRN_KNR_MID_NT
+      - name: NT_TRN_TNC_M
+        data_field: TRN_TNC_MID_NT
+      - name: TRNPerTrp_NT_M
+        data_field: TRN_MID_TOT_NT
         
-  # - file_name: trips_nt_hi_tap.omx
-    # is_tap: True
-    # tables:                
-      # - name: TRN_WALK_HI_NT
-        # data_field: TRN_WALK_HI_NT
-      # - name: TRN_PNR_HI_NT
-        # data_field: TRN_PNR_HI_NT
-      # - name: TRN_KNR_HI_NT
-        # data_field: TRN_KNR_HI_NT
-      # - name: TRN_TNC_HI_NT
-        # data_field: TRN_TNC_HI_NT
-      # - name: TRN_HI_NT
-        # data_field: TRN_HI_TOT_NT
+  - file_name: trips_nt_hi_tap.omx
+    is_tap: True
+    tables:                
+      - name: NT_TRN_WALK_H
+        data_field: TRN_WALK_HI_NT
+      - name: NT_TRN_PNR_H
+        data_field: TRN_PNR_HI_NT
+      - name: NT_TRN_KNR_H
+        data_field: TRN_KNR_HI_NT
+      - name: NT_TRN_TNC_H
+        data_field: TRN_TNC_HI_NT
+      - name: TRNPerTrp_NT_H
+        data_field: TRN_HI_TOT_NT
 
 
 CONSTANTS:

@@ -301,7 +301,7 @@ telecommuteFrequency <- telecommuteFrequency[-c(1), ]
 write.csv(telecommuteFrequency, "telecommuteFrequency.csv", row.names = TRUE)
 
 # County-County Flows
-countyFlows <- xtabs(finalweight~HDISTRICT+WDISTRICT, data = workers)
+countyFlows <- xtabs(finalweight~HDISTRICT+WDISTRICT, data = workers[levels(workers$work_from_home)[workers$work_from_home] == 'False',])
 countyFlows[is.na(countyFlows)] <- 0
 countyFlows <- addmargins(as.table(countyFlows))
 countyFlows <- as.data.frame.matrix(countyFlows)

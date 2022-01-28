@@ -835,13 +835,13 @@ Description {.sidebar data-width=135}
 
 **Tour Productions by County**
 
-Comparison of work productions
+Comparison of work productions, model vs. ACS Journey-To-Work 2011-2015. NOTE: Other ACS data is 2017, this data is NOT adjusted for date, it is adjusted for work-from-home.
 
 Note: Districts can be Tract, County, District etc.
 
 **Tour Attractions by County**
 
-Comparison of work attractions
+Comparison of work attractions, model vs. ACS Journey-To-Work 2011-2015. NOTE: Other ACS data is 2017, this data is NOT adjusted for date, it is adjusted for work-from-home.
 
 Chart Column 1
 --------------------------------------------
@@ -948,6 +948,7 @@ tworktourattr
 
 ```
 
+<!--
 Employment vs Workers{data-navmenu="Long Term"}
 ============================================
 
@@ -960,44 +961,32 @@ Description {.sidebar data-width=175}
 
 Results of work location model.
 
-Comparison of assigned workers to available employment at TAZ level.
+Comparison of assigned workers to Census ACS Workers by Location.
 
-Only for build scenario.
+Based on Census ACS 5-year 2017, table B08406.
 
 
 Chart Column 2{.tabset}
 --------------------------------------------
 
 ### By County{data-height=575} 
-<!-- ```{r job_wrk1a}
-bscols(widths=c(6,6),
-  include_graphics(file.path(SYSTEM_JPEG_PATH, "workersByCounty.jpeg")),
-  include_graphics(file.path(SYSTEM_JPEG_PATH, "workersByTAZ.jpeg"))
-)
 
-# knitr::include_graphics(file.path(SYSTEM_JPEG_PATH, "workersByCounty.jpeg")),
-# knitr::include_graphics(file.path(SYSTEM_JPEG_PATH, "workersByTAZ.jpeg"))
-``` -->
 ```{r job_wrk1a}
-#knitr::include_graphics(file.path(SYSTEM_JPEG_PATH, "workersByCounty.jpeg"))
-# knitr::include_graphics(file.path(SYSTEM_JPEG_PATH, "workersByTAZ_County.jpeg"))
 
-#workers_per_co.csv
-#workers_per_taz.csv
-
-base_df <- build_data[[which(build_csv_names=="employees_per_co")]]
+base_df <- base_data[[which(base_csv_names=="workplaceLocationCensus")]]
 build_df <- build_data[[which(build_csv_names=="workers_per_co")]]
 
-base_df$WDISTRICT = levels(base_df$WDISTRICT)[base_df$WDISTRICT]
+base_df$WDISTRICT = levels(base_df$COUNTY)[base_df$COUNTY]
+base_df = base_df[,c("WDISTRICT", "freq")]
 build_df$WDISTRICT = levels(build_df$WDISTRICT)[build_df$WDISTRICT]
 build_df = build_df[build_df$WDISTRICT %in% base_df$WDISTRICT,]
 base_df = base_df[base_df$WDISTRICT %in% build_df$WDISTRICT,]
+build_df$freq = build_df$freq / BUILD_SAMPLE_RATE
 
-#colnames(base_df)[which(colnames(base_df) == "freq")] = BASE_SCENARIO_NAME
-#colnames(build_df)[which(colnames(build_df) == "freq")] = BUILD_SCENARIO_NAME
+df = merge(base_df, build_df, by = "WDISTRICT")
+colnames(df)[which(colnames(df) == "freq.x")] = "freq"
+colnames(df)[which(colnames(df) == "freq.y")] = "freq_build"
 
-df = base_df
-df$freq_build = build_df$freq[which(df$WDISTRICT == build_df$WDISTRICT)]/BUILD_SAMPLE_RATE
 
 co_cor = cor(df$freq, df$freq_build)^2
 co_lm = lm(freq_build ~ freq, df)
@@ -1088,6 +1077,7 @@ ggplot(df, aes(x = base, y = build)) + geom_point(alpha = 0.3) +
 
 ```
 
+-->
 
 Zero Auto Households {data-navmenu="Long Term"}
 ============================================

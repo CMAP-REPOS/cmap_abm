@@ -25,4 +25,4 @@ desktop.data_explorer().replace_primary_scenario(scenario)
 
 processMatrix = _m.Modeller().tool("inro.emme.data.matrix.matrix_transaction")
 
-processMatrix(transaction_file = WORK_FOLDER)
+processMatrix(transaction_file = WORK_FOLDER, throw_on_error = False)

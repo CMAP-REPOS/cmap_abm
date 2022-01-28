@@ -21,6 +21,8 @@ settings = yaml.load_file(settings_file)
 # county_flows= fread('E:/Projects/Clients/MWCOG/Tasks/TO3/Visualizer/data/census/ACS_commuting_flows_2015_5yr.csv')
 # tract_to_taz = fread('E:/Projects/Clients/MWCOG/Tasks/TO3/PopulationSim/data/xwalk/tract_to_taz.csv')
 
+census_api_key("3b5963a87855c7861477469fd5e8e5846c9d9416")
+
 zone_dir = settings$zone_dir
 
 zones = st_read(file.path(zone_dir, settings$zone_shp_file))
@@ -53,11 +55,24 @@ county_flows[work_county_name == 'Lake', work_county_name := ifelse(work_state_f
 county_flows = county_flows[counties, on = .(fips = county_fip), nomatch = 0]
 county_flows = county_flows[w_fips %in% counties[, county_fip]]
 county_flows[, workers_N := gsub(',', '', workers_N)]
-county_flows[, workers_N := as.integer(workers_N)]
+county_flows[, workers_N1 := as.integer(workers_N)]
+
+acs_mode = data.table(
+  get_acs(
+    geography = "county",
+    table = "K200801",
+    state = unique(counties$state),
+    # county = counties$county,
+    year = 2015
+  )
+) 
+
+acs_wfh = acs_mode[acs_mode$variable == "K200801_006",]
+
+county_flows$workers_N = unlist(mapply(function(fc, tc, inw){if(fc == tc)(return(inw - acs_wfh[acs_wfh$GEOID == fc, "estimate"]))else(return(inw))}, county_flows$fips, county_flows$w_fips, county_flows$workers_N1))
+
 
 county_flows_matrix = dcast(county_flows, res_county_name ~ work_county_name , value.var = 'workers_N', fun = sum)
-#county_flows_matrix[, V1 := NULL]
-
 
 county_flows_matrix[, Total := rowSums(.SD), .SDcols = names(county_flows_matrix)[-1]]
 county_flows_matrix = rollup(county_flows_matrix, j = lapply(.SD, sum), by = 'res_county_name', .SDcols = names(county_flows_matrix)[-1])
@@ -71,6 +86,11 @@ county_flows_matrix[, order_num := NULL]
 
 setnames(county_flows_matrix, 'res_county_name', '')
 
+
+
+
+
+
 fwrite(county_flows_matrix, file.path(settings$visualizer_summaries, 'countyFlowsCensus.csv'))
 
 # use this as a way to get county name table
@@ -79,8 +99,6 @@ counties[county_flows, county_name := i.res_county_name, on = .(county_fip = fip
 fwrite(counties, file.path(settings$proj_dir, 'county_lookup.csv'))
 
 # ACS vehicles
-
-census_api_key("3b5963a87855c7861477469fd5e8e5846c9d9416")
 
 acs_veh = data.table(
   get_acs(
@@ -137,3 +155,24 @@ setDT(hhsize)
 hhsize[, HHSIZE := round(as.numeric(gsub('B08201_', '', HHSIZE))/7, 0)]
 fwrite(hhsize, file.path(settings$visualizer_summaries, 'hhSizeCensus.csv'))
 
+# Workplace location by county from ACS ####
+#
+# Note that the universe is Workers age >= 16 that did not work at home, so it doesn't need to be adjusted by wfh/tc
+
+acs_wp = data.table(
+  get_acs(
+    geography = "county",
+    table = "B08406",
+    state = unique(counties$state),
+    # county = counties$county,
+    year = 2017
+  )
+)
+
+acs_wp$COUNTY = counties$county_name[match(substr(acs_wp$GEOID, 0, 5), levels(counties$county_fip)[counties$county_fip])] 
+
+acs_wp = acs_wp[!is.na(acs_wp$COUNTY) & acs_wp$variable == "B08406_001",c("COUNTY", "estimate")]
+
+colnames(acs_wp) = c("COUNTY", "freq")
+
+fwrite(acs_wp, file.path(settings$visualizer_summaries, 'workplaceLocationCensus.csv'))

@@ -26,8 +26,8 @@ class CMapNetwork(_m.Tool()):
         self.attributes = ["period", "input_directory"]
         version = os.environ.get("EMMEPATH", "")
         self._version = version[-5:] if version else ""
-        #self.timeFactors = {1: 3.75, 2: 0.75, 3: 1.5, 4: 0.75, 5: 3.0, 6: 1.5, 7: 1.5, 8: 1.5} 
-        self.timeFactors = {1: 10, 2: 1.0, 3: 2.0, 4: 1.0, 5: 4.0, 6: 2.0, 7: 2.0, 8: 2.0} 
+        self.timeFactors = {1: 3.75, 2: 0.75, 3: 1.5, 4: 0.75, 5: 3.0, 6: 1.5, 7: 1.5, 8: 1.5} 
+        #self.timeFactors = {1: 10, 2: 1.0, 3: 2.0, 4: 1.0, 5: 4.0, 6: 2.0, 7: 2.0, 8: 2.0} 
         #TODO: ASR changed 2 and 4 to 1.0, check on these
         
     def __call__(self, scenario, input_directory=None, runCapacities = False, export = False, output_directory = None, runPrep = True):

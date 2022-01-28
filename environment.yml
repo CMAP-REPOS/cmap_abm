@@ -266,12 +266,13 @@ dependencies:
   - zlib=1.2.11=h62dcd97_1010
   - zstd=1.5.0=h6255e5f_0
   - pip:
-    - activitysim==1.0.1
+    - activitysim==1.0.4
     - charset-normalizer==2.0.1
     - idna==3.2
     - openmatrix==0.3.5.0
     - requests==2.26.0
     - zbox==1.2.0
     - pandana==0.6.1
+    - simpledbf==0.2.6
 prefix: C:\Users\andrew.rohne\.conda\envs\cmapasim
 

@@ -209,3 +209,9 @@ coef_1_plus_eating_out_tours_constant,2.0723,F
 coef_1_plus_visting_tours_constant,1.2172,F
 coef_1_plus_other_discretionary_tours_constant,1.3389,F
 coef_0_auto_household_and_escorting_tour,-2,T
+coef_tc_1dayperweek_1,-0.005,F
+coef_tc_23dayperweek_1,0.142,F
+coef_tc_4pdayperweek_1,-0.406,F
+coef_tc_1dayperweek_2p,-0.348,F
+coef_tc_23dayperweek_2p,-0.041,F
+coef_tc_4pdayperweek_2p,-0.447,F

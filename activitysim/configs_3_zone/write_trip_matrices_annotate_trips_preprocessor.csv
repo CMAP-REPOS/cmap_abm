@@ -20,37 +20,37 @@ Description,Target,Expression
 ,is_tr,True
 ,no_tr,False
 # ea trips,,
-# ,SOV_TR_L_EA,((trips.trip_mode == 'DRIVEALONE') & is_ea & is_low & is_tr) + ((((tour_participants == 1) & (trips.trip_mode == 'TAXI')) | (trips.trip_mode == 'TNC_SINGLE')) & is_ea & is_low)
-# ,SOV_NT_L_EA,((trips.trip_mode == 'DRIVEALONE') & is_ea & is_low & no_tr)
-# ,HOV2_L_EA,((trips.trip_mode == 'SHAREDRIDE2') & is_ea & is_low) * tour_participants  / OCC_SHARED2 + ((tour_participants == 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_ea & is_low) * tour_participants / OCC_SHARED2
-# ,HOV3_L_EA,((trips.trip_mode == 'SHAREDRIDE3') & is_ea & is_low) * tour_participants / OCC_SHARED3 + ((tour_participants > 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_ea & is_low) * tour_participants / OCC_SHARED3
-# ,SOV_TR_M_EA,((trips.trip_mode == 'DRIVEALONE') & is_ea & is_mid & is_tr)+ ((((tour_participants == 1) & (trips.trip_mode == 'TAXI')) | (trips.trip_mode == 'TNC_SINGLE')) & is_ea & is_mid)
-# ,SOV_NT_M_EA,((trips.trip_mode == 'DRIVEALONE') & is_ea & is_mid & no_tr) 
-# ,HOV2_M_EA,((trips.trip_mode == 'SHAREDRIDE2') & is_ea & is_mid) * tour_participants  / OCC_SHARED2 + ((tour_participants == 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_ea & is_mid) * tour_participants / OCC_SHARED2
-# ,HOV3_M_EA,((trips.trip_mode == 'SHAREDRIDE3') & is_ea & is_mid) * tour_participants / OCC_SHARED3 + ((tour_participants > 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_ea & is_mid) * tour_participants / OCC_SHARED3
-# ,SOV_TR_H_EA,((trips.trip_mode == 'DRIVEALONE') & is_ea & is_high & is_tr) + ((((tour_participants == 1) & (trips.trip_mode == 'TAXI')) | (trips.trip_mode == 'TNC_SINGLE')) & is_ea & is_high)
-# ,SOV_NT_H_EA,((trips.trip_mode == 'DRIVEALONE') & is_ea & is_high & no_tr) 
-# ,HOV2_H_EA,((trips.trip_mode == 'SHAREDRIDE2') & is_ea & is_high) * tour_participants  / OCC_SHARED2 + ((tour_participants == 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_ea & is_high) * tour_participants / OCC_SHARED2
-# ,HOV3_H_EA,((trips.trip_mode == 'SHAREDRIDE3') & is_ea & is_high) * tour_participants / OCC_SHARED3 + ((tour_participants > 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_ea & is_high) * tour_participants / OCC_SHARED3
-# ,TRN_WALK_LOW_EA,((trips.trip_mode == 'WALK_TRANSIT') & is_ea & is_low) * tour_participants
-# ,TRN_PNR_LOW_EA,((trips.trip_mode == 'PNR_TRANSIT') & is_ea & is_low) * tour_participants
-# ,TRN_KNR_LOW_EA,((trips.trip_mode == 'KNR_TRANSIT') & is_ea & is_low) * tour_participants
-# ,TRN_TNC_LOW_EA,((trips.trip_mode == 'TNC_TRANSIT') & is_ea & is_low) * tour_participants
-# ,TRN_WALK_MID_EA,((trips.trip_mode == 'WALK_TRANSIT') & is_ea & is_mid) * tour_participants
-# ,TRN_PNR_MID_EA,((trips.trip_mode == 'PNR_TRANSIT') & is_ea & is_mid) * tour_participants
-# ,TRN_KNR_MID_EA,((trips.trip_mode == 'KNR_TRANSIT') & is_ea & is_mid) * tour_participants
-# ,TRN_TNC_MID_EA,((trips.trip_mode == 'TNC_TRANSIT') & is_ea & is_mid) * tour_participants
-# ,TRN_WALK_HI_EA,((trips.trip_mode == 'WALK_TRANSIT') & is_ea & is_high) * tour_participants
-# ,TRN_PNR_HI_EA,((trips.trip_mode == 'PNR_TRANSIT') & is_ea & is_high) * tour_participants
-# ,TRN_KNR_HI_EA,((trips.trip_mode == 'KNR_TRANSIT') & is_ea & is_high) * tour_participants
-# ,TRN_TNC_HI_EA,((trips.trip_mode == 'TNC_TRANSIT') & is_ea & is_high) * tour_participants
-# ,TRN_LOW_TOT_EA,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & (is_ea) & (is_low)) * tour_participants"
-# ,TRN_MID_TOT_EA,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & (is_ea) & (is_mid)) * tour_participants"
-# ,TRN_HI_TOT_EA,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & (is_ea) & (is_high)) * tour_participants"
-# ,WALK_EA,((trips.trip_mode == 'WALK') & is_ea) * tour_participants
-# ,BIKE_EA,((trips.trip_mode == 'BIKE') & is_ea) * tour_participants
-# ,SCHBUS_EA,((trips.trip_mode == 'SCHBUS') & is_ea) * tour_participants
-# # am trips,,
+,SOV_TR_L_EA,((trips.trip_mode == 'DRIVEALONE') & is_ea & is_low & is_tr) * tour_participants + ((((tour_participants == 1) & (trips.trip_mode == 'TAXI')) | (trips.trip_mode == 'TNC_SINGLE')) & is_ea & is_low) * tour_participants
+,SOV_NT_L_EA,((trips.trip_mode == 'DRIVEALONE') & is_ea & is_low & no_tr) * tour_participants
+,HOV2_L_EA,((trips.trip_mode == 'SHAREDRIDE2') & is_ea & is_low) * tour_participants  / OCC_SHARED2 + ((tour_participants == 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_ea & is_low) * tour_participants / OCC_SHARED2
+,HOV3_L_EA,((trips.trip_mode == 'SHAREDRIDE3') & is_ea & is_low) * tour_participants / OCC_SHARED3 + ((tour_participants > 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_ea & is_low) * tour_participants / OCC_SHARED3
+,SOV_TR_M_EA,((trips.trip_mode == 'DRIVEALONE') & is_ea & is_mid & is_tr) * tour_participants + ((((tour_participants == 1) & (trips.trip_mode == 'TAXI')) | (trips.trip_mode == 'TNC_SINGLE')) & is_ea & is_mid) * tour_participants
+,SOV_NT_M_EA,((trips.trip_mode == 'DRIVEALONE') & is_ea & is_mid & no_tr) * tour_participants 
+,HOV2_M_EA,((trips.trip_mode == 'SHAREDRIDE2') & is_ea & is_mid) * tour_participants  / OCC_SHARED2 + ((tour_participants == 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_ea & is_mid) * tour_participants / OCC_SHARED2
+,HOV3_M_EA,((trips.trip_mode == 'SHAREDRIDE3') & is_ea & is_mid) * tour_participants / OCC_SHARED3 + ((tour_participants > 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_ea & is_mid) * tour_participants / OCC_SHARED3
+,SOV_TR_H_EA,((trips.trip_mode == 'DRIVEALONE') & is_ea & is_high & is_tr) * tour_participants + ((((tour_participants == 1) & (trips.trip_mode == 'TAXI')) | (trips.trip_mode == 'TNC_SINGLE')) & is_ea & is_high) * tour_participants
+,SOV_NT_H_EA,((trips.trip_mode == 'DRIVEALONE') & is_ea & is_high & no_tr)  * tour_participants
+,HOV2_H_EA,((trips.trip_mode == 'SHAREDRIDE2') & is_ea & is_high) * tour_participants  / OCC_SHARED2 + ((tour_participants == 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_ea & is_high) * tour_participants / OCC_SHARED2
+,HOV3_H_EA,((trips.trip_mode == 'SHAREDRIDE3') & is_ea & is_high) * tour_participants / OCC_SHARED3 + ((tour_participants > 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_ea & is_high) * tour_participants / OCC_SHARED3
+,TRN_WALK_LOW_EA,((trips.trip_mode == 'WALK_TRANSIT') & is_ea & is_low) * tour_participants
+,TRN_PNR_LOW_EA,((trips.trip_mode == 'PNR_TRANSIT') & is_ea & is_low) * tour_participants
+,TRN_KNR_LOW_EA,((trips.trip_mode == 'KNR_TRANSIT') & is_ea & is_low) * tour_participants
+,TRN_TNC_LOW_EA,((trips.trip_mode == 'TNC_TRANSIT') & is_ea & is_low) * tour_participants
+,TRN_WALK_MID_EA,((trips.trip_mode == 'WALK_TRANSIT') & is_ea & is_mid) * tour_participants
+,TRN_PNR_MID_EA,((trips.trip_mode == 'PNR_TRANSIT') & is_ea & is_mid) * tour_participants
+,TRN_KNR_MID_EA,((trips.trip_mode == 'KNR_TRANSIT') & is_ea & is_mid) * tour_participants
+,TRN_TNC_MID_EA,((trips.trip_mode == 'TNC_TRANSIT') & is_ea & is_mid) * tour_participants
+,TRN_WALK_HI_EA,((trips.trip_mode == 'WALK_TRANSIT') & is_ea & is_high) * tour_participants
+,TRN_PNR_HI_EA,((trips.trip_mode == 'PNR_TRANSIT') & is_ea & is_high) * tour_participants
+,TRN_KNR_HI_EA,((trips.trip_mode == 'KNR_TRANSIT') & is_ea & is_high) * tour_participants
+,TRN_TNC_HI_EA,((trips.trip_mode == 'TNC_TRANSIT') & is_ea & is_high) * tour_participants
+,TRN_LOW_TOT_EA,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & (is_ea) & (is_low)) * tour_participants"
+,TRN_MID_TOT_EA,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & (is_ea) & (is_mid)) * tour_participants"
+,TRN_HI_TOT_EA,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & (is_ea) & (is_high)) * tour_participants"
+,WALK_EA,((trips.trip_mode == 'WALK') & is_ea) * tour_participants
+,BIKE_EA,((trips.trip_mode == 'BIKE') & is_ea) * tour_participants
+,SCHBUS_EA,((trips.trip_mode == 'SCHBUS') & is_ea) * tour_participants
+# am trips,,
 ,SOV_TR_L_AM,((trips.trip_mode == 'DRIVEALONE') & is_am & is_low & is_tr) * tour_participants + ((((tour_participants == 1) & (trips.trip_mode == 'TAXI')) | (trips.trip_mode == 'TNC_SINGLE')) & is_am & is_low) * tour_participants
 ,SOV_NT_L_AM,((trips.trip_mode == 'DRIVEALONE') & is_am & is_low & no_tr) * tour_participants
 ,HOV2_L_AM,((trips.trip_mode == 'SHAREDRIDE2') & is_am & is_low) * tour_participants  / OCC_SHARED2 + ((tour_participants == 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_am & is_low) * tour_participants / OCC_SHARED2
@@ -81,189 +81,189 @@ Description,Target,Expression
 ,WALK_AM,((trips.trip_mode == 'WALK') & is_am) * tour_participants
 ,BIKE_AM,((trips.trip_mode == 'BIKE') & is_am) * tour_participants
 ,SCHBUS_AM,((trips.trip_mode == 'SCHBUS') & is_am) * tour_participants
-# # mm trips,,
-# ,SOV_TR_L_MM,((trips.trip_mode == 'DRIVEALONE') & is_mm & is_low & is_tr) + ((((tour_participants == 1) & (trips.trip_mode == 'TAXI')) | (trips.trip_mode == 'TNC_SINGLE')) & is_mm & is_low)
-# ,SOV_NT_L_MM,((trips.trip_mode == 'DRIVEALONE') & is_mm & is_low & no_tr)
-# ,HOV2_L_MM,((trips.trip_mode == 'SHAREDRIDE2') & is_mm & is_low) * tour_participants  / OCC_SHARED2 + ((tour_participants == 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_mm & is_low) * tour_participants / OCC_SHARED2
-# ,HOV3_L_MM,((trips.trip_mode == 'SHAREDRIDE3') & is_mm & is_low) * tour_participants / OCC_SHARED3 + ((tour_participants > 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_mm & is_low) * tour_participants / OCC_SHARED3
-# ,SOV_TR_M_MM,((trips.trip_mode == 'DRIVEALONE') & is_mm & is_mid & is_tr)+ ((((tour_participants == 1) & (trips.trip_mode == 'TAXI')) | (trips.trip_mode == 'TNC_SINGLE')) & is_mm & is_mid)
-# ,SOV_NT_M_MM,((trips.trip_mode == 'DRIVEALONE') & is_mm & is_mid & no_tr) 
-# ,HOV2_M_MM,((trips.trip_mode == 'SHAREDRIDE2') & is_mm & is_mid) * tour_participants  / OCC_SHARED2 + ((tour_participants == 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_mm & is_mid) * tour_participants / OCC_SHARED2
-# ,HOV3_M_MM,((trips.trip_mode == 'SHAREDRIDE3') & is_mm & is_mid) * tour_participants / OCC_SHARED3 + ((tour_participants > 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_mm & is_mid) * tour_participants / OCC_SHARED3
-# ,SOV_TR_H_MM,((trips.trip_mode == 'DRIVEALONE') & is_mm & is_high & is_tr) + ((((tour_participants == 1) & (trips.trip_mode == 'TAXI')) | (trips.trip_mode == 'TNC_SINGLE')) & is_mm & is_high)
-# ,SOV_NT_H_MM,((trips.trip_mode == 'DRIVEALONE') & is_mm & is_high & no_tr) 
-# ,HOV2_H_MM,((trips.trip_mode == 'SHAREDRIDE2') & is_mm & is_high) * tour_participants  / OCC_SHARED2 + ((tour_participants == 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_mm & is_high) * tour_participants / OCC_SHARED2
-# ,HOV3_H_MM,((trips.trip_mode == 'SHAREDRIDE3') & is_mm & is_high) * tour_participants / OCC_SHARED3 + ((tour_participants > 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_mm & is_high) * tour_participants / OCC_SHARED3
-# ,TRN_WALK_LOW_MM,((trips.trip_mode == 'WALK_TRANSIT') & is_mm & is_low) * tour_participants
-# ,TRN_PNR_LOW_MM,((trips.trip_mode == 'PNR_TRANSIT') & is_mm & is_low) * tour_participants
-# ,TRN_KNR_LOW_MM,((trips.trip_mode == 'KNR_TRANSIT') & is_mm & is_low) * tour_participants
-# ,TRN_TNC_LOW_MM,((trips.trip_mode == 'TNC_TRANSIT') & is_mm & is_low) * tour_participants
-# ,TRN_WALK_MID_MM,((trips.trip_mode == 'WALK_TRANSIT') & is_mm & is_mid) * tour_participants
-# ,TRN_PNR_MID_MM,((trips.trip_mode == 'PNR_TRANSIT') & is_mm & is_mid) * tour_participants
-# ,TRN_KNR_MID_MM,((trips.trip_mode == 'KNR_TRANSIT') & is_mm & is_mid) * tour_participants
-# ,TRN_TNC_MID_MM,((trips.trip_mode == 'TNC_TRANSIT') & is_mm & is_mid) * tour_participants
-# ,TRN_WALK_HI_MM,((trips.trip_mode == 'WALK_TRANSIT') & is_mm & is_high) * tour_participants
-# ,TRN_PNR_HI_MM,((trips.trip_mode == 'PNR_TRANSIT') & is_mm & is_high) * tour_participants
-# ,TRN_KNR_HI_MM,((trips.trip_mode == 'KNR_TRANSIT') & is_mm & is_high) * tour_participants
-# ,TRN_TNC_HI_MM,((trips.trip_mode == 'TNC_TRANSIT') & is_mm & is_high) * tour_participants
-# ,TRN_LOW_TOT_MM,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & is_mm & is_low) * tour_participants"
-# ,TRN_MID_TOT_MM,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & is_mm & is_mid) * tour_participants"
-# ,TRN_HI_TOT_MM,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & is_mm & is_high) * tour_participants"
-# ,WALK_MM,((trips.trip_mode == 'WALK') & is_mm) * tour_participants
-# ,BIKE_MM,((trips.trip_mode == 'BIKE') & is_mm) * tour_participants
-# ,SCHBUS_MM,((trips.trip_mode == 'SCHBUS') & is_mm) * tour_participants
-# # md trips,,
-# ,SOV_TR_L_MD,((trips.trip_mode == 'DRIVEALONE') & is_md & is_low & is_tr) + ((((tour_participants == 1) & (trips.trip_mode == 'TAXI')) | (trips.trip_mode == 'TNC_SINGLE')) & is_md & is_low)
-# ,SOV_NT_L_MD,((trips.trip_mode == 'DRIVEALONE') & is_md & is_low & no_tr)
-# ,HOV2_L_MD,((trips.trip_mode == 'SHAREDRIDE2') & is_md & is_low) * tour_participants  / OCC_SHARED2 + ((tour_participants == 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_md & is_low) * tour_participants / OCC_SHARED2
-# ,HOV3_L_MD,((trips.trip_mode == 'SHAREDRIDE3') & is_md & is_low) * tour_participants / OCC_SHARED3 + ((tour_participants > 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_md & is_low) * tour_participants / OCC_SHARED3
-# ,SOV_TR_M_MD,((trips.trip_mode == 'DRIVEALONE') & is_md & is_mid & is_tr)+ ((((tour_participants == 1) & (trips.trip_mode == 'TAXI')) | (trips.trip_mode == 'TNC_SINGLE')) & is_md & is_mid)
-# ,SOV_NT_M_MD,((trips.trip_mode == 'DRIVEALONE') & is_md & is_mid & no_tr) 
-# ,HOV2_M_MD,((trips.trip_mode == 'SHAREDRIDE2') & is_md & is_mid) * tour_participants  / OCC_SHARED2 + ((tour_participants == 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_md & is_mid) * tour_participants / OCC_SHARED2
-# ,HOV3_M_MD,((trips.trip_mode == 'SHAREDRIDE3') & is_md & is_mid) * tour_participants / OCC_SHARED3 + ((tour_participants > 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_md & is_mid) * tour_participants / OCC_SHARED3
-# ,SOV_TR_H_MD,((trips.trip_mode == 'DRIVEALONE') & is_md & is_high & is_tr) + ((((tour_participants == 1) & (trips.trip_mode == 'TAXI')) | (trips.trip_mode == 'TNC_SINGLE')) & is_md & is_high)
-# ,SOV_NT_H_MD,((trips.trip_mode == 'DRIVEALONE') & is_md & is_high & no_tr) 
-# ,HOV2_H_MD,((trips.trip_mode == 'SHAREDRIDE2') & is_md & is_high) * tour_participants  / OCC_SHARED2 + ((tour_participants == 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_md & is_high) * tour_participants / OCC_SHARED2
-# ,HOV3_H_MD,((trips.trip_mode == 'SHAREDRIDE3') & is_md & is_high) * tour_participants / OCC_SHARED3 + ((tour_participants > 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_md & is_high) * tour_participants / OCC_SHARED3
-# ,TRN_WALK_LOW_MD,((trips.trip_mode == 'WALK_TRANSIT') & is_md & is_low) * tour_participants
-# ,TRN_PNR_LOW_MD,((trips.trip_mode == 'PNR_TRANSIT') & is_md & is_low) * tour_participants
-# ,TRN_KNR_LOW_MD,((trips.trip_mode == 'KNR_TRANSIT') & is_md & is_low) * tour_participants
-# ,TRN_TNC_LOW_MD,((trips.trip_mode == 'TNC_TRANSIT') & is_md & is_low) * tour_participants
-# ,TRN_WALK_MID_MD,((trips.trip_mode == 'WALK_TRANSIT') & is_md & is_mid) * tour_participants
-# ,TRN_PNR_MID_MD,((trips.trip_mode == 'PNR_TRANSIT') & is_md & is_mid) * tour_participants
-# ,TRN_KNR_MID_MD,((trips.trip_mode == 'KNR_TRANSIT') & is_md & is_mid) * tour_participants
-# ,TRN_TNC_MID_MD,((trips.trip_mode == 'TNC_TRANSIT') & is_md & is_mid) * tour_participants
-# ,TRN_WALK_HI_MD,((trips.trip_mode == 'WALK_TRANSIT') & is_md & is_high) * tour_participants
-# ,TRN_PNR_HI_MD,((trips.trip_mode == 'PNR_TRANSIT') & is_md & is_high) * tour_participants
-# ,TRN_KNR_HI_MD,((trips.trip_mode == 'KNR_TRANSIT') & is_md & is_high) * tour_participants
-# ,TRN_TNC_HI_MD,((trips.trip_mode == 'TNC_TRANSIT') & is_md & is_high) * tour_participants
-# ,TRN_LOW_TOT_MD,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & is_md & is_low) * tour_participants"
-# ,TRN_MID_TOT_MD,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & is_md & is_mid) * tour_participants"
-# ,TRN_HI_TOT_MD,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & is_md & is_high) * tour_participants"
-# ,WALK_MD,((trips.trip_mode == 'WALK') & is_md) * tour_participants
-# ,BIKE_MD,((trips.trip_mode == 'BIKE') & is_md) * tour_participants
-# ,SCHBUS_MD,((trips.trip_mode == 'SCHBUS') & is_md) * tour_participants
-# # af trips,,
-# ,SOV_TR_L_AF,((trips.trip_mode == 'DRIVEALONE') & is_af & is_low & is_tr) + ((((tour_participants == 1) & (trips.trip_mode == 'TAXI')) | (trips.trip_mode == 'TNC_SINGLE')) & is_af & is_low)
-# ,SOV_NT_L_AF,((trips.trip_mode == 'DRIVEALONE') & is_af & is_low & no_tr)
-# ,HOV2_L_AF,((trips.trip_mode == 'SHAREDRIDE2') & is_af & is_low) * tour_participants  / OCC_SHARED2 + ((tour_participants == 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_af & is_low) * tour_participants / OCC_SHARED2
-# ,HOV3_L_AF,((trips.trip_mode == 'SHAREDRIDE3') & is_af & is_low) * tour_participants / OCC_SHARED3 + ((tour_participants > 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_af & is_low) * tour_participants / OCC_SHARED3
-# ,SOV_TR_M_AF,((trips.trip_mode == 'DRIVEALONE') & is_af & is_mid & is_tr)+ ((((tour_participants == 1) & (trips.trip_mode == 'TAXI')) | (trips.trip_mode == 'TNC_SINGLE')) & is_af & is_mid)
-# ,SOV_NT_M_AF,((trips.trip_mode == 'DRIVEALONE') & is_af & is_mid & no_tr) 
-# ,HOV2_M_AF,((trips.trip_mode == 'SHAREDRIDE2') & is_af & is_mid) * tour_participants  / OCC_SHARED2 + ((tour_participants == 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_af & is_mid) * tour_participants / OCC_SHARED2
-# ,HOV3_M_AF,((trips.trip_mode == 'SHAREDRIDE3') & is_af & is_mid) * tour_participants / OCC_SHARED3 + ((tour_participants > 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_af & is_mid) * tour_participants / OCC_SHARED3
-# ,SOV_TR_H_AF,((trips.trip_mode == 'DRIVEALONE') & is_af & is_high & is_tr) + ((((tour_participants == 1) & (trips.trip_mode == 'TAXI')) | (trips.trip_mode == 'TNC_SINGLE')) & is_af & is_high)
-# ,SOV_NT_H_AF,((trips.trip_mode == 'DRIVEALONE') & is_af & is_high & no_tr) 
-# ,HOV2_H_AF,((trips.trip_mode == 'SHAREDRIDE2') & is_af & is_high) * tour_participants  / OCC_SHARED2 + ((tour_participants == 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_af & is_high) * tour_participants / OCC_SHARED2
-# ,HOV3_H_AF,((trips.trip_mode == 'SHAREDRIDE3') & is_af & is_high) * tour_participants / OCC_SHARED3 + ((tour_participants > 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_af & is_high) * tour_participants / OCC_SHARED3
-# ,TRN_WALK_LOW_AF,((trips.trip_mode == 'WALK_TRANSIT') & is_af & is_low) * tour_participants
-# ,TRN_PNR_LOW_AF,((trips.trip_mode == 'PNR_TRANSIT') & is_af & is_low) * tour_participants
-# ,TRN_KNR_LOW_AF,((trips.trip_mode == 'KNR_TRANSIT') & is_af & is_low) * tour_participants
-# ,TRN_TNC_LOW_AF,((trips.trip_mode == 'TNC_TRANSIT') & is_af & is_low) * tour_participants
-# ,TRN_WALK_MID_AF,((trips.trip_mode == 'WALK_TRANSIT') & is_af & is_mid) * tour_participants
-# ,TRN_PNR_MID_AF,((trips.trip_mode == 'PNR_TRANSIT') & is_af & is_mid) * tour_participants
-# ,TRN_KNR_MID_AF,((trips.trip_mode == 'KNR_TRANSIT') & is_af & is_mid) * tour_participants
-# ,TRN_TNC_MID_AF,((trips.trip_mode == 'TNC_TRANSIT') & is_af & is_mid) * tour_participants
-# ,TRN_WALK_HI_AF,((trips.trip_mode == 'WALK_TRANSIT') & is_af & is_high) * tour_participants
-# ,TRN_PNR_HI_AF,((trips.trip_mode == 'PNR_TRANSIT') & is_af & is_high) * tour_participants
-# ,TRN_KNR_HI_AF,((trips.trip_mode == 'KNR_TRANSIT') & is_af & is_high) * tour_participants
-# ,TRN_TNC_HI_AF,((trips.trip_mode == 'TNC_TRANSIT') & is_af & is_high) * tour_participants
-# ,TRN_LOW_TOT_AF,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & is_af & is_low) * tour_participants"
-# ,TRN_MID_TOT_AF,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & is_af & is_mid) * tour_participants"
-# ,TRN_HI_TOT_AF,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & is_af & is_high) * tour_participants"
-# ,WALK_AF,((trips.trip_mode == 'WALK') & is_af) * tour_participants
-# ,BIKE_AF,((trips.trip_mode == 'BIKE') & is_af) * tour_participants
-# ,SCHBUS_AF,((trips.trip_mode == 'SCHBUS') & is_af) * tour_participants
-# # pm trips,,
-# ,SOV_TR_L_PM,((trips.trip_mode == 'DRIVEALONE') & is_pm & is_low & is_tr) + ((((tour_participants == 1) & (trips.trip_mode == 'TAXI')) | (trips.trip_mode == 'TNC_SINGLE')) & is_pm & is_low)
-# ,SOV_NT_L_PM,((trips.trip_mode == 'DRIVEALONE') & is_pm & is_low & no_tr)
-# ,HOV2_L_PM,((trips.trip_mode == 'SHAREDRIDE2') & is_pm & is_low) * tour_participants  / OCC_SHARED2 + ((tour_participants == 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_pm & is_low) * tour_participants / OCC_SHARED2
-# ,HOV3_L_PM,((trips.trip_mode == 'SHAREDRIDE3') & is_pm & is_low) * tour_participants / OCC_SHARED3 + ((tour_participants > 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_pm & is_low) * tour_participants / OCC_SHARED3
-# ,SOV_TR_M_PM,((trips.trip_mode == 'DRIVEALONE') & is_pm & is_mid & is_tr)+ ((((tour_participants == 1) & (trips.trip_mode == 'TAXI')) | (trips.trip_mode == 'TNC_SINGLE')) & is_pm & is_mid)
-# ,SOV_NT_M_PM,((trips.trip_mode == 'DRIVEALONE') & is_pm & is_mid & no_tr) 
-# ,HOV2_M_PM,((trips.trip_mode == 'SHAREDRIDE2') & is_pm & is_mid) * tour_participants  / OCC_SHARED2 + ((tour_participants == 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_pm & is_mid) * tour_participants / OCC_SHARED2
-# ,HOV3_M_PM,((trips.trip_mode == 'SHAREDRIDE3') & is_pm & is_mid) * tour_participants / OCC_SHARED3 + ((tour_participants > 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_pm & is_mid) * tour_participants / OCC_SHARED3
-# ,SOV_TR_H_PM,((trips.trip_mode == 'DRIVEALONE') & is_pm & is_high & is_tr) + ((((tour_participants == 1) & (trips.trip_mode == 'TAXI')) | (trips.trip_mode == 'TNC_SINGLE')) & is_pm & is_high)
-# ,SOV_NT_H_PM,((trips.trip_mode == 'DRIVEALONE') & is_pm & is_high & no_tr) 
-# ,HOV2_H_PM,((trips.trip_mode == 'SHAREDRIDE2') & is_pm & is_high) * tour_participants  / OCC_SHARED2 + ((tour_participants == 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_pm & is_high) * tour_participants / OCC_SHARED2
-# ,HOV3_H_PM,((trips.trip_mode == 'SHAREDRIDE3') & is_pm & is_high) * tour_participants / OCC_SHARED3 + ((tour_participants > 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_pm & is_high) * tour_participants / OCC_SHARED3
-# ,TRN_WALK_LOW_PM,((trips.trip_mode == 'WALK_TRANSIT') & is_pm & is_low) * tour_participants
-# ,TRN_PNR_LOW_PM,((trips.trip_mode == 'PNR_TRANSIT') & is_pm & is_low) * tour_participants
-# ,TRN_KNR_LOW_PM,((trips.trip_mode == 'KNR_TRANSIT') & is_pm & is_low) * tour_participants
-# ,TRN_TNC_LOW_PM,((trips.trip_mode == 'TNC_TRANSIT') & is_pm & is_low) * tour_participants
-# ,TRN_WALK_MID_PM,((trips.trip_mode == 'WALK_TRANSIT') & is_pm & is_mid) * tour_participants
-# ,TRN_PNR_MID_PM,((trips.trip_mode == 'PNR_TRANSIT') & is_pm & is_mid) * tour_participants
-# ,TRN_KNR_MID_PM,((trips.trip_mode == 'KNR_TRANSIT') & is_pm & is_mid) * tour_participants
-# ,TRN_TNC_MID_PM,((trips.trip_mode == 'TNC_TRANSIT') & is_pm & is_mid) * tour_participants
-# ,TRN_WALK_HI_PM,((trips.trip_mode == 'WALK_TRANSIT') & is_pm & is_high) * tour_participants
-# ,TRN_PNR_HI_PM,((trips.trip_mode == 'PNR_TRANSIT') & is_pm & is_high) * tour_participants
-# ,TRN_KNR_HI_PM,((trips.trip_mode == 'KNR_TRANSIT') & is_pm & is_high) * tour_participants
-# ,TRN_TNC_HI_PM,((trips.trip_mode == 'TNC_TRANSIT') & is_pm & is_high) * tour_participants
-# ,TRN_LOW_TOT_PM,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & is_pm & is_low) * tour_participants"
-# ,TRN_MID_TOT_PM,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & is_pm & is_mid) * tour_participants"
-# ,TRN_HI_TOT_PM,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & is_pm & is_high) * tour_participants"
-# ,WALK_PM,((trips.trip_mode == 'WALK') & is_pm) * tour_participants
-# ,BIKE_PM,((trips.trip_mode == 'BIKE') & is_pm) * tour_participants
-# ,SCHBUS_PM,((trips.trip_mode == 'SCHBUS') & is_pm) * tour_participants
-# # ev trips,,
-# ,SOV_TR_L_EV,((trips.trip_mode == 'DRIVEALONE') & is_ev & is_low & is_tr) + ((((tour_participants == 1) & (trips.trip_mode == 'TAXI')) | (trips.trip_mode == 'TNC_SINGLE')) & is_ev & is_low)
-# ,SOV_NT_L_EV,((trips.trip_mode == 'DRIVEALONE') & is_ev & is_low & no_tr)
-# ,HOV2_L_EV,((trips.trip_mode == 'SHAREDRIDE2') & is_ev & is_low) * tour_participants  / OCC_SHARED2 + ((tour_participants == 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_ev & is_low) * tour_participants / OCC_SHARED2
-# ,HOV3_L_EV,((trips.trip_mode == 'SHAREDRIDE3') & is_ev & is_low) * tour_participants / OCC_SHARED3 + ((tour_participants > 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_ev & is_low) * tour_participants / OCC_SHARED3
-# ,SOV_TR_M_EV,((trips.trip_mode == 'DRIVEALONE') & is_ev & is_mid & is_tr)+ ((((tour_participants == 1) & (trips.trip_mode == 'TAXI')) | (trips.trip_mode == 'TNC_SINGLE')) & is_ev & is_mid)
-# ,SOV_NT_M_EV,((trips.trip_mode == 'DRIVEALONE') & is_ev & is_mid & no_tr) 
-# ,HOV2_M_EV,((trips.trip_mode == 'SHAREDRIDE2') & is_ev & is_mid) * tour_participants  / OCC_SHARED2 + ((tour_participants == 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_ev & is_mid) * tour_participants / OCC_SHARED2
-# ,HOV3_M_EV,((trips.trip_mode == 'SHAREDRIDE3') & is_ev & is_mid) * tour_participants / OCC_SHARED3 + ((tour_participants > 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_ev & is_mid) * tour_participants / OCC_SHARED3
-# ,SOV_TR_H_EV,((trips.trip_mode == 'DRIVEALONE') & is_ev & is_high & is_tr) + ((((tour_participants == 1) & (trips.trip_mode == 'TAXI')) | (trips.trip_mode == 'TNC_SINGLE')) & is_ev & is_high)
-# ,SOV_NT_H_EV,((trips.trip_mode == 'DRIVEALONE') & is_ev & is_high & no_tr) 
-# ,HOV2_H_EV,((trips.trip_mode == 'SHAREDRIDE2') & is_ev & is_high) * tour_participants  / OCC_SHARED2 + ((tour_participants == 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_ev & is_high) * tour_participants / OCC_SHARED2
-# ,HOV3_H_EV,((trips.trip_mode == 'SHAREDRIDE3') & is_ev & is_high) * tour_participants / OCC_SHARED3 + ((tour_participants > 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_ev & is_high) * tour_participants / OCC_SHARED3
-# ,TRN_WALK_LOW_EV,((trips.trip_mode == 'WALK_TRANSIT') & is_ev & is_low) * tour_participants
-# ,TRN_PNR_LOW_EV,((trips.trip_mode == 'PNR_TRANSIT') & is_ev & is_low) * tour_participants
-# ,TRN_KNR_LOW_EV,((trips.trip_mode == 'KNR_TRANSIT') & is_ev & is_low) * tour_participants
-# ,TRN_TNC_LOW_EV,((trips.trip_mode == 'TNC_TRANSIT') & is_ev & is_low) * tour_participants
-# ,TRN_WALK_MID_EV,((trips.trip_mode == 'WALK_TRANSIT') & is_ev & is_mid) * tour_participants
-# ,TRN_PNR_MID_EV,((trips.trip_mode == 'PNR_TRANSIT') & is_ev & is_mid) * tour_participants
-# ,TRN_KNR_MID_EV,((trips.trip_mode == 'KNR_TRANSIT') & is_ev & is_mid) * tour_participants
-# ,TRN_TNC_MID_EV,((trips.trip_mode == 'TNC_TRANSIT') & is_ev & is_mid) * tour_participants
-# ,TRN_WALK_HI_EV,((trips.trip_mode == 'WALK_TRANSIT') & is_ev & is_high) * tour_participants
-# ,TRN_PNR_HI_EV,((trips.trip_mode == 'PNR_TRANSIT') & is_ev & is_high) * tour_participants
-# ,TRN_KNR_HI_EV,((trips.trip_mode == 'KNR_TRANSIT') & is_ev & is_high) * tour_participants
-# ,TRN_TNC_HI_EV,((trips.trip_mode == 'TNC_TRANSIT') & is_ev & is_high) * tour_participants
-# ,TRN_LOW_TOT_EV,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & is_ev & is_low) * tour_participants"
-# ,TRN_MID_TOT_EV,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & is_ev & is_mid) * tour_participants"
-# ,TRN_HI_TOT_EV,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & is_ev & is_high) * tour_participants"
-# ,WALK_EV,((trips.trip_mode == 'WALK') & is_ev) * tour_participants
-# ,BIKE_EV,((trips.trip_mode == 'BIKE') & is_ev) * tour_participants
-# ,SCHBUS_EV,((trips.trip_mode == 'SCHBUS') & is_ev) * tour_participants
-# # nt trips
-# ,SOV_TR_L_NT,((trips.trip_mode == 'DRIVEALONE') & is_nt & is_low & is_tr) + ((((tour_participants == 1) & (trips.trip_mode == 'TAXI')) | (trips.trip_mode == 'TNC_SINGLE')) & is_nt & is_low)
-# ,SOV_NT_L_NT,((trips.trip_mode == 'DRIVEALONE') & is_nt & is_low & no_tr)
-# ,HOV2_L_NT,((trips.trip_mode == 'SHAREDRIDE2') & is_nt & is_low) * tour_participants  / OCC_SHARED2 + ((tour_participants == 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_nt & is_low) * tour_participants / OCC_SHARED2
-# ,HOV3_L_NT,((trips.trip_mode == 'SHAREDRIDE3') & is_nt & is_low) * tour_participants / OCC_SHARED3 + ((tour_participants > 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_nt & is_low) * tour_participants / OCC_SHARED3
-# ,SOV_TR_M_NT,((trips.trip_mode == 'DRIVEALONE') & is_nt & is_mid & is_tr)+ ((((tour_participants == 1) & (trips.trip_mode == 'TAXI')) | (trips.trip_mode == 'TNC_SINGLE')) & is_nt & is_mid)
-# ,SOV_NT_M_NT,((trips.trip_mode == 'DRIVEALONE') & is_nt & is_mid & no_tr) 
-# ,HOV2_M_NT,((trips.trip_mode == 'SHAREDRIDE2') & is_nt & is_mid) * tour_participants  / OCC_SHARED2 + ((tour_participants == 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_nt & is_mid) * tour_participants / OCC_SHARED2
-# ,HOV3_M_NT,((trips.trip_mode == 'SHAREDRIDE3') & is_nt & is_mid) * tour_participants / OCC_SHARED3 + ((tour_participants > 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_nt & is_mid) * tour_participants / OCC_SHARED3
-# ,SOV_TR_H_NT,((trips.trip_mode == 'DRIVEALONE') & is_nt & is_high & is_tr) + ((((tour_participants == 1) & (trips.trip_mode == 'TAXI')) | (trips.trip_mode == 'TNC_SINGLE')) & is_nt & is_high)
-# ,SOV_NT_H_NT,((trips.trip_mode == 'DRIVEALONE') & is_nt & is_high & no_tr) 
-# ,HOV2_H_NT,((trips.trip_mode == 'SHAREDRIDE2') & is_nt & is_high) * tour_participants  / OCC_SHARED2 + ((tour_participants == 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_nt & is_high) * tour_participants / OCC_SHARED2
-# ,HOV3_H_NT,((trips.trip_mode == 'SHAREDRIDE3') & is_nt & is_high) * tour_participants / OCC_SHARED3 + ((tour_participants > 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_nt & is_high) * tour_participants / OCC_SHARED3
-# ,TRN_WALK_LOW_NT,((trips.trip_mode == 'WALK_TRANSIT') & is_nt & is_low) * tour_participants
-# ,TRN_PNR_LOW_NT,((trips.trip_mode == 'PNR_TRANSIT') & is_nt & is_low) * tour_participants
-# ,TRN_KNR_LOW_NT,((trips.trip_mode == 'KNR_TRANSIT') & is_nt & is_low) * tour_participants
-# ,TRN_TNC_LOW_NT,((trips.trip_mode == 'TNC_TRANSIT') & is_nt & is_low) * tour_participants
-# ,TRN_WALK_MID_NT,((trips.trip_mode == 'WALK_TRANSIT') & is_nt & is_mid) * tour_participants
-# ,TRN_PNR_MID_NT,((trips.trip_mode == 'PNR_TRANSIT') & is_nt & is_mid) * tour_participants
-# ,TRN_KNR_MID_NT,((trips.trip_mode == 'KNR_TRANSIT') & is_nt & is_mid) * tour_participants
-# ,TRN_TNC_MID_NT,((trips.trip_mode == 'TNC_TRANSIT') & is_nt & is_mid) * tour_participants
-# ,TRN_WALK_HI_NT,((trips.trip_mode == 'WALK_TRANSIT') & is_nt & is_high) * tour_participants
-# ,TRN_PNR_HI_NT,((trips.trip_mode == 'PNR_TRANSIT') & is_nt & is_high) * tour_participants
-# ,TRN_KNR_HI_NT,((trips.trip_mode == 'KNR_TRANSIT') & is_nt & is_high) * tour_participants
-# ,TRN_TNC_HI_NT,((trips.trip_mode == 'TNC_TRANSIT') & is_nt & is_high) * tour_participants
-# ,TRN_LOW_TOT_NT,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & is_nt & is_low) * tour_participants"
-# ,TRN_MID_TOT_NT,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & is_nt & is_mid) * tour_participants"
-# ,TRN_HI_TOT_NT,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & is_nt & is_high) * tour_participants"
-# ,WALK_NT,((trips.trip_mode == 'WALK') & is_nt) * tour_participants
-# ,BIKE_NT,((trips.trip_mode == 'BIKE') & is_nt) * tour_participants
-# ,SCHBUS_NT,((trips.trip_mode == 'SCHBUS') & is_nt) * tour_participants
+# mm trips,,
+,SOV_TR_L_MM,((trips.trip_mode == 'DRIVEALONE') & is_mm & is_low & is_tr) * tour_participants + ((((tour_participants == 1) & (trips.trip_mode == 'TAXI')) | (trips.trip_mode == 'TNC_SINGLE')) & is_mm & is_low) * tour_participants
+,SOV_NT_L_MM,((trips.trip_mode == 'DRIVEALONE') & is_mm & is_low & no_tr) * tour_participants
+,HOV2_L_MM,((trips.trip_mode == 'SHAREDRIDE2') & is_mm & is_low) * tour_participants  / OCC_SHARED2 + ((tour_participants == 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_mm & is_low) * tour_participants / OCC_SHARED2
+,HOV3_L_MM,((trips.trip_mode == 'SHAREDRIDE3') & is_mm & is_low) * tour_participants / OCC_SHARED3 + ((tour_participants > 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_mm & is_low) * tour_participants / OCC_SHARED3
+,SOV_TR_M_MM,((trips.trip_mode == 'DRIVEALONE') & is_mm & is_mid & is_tr) * tour_participants + ((((tour_participants == 1) & (trips.trip_mode == 'TAXI')) | (trips.trip_mode == 'TNC_SINGLE')) & is_mm & is_mid) * tour_participants
+,SOV_NT_M_MM,((trips.trip_mode == 'DRIVEALONE') & is_mm & is_mid & no_tr) * tour_participants
+,HOV2_M_MM,((trips.trip_mode == 'SHAREDRIDE2') & is_mm & is_mid) * tour_participants  / OCC_SHARED2 + ((tour_participants == 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_mm & is_mid) * tour_participants / OCC_SHARED2
+,HOV3_M_MM,((trips.trip_mode == 'SHAREDRIDE3') & is_mm & is_mid) * tour_participants / OCC_SHARED3 + ((tour_participants > 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_mm & is_mid) * tour_participants / OCC_SHARED3
+,SOV_TR_H_MM,((trips.trip_mode == 'DRIVEALONE') & is_mm & is_high & is_tr) * tour_participants + ((((tour_participants == 1) & (trips.trip_mode == 'TAXI')) | (trips.trip_mode == 'TNC_SINGLE')) & is_mm & is_high) * tour_participants
+,SOV_NT_H_MM,((trips.trip_mode == 'DRIVEALONE') & is_mm & is_high & no_tr) * tour_participants
+,HOV2_H_MM,((trips.trip_mode == 'SHAREDRIDE2') & is_mm & is_high) * tour_participants  / OCC_SHARED2 + ((tour_participants == 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_mm & is_high) * tour_participants / OCC_SHARED2
+,HOV3_H_MM,((trips.trip_mode == 'SHAREDRIDE3') & is_mm & is_high) * tour_participants / OCC_SHARED3 + ((tour_participants > 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_mm & is_high) * tour_participants / OCC_SHARED3
+,TRN_WALK_LOW_MM,((trips.trip_mode == 'WALK_TRANSIT') & is_mm & is_low) * tour_participants
+,TRN_PNR_LOW_MM,((trips.trip_mode == 'PNR_TRANSIT') & is_mm & is_low) * tour_participants
+,TRN_KNR_LOW_MM,((trips.trip_mode == 'KNR_TRANSIT') & is_mm & is_low) * tour_participants
+,TRN_TNC_LOW_MM,((trips.trip_mode == 'TNC_TRANSIT') & is_mm & is_low) * tour_participants
+,TRN_WALK_MID_MM,((trips.trip_mode == 'WALK_TRANSIT') & is_mm & is_mid) * tour_participants
+,TRN_PNR_MID_MM,((trips.trip_mode == 'PNR_TRANSIT') & is_mm & is_mid) * tour_participants
+,TRN_KNR_MID_MM,((trips.trip_mode == 'KNR_TRANSIT') & is_mm & is_mid) * tour_participants
+,TRN_TNC_MID_MM,((trips.trip_mode == 'TNC_TRANSIT') & is_mm & is_mid) * tour_participants
+,TRN_WALK_HI_MM,((trips.trip_mode == 'WALK_TRANSIT') & is_mm & is_high) * tour_participants
+,TRN_PNR_HI_MM,((trips.trip_mode == 'PNR_TRANSIT') & is_mm & is_high) * tour_participants
+,TRN_KNR_HI_MM,((trips.trip_mode == 'KNR_TRANSIT') & is_mm & is_high) * tour_participants
+,TRN_TNC_HI_MM,((trips.trip_mode == 'TNC_TRANSIT') & is_mm & is_high) * tour_participants
+,TRN_LOW_TOT_MM,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & is_mm & is_low) * tour_participants"
+,TRN_MID_TOT_MM,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & is_mm & is_mid) * tour_participants"
+,TRN_HI_TOT_MM,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & is_mm & is_high) * tour_participants"
+,WALK_MM,((trips.trip_mode == 'WALK') & is_mm) * tour_participants
+,BIKE_MM,((trips.trip_mode == 'BIKE') & is_mm) * tour_participants
+,SCHBUS_MM,((trips.trip_mode == 'SCHBUS') & is_mm) * tour_participants
+# md trips,,
+,SOV_TR_L_MD,((trips.trip_mode == 'DRIVEALONE') & is_md & is_low & is_tr) * tour_participants + ((((tour_participants == 1) & (trips.trip_mode == 'TAXI')) | (trips.trip_mode == 'TNC_SINGLE')) & is_md & is_low) * tour_participants
+,SOV_NT_L_MD,((trips.trip_mode == 'DRIVEALONE') & is_md & is_low & no_tr) * tour_participants
+,HOV2_L_MD,((trips.trip_mode == 'SHAREDRIDE2') & is_md & is_low) * tour_participants  / OCC_SHARED2 + ((tour_participants == 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_md & is_low) * tour_participants / OCC_SHARED2
+,HOV3_L_MD,((trips.trip_mode == 'SHAREDRIDE3') & is_md & is_low) * tour_participants / OCC_SHARED3 + ((tour_participants > 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_md & is_low) * tour_participants / OCC_SHARED3
+,SOV_TR_M_MD,((trips.trip_mode == 'DRIVEALONE') & is_md & is_mid & is_tr) * tour_participants + ((((tour_participants == 1) & (trips.trip_mode == 'TAXI')) | (trips.trip_mode == 'TNC_SINGLE')) & is_md & is_mid) * tour_participants
+,SOV_NT_M_MD,((trips.trip_mode == 'DRIVEALONE') & is_md & is_mid & no_tr) * tour_participants
+,HOV2_M_MD,((trips.trip_mode == 'SHAREDRIDE2') & is_md & is_mid) * tour_participants  / OCC_SHARED2 + ((tour_participants == 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_md & is_mid) * tour_participants / OCC_SHARED2
+,HOV3_M_MD,((trips.trip_mode == 'SHAREDRIDE3') & is_md & is_mid) * tour_participants / OCC_SHARED3 + ((tour_participants > 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_md & is_mid) * tour_participants / OCC_SHARED3
+,SOV_TR_H_MD,((trips.trip_mode == 'DRIVEALONE') & is_md & is_high & is_tr) * tour_participants + ((((tour_participants == 1) & (trips.trip_mode == 'TAXI')) | (trips.trip_mode == 'TNC_SINGLE')) & is_md & is_high) * tour_participants
+,SOV_NT_H_MD,((trips.trip_mode == 'DRIVEALONE') & is_md & is_high & no_tr) * tour_participants 
+,HOV2_H_MD,((trips.trip_mode == 'SHAREDRIDE2') & is_md & is_high) * tour_participants  / OCC_SHARED2 + ((tour_participants == 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_md & is_high) * tour_participants / OCC_SHARED2
+,HOV3_H_MD,((trips.trip_mode == 'SHAREDRIDE3') & is_md & is_high) * tour_participants / OCC_SHARED3 + ((tour_participants > 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_md & is_high) * tour_participants / OCC_SHARED3
+,TRN_WALK_LOW_MD,((trips.trip_mode == 'WALK_TRANSIT') & is_md & is_low) * tour_participants
+,TRN_PNR_LOW_MD,((trips.trip_mode == 'PNR_TRANSIT') & is_md & is_low) * tour_participants
+,TRN_KNR_LOW_MD,((trips.trip_mode == 'KNR_TRANSIT') & is_md & is_low) * tour_participants
+,TRN_TNC_LOW_MD,((trips.trip_mode == 'TNC_TRANSIT') & is_md & is_low) * tour_participants
+,TRN_WALK_MID_MD,((trips.trip_mode == 'WALK_TRANSIT') & is_md & is_mid) * tour_participants
+,TRN_PNR_MID_MD,((trips.trip_mode == 'PNR_TRANSIT') & is_md & is_mid) * tour_participants
+,TRN_KNR_MID_MD,((trips.trip_mode == 'KNR_TRANSIT') & is_md & is_mid) * tour_participants
+,TRN_TNC_MID_MD,((trips.trip_mode == 'TNC_TRANSIT') & is_md & is_mid) * tour_participants
+,TRN_WALK_HI_MD,((trips.trip_mode == 'WALK_TRANSIT') & is_md & is_high) * tour_participants
+,TRN_PNR_HI_MD,((trips.trip_mode == 'PNR_TRANSIT') & is_md & is_high) * tour_participants
+,TRN_KNR_HI_MD,((trips.trip_mode == 'KNR_TRANSIT') & is_md & is_high) * tour_participants
+,TRN_TNC_HI_MD,((trips.trip_mode == 'TNC_TRANSIT') & is_md & is_high) * tour_participants
+,TRN_LOW_TOT_MD,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & is_md & is_low) * tour_participants"
+,TRN_MID_TOT_MD,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & is_md & is_mid) * tour_participants"
+,TRN_HI_TOT_MD,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & is_md & is_high) * tour_participants"
+,WALK_MD,((trips.trip_mode == 'WALK') & is_md) * tour_participants
+,BIKE_MD,((trips.trip_mode == 'BIKE') & is_md) * tour_participants
+,SCHBUS_MD,((trips.trip_mode == 'SCHBUS') & is_md) * tour_participants
+# af trips,,
+,SOV_TR_L_AF,((trips.trip_mode == 'DRIVEALONE') & is_af & is_low & is_tr) * tour_participants + ((((tour_participants == 1) & (trips.trip_mode == 'TAXI')) | (trips.trip_mode == 'TNC_SINGLE')) & is_af & is_low) * tour_participants
+,SOV_NT_L_AF,((trips.trip_mode == 'DRIVEALONE') & is_af & is_low & no_tr) * tour_participants
+,HOV2_L_AF,((trips.trip_mode == 'SHAREDRIDE2') & is_af & is_low) * tour_participants  / OCC_SHARED2 + ((tour_participants == 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_af & is_low) * tour_participants / OCC_SHARED2
+,HOV3_L_AF,((trips.trip_mode == 'SHAREDRIDE3') & is_af & is_low) * tour_participants / OCC_SHARED3 + ((tour_participants > 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_af & is_low) * tour_participants / OCC_SHARED3
+,SOV_TR_M_AF,((trips.trip_mode == 'DRIVEALONE') & is_af & is_mid & is_tr) * tour_participants + ((((tour_participants == 1) & (trips.trip_mode == 'TAXI')) | (trips.trip_mode == 'TNC_SINGLE')) & is_af & is_mid) * tour_participants
+,SOV_NT_M_AF,((trips.trip_mode == 'DRIVEALONE') & is_af & is_mid & no_tr)  * tour_participants
+,HOV2_M_AF,((trips.trip_mode == 'SHAREDRIDE2') & is_af & is_mid) * tour_participants  / OCC_SHARED2 + ((tour_participants == 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_af & is_mid) * tour_participants / OCC_SHARED2
+,HOV3_M_AF,((trips.trip_mode == 'SHAREDRIDE3') & is_af & is_mid) * tour_participants / OCC_SHARED3 + ((tour_participants > 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_af & is_mid) * tour_participants / OCC_SHARED3
+,SOV_TR_H_AF,((trips.trip_mode == 'DRIVEALONE') & is_af & is_high & is_tr) * tour_participants + ((((tour_participants == 1) & (trips.trip_mode == 'TAXI')) | (trips.trip_mode == 'TNC_SINGLE')) & is_af & is_high) * tour_participants
+,SOV_NT_H_AF,((trips.trip_mode == 'DRIVEALONE') & is_af & is_high & no_tr) * tour_participants
+,HOV2_H_AF,((trips.trip_mode == 'SHAREDRIDE2') & is_af & is_high) * tour_participants  / OCC_SHARED2 + ((tour_participants == 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_af & is_high) * tour_participants / OCC_SHARED2
+,HOV3_H_AF,((trips.trip_mode == 'SHAREDRIDE3') & is_af & is_high) * tour_participants / OCC_SHARED3 + ((tour_participants > 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_af & is_high) * tour_participants / OCC_SHARED3
+,TRN_WALK_LOW_AF,((trips.trip_mode == 'WALK_TRANSIT') & is_af & is_low) * tour_participants
+,TRN_PNR_LOW_AF,((trips.trip_mode == 'PNR_TRANSIT') & is_af & is_low) * tour_participants
+,TRN_KNR_LOW_AF,((trips.trip_mode == 'KNR_TRANSIT') & is_af & is_low) * tour_participants
+,TRN_TNC_LOW_AF,((trips.trip_mode == 'TNC_TRANSIT') & is_af & is_low) * tour_participants
+,TRN_WALK_MID_AF,((trips.trip_mode == 'WALK_TRANSIT') & is_af & is_mid) * tour_participants
+,TRN_PNR_MID_AF,((trips.trip_mode == 'PNR_TRANSIT') & is_af & is_mid) * tour_participants
+,TRN_KNR_MID_AF,((trips.trip_mode == 'KNR_TRANSIT') & is_af & is_mid) * tour_participants
+,TRN_TNC_MID_AF,((trips.trip_mode == 'TNC_TRANSIT') & is_af & is_mid) * tour_participants
+,TRN_WALK_HI_AF,((trips.trip_mode == 'WALK_TRANSIT') & is_af & is_high) * tour_participants
+,TRN_PNR_HI_AF,((trips.trip_mode == 'PNR_TRANSIT') & is_af & is_high) * tour_participants
+,TRN_KNR_HI_AF,((trips.trip_mode == 'KNR_TRANSIT') & is_af & is_high) * tour_participants
+,TRN_TNC_HI_AF,((trips.trip_mode == 'TNC_TRANSIT') & is_af & is_high) * tour_participants
+,TRN_LOW_TOT_AF,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & is_af & is_low) * tour_participants"
+,TRN_MID_TOT_AF,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & is_af & is_mid) * tour_participants"
+,TRN_HI_TOT_AF,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & is_af & is_high) * tour_participants"
+,WALK_AF,((trips.trip_mode == 'WALK') & is_af) * tour_participants
+,BIKE_AF,((trips.trip_mode == 'BIKE') & is_af) * tour_participants
+,SCHBUS_AF,((trips.trip_mode == 'SCHBUS') & is_af) * tour_participants
+# pm trips,,
+,SOV_TR_L_PM,((trips.trip_mode == 'DRIVEALONE') & is_pm & is_low & is_tr) * tour_participants + ((((tour_participants == 1) & (trips.trip_mode == 'TAXI')) | (trips.trip_mode == 'TNC_SINGLE')) & is_pm & is_low) * tour_participants
+,SOV_NT_L_PM,((trips.trip_mode == 'DRIVEALONE') & is_pm & is_low & no_tr) * tour_participants
+,HOV2_L_PM,((trips.trip_mode == 'SHAREDRIDE2') & is_pm & is_low) * tour_participants  / OCC_SHARED2 + ((tour_participants == 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_pm & is_low) * tour_participants / OCC_SHARED2
+,HOV3_L_PM,((trips.trip_mode == 'SHAREDRIDE3') & is_pm & is_low) * tour_participants / OCC_SHARED3 + ((tour_participants > 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_pm & is_low) * tour_participants / OCC_SHARED3
+,SOV_TR_M_PM,((trips.trip_mode == 'DRIVEALONE') & is_pm & is_mid & is_tr) * tour_participants + ((((tour_participants == 1) & (trips.trip_mode == 'TAXI')) | (trips.trip_mode == 'TNC_SINGLE')) & is_pm & is_mid) * tour_participants
+,SOV_NT_M_PM,((trips.trip_mode == 'DRIVEALONE') & is_pm & is_mid & no_tr) * tour_participants 
+,HOV2_M_PM,((trips.trip_mode == 'SHAREDRIDE2') & is_pm & is_mid) * tour_participants  / OCC_SHARED2 + ((tour_participants == 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_pm & is_mid) * tour_participants / OCC_SHARED2
+,HOV3_M_PM,((trips.trip_mode == 'SHAREDRIDE3') & is_pm & is_mid) * tour_participants / OCC_SHARED3 + ((tour_participants > 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_pm & is_mid) * tour_participants / OCC_SHARED3
+,SOV_TR_H_PM,((trips.trip_mode == 'DRIVEALONE') & is_pm & is_high & is_tr) * tour_participants + ((((tour_participants == 1) & (trips.trip_mode == 'TAXI')) | (trips.trip_mode == 'TNC_SINGLE')) & is_pm & is_high) * tour_participants
+,SOV_NT_H_PM,((trips.trip_mode == 'DRIVEALONE') & is_pm & is_high & no_tr) * tour_participants 
+,HOV2_H_PM,((trips.trip_mode == 'SHAREDRIDE2') & is_pm & is_high) * tour_participants  / OCC_SHARED2 + ((tour_participants == 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_pm & is_high) * tour_participants / OCC_SHARED2
+,HOV3_H_PM,((trips.trip_mode == 'SHAREDRIDE3') & is_pm & is_high) * tour_participants / OCC_SHARED3 + ((tour_participants > 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_pm & is_high) * tour_participants / OCC_SHARED3
+,TRN_WALK_LOW_PM,((trips.trip_mode == 'WALK_TRANSIT') & is_pm & is_low) * tour_participants
+,TRN_PNR_LOW_PM,((trips.trip_mode == 'PNR_TRANSIT') & is_pm & is_low) * tour_participants
+,TRN_KNR_LOW_PM,((trips.trip_mode == 'KNR_TRANSIT') & is_pm & is_low) * tour_participants
+,TRN_TNC_LOW_PM,((trips.trip_mode == 'TNC_TRANSIT') & is_pm & is_low) * tour_participants
+,TRN_WALK_MID_PM,((trips.trip_mode == 'WALK_TRANSIT') & is_pm & is_mid) * tour_participants
+,TRN_PNR_MID_PM,((trips.trip_mode == 'PNR_TRANSIT') & is_pm & is_mid) * tour_participants
+,TRN_KNR_MID_PM,((trips.trip_mode == 'KNR_TRANSIT') & is_pm & is_mid) * tour_participants
+,TRN_TNC_MID_PM,((trips.trip_mode == 'TNC_TRANSIT') & is_pm & is_mid) * tour_participants
+,TRN_WALK_HI_PM,((trips.trip_mode == 'WALK_TRANSIT') & is_pm & is_high) * tour_participants
+,TRN_PNR_HI_PM,((trips.trip_mode == 'PNR_TRANSIT') & is_pm & is_high) * tour_participants
+,TRN_KNR_HI_PM,((trips.trip_mode == 'KNR_TRANSIT') & is_pm & is_high) * tour_participants
+,TRN_TNC_HI_PM,((trips.trip_mode == 'TNC_TRANSIT') & is_pm & is_high) * tour_participants
+,TRN_LOW_TOT_PM,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & is_pm & is_low) * tour_participants"
+,TRN_MID_TOT_PM,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & is_pm & is_mid) * tour_participants"
+,TRN_HI_TOT_PM,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & is_pm & is_high) * tour_participants"
+,WALK_PM,((trips.trip_mode == 'WALK') & is_pm) * tour_participants
+,BIKE_PM,((trips.trip_mode == 'BIKE') & is_pm) * tour_participants
+,SCHBUS_PM,((trips.trip_mode == 'SCHBUS') & is_pm) * tour_participants
+# ev trips,,
+,SOV_TR_L_EV,((trips.trip_mode == 'DRIVEALONE') & is_ev & is_low & is_tr) * tour_participants + ((((tour_participants == 1) & (trips.trip_mode == 'TAXI')) | (trips.trip_mode == 'TNC_SINGLE')) & is_ev & is_low) * tour_participants
+,SOV_NT_L_EV,((trips.trip_mode == 'DRIVEALONE') & is_ev & is_low & no_tr) * tour_participants
+,HOV2_L_EV,((trips.trip_mode == 'SHAREDRIDE2') & is_ev & is_low) * tour_participants  / OCC_SHARED2 + ((tour_participants == 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_ev & is_low) * tour_participants / OCC_SHARED2
+,HOV3_L_EV,((trips.trip_mode == 'SHAREDRIDE3') & is_ev & is_low) * tour_participants / OCC_SHARED3 + ((tour_participants > 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_ev & is_low) * tour_participants / OCC_SHARED3
+,SOV_TR_M_EV,((trips.trip_mode == 'DRIVEALONE') & is_ev & is_mid & is_tr) * tour_participants + ((((tour_participants == 1) & (trips.trip_mode == 'TAXI')) | (trips.trip_mode == 'TNC_SINGLE')) & is_ev & is_mid) * tour_participants
+,SOV_NT_M_EV,((trips.trip_mode == 'DRIVEALONE') & is_ev & is_mid & no_tr) * tour_participants
+,HOV2_M_EV,((trips.trip_mode == 'SHAREDRIDE2') & is_ev & is_mid) * tour_participants  / OCC_SHARED2 + ((tour_participants == 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_ev & is_mid) * tour_participants / OCC_SHARED2
+,HOV3_M_EV,((trips.trip_mode == 'SHAREDRIDE3') & is_ev & is_mid) * tour_participants / OCC_SHARED3 + ((tour_participants > 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_ev & is_mid) * tour_participants / OCC_SHARED3
+,SOV_TR_H_EV,((trips.trip_mode == 'DRIVEALONE') & is_ev & is_high & is_tr) * tour_participants + ((((tour_participants == 1) & (trips.trip_mode == 'TAXI')) | (trips.trip_mode == 'TNC_SINGLE')) & is_ev & is_high) * tour_participants
+,SOV_NT_H_EV,((trips.trip_mode == 'DRIVEALONE') & is_ev & is_high & no_tr) * tour_participants
+,HOV2_H_EV,((trips.trip_mode == 'SHAREDRIDE2') & is_ev & is_high) * tour_participants  / OCC_SHARED2 + ((tour_participants == 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_ev & is_high) * tour_participants / OCC_SHARED2
+,HOV3_H_EV,((trips.trip_mode == 'SHAREDRIDE3') & is_ev & is_high) * tour_participants / OCC_SHARED3 + ((tour_participants > 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_ev & is_high) * tour_participants / OCC_SHARED3
+,TRN_WALK_LOW_EV,((trips.trip_mode == 'WALK_TRANSIT') & is_ev & is_low) * tour_participants
+,TRN_PNR_LOW_EV,((trips.trip_mode == 'PNR_TRANSIT') & is_ev & is_low) * tour_participants
+,TRN_KNR_LOW_EV,((trips.trip_mode == 'KNR_TRANSIT') & is_ev & is_low) * tour_participants
+,TRN_TNC_LOW_EV,((trips.trip_mode == 'TNC_TRANSIT') & is_ev & is_low) * tour_participants
+,TRN_WALK_MID_EV,((trips.trip_mode == 'WALK_TRANSIT') & is_ev & is_mid) * tour_participants
+,TRN_PNR_MID_EV,((trips.trip_mode == 'PNR_TRANSIT') & is_ev & is_mid) * tour_participants
+,TRN_KNR_MID_EV,((trips.trip_mode == 'KNR_TRANSIT') & is_ev & is_mid) * tour_participants
+,TRN_TNC_MID_EV,((trips.trip_mode == 'TNC_TRANSIT') & is_ev & is_mid) * tour_participants
+,TRN_WALK_HI_EV,((trips.trip_mode == 'WALK_TRANSIT') & is_ev & is_high) * tour_participants
+,TRN_PNR_HI_EV,((trips.trip_mode == 'PNR_TRANSIT') & is_ev & is_high) * tour_participants
+,TRN_KNR_HI_EV,((trips.trip_mode == 'KNR_TRANSIT') & is_ev & is_high) * tour_participants
+,TRN_TNC_HI_EV,((trips.trip_mode == 'TNC_TRANSIT') & is_ev & is_high) * tour_participants
+,TRN_LOW_TOT_EV,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & is_ev & is_low) * tour_participants"
+,TRN_MID_TOT_EV,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & is_ev & is_mid) * tour_participants"
+,TRN_HI_TOT_EV,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & is_ev & is_high) * tour_participants"
+,WALK_EV,((trips.trip_mode == 'WALK') & is_ev) * tour_participants
+,BIKE_EV,((trips.trip_mode == 'BIKE') & is_ev) * tour_participants
+,SCHBUS_EV,((trips.trip_mode == 'SCHBUS') & is_ev) * tour_participants
+# nt trips
+,SOV_TR_L_NT,((trips.trip_mode == 'DRIVEALONE') & is_nt & is_low & is_tr) * tour_participants + ((((tour_participants == 1) & (trips.trip_mode == 'TAXI')) | (trips.trip_mode == 'TNC_SINGLE')) & is_nt & is_low) * tour_participants
+,SOV_NT_L_NT,((trips.trip_mode == 'DRIVEALONE') & is_nt & is_low & no_tr) * tour_participants
+,HOV2_L_NT,((trips.trip_mode == 'SHAREDRIDE2') & is_nt & is_low) * tour_participants  / OCC_SHARED2 + ((tour_participants == 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_nt & is_low) * tour_participants / OCC_SHARED2
+,HOV3_L_NT,((trips.trip_mode == 'SHAREDRIDE3') & is_nt & is_low) * tour_participants / OCC_SHARED3 + ((tour_participants > 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_nt & is_low) * tour_participants / OCC_SHARED3
+,SOV_TR_M_NT,((trips.trip_mode == 'DRIVEALONE') & is_nt & is_mid & is_tr) * tour_participants + ((((tour_participants == 1) & (trips.trip_mode == 'TAXI')) | (trips.trip_mode == 'TNC_SINGLE')) & is_nt & is_mid) * tour_participants
+,SOV_NT_M_NT,((trips.trip_mode == 'DRIVEALONE') & is_nt & is_mid & no_tr) * tour_participants
+,HOV2_M_NT,((trips.trip_mode == 'SHAREDRIDE2') & is_nt & is_mid) * tour_participants  / OCC_SHARED2 + ((tour_participants == 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_nt & is_mid) * tour_participants / OCC_SHARED2
+,HOV3_M_NT,((trips.trip_mode == 'SHAREDRIDE3') & is_nt & is_mid) * tour_participants / OCC_SHARED3 + ((tour_participants > 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_nt & is_mid) * tour_participants / OCC_SHARED3
+,SOV_TR_H_NT,((trips.trip_mode == 'DRIVEALONE') & is_nt & is_high & is_tr) * tour_participants + ((((tour_participants == 1) & (trips.trip_mode == 'TAXI')) | (trips.trip_mode == 'TNC_SINGLE')) & is_nt & is_high) * tour_participants
+,SOV_NT_H_NT,((trips.trip_mode == 'DRIVEALONE') & is_nt & is_high & no_tr) * tour_participants
+,HOV2_H_NT,((trips.trip_mode == 'SHAREDRIDE2') & is_nt & is_high) * tour_participants  / OCC_SHARED2 + ((tour_participants == 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_nt & is_high) * tour_participants / OCC_SHARED2
+,HOV3_H_NT,((trips.trip_mode == 'SHAREDRIDE3') & is_nt & is_high) * tour_participants / OCC_SHARED3 + ((tour_participants > 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_nt & is_high) * tour_participants / OCC_SHARED3
+,TRN_WALK_LOW_NT,((trips.trip_mode == 'WALK_TRANSIT') & is_nt & is_low) * tour_participants
+,TRN_PNR_LOW_NT,((trips.trip_mode == 'PNR_TRANSIT') & is_nt & is_low) * tour_participants
+,TRN_KNR_LOW_NT,((trips.trip_mode == 'KNR_TRANSIT') & is_nt & is_low) * tour_participants
+,TRN_TNC_LOW_NT,((trips.trip_mode == 'TNC_TRANSIT') & is_nt & is_low) * tour_participants
+,TRN_WALK_MID_NT,((trips.trip_mode == 'WALK_TRANSIT') & is_nt & is_mid) * tour_participants
+,TRN_PNR_MID_NT,((trips.trip_mode == 'PNR_TRANSIT') & is_nt & is_mid) * tour_participants
+,TRN_KNR_MID_NT,((trips.trip_mode == 'KNR_TRANSIT') & is_nt & is_mid) * tour_participants
+,TRN_TNC_MID_NT,((trips.trip_mode == 'TNC_TRANSIT') & is_nt & is_mid) * tour_participants
+,TRN_WALK_HI_NT,((trips.trip_mode == 'WALK_TRANSIT') & is_nt & is_high) * tour_participants
+,TRN_PNR_HI_NT,((trips.trip_mode == 'PNR_TRANSIT') & is_nt & is_high) * tour_participants
+,TRN_KNR_HI_NT,((trips.trip_mode == 'KNR_TRANSIT') & is_nt & is_high) * tour_participants
+,TRN_TNC_HI_NT,((trips.trip_mode == 'TNC_TRANSIT') & is_nt & is_high) * tour_participants
+,TRN_LOW_TOT_NT,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & is_nt & is_low) * tour_participants"
+,TRN_MID_TOT_NT,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & is_nt & is_mid) * tour_participants"
+,TRN_HI_TOT_NT,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & is_nt & is_high) * tour_participants"
+,WALK_NT,((trips.trip_mode == 'WALK') & is_nt) * tour_participants
+,BIKE_NT,((trips.trip_mode == 'BIKE') & is_nt) * tour_participants
+,SCHBUS_NT,((trips.trip_mode == 'SCHBUS') & is_nt) * tour_participants

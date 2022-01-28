@@ -50,7 +50,7 @@ from collections import defaultdict as _defaultdict, OrderedDict
 import contextlib as _context
 import numpy
 import general as gen_utils
-import demand as dem_utils
+#import demand as dem_utils
 
 import os
 import sys
@@ -128,7 +128,7 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
             if not period in periods:
                 raise Exception('period: unknown value - specify one of %s' % periods)
             
-            num_processors = dem_utils.parse_num_processors(num_processors)
+            num_processors = attrs["num_processors"] #dem_utils.parse_num_processors(num_processors)
             #params = self.get_perception_parameters(period)
 
             self.generate_matrix_list(period, self.scenario)

@@ -218,6 +218,7 @@ class TrafficAssignment(_m.Tool()):
                 classIndex = 0
                 for traffic_class in classes:
                     demand = "%s_%s"%(period, traffic_class["name"]) 
+                    print "Demand matrix = %s"%demand
                     classIndex += 1
                     
                     att_name = "@c_%s"%traffic_class["name"].lower()
@@ -291,6 +292,7 @@ class TrafficAssignment(_m.Tool()):
                                 })
         # Run assignment
         out = traffic_assign(assign_spec, scenario, chart_log_interval=1)
+        print "Assigned %s trips"%out['initialization']['all_classes']['demand']['total']
         print "Assignment complete, ended due to %s after %s iterations and at a RG of %s" % (out['stopping_criterion'], len(out['iterations']), out['iterations'][len(out['iterations'])-1]['gaps']['relative'])
         return
         
@@ -463,8 +465,7 @@ class TrafficAssignment(_m.Tool()):
                 #net_calc("@reliability", "(@sta_reliability+" + reliability_expr, {"link": "vdf=%s" % function.id[2:]})
 
             #net_calc("@reliability_sq", "@reliability**2", {"link": "modes=d"})
-            #FIXME: Figure out why this is breaking - claims ptimau is not avail, and that should be incorrect!
-            #net_calc("@auto_time_turn", "ptimau*(ptimau.gt.0)", {"incoming_link": "all", "outgoing_link": "all"})  
+            net_calc("@auto_time_turn", "ptimau*(ptimau.gt.0)", {"incoming_link": "all", "outgoing_link": "all"})  
                      
     def base_assignment_spec(self, relative_gap, max_iterations, num_processors, background_traffic=False):
         """

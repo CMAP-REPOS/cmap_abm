@@ -35,6 +35,7 @@ import_basenet = _m.Modeller().tool("inro.emme.data.network.base.base_network_tr
 impVeh = _m.Modeller().tool("inro.emme.data.network.transit.vehicle_transaction")
 listModes = _m.Modeller().tool("inro.emme.data.network.mode.list_modes")
 import_attrib = _m.Modeller().tool("inro.emme.data.extra_attribute.import_extra_attributes")
+importTurns = _m.Modeller().tool("inro.emme.data.network.turn.turn_transaction")
 #listFunc = _m.Modeller().tool("
 
 for scen in HSCENS_TO_EXPORT:
@@ -48,6 +49,8 @@ for scen in HSCENS_TO_EXPORT:
     import_basenet(transaction_file = eFolder + os.sep + str(scen) + ".out", revert_on_error = False)
     for f in ["extra_links_%s.txt"%scen, "extra_nodes_%s.txt"%scen]:
         import_attrib(file_path = eFolder + os.sep  + f, import_definitions = True, revert_on_error = False)
+    # Import Turns
+    importTurns (transaction_file  = eFolder + os.sep + "turns%s.out"%scen, revert_on_error = False)
     
 for scen in TSCENS_TO_EXPORT:
     createScenario(scenario_id = scen, scenario_title = scen_desc[str(scen)], overwrite = True, set_as_primary = True)

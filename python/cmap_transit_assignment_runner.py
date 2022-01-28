@@ -1,11 +1,14 @@
 import inro.emme.desktop.app as _app
 import inro.modeller as _m
-import cmap_transit_assignment_v3 as cmap_transit_assignment
+import transit_assignment.cmap_transit_assignment as cmap_transit_assignment
 #import network.cmap_network as cmap_network
 import sys
+import os
 
-#desktop = _app.start_dedicated(project="D:/Projects/Clients/CMAP/Model/New Skims/CMAP-ABM_TB/CMAP-ABM.emp", visible=True, user_initials="NSD") #old model
-desktop = _app.start_dedicated(project="D:/Projects/Clients/CMAP/Model/onto2050_2019/cmap_abm/CMAP-ABM/CMAP-ABM.emp", visible=True, user_initials="ASR") #new model
+PROJECT = os.environ["EMMEBANK"]
+
+desktop = _app.start_dedicated(project = PROJECT, visible=True, user_initials="ASR") 
+
 modeller = _m.Modeller(desktop)
 my_emmebank = modeller.emmebank
 databank = desktop.data_explorer().active_database().core_emmebank
@@ -33,6 +36,6 @@ for i in range(len(tods)):
     tranScen = database.scenario_by_number(transitScenario)
     data_explorer.replace_primary_scenario(tranScen)
 
-    matrix_count = cmap_transit_assignment.TransitAssignment().__call__(str(tods[i]), matrix_count, current_scenario)
+    matrix_count = cmap_transit_assignment.TransitAssignment().__call__(str(tods[i]), matrix_count, current_scenario, num_processors = 27)
 
 print('Finished!')

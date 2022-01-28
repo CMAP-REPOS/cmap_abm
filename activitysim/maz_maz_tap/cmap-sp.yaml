@@ -1,5 +1,15 @@
 shapefile_name: "..\\data\\Chicago_streets.shp"
-mazfile_name: "..\\data\\CMAP_MAZ_cents.txt"
+mmt_link_ref_id: "REF_IN_ID"
+mmt_link_nref_id: "NREF_IN_ID"
+mmt_link_id: "LINK_ID"
+mmt_link_dirtravel: "DIR_TRAVEL"
+mmt_link_fc: "FUNC_CLASS"
+mmt_link_len: "Shape_Leng"
+mmt_node_fc: "FUNC_CLASS"
+mmt_node_ref_id: "REF_IN_ID"
+mmt_node_nref_id: "NREF_IN_ID"
+mazfile_name: "..\\data\\CMAP_MAZ_cents.txt" #FIXME: shapefile!
+maz_shape_maz_id: "subzone17"
 tapfile_name: "..\\data\\tap_attributes.csv"
 drive_tap_field: "canpnr"
 tap_parkcost_field: "dpark_cost"
@@ -13,4 +23,5 @@ maz_tap_walk_output: "..\\data\\maz_to_tap_walk.csv"
 maz_tap_drive_output: "..\\data\\maz_to_tap_drive.csv"
 maz_maz_walk_output: "..\\data\\maz_to_maz_walk.csv"
 maz_maz_bike_output: "..\\data\\maz_to_maz_bike.csv"
+
 
