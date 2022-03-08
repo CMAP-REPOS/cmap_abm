@@ -86,11 +86,13 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
         self._matrix_cache = {}  # used to hold data for reporting and post-processing of skims
         #for initializing matrices
         self._all_periods = ["1", "2", "3", "4", "5", "6", "7", "8"]
+        self.periodLabel = {1: "NT", 2: "EA", 3: "AM", 4: "MM", 5: "MD", 6: "AF", 7: "PM", 8: "EV"}
         self.periods = self._all_periods[:]
         self.attributes = ["components", "periods", "delete_all_existing"]
         self._matrices = {}
         self._count = {}
         self.user_classes = ["1","2","3"]
+        self.user_class_labels = {1: "L", 2: "M", 3: "H"}
         self.cost_percep = {"uc1": 0.12, "uc2": 0.06, "uc3": 0.04} # by user class
         self.vots = {"uc1": 3.83, "uc2": 12, "uc3": 40}  # by user class - 2.3 $/hr (3.83 cents/min), 7.2 $/hr (12 cents/min), 24.0 $/hr (40 cents/min)
         self.clean_importance = {"uc1":0.5, "uc2": 0.75, "uc3":1.0} #by user_class
@@ -104,7 +106,10 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
             #"external_external_model",
             #"truck_model",
             #"commercial_vehicle_model",
-        ]        
+        ]   
+        self.skim_matrices = ["GENCOST", "FIRSTWAIT", "XFERWAIT", "TOTALWAIT", "FARE", "XFERS", "ACCWALK", "XFERWALK", "EGRWALK", "TOTALWALK", "TOTALIVTT", "DWELLTIME", "CTABUSLIVTT", "PACEBUSRIVTT", "PACEBUSLIVTT", "PACEBUSEIVTT", "CTABUSEIVTT", "CTARAILIVTT", "METRARAILIVTT", "CTABUSLDIST", "PACEBUSRDIST", "PACEBUSLDIST", "PACEBUSEDIST", "CTABUSEDIST", "CTARAILDIST", "METRARAILDIST", "TOTTRNDIST"]
+        self.basematrixnumber = 700
+
 
     def __call__(self, period, matrix_count, scenario, assignment_only=False, skims_only=False,
                  num_processors="MAX-1"):
@@ -120,7 +125,7 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
         #if not scenario.has_traffic_results:
         #    raise Exception("missing traffic assignment results for period %s scenario %s" % (period, scenario))
         #emmebank = scenario.emmebank
-        print("traffic assignment for period %s scenario %s" % (period, scenario))
+        print("transit assignment for period %s scenario %s" % (period, scenario))
         with self.setup(attrs):
             #gen_utils.log_snapshot("Transit assignment", str(self), attrs)
             
@@ -157,8 +162,8 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
             #day_pass = float(transit_passes["day_pass"]) / 2.0
             #regional_pass = float(transit_passes["regional_pass"]) / 2.0
 
-            day_pass = 5*100  # in cents. TODO - temp value to get the process working
-            regional_pass = 10*100 #in cents. TODO - temp value to get the process working. in cents.
+            day_pass = 5*100  # in cents. #TODO - temp value to get the process working
+            regional_pass = 10*100 #in cents. #TODO - temp value to get the process working. in cents.
 
             for uc in self.user_classes:
                 print("calculate network attributes")
@@ -928,11 +933,14 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
                         
         #print('add matrices')
         #user_classes = ["1","2","3"]
+        idx = self.basematrixnumber
         for uc in self.user_classes:
             for a_name in ["WLK", "PNR", "KNR"]:
-                temp = self.add_matrices("transit_demand", period,
-                                         [("mf", "%s_%s%s_uc%s" % (a_name, name, period, uc), "%s %s access %s uc %s" % (a_name, desc, period, uc))
-                                          for name, desc in tmplt_matrices], scenario)
+                for mname in self.skim_matrices:
+                    print "%s_%s_%s_%s"%(mname, a_name, self.user_class_labels[int(uc)], self.periodLabel[int(period)])
+                    temp = self.add_matrices(int(period) * 1000 + idx, "%s_%s_%s_%s"%(mname, a_name, self.user_class_labels[int(uc)], self.periodLabel[int(period)]), scenario)
+                    idx += 1
+             
 
             #sum the demand to all users (clas1+class2+class3) and factor by access mode
             #spec_list = [
@@ -969,8 +977,8 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
                                 "expression": '%s * (mf%s)' % (demand_factor[a_name], mat_class["uc%s" %uc]),
                         }]
                     
-                    #print(spec_list)    
-                    matrix_calc(spec_list, scenario=scenario, num_processors=num_processors)
+                    print(spec_list)    
+                    #matrix_calc(spec_list, scenario=scenario, num_processors=num_processors)
 
 
     #@_m.logbook_trace("Transit skim matrices initialize", save_arguments=True)
@@ -1002,7 +1010,7 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
             ("CTABUSEDIST", "CTA bus in-vehicle distance"),
             ("CTARAILDIST", "CTA bus in-vehicle distance"),
             ("METRARAILDIST", "CTA bus in-vehicle distance"),
-            ("TOTDIST",    "Total transit distance")
+            ("TOTTRNDIST",    "Total transit distance")
         ]
         skim_sets = [
             #("BUS",    "Local bus only"),
@@ -1011,12 +1019,12 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
         ]
 
         #user_classes = ["1","2","3"]
-        for uc in self.user_classes:
-            for set_name, set_desc in skim_sets:
-                self.add_matrices("transit_skims", period,
-                                  [("mf", set_name + "_" + name + period + "_uc" + uc,
-                                    set_desc + ": " + desc + " " + period + " " + uc)
-                                   for name, desc in tmplt_matrices], scenario)
+        #for uc in self.user_classes:
+        #    for set_name, set_desc in skim_sets:
+        #        self.add_matrices("transit_skims", period,
+        #                          [("mf", set_name + "_" + name + period + "_uc" + uc,
+        #                            set_desc + ": " + desc + " " + period + " " + uc)
+        #                           for name, desc in tmplt_matrices], scenario)
 
 
     #@_m.logbook_trace("Transit assignment by demand set", save_arguments=True)
@@ -1024,8 +1032,7 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
         modeller = _m.Modeller()
         scenario = self.scenario
         emmebank = scenario.emmebank
-        assign_transit = modeller.tool(
-            "inro.emme.transit_assignment.extended_transit_assignment")
+        assign_transit = modeller.tool("inro.emme.transit_assignment.extended_transit_assignment")
 
         walk_modes = ["m", "c", "u", "x", "v", "y", "w", "z", "b", "r", "t", "d", "a", "e"]
         local_bus_mode = ["B", "P", "L"]
@@ -1103,15 +1110,23 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
         ])
 
         if skims_only:
-            access_modes = ["WLK"]
+            access_modes = ["WALK"]
         else:
-            access_modes = ["WLK", "PNR", "KNR"]
+            access_modes = ["WALK", "PNR", "KNR"]
         
         add_volumes = False
         for a_name in access_modes:
             for mode_name, parameters in skim_parameters.iteritems():
                 spec = _copy(base_spec)
                 name = "%s_%s%s_uc%s" % (a_name, mode_name, period, user_class)
+                print "Name=%s (1122)"%name
+                print "period = %s"%period
+                
+                name = "%s_TRN_%s_%s"%(self.periodLabel[int(period)], a_name, self.user_class_labels[int(user_class)])
+                print "NEW Name=%s (1122)"%name 
+                # s/b pp_TRN_access_vot
+                # where access in [WALK, PNR, KNR, TNC]
+                # where vot in [L, M, H]
                 spec["modes"] = parameters["modes"]
                 spec["demand"] = 'mf"%s"' % (name)  #TODO - demand matrix by user class
                 spec["journey_levels"] = parameters["journey_levels"]
@@ -1186,7 +1201,7 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
             spec = {
                 "type": "MATRIX_CALCULATION",
                 "constraint": None,
-                "result": 'mf"%s_TOTDIST%s_%s"' % (skim_name, period, user_class),
+                "result": 'mf"%s_TOTTRNDIST%s_%s"' % (skim_name, period, user_class),
                 "expression": ('mf"{name}_CTABUSLDIST{period}_{uc}" + mf"{name}_PACEBUSRDIST{period}_{uc}" + mf"{name}_PACEBUSLDIST{period}_{uc}"'
                                ' + mf"{name}_PACEBUSEDIST{period}_{uc}" + mf"{name}_CTABUSEDIST{period}_{uc}"  + mf"{name}_CTARAILDIST{period}_{uc}" + mf"{name}_METRARAILDIST{period}_{uc}"').format(name=skim_name, period=period, uc=user_class),
             }
@@ -1399,29 +1414,9 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
         report.wrap_html('Matrix details', "<br>".join(text))
         _m.logbook_write(title, report.render())
 
-    def add_matrices(self, component, period, matrices, scenario):
-        
-        #print(self._matrices)
-        #print('function add_matrices')
-        #print(matrices)
-        matrices_out = []
-        create_matrix = _m.Modeller().tool("inro.emme.data.matrix.create_matrix")
-        #emmebank = scenario.emmebank
-        #dims = emmebank.dimensions
-        #print("emmebank dimension - full matrices: " + str(dims["full_matrices"]))
-        
-        #delete existing - run only when needed
-        #for i in range(63,73,1):
-        #    emmebank.delete_matrix(emmebank.matrix("mf"+str(i)))
-        #emmebank.delete_matrix(emmebank.matrix("mf8727"))
-        #emmebank.delete_matrix(emmebank.matrix("mf8728"))
-            
-        for ident, name, desc in matrices:
-            #print('here1')
-            self._matrices[component][period].append([ident+str(self._count[ident]), name, desc])
-            self._count[ident] += 1
-            matrices_out.append(create_matrix(matrix_id = ident+str(self._count[ident]), matrix_name = name, matrix_description = desc, scenario = scenario, default_value = 0, overwrite = True))
-            #print(ident + '; ' + name + '; ' + desc) 
+    def add_matrices(self, mid, mname, scenario, desc = ""):
+        create_matrix = _m.Modeller().tool("inro.emme.data.matrix.create_matrix")           
+        matrices_out = create_matrix(matrix_id = "mf%s"%mid, matrix_name = mname, matrix_description = desc, scenario = scenario, default_value = 0, overwrite = True)
         return matrices_out
 
     #set high values (>999999) to 0 - no path

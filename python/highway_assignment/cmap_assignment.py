@@ -113,14 +113,18 @@ class TrafficAssignment(_m.Tool()):
                     "skims": ["TIME", "DIST", "FTIME", "TOLLCOST.HOV3", "TOLLDIST", "HOVDIST"]
                 },
                 {   # 12
-                    "name": 'TRK_L', "mode": 'l', "PCE": 1.3, "VOT": 60., "toll": "@toll2",
+                    "name": 'TRK_B', "mode": 'b', "PCE": 1.0, "VOT": 60., "toll": "@toll",
                     "skims": ["TIME", "DIST", "TOLLCOST.TRK_L", "TOLLDIST"]
                 },
                 {   # 13
+                    "name": 'TRK_L', "mode": 'l', "PCE": 1.3, "VOT": 60., "toll": "@toll2",
+                    "skims": ["TIME", "DIST", "TOLLCOST.TRK_L", "TOLLDIST"]
+                },
+                {   # 14
                     "name": 'TRK_M', "mode": 'm', "PCE": 1.5, "VOT": 60., "toll": "@toll3",
                     "skims": ["TIME", "DIST", "TOLLCOST.TRK_M", "TOLLDIST"]
                 },
-                {   # 14
+                {   # 15
                     "name": 'TRK_H', "mode": 'h', "PCE": 2.5, "VOT": 100., "toll": "@toll4",
                     "skims": ["TIME", "DIST", "TOLLCOST.TRK_H", "TOLLDIST"]
                 }
@@ -217,8 +221,7 @@ class TrafficAssignment(_m.Tool()):
             with _m.logbook_trace("Per-class flow attributes"):
                 classIndex = 0
                 for traffic_class in classes:
-                    demand = "%s_%s"%(period, traffic_class["name"]) 
-                    print "Demand matrix = %s"%demand
+                    demand = "mf%s_%s"%(traffic_class["name"], period) 
                     classIndex += 1
                     
                     att_name = "@c_%s"%traffic_class["name"].lower()

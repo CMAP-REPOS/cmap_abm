@@ -12,15 +12,15 @@ print("Starting Skim Process at %s"%(datetime.datetime.now()))
 desktop = _app.start_dedicated(project="C:/projects/cmap_activitysim/cmap_abm/CMAP-ABM/CMAP-ABM.emp", visible=True, user_initials="ASR")
 modeller = _m.Modeller(desktop)
 databank = desktop.data_explorer().active_database().core_emmebank
-
-scens = [{"periodNum": 1, "period": "NT"},
+scens = [{"periodNum": 1, "period": "NT"}]
+'''scens = [{"periodNum": 1, "period": "NT"},
    {"periodNum": 2, "period": "EA"},
    {"periodNum": 3, "period": "AM"},
    {"periodNum": 4, "period": "MM"},
    {"periodNum": 5, "period": "MD"},
    {"periodNum": 6, "period": "AF"},
    {"periodNum": 7, "period": "PM"},
-   {"periodNum": 8, "period": "EV"}]
+   {"periodNum": 8, "period": "EV"}]'''
 
 for s in scens:
     print "Scenario %s Assignment"%s['period']

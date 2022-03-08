@@ -21,7 +21,6 @@ databank = desktop.data_explorer().active_database().core_emmebank
 
 #transit
 tods = [1,2,3,4,5,6,7,8]
-#tods = [1] #for testing only
 #transitImport = 100    #old model
 transitImport = 200   #new model
 transitScenarios = [transitImport + i for i in tods]
@@ -35,7 +34,6 @@ for i in range(len(tods)):
     current_scenario = my_emmebank.scenario(transitScenario)
     tranScen = database.scenario_by_number(transitScenario)
     data_explorer.replace_primary_scenario(tranScen)
-
-    matrix_count = cmap_transit_assignment.TransitAssignment().__call__(str(tods[i]), matrix_count, current_scenario, num_processors = 27)
-
+    ta = cmap_transit_assignment.TransitAssignment()
+    ta(str(tods[i]), matrix_count, current_scenario, num_processors = 27)
 print('Finished!')

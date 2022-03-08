@@ -4,7 +4,7 @@
 
 :: READ FIRST: <<readme path>> #TODO
 
-
+@ECHO OFF
 
 ::
 :: Scenario Paths - These define the inputs and outputs
@@ -41,14 +41,17 @@ SET ASIM_INPUTS=%ASIM%\data
 ::
 
 :: Prepare EMMEBank - rewrites warm-start matrices, removes skims
-::%EMMEPY% python\import\importScenarios.py
-::%EMMEPY% python\import\importScalars.py
-::%EMMEPY% %BASE_PATH%\python\import\importwsmatrices.py
-::%EMMEPY% %BASE_PATH%\python\import\importwsmatrices.py
+::%EMMEPY% python\import\importScenarios.py :: TODO: REMOVE BEFORE FLIGHT
+:: %EMMEPY% python\import\importScalars.py :: TODO: REMOVE BEFORE FLIGHT
+:: %EMMEPY% %BASE_PATH%\python\import\importwsmatrices.py :: TODO: REMOVE BEFORE FLIGHT
 
+::%EMMEPY% %BASE_PATH%\python\add_acc_egr_links.py
 
 ::#TODO: assign/skim HNET
-::%EMMEPY% %BASE_PATH%\python\cmap_assignment_runner.py
+::%EMMEPY% %BASE_PATH%\python\cmap_assignment_runner.py :: TODO: REMOVE BEFORE FLIGHT
+ 
+%EMMEPY% %BASE_PATH%\python\copyAutoTime.py
+
 ::#TODO: assign/skim TNET
 ::%EMMEPY% %BASE_PATH%\python\cmap_transit_assignment_runner.py
 
@@ -57,8 +60,8 @@ SET ASIM_INPUTS=%ASIM%\data
 ::
 :: Prepare files for ActivitySim and run ActivitySim
 ::
-%ANACONDA% python\prepAsim.py
-%ANACONDA% %ASIM%\simulation.py -c %ASIM%\configs_test -c %ASIM%\configs_3_zone -o %ASIM%\output -d %ASIM%\data
+::%ANACONDA% python\prepAsim.py
+::%ANACONDA% %ASIM%\simulation.py -c %ASIM%\configs_test -c %ASIM%\configs_3_zone -o %ASIM%\output -d %ASIM%\data
 
 
 ::#TODO: assign HNET
