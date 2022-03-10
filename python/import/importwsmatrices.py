@@ -38,6 +38,8 @@ finalAssnMats = {400: "SOV_NT_L", 401: "SOV_TR_L", 402: "HOV2_L", 403: "HOV3_L",
 
 # Import Highway Warm Start
 for scen in HSCENS:
+    scenario = databank.scenario(scen)
+    desktop.data_explorer().replace_primary_scenario(scenario)
     period = per[scen]
     for skid in range(400, 416) + range(201, 226) + range(362, 377):
         try:
@@ -192,6 +194,7 @@ for scen in HSCENS:
 # Import Transit Warm Start    
 for scen in TSCENS:
     scenario = databank.scenario(scen)
+    desktop.data_explorer().replace_primary_scenario(scenario)
     period = per[scen-200]
 
     matsToImport = {

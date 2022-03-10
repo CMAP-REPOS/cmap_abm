@@ -972,7 +972,7 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
                         {  # demand aggregation and factoring
                                 "type": "MATRIX_CALCULATION",
                                 "constraint": None,
-                                "result": 'mf"%s_%s%s_uc%s"' % (a_name, name, period, uc),
+                                "result": '%s_%s%s_uc%s' % (a_name, name, period, uc),
                                 #"expression": '%s' % (demand_factor[a_name]),
                                 "expression": '%s * (mf%s)' % (demand_factor[a_name], mat_class["uc%s" %uc]),
                         }]
@@ -1034,7 +1034,7 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
         emmebank = scenario.emmebank
         assign_transit = modeller.tool("inro.emme.transit_assignment.extended_transit_assignment")
 
-        walk_modes = ["m", "c", "u", "x", "v", "y", "w", "z", "b", "r", "t", "d", "a", "e"]
+        walk_modes = ["m", "c", "u", "x", "v", "y", "w", "z", "b", "r", "t", "d"] # "a", "e"]
         local_bus_mode = ["B", "P", "L"]
         premium_modes = ["C", "M", "E", "Q"]
         #walk_modes_accessegress = ["a","e"]
@@ -1133,6 +1133,7 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
                 spec["in_vehicle_cost"]["perception_factor"] = "@boardp%sm" % (user_class)
                 spec["boarding_cost"]["on_lines"]["perception_factor"] = float(self.cost_percep["uc%s" % (user_class)])
                 spec["in_vehicle_time"]["perception_factor"] = "@ivtf%s" % (user_class)
+                print spec
                 assign_transit(spec, class_name=name, add_volumes=add_volumes, scenario=self.scenario)
                 add_volumes = True
 

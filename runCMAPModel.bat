@@ -15,10 +15,12 @@ SET EMMEBANK=C:\projects\cmap_activitysim\cmap_abm\CMAP-ABM\CMAP-ABM.emp
 SET INPUT_FOLDER=%BASE_PATH%\inputs
 SET WARM_START=%BASE_PATH%\emme_inputs
 SET SCENARIO_OUTPUT=%BASE_PATH%\outputs
+SET LOG_OUT=%BASE_PATH%\Reports
 MD %SCENARIO_OUTPUT%
 MD %SCENARIO_OUTPUT%\activitysim_outputs
 MD %SCENARIO_OUTPUT%\activitysim_logs
 
+DEL %LOG_OUT%\*
 :: Python paths - EMMEPY should point to the Emme installation, ANACONDA should point to the 
 :: Anaconda environment; both should point directly to the Python executable.
 
@@ -41,19 +43,19 @@ SET ASIM_INPUTS=%ASIM%\data
 ::
 
 :: Prepare EMMEBank - rewrites warm-start matrices, removes skims
-::%EMMEPY% python\import\importScenarios.py :: TODO: REMOVE BEFORE FLIGHT
-:: %EMMEPY% python\import\importScalars.py :: TODO: REMOVE BEFORE FLIGHT
-:: %EMMEPY% %BASE_PATH%\python\import\importwsmatrices.py :: TODO: REMOVE BEFORE FLIGHT
+%EMMEPY% python\import\importScenarios.py :: TODO: REMOVE BEFORE FLIGHT
+%EMMEPY% python\import\importScalars.py :: TODO: REMOVE BEFORE FLIGHT
+%EMMEPY% %BASE_PATH%\python\import\importwsmatrices.py :: TODO: REMOVE BEFORE FLIGHT
 
 ::%EMMEPY% %BASE_PATH%\python\add_acc_egr_links.py
 
 ::#TODO: assign/skim HNET
-::%EMMEPY% %BASE_PATH%\python\cmap_assignment_runner.py :: TODO: REMOVE BEFORE FLIGHT
+%EMMEPY% %BASE_PATH%\python\cmap_assignment_runner.py :: TODO: REMOVE BEFORE FLIGHT
  
-%EMMEPY% %BASE_PATH%\python\copyAutoTime.py
+::%EMMEPY% %BASE_PATH%\python\copyAutoTime.py
 
 ::#TODO: assign/skim TNET
-::%EMMEPY% %BASE_PATH%\python\cmap_transit_assignment_runner.py
+%EMMEPY% %BASE_PATH%\python\cmap_transit_assignment_runner.py
 
 ::#TODO: output skim matrices to ActivitySim folder
 
