@@ -137,10 +137,6 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
             #params = self.get_perception_parameters(period)
 
             self.generate_matrix_list(period, self.scenario)
-
-            #create matrices
-            print("transit demand matrices")
-            self.transit_demand_matrices(period, scenario, num_processors)
             
             print("transit skim matrices")
             self.transit_skim_matrices(period, scenario, num_processors)
@@ -170,16 +166,23 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
                 self.calc_network_attribute(uc)
 
                 #parameters by period and user class
-		params = self.get_perception_parameters(period, "uc%s" % (uc))
+                params = self.get_perception_parameters(period, "uc%s" % (uc))
                        
-                print("run transit assignment")
+                print("run transit assignment for period=%s, uc=%s"%(period, uc))
                 self.run_assignment(period, uc, params, network, skims_only, num_processors)
-
+                
                 if not assignment_only:
+                    a=1
                     #max_fare = day_pass for local bus and regional_pass for premium modes
                     #self.run_skims("BUS", period, params, day_pass, num_processors, network)
                     #self.run_skims("PREM", period, params, regional_pass, num_processors, network)
-                    self.run_skims("ALLPEN", period, "uc%s" % (uc), params, regional_pass, num_processors, network)
+                    ###
+                    #for a_name in ["WLK", "PNR", "KNR"]:
+                    #name = "%s_TRN_%s_%s"%(self.periodLabel[int(period)], a_name, self.user_class_labels[int(user_class)])
+                    #name is [NT_TRN_WALK_L, NT_TRN_PNR_L, NT_TRN_KNR_L]
+                    #run_skims(self, name, period, user_class, params, max_fare, num_processors, network)
+                    ###
+                    self.run_skims("ALLPEN", period, uc, params, regional_pass, num_processors, network)
                     #self.mask_allpen(period)  #needed only when three sets are used. TODO - for later.
                     #self.report(period)  #use sandag specific utilites. TODO - for later.
 
@@ -935,9 +938,8 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
         #user_classes = ["1","2","3"]
         idx = self.basematrixnumber
         for uc in self.user_classes:
-            for a_name in ["WLK", "PNR", "KNR"]:
+            for a_name in ["WALK", "PNR", "KNR"]:
                 for mname in self.skim_matrices:
-                    print "%s_%s_%s_%s"%(mname, a_name, self.user_class_labels[int(uc)], self.periodLabel[int(period)])
                     temp = self.add_matrices(int(period) * 1000 + idx, "%s_%s_%s_%s"%(mname, a_name, self.user_class_labels[int(uc)], self.periodLabel[int(period)]), scenario)
                     idx += 1
              
@@ -965,24 +967,34 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
         #print('aggregate demand')
 	#ex. demand matrix = mfWLK_ALLPEN1
 		
-        for uc in self.user_classes:
-            for a_name in ["WLK", "PNR", "KNR"]:
-                for name, desc in tmplt_matrices:
-                    spec_list = [
-                        {  # demand aggregation and factoring
-                                "type": "MATRIX_CALCULATION",
-                                "constraint": None,
-                                "result": '%s_%s%s_uc%s' % (a_name, name, period, uc),
-                                #"expression": '%s' % (demand_factor[a_name]),
-                                "expression": '%s * (mf%s)' % (demand_factor[a_name], mat_class["uc%s" %uc]),
-                        }]
+        # for uc in self.user_classes:
+            # for a_name in ["WALK", "PNR", "KNR"]:
+                # for name, desc in tmplt_matrices:
+                    # spec_list = [
+                        # {  # demand aggregation and factoring
+                                # "type": "MATRIX_CALCULATION",
+                                # "constraint": None,
+                                # "result": '%s_%s%s_uc%s' % (a_name, name, period, uc),
+                                # #"expression": '%s' % (demand_factor[a_name]),
+                                # "expression": '%s * (mf%s)' % (demand_factor[a_name], mat_class["uc%s" %uc]),
+                        # }]
                     
-                    print(spec_list)    
+                    #print(spec_list)    
                     #matrix_calc(spec_list, scenario=scenario, num_processors=num_processors)
 
 
     #@_m.logbook_trace("Transit skim matrices initialize", save_arguments=True)
     def transit_skim_matrices(self, period, scenario, num_processors):
+        idx = self.basematrixnumber
+        for uc in self.user_classes:
+            for a_name in ["WALK", "PNR", "KNR"]:
+                for mname in self.skim_matrices:
+                    temp = self.add_matrices(int(period) * 1000 + idx, "%s_%s_%s_%s"%(mname, a_name, self.user_class_labels[int(uc)], self.periodLabel[int(period)]), scenario)
+                    idx += 1
+        return(True)
+        """
+        print(scenario)
+        scenario = self.scenario
         tmplt_matrices = [
             ("GENCOST",    "total impedance"),
             ("FIRSTWAIT",  "first wait time"),
@@ -1018,14 +1030,15 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
             ("ALLPEN", "All w/ xfer pen")
         ]
 
-        #user_classes = ["1","2","3"]
-        #for uc in self.user_classes:
-        #    for set_name, set_desc in skim_sets:
-        #        self.add_matrices("transit_skims", period,
-        #                          [("mf", set_name + "_" + name + period + "_uc" + uc,
-        #                            set_desc + ": " + desc + " " + period + " " + uc)
-        #                           for name, desc in tmplt_matrices], scenario)
-
+        user_classes = ["WALK","KNR","PNR"]
+        for uc in self.user_classes:
+           for set_name, set_desc in skim_sets:
+               #add_matrices(self, mid, mname, scenario, desc = "")
+               self.add_matrices("transit_skims", period,
+                                 [("mf", set_name + "_" + name + "_" + period + "_" + uc,
+                                   set_desc + ": " + desc + " " + period + " " + uc)
+                                  for name, desc in tmplt_matrices], scenario)
+    """
 
     #@_m.logbook_trace("Transit assignment by demand set", save_arguments=True)
     def run_assignment(self, period, user_class, params, network, skims_only, num_processors):
@@ -1118,22 +1131,13 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
         for a_name in access_modes:
             for mode_name, parameters in skim_parameters.iteritems():
                 spec = _copy(base_spec)
-                name = "%s_%s%s_uc%s" % (a_name, mode_name, period, user_class)
-                print "Name=%s (1122)"%name
-                print "period = %s"%period
-                
                 name = "%s_TRN_%s_%s"%(self.periodLabel[int(period)], a_name, self.user_class_labels[int(user_class)])
-                print "NEW Name=%s (1122)"%name 
-                # s/b pp_TRN_access_vot
-                # where access in [WALK, PNR, KNR, TNC]
-                # where vot in [L, M, H]
                 spec["modes"] = parameters["modes"]
-                spec["demand"] = 'mf"%s"' % (name)  #TODO - demand matrix by user class
+                spec["demand"] = 'mf%s' % (name)  #TODO - demand matrix by user class
                 spec["journey_levels"] = parameters["journey_levels"]
                 spec["in_vehicle_cost"]["perception_factor"] = "@boardp%sm" % (user_class)
                 spec["boarding_cost"]["on_lines"]["perception_factor"] = float(self.cost_percep["uc%s" % (user_class)])
                 spec["in_vehicle_time"]["perception_factor"] = "@ivtf%s" % (user_class)
-                print spec
                 assign_transit(spec, class_name=name, add_volumes=add_volumes, scenario=self.scenario)
                 add_volumes = True
 
@@ -1152,27 +1156,27 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
             "inro.emme.transit_assignment.extended.path_based_analysis")
         strategy_analysis = modeller.tool(
             "inro.emme.transit_assignment.extended.strategy_based_analysis")
-
-        class_name = "WLK_%s%s_%s" % (name, period, user_class)
+        
+        class_name = "%s_TRN_%s_%s"%(self.periodLabel[int(period)], "WALK", self.user_class_labels[int(user_class)])
         skim_name = "%s" % (name)
         #self.run_skims.logbook_cursor.write(name="Extract skims for %s, using assignment class %s" % (name, class_name))
         print("Extract skims for %s, using assignment class %s" % (name, class_name))
-		
         with _m.logbook_trace("First and total wait time, number of boardings, fares, total walk time, in-vehicle time"):
             # First and total wait time, number of boardings, fares, total walk time, in-vehicle time
             spec = {
                 "type": "EXTENDED_TRANSIT_MATRIX_RESULTS",
-                "actual_first_waiting_times": 'mf"%s_FIRSTWAIT%s_%s"' % (skim_name, period, user_class),
-                "actual_total_waiting_times": 'mf"%s_TOTALWAIT%s_%s"' % (skim_name, period, user_class),
-                "total_impedance": 'mf"%s_GENCOST%s_%s"' % (skim_name, period, user_class),
+                #FIRSTWAIT_<AMODE>_<VOT>_<PER>
+                "actual_first_waiting_times": 'mf"FIRSTWAIT_%s_%s_%s"' % ("WALK", self.user_class_labels[int(user_class)], self.periodLabel[int(period)]),
+                "actual_total_waiting_times": 'mf"TOTALWAIT_%s_%s_%s"' % ("WALK", self.user_class_labels[int(user_class)], self.periodLabel[int(period)]),
+                "total_impedance": 'mf"GENCOST_%s_%s_%s"' % ("WALK", self.user_class_labels[int(user_class)], self.periodLabel[int(period)]),
                 "by_mode_subset": {
                     "modes": [mode.id for mode in network.modes() if mode.type == "TRANSIT" or mode.type == "AUX_TRANSIT"],
-                    "avg_boardings": 'mf"%s_XFERS%s_%s"' % (skim_name, period, user_class),
-                    "actual_in_vehicle_times": 'mf"%s_TOTALIVTT%s_%s"' % (skim_name, period, user_class),
+                    "avg_boardings": 'mf"XFERS_%s_%s_%s"' % ("WALK", self.user_class_labels[int(user_class)], self.periodLabel[int(period)]),
+                    "actual_in_vehicle_times": 'mf"TOTALIVTT_%s_%s_%s"' % ("WALK", self.user_class_labels[int(user_class)], self.periodLabel[int(period)]),
                     "actual_in_vehicle_costs": 'mf"TEMP_IN_VEHICLE_COST"',
-                    "actual_total_boarding_costs": 'mf"%s_FARE%s_%s"' % (skim_name, period, user_class),
+                    "actual_total_boarding_costs": 'mf"FARE_%s_%s_%s"' % ("WALK", self.user_class_labels[int(user_class)], self.periodLabel[int(period)]),
                     "perceived_total_boarding_costs": 'mf"TEMP_PERCEIVED_FARE"',
-                    "actual_aux_transit_times": 'mf"%s_TOTALWALK%s_%s"' % (skim_name, period, user_class),
+                    "actual_aux_transit_times": 'mf"TOTALWALK_%s_%s_%s"' % ("WALK", self.user_class_labels[int(user_class)], self.periodLabel[int(period)]),
                 },
             }
             matrix_results(spec, class_name=class_name, scenario=scenario, num_processors=num_processors)
@@ -1187,8 +1191,8 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
                 ("METRARAIL", ["M"],     ["IVTT", "DIST"]),
             ]
             for mode_name, modes, skim_types in mode_combinations:
-                dist = 'mf"%s_%sDIST%s_%s"' % (skim_name, mode_name, period, user_class) if "DIST" in skim_types else None
-                ivtt = 'mf"%s_%sIVTT%s_%s"' % (skim_name, mode_name, period, user_class) if "IVTT" in skim_types else None
+                dist = 'mf"%sDIST_%s_%s_%s"' % (mode_name, "WALK", self.user_class_labels[int(user_class)], self.periodLabel[int(period)]) if "DIST" in skim_types else None
+                ivtt = 'mf"%sIVTT_%s_%s_%s"' % (mode_name, "WALK", self.user_class_labels[int(user_class)], self.periodLabel[int(period)]) if "IVTT" in skim_types else None
                 spec = {
                     "type": "EXTENDED_TRANSIT_MATRIX_RESULTS",
                     "by_mode_subset": {
@@ -1202,9 +1206,9 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
             spec = {
                 "type": "MATRIX_CALCULATION",
                 "constraint": None,
-                "result": 'mf"%s_TOTTRNDIST%s_%s"' % (skim_name, period, user_class),
-                "expression": ('mf"{name}_CTABUSLDIST{period}_{uc}" + mf"{name}_PACEBUSRDIST{period}_{uc}" + mf"{name}_PACEBUSLDIST{period}_{uc}"'
-                               ' + mf"{name}_PACEBUSEDIST{period}_{uc}" + mf"{name}_CTABUSEDIST{period}_{uc}"  + mf"{name}_CTARAILDIST{period}_{uc}" + mf"{name}_METRARAILDIST{period}_{uc}"').format(name=skim_name, period=period, uc=user_class),
+                "result": 'mf"TOTTRNDIST_%s_%s_%s"' % ("WALK", self.user_class_labels[int(user_class)], self.periodLabel[int(period)]),
+                "expression": ('mf"CTABUSLDIST_{amode}_{uc}_{period}" + mf"PACEBUSRDIST_{amode}_{uc}_{period}" + mf"PACEBUSLDIST_{amode}_{uc}_{period}"'
+                               ' + mf"PACEBUSEDIST_{amode}_{uc}_{period}" + mf"CTABUSEDIST_{amode}_{uc}_{period}"  + mf"CTARAILDIST_{amode}_{uc}_{period}" + mf"METRARAILDIST_{amode}_{uc}_{period}"').format(amode = "WALK", period=self.periodLabel[int(period)], uc=self.user_class_labels[int(user_class)])
             }
             matrix_calc(spec, scenario=scenario, num_processors=num_processors)
 
@@ -1229,12 +1233,12 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
                 "type": "MATRIX_CALCULATION",
                 "constraint":{
                     "by_value": {
-                        "od_values": 'mf"%s_XFERS%s_%s"' % (skim_name, period, user_class),
+                        "od_values": 'mf"XFERS_%s_%s_%s"' % ("WALK", self.user_class_labels[int(user_class)], self.periodLabel[int(period)]),
                         "interval_min": 1, "interval_max": 9999999,
                         "condition": "INCLUDE"},
                 },
-                "result": 'mf"%s_XFERS%s_%s"' % (skim_name, period, user_class),
-                "expression": '(%s_XFERS%s_%s - 1 - TEMP_LAYOVER_BOARD).max.0' % (skim_name, period, user_class),
+                "result": 'mf"XFERS_%s_%s_%s"' % ("WALK", self.user_class_labels[int(user_class)], self.periodLabel[int(period)]),
+                "expression": '(XFERS_%s_%s_%s - 1 - TEMP_LAYOVER_BOARD).max.0' % ("WALK", self.user_class_labels[int(user_class)], self.periodLabel[int(period)]),
             }
             matrix_calc(spec, scenario=scenario, num_processors=num_processors)
 
@@ -1242,8 +1246,8 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
             spec = {
                 "type": "MATRIX_CALCULATION",
                 "constraint": None,
-                "result": 'mf"%s_FARE%s_%s"' % (skim_name, period, user_class),
-                "expression": '(%s_FARE%s_%s + TEMP_IN_VEHICLE_COST).min.%s' % (skim_name, period, user_class, max_fare),
+                "result": 'mf"FARE_%s_%s_%s"' % ("WALK", self.user_class_labels[int(user_class)], self.periodLabel[int(period)]),
+                "expression": '(FARE_%s_%s_%s + TEMP_IN_VEHICLE_COST).min.%s' % ("WALK", self.user_class_labels[int(user_class)], self.periodLabel[int(period)], max_fare),
             }
             matrix_calc(spec, scenario=scenario, num_processors=num_processors)
 
@@ -1256,7 +1260,7 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
                 "path_selection_threshold": {"lower": 0, "upper": 999999 },
                 "path_to_od_aggregation": {
                     "operator": "average",
-                    "aggregated_path_values": 'mf"%s_ACCWALK%s_%s"' % (skim_name, period, user_class),
+                    "aggregated_path_values": 'mf"ACCWALK_%s_%s_%s"' % ("WALK", self.user_class_labels[int(user_class)], self.periodLabel[int(period)]),
                 },
                 "type": "EXTENDED_TRANSIT_PATH_ANALYSIS"
             }
@@ -1270,7 +1274,7 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
                 "path_selection_threshold": {"lower": 0, "upper": 999999 },
                 "path_to_od_aggregation": {
                     "operator": "average",
-                    "aggregated_path_values": 'mf"%s_EGRWALK%s_%s"' % (skim_name, period, user_class)
+                    "aggregated_path_values": 'mf"EGRWALK_%s_%s_%s"' % ("WALK", self.user_class_labels[int(user_class)], self.periodLabel[int(period)])
                 },
                 "type": "EXTENDED_TRANSIT_PATH_ANALYSIS"
             }
@@ -1280,20 +1284,20 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
             {    # walk access time - convert to time with 3 miles/ hr
                 "type": "MATRIX_CALCULATION",
                 "constraint": None,
-                "result": 'mf"%s_ACCWALK%s_%s"' % (skim_name, period, user_class),
-                "expression": '60.0 * %s_ACCWALK%s_%s / 3.0' % (skim_name, period, user_class),
+                "result": 'mf"ACCWALK_%s_%s_%s"' % ("WALK", self.user_class_labels[int(user_class)], self.periodLabel[int(period)]),
+                "expression": '60.0 * ACCWALK_%s_%s_%s / 3.0' % ("WALK", self.user_class_labels[int(user_class)], self.periodLabel[int(period)]),
             },
             {    # walk egress time - convert to time with 3 miles/ hr
                 "type": "MATRIX_CALCULATION",
                 "constraint": None,
-                "result": 'mf"%s_EGRWALK%s_%s"' % (skim_name, period, user_class),
-                "expression": '60.0 * %s_EGRWALK%s_%s / 3.0' % (skim_name, period, user_class),
+                "result": 'mf"EGRWALK_%s_%s_%s"' % ("WALK", self.user_class_labels[int(user_class)], self.periodLabel[int(period)]),
+                "expression": '60.0 * EGRWALK_%s_%s_%s / 3.0' % ("WALK", self.user_class_labels[int(user_class)], self.periodLabel[int(period)]),
             },
             {   # transfer walk time = total - access - egress
                 "type": "MATRIX_CALCULATION",
                 "constraint": None,
-                "result": 'mf"%s_XFERWALK%s_%s"' % (skim_name, period, user_class),
-                "expression": '({name}_TOTALWALK{period}_{uc} - {name}_ACCWALK{period}_{uc} - {name}_EGRWALK{period}_{uc}).max.0'.format(name=skim_name, period=period, uc=user_class),
+                "result": 'mf"XFERWALK_%s_%s_%s"' % ("WALK", self.user_class_labels[int(user_class)], self.periodLabel[int(period)]),
+                "expression": '(TOTALWALK_{amode}_{uc}_{period} - ACCWALK_{amode}_{uc}_{period} - EGRWALK_{amode}_{uc}_{period}).max.0'.format(amode = "WALK", period=self.periodLabel[int(period)], uc=self.user_class_labels[int(user_class)]),
             }]
             matrix_calc(spec_list, scenario=scenario, num_processors=num_processors)
 
@@ -1303,12 +1307,12 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
                 "type": "MATRIX_CALCULATION",
                 "constraint":{
                     "by_value": {
-                        "od_values": 'mf"%s_TOTALWAIT%s_%s"' % (skim_name, period, user_class),
+                        "od_values": 'mf"TOTALWAIT_%s_%s_%s"' % ("WALK", self.user_class_labels[int(user_class)], self.periodLabel[int(period)]),
                         "interval_min": 0, "interval_max": 9999999,
                         "condition": "INCLUDE"},
                 },
-                "result": 'mf"%s_XFERWAIT%s_%s"' % (skim_name, period, user_class),
-                "expression": '({name}_TOTALWAIT{period}_{uc} - {name}_FIRSTWAIT{period}_{uc}).max.0'.format(name=skim_name, period=period, uc=user_class),
+                "result": 'mf"XFERWAIT_%s_%s_%s"' % ("WALK", self.user_class_labels[int(user_class)], self.periodLabel[int(period)]),
+                "expression": '(TOTALWAIT_{amode}_{uc}_{period} - FIRSTWAIT_{amode}_{uc}_{period}).max.0'.format(amode = "WALK", uc = self.user_class_labels[int(user_class)], period = self.periodLabel[int(period)]),
             }
             matrix_calc(spec, scenario=scenario, num_processors=num_processors)
 
@@ -1326,7 +1330,7 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
                         "selection_threshold": {"lower": -999999, "upper": 999999}
                     },
                     "results": {
-                        "strategy_values": 'mf"%s_DWELLTIME%s_%s"' % (skim_name, period, user_class),
+                        "strategy_values": 'mf"DWELLTIME_%s_%s_%s"' % ("WALK", self.user_class_labels[int(user_class)], self.periodLabel[int(period)]),
                     },
                     "type": "EXTENDED_TRANSIT_STRATEGY_ANALYSIS"
                 }
@@ -1337,19 +1341,23 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
         expr_params["name"] = skim_name
         expr_params["period"] = period
         expr_params["user_class"] = user_class
+        expr_params["uc"] = self.user_class_labels[int(user_class)]
         expr_params["init_wait"] = 0.5 #TODO - cmap has a network attribute
         expr_params["perception_factor"] = 1.0 #TODO - cmap has a network attribute
         expr_params["walk"] = 2.0 #TODO - cmap has a network attribute
+        expr_params["amode"] = "WALK"
+        
+        print("{xfer_wait} * TOTALWAIT_{amode}_{uc}_{period} - ({xfer_wait} - {init_wait}) * FIRSTWAIT_{amode}_{uc}_{period} + 1.0 * TOTALIVTT_{amode}_{uc}_{period} + (1 / {vot}) * (TEMP_PERCEIVED_FARE + {perception_factor} * TEMP_IN_VEHICLE_COST) + {xfers} *(XFERS_{amode}_{uc}_{period}.max.0) + {walk} * TOTALWALK_{amode}_{uc}_{period}").format(**expr_params)
         spec = {
             "type": "MATRIX_CALCULATION",
             "constraint": None,
-            "result": 'mf"%s_GENCOST%s_%s"' % (skim_name, period, user_class),
-            "expression": ("{xfer_wait} * {name}_TOTALWAIT{period}_{user_class} "
-                           "- ({xfer_wait} - {init_wait}) * {name}_FIRSTWAIT{period}_{user_class} "
-                           "+ 1.0 * {name}_TOTALIVTT{period}_{user_class}"
+            "result": 'mf"GENCOST_%s_%s_%s"' % ("WALK", self.user_class_labels[int(user_class)], self.periodLabel[int(period)]),
+            "expression": ("{xfer_wait} * TOTALWAIT_{amode}_{uc}_{period} "
+                           "- ({xfer_wait} - {init_wait}) * FIRSTWAIT_{amode}_{uc}_{period} "
+                           "+ 1.0 * TOTALIVTT_{amode}_{uc}_{period}"
                            "+ (1 / {vot}) * (TEMP_PERCEIVED_FARE + {perception_factor} * TEMP_IN_VEHICLE_COST)"
-                           "+ {xfers} *({name}_XFERS{period}_{user_class}.max.0) "
-                           "+ {walk} * {name}_TOTALWALK{period}_{user_class}").format(**expr_params)
+                           "+ {xfers} *(XFERS_{amode}_{uc}_{period}.max.0) "
+                           "+ {walk} * TOTALWALK_{amode}_{uc}_{period}").format(**expr_params)
         }
         matrix_calc(spec, scenario=scenario, num_processors=num_processors) #TODO: not calculated correctly. need to see calculations.
         return
@@ -1416,6 +1424,7 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
         _m.logbook_write(title, report.render())
 
     def add_matrices(self, mid, mname, scenario, desc = ""):
+        scenario = self.scenario
         create_matrix = _m.Modeller().tool("inro.emme.data.matrix.create_matrix")           
         matrices_out = create_matrix(matrix_id = "mf%s"%mid, matrix_name = mname, matrix_description = desc, scenario = scenario, default_value = 0, overwrite = True)
         return matrices_out

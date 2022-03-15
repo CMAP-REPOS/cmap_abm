@@ -15,7 +15,7 @@ import os
 import json as _json
 import inro.emme.desktop.app as _app
 
-HSCENS = [1,2,3,4,5,6,7,8]
+HSCENS = [] #1,2,3,4,5,6,7,8]
 TSCENS = [201,202,203,204,205,206,207,208]
 
 WORK_FOLDER = os.environ["WARM_START"] + os.sep + "wsmatrices"
@@ -196,34 +196,22 @@ for scen in TSCENS:
     scenario = databank.scenario(scen)
     desktop.data_explorer().replace_primary_scenario(scenario)
     period = per[scen-200]
-
-    matsToImport = {
-            "TRNPerTrp_%s_L"%period: "mf%s%s"%(scen, 362),
-            "TRNPerTrp_%s_M"%period: "mf%s%s"%(scen, 363),
-            "TRNPerTrp_%s_H"%period: "mf%s%s"%(scen, 364), 
-            "%s_TRN_WALK_L"%period: "mf%s%s"%(scen, 365),
-            "%s_TRN_PNR_L"%period: "mf%s%s"%(scen, 366), 
-            "%s_TRN_KNR_L"%period: "mf%s%s"%(scen, 367), 
-            "%s_TRN_TNC_L"%period: "mf%s%s"%(scen, 368), 
-            "%s_TRN_WALK_M"%period: "mf%s%s"%(scen, 369),
-            "%s_TRN_PNR_M"%period: "mf%s%s"%(scen, 370), 
-            "%s_TRN_KNR_M"%period: "mf%s%s"%(scen, 371), 
-            "%s_TRN_TNC_M"%period: "mf%s%s"%(scen, 372), 
-            "%s_TRN_WALK_H"%period: "mf%s%s"%(scen, 373),
-            "%s_TRN_PNR_H"%period: "mf%s%s"%(scen, 374), 
-            "%s_TRN_KNR_H"%period: "mf%s%s"%(scen, 375), 
-            "%s_TRN_TNC_H"%period: "mf%s%s"%(scen, 376)
-        }  
-    for vclass, mn in zip(['Low', 'Mid', 'Hi'], [362, 363, 364]):
-        #matsToImport = {"TRNPerTrp_%s_%s"%(period, vclass[0:1]): "mf%s%s"%(scen-200, mn)}
-        matsToImport = {"TRN_%s_%s"%(vclass.upper(), period): "mf%s%s"%(scen-200, mn)}
+    for vot, V, vint in zip(['low','mid','hi'], ['L', 'M', 'H'], [0, 1, 2]):
+        matsToImport = {
+                #"TRNPerTrp_%s_%s"%(period,V): "mf%s%s"%(scen-200, 362 + vint),
+                "%s_TRN_WALK_%s"%(period,V): "mf%s%s"%(scen-200, 365 + 4 * vint),
+                "%s_TRN_PNR_%s"%(period,V): "mf%s%s"%(scen-200, 366 + 4 * vint), 
+                "%s_TRN_KNR_%s"%(period,V): "mf%s%s"%(scen-200, 367 + 4 * vint), 
+                "%s_TRN_TNC_%s"%(period,V): "mf%s%s"%(scen-200, 368 + 4 * vint), 
+                
+            }
         for n, m in matsToImport.items():
             createMatrix(matrix_id = m, matrix_name = n, scenario = scenario, overwrite = True)
-        importOMX(file_path = "%s\\trips_%s_%s_tap.omx"%(WORK_FOLDER, period, vclass), matrices = matsToImport, scenario = scenario)
+        importOMX(file_path = "%s\\trn_%s_%s_tap.omx"%(WORK_FOLDER, period, vot), matrices = matsToImport, scenario = scenario)
 
 # Delete any old skims
 for scen in HSCENS:
-    for skid in range(600, 660):
+    for skid in range(600, 1000):
         try:
             deleteMatrix(matrix = databank.matrix("mf%s%s"%(scen, skid)))
         except:

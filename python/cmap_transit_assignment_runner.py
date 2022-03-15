@@ -20,7 +20,7 @@ databank = desktop.data_explorer().active_database().core_emmebank
 #my_emmebank = my_modeller.emmebank
 
 #transit
-tods = [1,2,3,4,5,6,7,8]
+tods = [1] #,2,3,4,5,6,7,8]
 #transitImport = 100    #old model
 transitImport = 200   #new model
 transitScenarios = [transitImport + i for i in tods]
