@@ -172,8 +172,6 @@ LOGSUM_CHOOSER_COLUMNS:
   - free_parking_at_work
   - income_segment
   - demographic_segment
-  - c_ivt_for_segment
-  - c_cost_for_segment
   - is_student
 
 MODE_CHOICE_LOGSUM_COLUMN_NAME: mode_choice_logsum
