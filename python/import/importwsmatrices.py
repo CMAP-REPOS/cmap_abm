@@ -1,9 +1,8 @@
 #
-# Import warm start matrices
-#
 # importwsmatrices.py
 #
-# Andrew Rohne RSG
+# Import warm start matrices
+#
 
 import inro.modeller as _m
 import inro.emme.core.exception as _except
@@ -14,9 +13,11 @@ import array
 import os
 import json as _json
 import inro.emme.desktop.app as _app
+import datetime
 
-HSCENS = [] #1,2,3,4,5,6,7,8]
-TSCENS = [201,202,203,204,205,206,207,208]
+HSCENS = [1,2,3,4,5,6,7,8]
+transitImport = 200
+TSCENS = [transitImport + i for i in HSCENS]
 
 WORK_FOLDER = os.environ["WARM_START"] + os.sep + "wsmatrices"
 PROJECT = os.environ["EMMEBANK"]
@@ -25,6 +26,7 @@ desktop = _app.start_dedicated(project=PROJECT, visible=True, user_initials="ASR
 modeller = _m.Modeller(desktop)
 databank = desktop.data_explorer().active_database().core_emmebank
 
+importMatrix = _m.Modeller().tool("inro.emme.data.matrix.matrix_transaction")
 createMatrix = _m.Modeller().tool("inro.emme.data.matrix.create_matrix")
 importOMX = _m.Modeller().tool("inro.emme.data.matrix.import_from_omx")
 deleteMatrix = _m.Modeller().tool("inro.emme.data.matrix.delete_matrix")
@@ -32,164 +34,224 @@ computeMatrix = _m.Modeller().tool("inro.emme.matrix_calculation.matrix_calculat
 
 per = {1: "NT", 2: "EA", 3: "AM", 4: "MM", 5: "MD", 6: "AF", 7: "PM", 8: "EV"}
 
-finalAssnMats = {400: "SOV_NT_L", 401: "SOV_TR_L", 402: "HOV2_L", 403: "HOV3_L", 404: "SOV_NT_M", 405: "SOV_TR_M", 
-                406: "HOV2_M", 407: "HOV3_M", 408: "SOV_NT_H", 409: "SOV_TR_H", 410: "HOV2_H", 411: "HOV3_H", 412: "TRK_B",
-                413: "TRK_L", 414: "TRK_M", 415: "TRK_H"}
+TODFactor_intTRK_B = [0.161, 0.054, 0.129, 0.050, 0.214, 0.132, 0.150, 0.110]
+TODFactor_intTRK_L = [0.143, 0.052, 0.142, 0.066, 0.264, 0.147, 0.112, 0.074]
+TODFactor_intTRK_M = [0.174, 0.049, 0.129, 0.061, 0.251, 0.139, 0.113, 0.084]
+TODFactor_intTRK_H = [0.216, 0.039, 0.102, 0.059, 0.249, 0.118, 0.092, 0.125]
+TODFactor_extAuto = [0.161, 0.054, 0.129, 0.050, 0.214, 0.132, 0.150, 0.110]
+TODFactor_extTRK_H = [0.216, 0.039, 0.102, 0.059, 0.249, 0.118, 0.092, 0.125]
+TODFactor_extAP = [0.161, 0.054, 0.129, 0.050, 0.214, 0.132, 0.150, 0.110]
+
+finalAssnMats = {300: "SOV_NT_TOT_L", 301: "SOV_TR_TOT_L", 302: "HOV2_TOT_L", 303: "HOV3_TOT_L", 304: "SOV_NT_TOT_M", 
+                305: "SOV_TR_TOT_M", 306: "HOV2_TOT_M", 307: "HOV3_TOT_M", 308: "SOV_NT_TOT_H", 309: "SOV_TR_TOT_H", 
+                310: "HOV2_TOT_H", 311: "HOV3_TOT_H", 312: "TRK_TOT_B", 313: "TRK_TOT_L", 314: "TRK_TOT_M", 315: "TRK_TOT_H"}
+
+# Import truck and external trips
+dailyMatrices = ["truck_trip_matrices.in", "poe_trip_matrices.in"]
+for m in dailyMatrices: 
+    importMatrix(transaction_file = WORK_FOLDER + os.sep + m, throw_on_error = False)
+
+# Delete any old skims: TODO to be removed
+for scen in HSCENS:
+    for skid in range(100, 1000):
+        try:
+            deleteMatrix(matrix = databank.matrix("mf%s%s"%(scen, skid)))
+        except:
+            pass
 
 # Import Highway Warm Start
 for scen in HSCENS:
     scenario = databank.scenario(scen)
     desktop.data_explorer().replace_primary_scenario(scenario)
     period = per[scen]
-    for skid in range(400, 416) + range(201, 226) + range(362, 377):
+    for skid in range(300, 316) + range(101, 126) + range(262, 283):
         try:
             deleteMatrix(matrix = databank.matrix("mf%s%s"%(scen, skid)))
         except:
             pass
             
-    matsToImport = {
-            "SOV_NT_L_%s"%period: "mf%s%s"%(scen, 214),
-            "SOV_TR_L_%s"%period: "mf%s%s"%(scen, 215),
-            "HOV2_L_%s"%period: "mf%s%s"%(scen, 216), 
-            "HOV3_L_%s"%period: "mf%s%s"%(scen, 217),
-            "SOV_NT_M_%s"%period: "mf%s%s"%(scen, 218), 
-            "SOV_TR_M_%s"%period: "mf%s%s"%(scen, 219), 
-            "HOV2_M_%s"%period: "mf%s%s"%(scen, 220), 
-            "HOV3_M_%s"%period: "mf%s%s"%(scen, 221), 
-            "SOV_NT_H_%s"%period: "mf%s%s"%(scen, 222), 
-            "SOV_TR_H_%s"%period: "mf%s%s"%(scen, 223),
-            "HOV2_H_%s"%period: "mf%s%s"%(scen, 224), 
-            "HOV3_H_%s"%period: "mf%s%s"%(scen, 225)
-            }
+    autoMatsToImport = {
+            "SOV_NT_L_%s"%period: "mf%s%s"%(scen, 101),
+            "SOV_TR_L_%s"%period: "mf%s%s"%(scen, 102),
+            "HOV2_L_%s"%period: "mf%s%s"%(scen, 103), 
+            "HOV3_L_%s"%period: "mf%s%s"%(scen, 104),
+            "SOV_NT_M_%s"%period: "mf%s%s"%(scen, 105), 
+            "SOV_TR_M_%s"%period: "mf%s%s"%(scen, 106), 
+            "HOV2_M_%s"%period: "mf%s%s"%(scen, 107), 
+            "HOV3_M_%s"%period: "mf%s%s"%(scen, 108), 
+            "SOV_NT_H_%s"%period: "mf%s%s"%(scen, 109), 
+            "SOV_TR_H_%s"%period: "mf%s%s"%(scen, 110),
+            "HOV2_H_%s"%period: "mf%s%s"%(scen, 111), 
+            "HOV3_H_%s"%period: "mf%s%s"%(scen, 112)
+        }
             
     auxMatsToImport = {
-            "%s_extAuto"%period: "mf%s%s"%(scen, 201), # -> SOV TR M
-            "%s_extTrkH"%period: "mf%s%s"%(scen, 202), ## -> TRK_H
-            "%s_extAP"%period: "mf%s%s"%(scen, 203), # -> SOV TR M
-			"%s_AIR1_L"%period: "mf%s%s"%(scen, 204), # -> SOV TR L
-			"%s_AIR1_H"%period: "mf%s%s"%(scen, 205), # -> SOV TR H
-			"%s_AIR2_L"%period: "mf%s%s"%(scen, 206), # -> HOV2 L
-			"%s_AIR2_H"%period: "mf%s%s"%(scen, 207), # -> HOV2 H
-			"%s_AIR3_L"%period: "mf%s%s"%(scen, 208), # -> HOV3 L
-			"%s_AIR3_H"%period: "mf%s%s"%(scen, 209), # -> HOV3 H
-            "TRK_B_%s"%period: "mf%s%s"%(scen, 210), # As-is
-            "TRK_L_%s"%period: "mf%s%s"%(scen, 211), # As-is
-            "TRK_M_%s"%period: "mf%s%s"%(scen, 212), # As-is
-            "TRK_H_%s"%period: "mf%s%s"%(scen, 213) #
-        }   
+            "TRK_B_%s"%period: "mf%s%s"%(scen, 113), # As-is
+            "TRK_L_%s"%period: "mf%s%s"%(scen, 114), # As-is
+            "TRK_M_%s"%period: "mf%s%s"%(scen, 115), # As-is
+            "TRK_H_%s"%period: "mf%s%s"%(scen, 116), #            
+            "extAuto_%s"%period: "mf%s%s"%(scen, 117), # -> SOV TR M
+            "extTRK_H_%s"%period: "mf%s%s"%(scen, 118), ## -> TRK_H
+            "extAP_%s"%period: "mf%s%s"%(scen, 119), # -> SOV TR M
+			"AIR1_L_%s"%period: "mf%s%s"%(scen, 120), # -> SOV TR L
+			"AIR1_H_%s"%period: "mf%s%s"%(scen, 121), # -> SOV TR H
+			"AIR2_L_%s"%period: "mf%s%s"%(scen, 122), # -> HOV2 L
+			"AIR2_H_%s"%period: "mf%s%s"%(scen, 123), # -> HOV2 H
+			"AIR3_L_%s"%period: "mf%s%s"%(scen, 124), # -> HOV3 L
+			"AIR3_H_%s"%period: "mf%s%s"%(scen, 125) # -> HOV3 H
+        }          
     scenario = databank.scenario(scen)    
-    for n, m in matsToImport.items():
+    for n, m in autoMatsToImport.items():
         createMatrix(matrix_id = m, matrix_name = n, scenario = scenario, overwrite = True)
-    importOMX(file_path = "%s\\trips_%s_taz.omx"%(WORK_FOLDER, period), matrices = matsToImport, scenario = scenario)
+    importOMX(file_path = "%s\\trips_%s_taz.omx"%(WORK_FOLDER, period), matrices = autoMatsToImport, scenario = scenario)
 
     for n, m in auxMatsToImport.items():
         createMatrix(matrix_id = m, matrix_name = n, scenario = scenario, overwrite = True)
     importOMX(file_path = "%s\\AUX_%s.omx"%(WORK_FOLDER, period), matrices = auxMatsToImport, scenario = scenario)
-    
+
     for n, m in finalAssnMats.items():
-        createMatrix(matrix_id = "mf%s%s"%(scen, n), matrix_name = "%s_%s"%(period, m), scenario = scenario, overwrite = True)
-    
+        createMatrix(matrix_id = "mf%s%s"%(scen, n), matrix_name = "%s_%s"%(m, period), scenario = scenario, overwrite = True)
+    '''
+    # matrix calc mfx113-x119 using mf4-10 and TOD factors
+    spec1 = {
+        "type": "MATRIX_CALCULATION",
+        "result": "mfTRK_B_%s"%(period),
+        "expression": "mfbcvtr*%f"%(TODFactor_intTRK_B[scen-1]),
+    }
+    spec2 = {
+        "type": "MATRIX_CALCULATION",
+        "result": "mfTRK_L_%s"%(period),
+        "expression": "mflcvtr*%f"%(TODFactor_intTRK_L[scen-1]),
+    }
+    spec3 = {
+        "type": "MATRIX_CALCULATION",
+        "result": "mfTRK_M_%s"%(period),
+        "expression": "mfmcvtr*%f"%(TODFactor_intTRK_M[scen-1]),
+    }
+    spec4 = {
+        "type": "MATRIX_CALCULATION",
+        "result": "mfTRK_H_%s"%(period),
+        "expression": "mfhcvtr*%f"%(TODFactor_intTRK_H[scen-1]),
+    }
+    spec5 = {
+        "type": "MATRIX_CALCULATION",
+        "result": "mfextAuto_%s"%(period),
+        "expression": "mfpoeaut*%f"%(TODFactor[scen-1]),
+    }
+    spec6 = {
+        "type": "MATRIX_CALCULATION",
+        "result": "mfextTRK_H_%s"%(period),
+        "expression": "mfpoetrk*%f"%(TODFactor[scen-1]),
+    }
+    spec7 = {
+        "type": "MATRIX_CALCULATION",
+        "result": "mfextAP_%s"%(period),
+        "expression": "mfpoeair*%f"%(TODFactor[scen-1]),
+    }        
+    computeMatrix([spec1,spec2,spec3,spec4,spec5,spec6,spec7]) 
+    '''
     # Prepare matrices for assignment - Low VoT
     spec1 = {
         "type": "MATRIX_CALCULATION",
-        "result": "%s_SOV_NT_L"%period,
+        "result": "SOV_NT_TOT_L_%s"%period,
         "expression": "SOV_NT_L_%s"%period,
     }
     
     spec2 = {
         "type": "MATRIX_CALCULATION",
-        "result": "%s_SOV_TR_L"%period,
-        "expression": "SOV_TR_L_%s + %s_AIR1_L"%(period, period),
+        "result": "SOV_TR_TOT_L_%s"%period,
+        "expression": "SOV_TR_L_%s + AIR1_L_%s"%(period, period),
     }
 
     spec3 = {
         "type": "MATRIX_CALCULATION",
-        "result": "%s_HOV2_L"%period,
-        "expression": "HOV2_L_%s + %s_AIR2_L"%(period, period),
+        "result": "HOV2_TOT_L_%s"%period,
+        "expression": "HOV2_L_%s + AIR2_L_%s"%(period, period),
     }
     
     spec4 = {
         "type": "MATRIX_CALCULATION",
-        "result": "%s_HOV3_L"%period,
-        "expression": "HOV3_L_%s + %s_AIR3_L"%(period, period),
+        "result": "HOV3_TOT_L_%s"%period,
+        "expression": "HOV3_L_%s + AIR3_L_%s"%(period, period),
     }
     
     # Prepare matrices for assignment - Mid VoT
     spec5 = {
         "type": "MATRIX_CALCULATION",
-        "result": "%s_SOV_NT_M"%period,
+        "result": "SOV_NT_TOT_M_%s"%period,
         "expression": "SOV_NT_M_%s"%period,
     }
     
     spec6 = {
         "type": "MATRIX_CALCULATION",
-        "result": "%s_SOV_TR_M"%period,
-        "expression": "SOV_TR_M_%s + %s_extAuto + %s_extAP"%(period, period, period),
+        "result": "SOV_TR_TOT_M_%s"%period,
+        "expression": "SOV_TR_M_%s + extAuto_%s + extAP_%s"%(period, period, period),
     }
     
     spec7 = {
         "type": "MATRIX_CALCULATION",
-        "result": "%s_HOV2_M"%period,
+        "result": "HOV2_TOT_M_%s"%period,
         "expression": "HOV2_M_%s"%period,
     }
     
     spec8 = {
         "type": "MATRIX_CALCULATION",
-        "result": "%s_HOV3_M"%period,
+        "result": "HOV3_TOT_M_%s"%period,
         "expression": "HOV3_M_%s"%period,
     }
     
     # Prepare matrices for assignment - High VoT
     spec9 = {
         "type": "MATRIX_CALCULATION",
-        "result": "%s_SOV_NT_H"%period,
+        "result": "SOV_NT_TOT_H_%s"%period,
         "expression": "SOV_NT_H_%s"%period,
     }
     
     spec10 = {
         "type": "MATRIX_CALCULATION",
-        "result": "%s_SOV_TR_H"%period,
-        "expression": "SOV_TR_H_%s"%period, # + %s_AIR1_H"%(period,period),
+        "result": "SOV_TR_TOT_H_%s"%period,
+        "expression": "SOV_TR_H_%s + AIR1_H_%s"%(period,period),
     }
     
     spec11 = {
         "type": "MATRIX_CALCULATION",
-        "result": "%s_HOV2_H"%period,
-        "expression": "HOV2_H_%s"%period, # + %s_AIR2_H"%(period,period),
+        "result": "HOV2_TOT_H_%s"%period,
+        "expression": "HOV2_H_%s + AIR2_H_%s"%(period,period),
     }
     
     spec12 = {
         "type": "MATRIX_CALCULATION",
-        "result": "%s_HOV3_H"%period,
-        "expression": "HOV3_H_%s"%period, # +  %s_AIR3_H"%(period,period),
+        "result": "HOV3_TOT_H_%s"%period,
+        "expression": "HOV3_H_%s + AIR3_H_%s"%(period,period),
     }
     
     # Prepare truck matrices
     spec13 = {
         "type": "MATRIX_CALCULATION",
         "result": "TRK_B_%s"%period,
-        "expression": "%s_TRK_B"%period,
+        "expression": "TRK_B_%s"%period,
     }
     
     spec14 = {
         "type": "MATRIX_CALCULATION",
         "result": "TRK_L_%s"%period,
-        "expression": "%s_TRK_L"%period,
+        "expression": "TRK_L_%s"%period,
     }
     
     spec15 = {
         "type": "MATRIX_CALCULATION",
         "result": "TRK_M_%s"%period,
-        "expression": "%s_TRK_M"%period,
+        "expression": "TRK_M_%s"%period,
     }
     
     spec16 = {
         "type": "MATRIX_CALCULATION",
-        "result": "%s_TRK_H"%period,
-        "expression": "TRK_H_%s + %s_extTrkH"%(period,period),
+        "result": "TRK_H_%s"%period,
+        "expression": "TRK_H_%s + extTRK_H_%s"%(period,period),
     }
     
-    computeMatrix([spec1, spec2, spec3, spec4, spec5, spec6, spec7, spec8, spec9, spec10, spec11, spec12, spec13, spec14, spec15, spec16]) 
+    computeMatrix([spec1, spec2, spec3, spec4, spec5, spec6, spec7, spec8, 
+                    spec9, spec10, spec11, spec12, spec13, spec14, spec15, spec16]) 
 
 # Import Transit Warm Start    
 for scen in TSCENS:
@@ -198,21 +260,23 @@ for scen in TSCENS:
     period = per[scen-200]
     for vot, V, vint in zip(['low','mid','hi'], ['L', 'M', 'H'], [0, 1, 2]):
         matsToImport = {
-                #"TRNPerTrp_%s_%s"%(period,V): "mf%s%s"%(scen-200, 362 + vint),
-                "%s_TRN_WALK_%s"%(period,V): "mf%s%s"%(scen-200, 365 + 4 * vint),
-                "%s_TRN_PNR_%s"%(period,V): "mf%s%s"%(scen-200, 366 + 4 * vint), 
-                "%s_TRN_KNR_%s"%(period,V): "mf%s%s"%(scen-200, 367 + 4 * vint), 
-                "%s_TRN_TNC_%s"%(period,V): "mf%s%s"%(scen-200, 368 + 4 * vint), 
-                
+                "TRN_TOT_%s_%s"%(V,period): "mf%s%s"%(scen-200, 262 + vint),
+                "TRN_WALK_%s_%s"%(V,period): "mf%s%s"%(scen-200, 265 + 7 * vint),
+                "TRN_PNROUT_%s_%s"%(V,period): "mf%s%s"%(scen-200, 266 + 7 * vint), 
+                "TRN_PNRIN_%s_%s"%(V,period): "mf%s%s"%(scen-200, 267 + 7 * vint), 
+                "TRN_KNROUT_%s_%s"%(V,period): "mf%s%s"%(scen-200, 268 + 7 * vint),                 
+                "TRN_KNRIN_%s_%s"%(V,period): "mf%s%s"%(scen-200, 269 + 7 * vint), 
+                "TRN_TNCOUT_%s_%s"%(V,period): "mf%s%s"%(scen-200, 270 + 7 * vint), 
+                "TRN_TNCIN_%s_%s"%(V,period): "mf%s%s"%(scen-200, 271 + 7 * vint)                
             }
+        
         for n, m in matsToImport.items():
             createMatrix(matrix_id = m, matrix_name = n, scenario = scenario, overwrite = True)
-        importOMX(file_path = "%s\\trn_%s_%s_tap.omx"%(WORK_FOLDER, period, vot), matrices = matsToImport, scenario = scenario)
-
-# Delete any old skims
-for scen in HSCENS:
-    for skid in range(600, 1000):
-        try:
-            deleteMatrix(matrix = databank.matrix("mf%s%s"%(scen, skid)))
-        except:
-            pass
+            spec1 = {
+                "type": "MATRIX_CALCULATION",
+                "result": "mf%s"%n,
+                "expression": "0.0001",
+            }
+            computeMatrix(spec1)
+    #importOMX(file_path = "%s\\trn_%s_taz.omx"%(WORK_FOLDER, period), matrices = matsToImport, scenario = scenario)
+print("Completed importing warmstart matrices at %s"%(datetime.datetime.now()))

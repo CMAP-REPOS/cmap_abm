@@ -4,14 +4,21 @@ import highway_assignment.cmap_assignment as cmap_assignment
 import network.cmap_network as cmap_network
 import matrix.cmap_matrix as cmap_matrix
 import sys
+import os
 import datetime
 import traceback
+import openmatrix as omx
 
-print("Starting Skim Process at %s"%(datetime.datetime.now()))
+print("Starting Auto Skim Process at %s"%(datetime.datetime.now()))
+EMME_OUTPUT = os.environ["BASE_PATH"] + os.sep + "emme_outputs"
+ASIM_INPUTS = os.environ["ASIM_INPUTS"]
+PROJECT = os.environ["EMMEBANK"]
 
-desktop = _app.start_dedicated(project="C:/projects/cmap_activitysim/cmap_abm/CMAP-ABM/CMAP-ABM.emp", visible=True, user_initials="ASR")
+desktop = _app.start_dedicated(project=PROJECT, visible = True, user_initials = "TL")
 modeller = _m.Modeller(desktop)
 databank = desktop.data_explorer().active_database().core_emmebank
+scens = [{"periodNum": 1, "period": "NT"}]
+'''
 scens = [{"periodNum": 1, "period": "NT"},
    {"periodNum": 2, "period": "EA"},
    {"periodNum": 3, "period": "AM"},
@@ -20,19 +27,29 @@ scens = [{"periodNum": 1, "period": "NT"},
    {"periodNum": 6, "period": "AF"},
    {"periodNum": 7, "period": "PM"},
    {"periodNum": 8, "period": "EV"}]
-
+'''
 for s in scens:
-    print "Scenario %s Assignment"%s['period']
+    print('Scenario %s Auto Assignment'%s['period'])
     scenario = desktop.data_explorer().active_database().scenario_by_number(s['periodNum'])
     desktop.data_explorer().replace_primary_scenario(scenario)
     try:
         #cmap_matrix.CMapMatrix().prepTripTables(databank.scenario(s['periodNum']), s['period'])
         cmap_network.CMapNetwork().__call__(databank.scenario(s['periodNum']), runCapacities = True)
         cmap_assignment.TrafficAssignment().__call__(s['period'], 1, 0.001, 40, 27, databank.scenario(s['periodNum']))
-        cmap_network.CMapNetwork().__call__(databank.scenario(s['periodNum']), runPrep = False, export = True, output_directory = "C:\\projects\\cmap_activitysim\\cmap_abm\\emme_outputs\\scen0%s" % s['periodNum'])
-        cmap_matrix.CMapMatrix().outputSkimsToOMX(s['period'], databank.scenario(s['periodNum']), "C:\\projects\\cmap_activitysim\\cmap_abm\\emme_outputs\\scen0%sskims.omx" % (s['periodNum']))
+        cmap_network.CMapNetwork().__call__(databank.scenario(s['periodNum']), runPrep = False, export = True, 
+                                            output_directory = "%s\\emme_outputs\\scen0%s" % (EMME_OUTPUT, s['periodNum']))
+        print('Export auto matrices to OMX for time period ' + s['period'])
+        cmap_matrix.CMapMatrix().outputAutoSkimsToOMX(s['period'], databank.scenario(s['periodNum']), 
+                                                        "%s\\taz_skims.omx" % ASIM_INPUTS)
     except:
         print "There was an error in the %s period"%s['period']
-        traceback.print_exc() 
+        traceback.print_exc()
 
-print("Completed Skim Process at %s"%(datetime.datetime.now()))
+# placeholder for distance, walk distance, and bike distance
+taz_skims = omx.open_file('%s\\taz_skims.omx' % ASIM_INPUTS,'a')
+taz_skims['DIST'] = old_skims['SOV_TR_M_DIST__MD']
+taz_skims['DISTWALK'] = old_skims['SOV_TR_M_DIST__MD']
+taz_skims['DISTBIKE'] = old_skims['SOV_TR_M_DIST__MD']
+taz_skims.close()
+
+print("Completed Auto Skim Process at %s"%(datetime.datetime.now()))

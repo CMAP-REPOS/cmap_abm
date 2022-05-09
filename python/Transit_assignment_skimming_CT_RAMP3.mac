@@ -1,0 +1,606 @@
+/Transit Assignment and Skimming for CT-RAMP
+/Extended set of premium transit attributes 2013
+/Modifications by Noel Peterson for Transit Modernization Model, 4/16/15
+/~o=295
+reports=nul
+/Transit scenario
+~r100=%1%
+~r100+%2%
+s=%r100%
+/Number of transit assignment iterations for equilibration
+~r200=%3%
+~r16=0.5 /MSA factor: 0=full update, 1=classic 1/n
+/Demand matrix numbers by class (1-3) for conventional transit
+~+|~r101=359|~r102=360|~r103=361
+/Demand matrix numbers by class (1-3) for premium transit
+~+|~r104=362|~r105=363|~r106=364
+/Bypass matrix segmentation by class if r204=1
+~r204=%7%
+~?r204=1
+~$>BYPASS MATRIX SEGMENTATION
+/Prepare class-specific matrices for skimming of mf%4% and mf%5% - for first iteration skimming
+3.21
+~+|1|y|mf%2%%r101%|~?q=1|y|Cl1Con|Demand for passenger class 1 con|~?q=1|y|0|mf%4%/2|||n|2
+~+|1|y|mf%2%%r102%|~?q=1|y|Cl2Con|Demand for passenger class 2 con|~?q=1|y|0|mf%4%/3|||n|2
+~+|1|y|mf%2%%r103%|~?q=1|y|Cl3Con|Demand for passenger class 3 con|~?q=1|y|0|mf%4%/6|||n|2
+~+|1|y|mf%2%%r104%|~?q=1|y|Cl1Pre|Demand for passenger class 1 pre|~?q=1|y|0|(mf%5%+mf%4%*%6%)/6|||n|2
+~+|1|y|mf%2%%r105%|~?q=1|y|Cl2Pre|Demand for passenger class 2 pre|~?q=1|y|0|(mf%5%+mf%4%*%6%)/3|||n|2
+~+|1|y|mf%2%%r106%|~?q=1|y|Cl3Pre|Demand for passenger class 3 pre|~?q=1|y|0|(mf%5%+mf%4%*%6%)/2|||n|2
+q
+~:BYPASS MATRIX SEGMENTATION
+/Bypass conventional transit if r205=1
+~r205=%6%
+/Start numbering skim matrices by TOD periods
+~r250=%2%
+~r250*1000
+~r250+400
+~/SETTING ASSIGNMENT & SKIMMING PARAMETERS
+/ CALCULATE WAIT TIME FUNCTION USED AS FRACTION OF HDWY
+~# original rail slopes (0.5, 0.15, 0.10, 0.0333) modified by (BMP 5/13/16):
+~r01=0.50000 /slope for 1st segment (high frequency) bus
+~r02=0.40000 /slope for 2nd segment (med frequency)  bus
+~r03=0.35000 /slope for 3rd segment (low frequency)  bus
+~r04=0.08333 /slope for 4th segment (very low freq)  bus
+~r05=10      /length of 1st segment, min bus
+~r06=10      /length of 2nd segment, min bus
+~r07=10      /length of 3rd segment, min bus
+~r08=%r05%
+~r08*%r01%   /wait time at end of 1st segment bus
+~r09=%r06%
+~r09*%r02%
+~r09+%r08%   /wait time at end of 2nd segment bus
+~r10=%r07%
+~r10*%r03%
+~r10+%r09%   /wait time at end of 2nd segment bus
+2.41
+~+|1|y|@hfrac|n
+~+|( (%r01%*hdwy).min.
+~+|( (%r08%+%r02%*(hdwy-%r05%)).min.
+~+|( (%r09%+%r03%*(hdwy-%r05%-%r06%)).min.
+~+|( %r10%+%r04%*(hdwy-%r05%-%r06%-%r07%) )
+~+|)))/hdwy
+~+||mod=BEPQL||4|q
+~r01=0.50000 /slope for 1st segment (high frequency) rail
+~r02=0.4000 /slope for 2nd segment (med frequency)  rail
+~r03=0.35000 /slope for 3rd segment (low frequency)  rail
+~r04=0.08333 /slope for 4th segment (very low freq)  rail
+~r05=10      /length of 1st segment, min rail
+~r06=10      /length of 2nd segment, min rail
+~r07=10      /length of 3rd segment, min rail
+~r08=%r05%
+~r08*%r01%   /wait time at end of 1st segment rail
+~r09=%r06%
+~r09*%r02%
+~r09+%r08%   /wait time at end of 2nd segment rail
+~r10=%r07%
+~r10*%r03%
+~r10+%r09%   /wait time at end of 2nd segment rail
+2.41
+~+|1|y|@hfrac|n
+~+|( (%r01%*hdwy).min.
+~+|( (%r08%+%r02%*(hdwy-%r05%)).min.
+~+|( (%r09%+%r03%*(hdwy-%r05%-%r06%)).min.
+~+|( %r10%+%r04%*(hdwy-%r05%-%r06%-%r07%) )
+~+|)))/hdwy
+~+||mod=CM||4|q
+2.41
+~+|1|y|@hdwef|n|hdwy*@hfrac||all|all|4
+q
+/ CALCULATE BASE WAIT CONVENIENCE FACTOR BY STATION TYPE AND INFORMATION
+~r15=0.90 /Real-time information convenience discount
+2.41
+~# Modified @wconv calculation to allow continuous @bstyp/@rstyp values,
+~# defined to match original specifications below (NMP 5/28/14):
+~#   ~r11=2.50 /1=Pole
+~#   ~r12=2.25 /2=Shelter
+~#   ~r13=2.00 /3=Plaza
+~#   ~r14=1.75 /4=Station
+~+|1|y|@wconv|n|(2.75-0.25*@bstyp).max.(2.75-0.25*@rstyp).max.1.75||all|4
+~+|1|y|@wconv|n|@wconv*%r15%||@bsinf=2|@rsinf=2||4
+~+|1|y|@wconf|n|@wconv+@wcona||all|4
+q
+/ CALCULATE BASE BOARDING TIME BY STATION TYPE (ELEVATOR, TRAVERSAL)
+~r27=2.5 /boarding time weight (base perception factor)
+2.41
+~# @timbo values are now batched in from inputs/bus_node_extra_attributes.csv &
+~# inputs/rail_node_extra_attributes.csv by Build_TOD_Transit_CT_RAMP3.mac (NMP 9/11/14)
+~+|1|y|@timbf|n|@timbo||all|4
+~# Modified @easbp calculation to allow continuous @easeb values,
+~# defined to match original specifications below (NMP 5/28/14):
+~#   ~r25=2.0 /additional penalty in min for worst ease of boarding (1=staircase vs. 3=level platform)
+~#   ~r26=1.0 /additional penalty in min for medium ease of boarding (2=low floor vs. 3=level platform)
+~+|1|y|@easbp|n|(3-@easeb).max.0||all|4
+~+|1|y|@perbo|n|%r27%||all|4
+~+|1|y|@perbf|n|@perbo+@perba||all|4
+q
+/ BASE IN-VEHICLE TIME PERCEPTION FACTOR BY LINE & GEOGRAPHY
+~r31=1.00  /regular bus
+~r32=0.90  /express bus
+~r33=0.95  /CTA rail
+~r34=0.85  /Metra commuter rail
+~r35=0.01  /diminishing cleanliness factor per passenger turnover from beginning of line - regular bus
+~r36=0.01  /diminishing cleanliness factor per passenger turnover from beginning of line - express bus
+~r37=0.01  /diminishing cleanliness factor per passenger turnover from beginning of line - CTA rail
+~r38=0.01  /diminishing cleanliness factor per passenger turnover from beginning of line - Metra
+~r28=0.50  /cleanliness importance 1 class of users
+~r29=0.75  /cleanliness importance 2 class of users
+~r30=1.00  /cleanliness importance 3 class of users
+2.41
+~+|1|y|@ivtpf|n|%r31%||mod=BPL||all|4
+~+|1|y|@ivtpf|n|%r32%||mod=EQ ||all|4
+~+|1|y|@ivtpf|n|%r33%||mod=C  ||all|4
+~+|1|y|@ivtpf|n|%r34%||mod=M  ||all|4
+q
+~/ Geography impacts on comfort and cleanliness
+2.41
+~+|1|y|@ivtpf|n|@ivtpf+0.00||mod=BPL||@zone=1,80|or @zonej=1,80||4
+~+|1|y|@ivtpf|n|@ivtpf+0.00||mod=EQ ||@zone=1,80|or @zonej=1,80||4
+~+|1|y|@ivtpf|n|@ivtpf+0.00||mod=C  ||@zone=1,80|or @zonej=1,80||4
+~+|1|y|@ivtpf|n|@ivtpf+0.00||mod=M  ||@zone=1,80|or @zonej=1,80||4
+q
+~#~/ Productivity bonus - IVT weight reduction for seating passenger by user class and mode
+~# @prof1/2/3 values are now batched in from inputs/productivity_bonus_by_line_id.csv
+~# by Build_TOD_Transit_CT_RAMP3.mac (NMP 5/28/14)
+~/ Geography impacts on productivity - stop frequency and boarding/alighting passengers
+2.41
+~+|1|y|@prof3|n|@prof3+0.01||mod=BPL||@zone=1,80|or @zonej=1,80||4
+~+|1|y|@prof3|n|@prof3+0.01||mod=EQ ||@zone=1,80|or @zonej=1,80||4
+~+|1|y|@prof3|n|@prof3+0.01||mod=C  ||@zone=1,80|or @zonej=1,80||4
+~+|1|y|@prof3|n|@prof3+0.01||mod=M  ||@zone=1,80|or @zonej=1,80||4
+q
+~/ Restore all class-specific factors and impacts
+2.41
+~+|1|y|@ivtf1|n|@ivtpf*(1+@soba1+@crowf+@clnob*%r28%
+~+|+@prof1*(@pseat+0.001)/(@pseat+@pstan+0.001))||all|all|4
+~+|1|y|@ivtf2|n|@ivtpf*(1+@soba2+@crowf+@clnob*%r29%
+~+|+@prof2*(@pseat+0.001)/(@pseat+@pstan+0.001))||all|all|4
+~+|1|y|@ivtf3|n|@ivtpf*(1+@soba3+@crowf+@clnob*%r30%
+~+|+@prof3*(@pseat+0.001)/(@pseat+@pstan+0.001))||all|all|4
+q
+/ SET BASE FARES BY MODE (ut1)
+~r41= 225  /CTA BUS AND RAIL
+~r42= 175  /PACE
+~r43= 183  /METRA
+~r44= 200	 /CTA TRANSFER DISCOUNT
+~r45=  25  /Default transfer cost
+
+~# r41= 0  /CTA BUS AND RAIL
+~# r42= 0  /PACE
+~# r43= 0  /METRA
+~# r44= 0	 /CTA TRANSFER DISCOUNT
+~# r45= 0  /Default transfer cost
+
+2.41
+~+|1|y|ut1|    0||    all| 4
+~+|1|y|ut1|%r41%||mod=BEC||4
+~+|1|y|ut1|%r42%||mod=LPQ||4
+~+|1|y|ut1|%r43%||mod=M  ||4|q
+/ SET LINK BASED TRANSFER DISCOUNTS (ul1)
+2.41
+~+|1|y|ul1|0    ||   all| 4
+~+|1|y|ul1|%r44%||mod=bc||4|q
+/ COST PERCEPTION FACTOR IN MIN
+/ 1st user class
+~r54=5   /VOT, $/h
+~r54*100 /VOT, cents/h
+~r54/60  /VOT, cents/min
+~+|~r51=1|~r51/%r54% /1/VOT
+/ 2nd user class
+~r55=10  /VOT, $/h
+~r55*100 /VOT, cents/h
+~r55/60  /VOT, cents/min
+~+|~r52=1|~r52/%r55% /1/VOT
+/ 3rd user class
+~r56=15  /VOT, $/h
+~r56*100 /VOT, cents/h
+~r56/60  /VOT, cents/min
+~+|~r53=1|~r53/%r56% /1/VOT
+/ DEFINE CROSS-CLASS SOCIAL BAGGAGE WEIGHTS ON IN-VEHICLE TIME
+/ 1st user-class perception of other classes
+~+|~r111=0.00|~r112=0.00|~r113=0.00
+/ 2nd user-class perception of other classes
+~+|~r121=0.00|~r122=0.00|~r123=0.00
+/ 3rd user-class perception of other classes
+~+|~r131=0.20|~r132=0.00|~r133=0.00
+/ PARAMETERS FOR CROWDING FUNCTIONS
+~r61=1.0  /IVT weight for seating passenger ideal
+~r62=1.2  /IVT weight for seating passenger at full capacity
+~r63=2.0  /Curve for seating passenger
+~r64=1.5  /IVT weight for standing passenger ideal
+~r65=2.0  /IVT weight for standing passenger at full capacity
+~r66=3.0  /Curve for standing passenger
+/ PARAMETERS FOR EXTRA AVERAGE WAIT TIME (UNRELIABILITY FOR BUSES)
+/ TOD-specific constant
+~x=%2%
+~+|~?x=1|~r71=+0.000|~?x=2|~r71=-0.073|~?x=3|~r71=-0.047|~?x=4|~r71=-0.018
+~+|~?x=5|~r71=-0.018|~?x=6|~r71=+0.000|~?x=7|~r71=+0.000|~?x=8|~r71=+0.009
+~r72=-0.155 /Generic constant
+~r73=2.592  /Coefficient for frequency
+~r74=0.048  /Coefficient for V/C
+~r75=0.145  /Stop order (cumulative distance) share
+/ Reliability policy impact variable by mode: 1.00=baseline, 0.00=fully reliable
+~# Now batched in by Build_TOD_Transit_CT_RAMP3.mac (NMP, 4/16/15)
+~#2.41
+~#~+|1|y|@relim|n|1.00||mod=BPL||4
+~#~+|1|y|@relim|n|1.00||mod=EQ ||4
+~#~+|1|y|@relim|n|1.00||mod=C  ||4
+~#~+|1|y|@relim|n|1.00||mod=M  ||4
+~#q
+~/ STATION CLEANLINESS INDEX
+~/ Fixed component by station type (1.00=ideal, 0.00=worst)
+2.41
+~# Modified clnsf calculation to allow continuous @bstyp/@rstyp values,
+~# defined to match original specifications below (NMP 5/28/14):
+~#   ~r81=0.80 /bus stops: pole (1), shelter (2)
+~#   ~r82=0.85 /bus plaza (3)
+~#   ~r83=0.90 /CTA, Metra station (4)
+~#   ~r84=0.95 /Metra terminal station (5)
+~+|1|y|@clnsf|n|(0.7+0.05*@bstyp).max.(0.7+0.05*@rstyp).max.0.8||all|4
+q
+~/ Variable component as multiplier on 10-logged number of passengers
+~r85=-0.00 /bus stops: pole, shelter
+~r86=-0.01 /bus plaza
+~r87=-0.01 /CTA, Metra station
+~r88=-0.01 /Metra terminal station
+/ Station cleanliness penalties
+~r89=1.50  /extra boarding factor per deviation from 1.00=ideal
+~r90=1.20  /extra wait time weight per deviation from 1.00=ideal
+/ Station cleanliness policy impact variable by station type: 1.00=baseline, 0.00=clean completely
+2.41
+~# Modified @clnim calculation to allow continuous @bstyp/@rstyp values (NMP 5/28/14):
+~+|1|y|@clnim|n|1.00||@bstyp=1.00,6.00|@rstyp=1.00,6.00||4
+q
+~x=1
+~:EQUILIBRATION LOOP
+~/ITERATION %x% OF %r200% ##########################################################
+~y=1
+~:USER CLASS LOOP
+~/ITER %x% USER CLASS %y% OF 3
+/ Start new assignment or add volumes index (conventional):
+~+|~?y=1|~r201=1|~?y>1|~r201=2
+/ Start new assignment or add volumes index (premium):
+~+|~?y=1|~r206=1|~?y>1|~r206=2|~?!r205=1|~r206=2
+/ Demand matrix numbers by class for conventional and premium transit
+~+|~z=%y%|~z+100
+~r202=%rz%
+~z+3
+~r203=%rz%
+/Add TOD
+~r240=%2%
+~r240*1000
+~r202+%r240%
+~r203+%r240%
+~/Conventional demand matrix r202 = %r202%
+~/Premium demand matrix r203 = %r203%
+/ VOT parameters
+~+|~z=%y%|~z+50
+~?r205=1
+~+|~?x=%r200%|~r250+30
+~/PREMIUM TRANSIT WITH WALK ACCESS - Express bus and Metra rail
+~/Extended transit assignment
+~<run_modeller_script  ../../scripts/abm_extended_transit.py %r206% mf%r203% %rz% %y% %s% %2% %r250% %r44% %r45% %x% %r200% %r20%
+~?x<%r200%
+~$SKIP PREMIUM TRANSIT FINAL TRANSIT FARES
+~r250+31
+~/ - Calculate final transit fares
+3.21
+~+|1|y|mf%r250%|~?q=1|y|Pfar%2%%y%|Prem_Fare_Per%2%_Class%y%|~?q=1|y|0
+~/ - Pay at initial boarding
+mf"Pifa%2%%y%"
+~/ - Add incremental zone fare
++mf"Pzfa%2%%y%"
+~/ - Deduct transfer discount if not greater than initial boarding
+-get(mf"Ptdi%2%%y%".min.%r44%)*(mf"Pifa%2%%y%".gt.put(1))+
+~/ - Add default transfer cost once if 2 boardings or more
+%r45%*(mf"Pbob%2%%y%".ge.2)
+~+|||n|2|~r250+1
+q
+~:SKIP PREMIUM TRANSIT FINAL TRANSIT FARES
+~/Save user-class-specific transit volumes
+2.41
+~?y=1
+~+|1|y|@pass1|n|voltr||all|all|4
+~?y=2
+~+|1|y|@pass2|n|voltr-@pass1||all|all|4
+~?y=3
+~+|1|y|@pass3|n|voltr-@pass1-@pass2||all|all|4
+q
+~/Save user-class-specific boardings
+2.41
+~?y=1
+~+|1|y|@boar1|n|board||all|all|4
+~?y=2
+~+|1|y|@boar2|n|board||all|all|4
+~?y=3
+~+|1|y|@boar3|n|board||all|all|4
+q
+~y+1
+~?!y>3
+~$USER CLASS LOOP
+~/RECALCULATION OF EQILIBRATED LOS COMPONENTS
+~/ - MSA on transit volumes, segment boardings, and station final alightings
+2.41
+~+|1|y|@trvav|n| voltr*(1/(%x%^%r16%))+@trvav*(1-1/(%x%^%r16%))||all|all|4
+~+|1|y|@borav|n| board*(1/(%x%^%r16%))+@borav*(1-1/(%x%^%r16%))||all|all|4
+q
+~/ - Social baggage mutiplier by proportion of user classes
+2.41
+~+|1|y|@soba1|n|(%r111%*@pass1+%r112%*@pass2+%r113%*@pass3)/(voltr+0.01)||all|all|4
+~+|1|y|@soba2|n|(%r121%*@pass1+%r122%*@pass2+%r123%*@pass3)/(voltr+0.01)||all|all|4
+~+|1|y|@soba3|n|(%r131%*@pass1+%r132%*@pass2+%r133%*@pass3)/(voltr+0.01)||all|all|4
+~+|1|y|@ivtc1|n|@pass1*timtr/(voltr+0.01)||all|all|4
+~+|1|y|@ivtc2|n|@pass2*timtr/(voltr+0.01)||all|all|4
+~+|1|y|@ivtc3|n|@pass3*timtr/(voltr+0.01)||all|all|4
+q
+~/ - In-vehicle crowding function
+2.41
+~+|1|y|@pseat|n|@trvav.min.@lcaps||all|all|4
+~+|1|y|@pstan|n|@trvav-@pseat    ||all|all|4
+~+|1|y|@stpro|n|(@pseat+0.001)/(@pseat+@pstan+0.001)||all|all|4
+~+|1|y|@ivtsp|n|@stpro*timtr||all|all|4
+~+|1|y|@crowf|n|((((%r61%+(%r62%-%r61%)*(@trvav/@lcapt)^%r63%)*@pseat
+~+|               +(%r64%+(%r65%-%r64%)*(@trvav/@lcapt)^%r66%)*@pstan)
+~+|               /(@trvav+0.01).max.1).min.10)-1
+~+||all|all|4
+q
+~/ - Crowding summary:
+2.41
+~+|1|n|@pseat*len                        ||mode=BPL||all|5|4|ms999|SumSea|Sum seating pass-miles  |1
+~+|1|n|(@pstan.min.(@lcapt-@lcaps))*len  ||mode=BPL||all|5|4|ms998|SumSta|Sum standing pass-miles |1
+~+|1|n|((@pstan-@lcapt+@lcaps).max.0)*len||mode=BPL||all|5|4|ms997|SumExt|Sum excessive pass-miles|1
+~+|1|n|@pseat*len                        ||mode=EQ ||all|5|4|ms989|SumSea|Sum seating pass-miles  |1
+~+|1|n|(@pstan.min.(@lcapt-@lcaps))*len  ||mode=EQ ||all|5|4|ms988|SumSta|Sum standing pass-miles |1
+~+|1|n|((@pstan-@lcapt+@lcaps).max.0)*len||mode=EQ ||all|5|4|ms987|SumExt|Sum excessive pass-miles|1
+~+|1|n|@pseat*len                        ||mode=C  ||all|5|4|ms979|SumSea|Sum seating pass-miles  |1
+~+|1|n|(@pstan.min.(@lcapt-@lcaps))*len  ||mode=C  ||all|5|4|ms978|SumSta|Sum standing pass-miles |1
+~+|1|n|((@pstan-@lcapt+@lcaps).max.0)*len||mode=C  ||all|5|4|ms977|SumExt|Sum excessive pass-miles|1
+~+|1|n|@pseat*len                        ||mode=M  ||all|5|4|ms969|SumSea|Sum seating pass-miles  |1
+~+|1|n|(@pstan.min.(@lcapt-@lcaps))*len  ||mode=M  ||all|5|4|ms968|SumSta|Sum standing pass-miles |1
+~+|1|n|((@pstan-@lcapt+@lcaps).max.0)*len||mode=M  ||all|5|4|ms967|SumExt|Sum excessive pass-miles|1
+~+|1|n|@crowf    ||mode=BPL||all|5|3|ms996|MaxCro|Max crowding factor    ||||1
+~+|1|n|@crowf    ||mode=EQ ||all|5|3|ms986|MaxCro|Max crowding factor    ||||1
+~+|1|n|@crowf    ||mode=C  ||all|5|3|ms976|MaxCro|Max crowding factor    ||||1
+~+|1|n|@crowf    ||mode=M  ||all|5|3|ms966|MaxCro|Max crowding factor    ||||1
+q
+~/   Mode     Seat. pass-mls  Stand. pass-mls  Excess. pass-mls  Max crowd. factor
+~/   Loc Bus     %ms999.0_9%       %ms998.0_9%       %ms997.0_9%       %ms996.3_9%
+~/   Exp Bus     %ms989.0_9%       %ms988.0_9%       %ms987.0_9%       %ms986.3_9%
+~/   CTA Rail    %ms979.0_9%       %ms978.0_9%       %ms977.0_9%       %ms976.3_9%
+~/   Metra       %ms969.0_9%       %ms968.0_9%       %ms967.0_9%       %ms966.3_9%
+~/ - Comfort convenince & cleanliness in vehicles
+2.41
+~+|1|y|@cumbo|n|put(@borav+get(1)*(index2>1))||all|all|4
+~+|1|y|@clnob|n|%r35%*@cumbo/@lcapt||mod=BPL||all|4
+~+|1|y|@clnob|n|%r36%*@cumbo/@lcapt||mod=EQ ||all|4
+~+|1|y|@clnob|n|%r37%*@cumbo/@lcapt||mod=C  ||all|4
+~+|1|y|@clnob|n|%r38%*@cumbo/@lcapt||mod=M  ||all|4
+~+|1|y|@ivtcl|n|(1-@clnob)*timtr   ||all     |all|4
+q
+~/ - Productivity bonus summary
+2.41
+~+|1|n|@prof1*@stpro||mod=BPL||all|5
+~+|2|ms999|MinPro|Min Prod, min||||3|ms998|MaxPro|Max Prod, min||||1
+~+|1|n|@prof1*@stpro||mod=EQ ||all|5
+~+|2|ms997|MinPro|Min Prod, min||||3|ms996|MaxPro|Max Prod, min||||1
+~+|1|n|@prof1*@stpro||mod=C  ||all|5
+~+|2|ms995|MinPro|Min Prod, min||||3|ms994|MaxPro|Max Prod, min||||1
+~+|1|n|@prof1*@stpro||mod=M  ||all|5
+~+|2|ms993|MinPro|Min Prod, min||||3|ms992|MaxPro|Max Prod, min||||1
+~+|1|n|@prof2*@stpro||mod=BPL||all|5
+~+|2|ms989|MinPro|Min Prod, min||||3|ms988|MaxPro|Max Prod, min||||1
+~+|1|n|@prof2*@stpro||mod=EQ ||all|5
+~+|2|ms987|MinPro|Min Prod, min||||3|ms986|MaxPro|Max Prod, min||||1
+~+|1|n|@prof2*@stpro||mod=C  ||all|5
+~+|2|ms985|MinPro|Min Prod, min||||3|ms984|MaxPro|Max Prod, min||||1
+~+|1|n|@prof2*@stpro||mod=M  ||all|5
+~+|2|ms983|MinPro|Min Prod, min||||3|ms982|MaxPro|Max Prod, min||||1
+~+|1|n|@prof3*@stpro||mod=BPL||all|5
+~+|2|ms979|MinPro|Min Prod, min||||3|ms978|MaxPro|Max Prod, min||||1
+~+|1|n|@prof3*@stpro||mod=EQ ||all|5
+~+|2|ms977|MinPro|Min Prod, min||||3|ms976|MaxPro|Max Prod, min||||1
+~+|1|n|@prof3*@stpro||mod=C  ||all|5
+~+|2|ms975|MinPro|Min Prod, min||||3|ms974|MaxPro|Max Prod, min||||1
+~+|1|n|@prof3*@stpro||mod=M  ||all|5
+~+|2|ms973|MinPro|Min Prod, min||||3|ms972|MaxPro|Max Prod, min||||1
+q
+~/   Max/min productivity bonus as IVT weight reduction:
+~/   Class 1, Local Bus: %ms999.3_6%, %ms998.3_6%
+~/   Class 1, Expr. Bus: %ms997.3_6%, %ms996.3_6%
+~/   Class 1, CTA Train: %ms995.3_6%, %ms994.3_6%
+~/   Class 1, Metra    : %ms993.3_6%, %ms992.3_6%
+~/   Class 2, Local Bus: %ms989.3_6%, %ms988.3_6%
+~/   Class 2, Expr. Bus: %ms987.3_6%, %ms986.3_6%
+~/   Class 2, CTA Train: %ms985.3_6%, %ms984.3_6%
+~/   Class 2, Metra    : %ms983.3_6%, %ms982.3_6%
+~/   Class 3, Local Bus: %ms979.3_6%, %ms978.3_6%
+~/   Class 3, Expr. Bus: %ms977.3_6%, %ms976.3_6%
+~/   Class 3, CTA Train: %ms975.3_6%, %ms974.3_6%
+~/   Class 3, Metra    : %ms973.3_6%, %ms972.3_6%
+~/ - Adjustment of IVT perception factor
+2.41
+~+|1|y|@ivpr1|n|(1-@prof1*@stpro)*timtr||all|all|4
+~+|1|y|@ivpr2|n|(1-@prof1*@stpro)*timtr||all|all|4
+~+|1|y|@ivpr3|n|(1-@prof1*@stpro)*timtr||all|all|4
+~+|1|y|@ivtf1|n|@ivtpf*(1+@soba1+@crowf+@clnob*%r28%+@prof1*@stpro)||all|all|4
+~+|1|y|@ivtf2|n|@ivtpf*(1+@soba2+@crowf+@clnob*%r29%+@prof2*@stpro)||all|all|4
+~+|1|y|@ivtf3|n|@ivtpf*(1+@soba3+@crowf+@clnob*%r30%+@prof3*@stpro)||all|all|4
+q
+~/ - Effective headway multiplier
+2.41
+~+|1|y|@hdwem|n|((@borav/((@lcapt-@trvav+@borav).max.1)).min.(3.0)).max.1||all|all|4
+~+|1|y|@hdwef|n|hdwy*@hfrac*@hdwem||all|all|4
+q
+~/ - Effective headway multiplier summary
+2.41
+~+|1|n|@hdwem||mode=B||all|5|6|ms999|NumEle|Num Elements|1
+~r199=%ms999%
+~?r199=0
+~$>ZERO CALC
+~+|1|n|@hdwem||mode=B||all|5|2|ms989|MinMul|Min hdwy multiplier||||1
+~:ZERO CALC
+~+|1|n|@hdwem||mode=P||all|5|6|ms999|NumEle|Num Elements|1
+~r199=%ms999%
+~?r199=0
+~$>ZERO CALC
+~+|1|n|@hdwem||mode=P||all|5|2|ms988|MinMul|Min hdwy multiplier||||1
+~:ZERO CALC
+~+|1|n|@hdwem||mode=L||all|5|6|ms999|NumEle|Num Elements|1
+~r199=%ms999%
+~?r199=0
+~$>ZERO CALC
+~+|1|n|@hdwem||mode=L||all|5|2|ms987|MinMul|Min hdwy multiplier||||1
+~:ZERO CALC
+~+|1|n|@hdwem||mode=E||all|5|6|ms999|NumEle|Num Elements|1
+~r199=%ms999%
+~?r199=0
+~$>ZERO CALC
+~+|1|n|@hdwem||mode=E||all|5|2|ms986|MinMul|Min hdwy multiplier||||1
+~:ZERO CALC
+~+|1|n|@hdwem||mode=Q||all|5|6|ms999|NumEle|Num Elements|1
+~r199=%ms999%
+~?r199=0
+~$>ZERO CALC
+~+|1|n|@hdwem||mode=Q||all|5|2|ms985|MinMul|Min hdwy multiplier||||1
+~:ZERO CALC
+~+|1|n|@hdwem||mode=C||all|5|6|ms999|NumEle|Num Elements|1
+~r199=%ms999%
+~?r199=0
+~$>ZERO CALC
+~+|1|n|@hdwem||mode=C||all|5|2|ms984|MinMul|Min hdwy multiplier||||1
+~:ZERO CALC
+~+|1|n|@hdwem||mode=M||all|5|6|ms999|NumEle|Num Elements|1
+~r199=%ms999%
+~?r199=0
+~$>ZERO CALC
+~+|1|n|@hdwem||mode=M||all|5|2|ms983|MinMul|Min hdwy multiplier||||1
+~:ZERO CALC
+~+|1|n|@hdwem||mode=B||all|5|6|ms999|NumEle|Num Elements|1
+~r199=%ms999%
+~?r199=0
+~$>ZERO CALC
+~+|1|n|@hdwem||mode=B||all|5|3|ms992|MaxMul|Max hdwy multiplier||||1
+~:ZERO CALC
+~+|1|n|@hdwem||mode=P||all|5|6|ms999|NumEle|Num Elements|1
+~r199=%ms999%
+~?r199=0
+~$>ZERO CALC
+~+|1|n|@hdwem||mode=P||all|5|3|ms998|MaxMul|Max hdwy multiplier||||1
+~:ZERO CALC
+~+|1|n|@hdwem||mode=L||all|5|6|ms999|NumEle|Num Elements|1
+~r199=%ms999%
+~?r199=0
+~$>ZERO CALC
+~+|1|n|@hdwem||mode=L||all|5|3|ms997|MaxMul|Max hdwy multiplier||||1
+~:ZERO CALC
+~+|1|n|@hdwem||mode=E||all|5|6|ms999|NumEle|Num Elements|1
+~r199=%ms999%
+~?r199=0
+~$>ZERO CALC
+~+|1|n|@hdwem||mode=E||all|5|3|ms996|MaxMul|Max hdwy multiplier||||1
+~:ZERO CALC
+~+|1|n|@hdwem||mode=Q||all|5|6|ms999|NumEle|Num Elements|1
+~r199=%ms999%
+~?r199=0
+~$>ZERO CALC
+~+|1|n|@hdwem||mode=Q||all|5|3|ms995|MaxMul|Max hdwy multiplier||||1
+~:ZERO CALC
+~+|1|n|@hdwem||mode=C||all|5|6|ms999|NumEle|Num Elements|1
+~r199=%ms999%
+~?r199=0
+~$>ZERO CALC
+~+|1|n|@hdwem||mode=C||all|5|3|ms994|MaxMul|Max hdwy multiplier||||1
+~:ZERO CALC
+~+|1|n|@hdwem||mode=M||all|5|6|ms999|NumEle|Num Elements|1
+~r199=%ms999%
+~?r199=0
+~$>ZERO CALC
+~+|1|n|@hdwem||mode=M||all|5|3|ms993|MaxMul|Max hdwy multiplier||||1
+~:ZERO CALC
+q
+~/   Min/max headway multiplier:
+~/   CTA Local Bus (B): %ms989.3%, %ms992.3%
+~/   PACE Regul Bus(P): %ms988.3%, %ms998.3%
+~/   PACE Loc. Bus (L): %ms987.3%, %ms997.3%
+~/   CTA Expr. Bus (E): %ms986.3%, %ms996.3%
+~/   PACE Exp. Bus (Q): %ms985.3%, %ms995.3%
+~/   CTA Rail (C)     : %ms984.3%, %ms994.3%
+~/   Metra Rail (M)   : %ms983.3%, %ms993.3%
+~/ - Extra average wait time due to unreliability
+2.41
+~+|1|y|@eavwt|n|((%r71%+%r72%+%r73%*(1/(hdwy.min.30))+
+~+|%r74%*((@trvav.min.@lcapt)/@lcaps)+%r75%*@cudis/@ldist).max.0)*
+~+|(hdwy.min.30)/2|
+~+|mod=BPLEQ||all|4
+~+|1|y|@hdwef|n|@hdwef+@eavwt*@relim||all|all|4
+q
+~/ - Extra average wait time summary by line headway groups
+~r199=8 / number of headway bins to report
+/ upper & lower bounds for bins
+~+|~r181=0|~r182=5|~r183=10|~r184=15|~r185=20|~r186=30|~r187=60|~r188=1000|~r189=9999
+2.41
+~r198=1 / Loop counter
+~:EAWT REPORT LOOP
+~+|~r197=%r198%|~r197+1
+~+|~t9=%%%r18%r198%%%%|~t8=%%%r18%r197%%%%
+~+|~r196=%t8%|~r196-0.001
+~+|1|n|@eavwt||mod=BPLEQ|and hdwy=%t9%,%r196%||all|5|6|ms999|NumEle|Num Elements
+~+|                                                  6|ms998|NumEle|Num Elements |1
+~r199=%ms999%
+~?r199=0
+~$>ZERO CALC
+~+|1|n|@eavwt||mod=BPLEQ|and hdwy=%t9%,%r196%||all|5|2|ms999|MinPro|Min Prod, min|||
+~+|                                                  3|ms998|MaxPro|Max Prod, min||||1
+~:ZERO CALC
+~/   Min/max extra wait time hdwy %t9_7%-%r196.3_8% min: %ms999.3_6%, %ms998.3_6%
+~r198+1
+~?!r198>%r199%
+~$EAWT REPORT LOOP
+q
+~/ - Variable cleanliness index
+2.41
+~+|1|y|@toboa |n|@borav||4|all|all|4
+~+|1|y|@toalij|n|@trvav+@boravn-@trvavn||4|all|all|4
+~# Modified @clnsv calculation to allow continuous @bstyp/@rstyp values (NMP 5/28/14):
+~+|1|y|@clnsv |n|((-0.01*(@bstyp.ge.2.5)).min.(-0.01*(@rstyp.ge.2.5)))*log10(1+@toboa+@toali)||all|4
+~+|1|y|@clnst |n|1-(1-(@clnsf-@clnsv))*@clnim||all|4
+q
+~/ - Station cleanliness summary by station type:
+2.41
+~# Modified @clnst min/max calculations to allow continuous @bstyp/@rstyp values (NMP 5/28/14):
+~+|1|n|@clnst||@bstyp=1.00,6.00|@rstyp=1.00,6.00||5
+~+|2|ms999|MinCln|Min Cleanliness||3|ms998|MaxCln|Max Cleanliness||1
+~+|1|n|@clnst||@bstyp=1.00,6.00|@rstyp=1.00,6.00||5
+~+|2|ms997|MinCln|Min Cleanliness||3|ms996|MaxCln|Max Cleanliness||1
+~+|1|n|@clnst||@bstyp=1.00,6.00|@rstyp=1.00,6.00||5
+~+|2|ms995|MinCln|Min Cleanliness||3|ms994|MaxCln|Max Cleanliness||1
+~+|1|n|@clnst||@bstyp=1.00,6.00|@rstyp=1.00,6.00||5
+~+|2|ms993|MinCln|Min Cleanliness||3|ms992|MaxCln|Max Cleanliness||1
+~+|1|n|@clnst||@bstyp=1.00,6.00|@rstyp=1.00,6.00||5
+~+|2|ms991|MinCln|Min Cleanliness||3|ms990|MaxCln|Max Cleanliness||1
+q
+~/   Min/max cleanliness - pole:          %ms999.3_6%, %ms998.3_6%
+~/   Min/max cleanliness - shelter:       %ms997.3_6%, %ms996.3_6%
+~/   Min/max cleanliness - plaza:         %ms995.3_6%, %ms994.3_6%
+~/   Min/max cleanliness - station:       %ms993.3_6%, %ms992.3_6%
+~/   Min/max cleanliness - major stat.:   %ms991.3_6%, %ms990.3_6%
+~/ - Additional boarding time penalty and wait time penalty for station non-cleanliness
+2.41
+~+|1|y|@perba|n|((1-(@clnsf-@clnsv))*@clnim)*%r89%||all|4
+~+|1|y|@wcona|n|((1-(@clnsf-@clnsv))*@clnim)*%r90%||all|4
+~+|1|y|@perbf|n|@perbo+@perba                     ||all|4
+~+|1|y|@wconf|n|@wconv+@wcona                     ||all|4
+q
+~x+1
+~?!x>%r200%
+~$EQUILIBRATION LOOP
+~/CONVERGENCE SUMMARIES AFTER EQUILIBRATION LOOP
+~/ - User-class-specific line ridership summary after equilibration
+2.41
+~+|1|y|@lpas1|n|@boar1||4|all|all|4
+~+|1|y|@lpas2|n|@boar2||4|all|all|4
+~+|1|y|@lpas3|n|@boar3||4|all|all|4
+q
+~:END
+~/Assignment and skimming done!!!
+reports=
+q

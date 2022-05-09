@@ -4,7 +4,7 @@
 
 import utilities.asim_input_prep as _a
 import utilities.cmap_utilities as _u
-import network.cmap_maz_tap as _cmt
+import network.cmap_maz_stop as _cmt
 import os
 
 modelYaml = os.environ['MODEL_PARAMETERS']
@@ -12,9 +12,9 @@ modelYaml = os.environ['MODEL_PARAMETERS']
 utils = _u.CMapUtilities()
 parms = utils.readYaml(modelYaml)
 
-#TODO: remove before flight
+#TODO: to be removed
 #ip = _a.ASimInputPrep()
 #ip(parms)
 
-mmt = _cmt.CMapMazTap()
-mmt(parms)
+mmms = _cmt.CMapMazStop()
+mmms(parms)

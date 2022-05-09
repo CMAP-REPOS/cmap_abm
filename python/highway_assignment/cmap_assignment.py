@@ -172,7 +172,7 @@ class TrafficAssignment(_m.Tool()):
                 #self.report(period, scenario, classes) #FIXME
                 # Check that the distance matrix is valid (no disconnected zones)
                 if raise_zero_dist:
-                    name = "%s_SOV_TR_H_DIST"%period
+                    name = "SOV_TR_H_DIST__%s"%period
                     dist_stats = self._stats[name]
                     if dist_stats[1] == 0:
                         zones = scenario.zone_numbers
@@ -272,8 +272,8 @@ class TrafficAssignment(_m.Tool()):
                                 att_des = "%s %s '%s' sel turn flow" % (period, traffic_class["name"], suffix)
                                 turn_flow = create_attribute("TURN", att_name, att_des, 0, overwrite=True, scenario=scenario)
 
-                                name = "SELDEM_%s_%s_%s" % (period, traffic_class["name"], suffix)
-                                desc = "Selected demand for %s %s %s" % (period, traffic_class["name"], suffix)
+                                name = "SELDEM_%s_%s__%s" % (traffic_class["name"], suffix, period)
+                                desc = "Selected demand for %s %s %s" % (traffic_class["name"], suffix, period)
                                 seldem = dem_utils.create_full_matrix(name, desc, scenario=scenario)
 
                                 # add select link analysis
@@ -339,7 +339,7 @@ class TrafficAssignment(_m.Tool()):
                     continue
                 class_analysis = []
                 if "GENCOST" in traffic_class["skims"]:
-                    od_travel_times = 'mf"%s_%s_%s"' % (period, traffic_class["name"], "GENCOST")
+                    od_travel_times = 'mf"%s_%s__%s"' % (traffic_class["name"], "GENCOST", period)
                     traffic_class["skims"].remove("GENCOST")
                 else:
                     od_travel_times = None
@@ -356,7 +356,7 @@ class TrafficAssignment(_m.Tool()):
                                 {"analyzed_demand": False, "path_value": True}
                         },
                         "results": {
-                            "od_values": '%s_%s_%s'%(period, traffic_class["name"], skim_name),
+                            "od_values": '%s_%s__%s'%(traffic_class["name"], skim_name, period),
                             "selected_link_volumes": None,
                             "selected_turn_volumes": None
                         }
@@ -395,7 +395,7 @@ class TrafficAssignment(_m.Tool()):
                         idx = 1
                         for skim_type in skims:
                             skim_name = skim_type.split(".")[0]
-                            name = "%s_%s_%s"%(period, class_name, skim_type)
+                            name = "%s_%s__%s"%(class_name, skim_name, period)
                             matrix = emmebank.matrix(name.split(".")[0])
                             data = matrix.get_numpy_data(scenario)
                             if skim_name in ["TIME", "DIST", "FTIME"]:
@@ -403,8 +403,6 @@ class TrafficAssignment(_m.Tool()):
                                 data[numpy.diag_indices_from(data)] = 0.5 * numpy.nanmin(data[::,:-17:], 1)
                                 internal_data = data[:-17:, :-17:]  # Exclude the last 17 zones, external zones
                                 self._stats[name] = (name, internal_data.min(), internal_data.max(), internal_data.mean(), internal_data.sum(), 0)
-                            elif skim_name == "REL":
-                                data = numpy.sqrt(data)
                             else:
                                 self._stats[name] = (name, data.min(), data.max(), data.mean(), data.sum(), 0)
                                 numpy.fill_diagonal(data, 0.0)
@@ -571,11 +569,11 @@ class TrafficAssignment(_m.Tool()):
         int_var_name : type
         """
         sm = 1000 * int(scenario)
-        idx = 600
+        idx = 400
         create_matrix = _m.Modeller().tool("inro.emme.data.matrix.create_matrix")
         for vehClass in classes:
             for skim in vehClass['skims']:
-                matrixName = "%s_%s_%s"%(period, vehClass['name'], skim.split(".")[0])
+                matrixName = "%s_%s__%s"%(vehClass['name'], skim.split(".")[0], period)
                 matrixId  = "mf%s"%(sm + idx)
                 create_matrix(matrix_id = matrixId, matrix_name = matrixName, matrix_description = "", scenario = scenario, overwrite = True)
                 idx += 1
