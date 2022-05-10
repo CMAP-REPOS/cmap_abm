@@ -1,0 +1,739 @@
+# read trips table post preprocessor and run expressions to code
+# additional data fields, with one data fields for each matrix specified below
+
+preprocessor:
+  SPEC: write_trip_matrices_annotate_trips_preprocessor
+  DF: trips
+  TABLES:
+    - tours
+    - households
+
+# divide trip counts by household expansion factor
+HH_EXPANSION_WEIGHT_COL: sample_rate  # added when households read in
+
+# save preprocessed trips table to pipeline if desired
+SAVE_TRIPS_TABLE: True
+
+MATRICES:
+  #EA
+  - file_name: trips_ea_taz.omx
+    tables:
+      - name: intSOV_NT_L_EA
+        data_field: SOV_NT_L_EA
+      - name: intSOV_TR_L_EA
+        data_field: SOV_TR_L_EA
+      - name: intHOV2_L_EA
+        data_field: HOV2_L_EA
+      - name: intHOV3_L_EA
+        data_field: HOV3_L_EA
+      - name: intSOV_NT_M_EA
+        data_field: SOV_NT_M_EA
+      - name: intSOV_TR_M_EA
+        data_field: SOV_TR_M_EA
+      - name: intHOV2_M_EA
+        data_field: HOV2_M_EA
+      - name: intHOV3_M_EA
+        data_field: HOV3_M_EA
+      - name: intSOV_NT_H_EA
+        data_field: SOV_NT_H_EA
+      - name: intSOV_TR_H_EA
+        data_field: SOV_TR_H_EA
+      - name: intHOV2_H_EA
+        data_field: HOV2_H_EA
+      - name: intHOV3_H_EA
+        data_field: HOV3_H_EA
+      - name: WALK_EA
+        data_field: WALK_EA
+      - name: BIKE_EA
+        data_field: BIKE_EA
+      - name: SCHBUS_EA
+        data_field: SCHBUS_EA
+
+  - file_name: trn_ea_taz.omx
+    tables:       
+      - name: TRN_WALK_L_EA
+        data_field: TRN_WALK_L_EA
+      - name: TRN_PNROUT_L_EA
+        data_field: TRN_PNROUT_L_EA
+      - name: TRN_PNRIN_L_EA
+        data_field: TRN_PNRIN_L_EA        
+      - name: TRN_KNROUT_L_EA
+        data_field: TRN_KNROUT_L_EA
+      - name: TRN_KNRIN_L_EA
+        data_field: TRN_KNRIN_L_EA        
+      - name: TRN_TNCOUT_L_EA
+        data_field: TRN_TNCOUT_L_EA
+      - name: TRN_TNCIN_L_EA
+        data_field: TRN_TNCIN_L_EA        
+      - name: TRN_TOT_L_EA
+        data_field: TRN_TOT_L_EA
+      - name: TRN_WALK_M_EA
+        data_field: TRN_WALK_M_EA
+      - name: TRN_PNROUT_M_EA
+        data_field: TRN_PNROUT_M_EA
+      - name: TRN_PNRIN_M_EA
+        data_field: TRN_PNRIN_M_EA        
+      - name: TRN_KNROUT_M_EA
+        data_field: TRN_KNROUT_M_EA
+      - name: TRN_KNRIN_M_EA
+        data_field: TRN_KNRIN_M_EA        
+      - name: TRN_TNCOUT_M_EA
+        data_field: TRN_TNCOUT_M_EA
+      - name: TRN_TNCIN_M_EA
+        data_field: TRN_TNCIN_M_EA        
+      - name: TRN_TOT_M_EA
+        data_field: TRN_TOT_M_EA
+      - name: TRN_WALK_H_EA
+        data_field: TRN_WALK_H_EA
+      - name: TRN_PNROUT_H_EA
+        data_field: TRN_PNROUT_H_EA
+      - name: TRN_PNRIN_H_EA
+        data_field: TRN_PNRIN_H_EA        
+      - name: TRN_KNROUT_H_EA
+        data_field: TRN_KNROUT_H_EA
+      - name: TRN_KNRIN_H_EA
+        data_field: TRN_KNRIN_H_EA        
+      - name: TRN_TNCOUT_H_EA
+        data_field: TRN_TNCOUT_H_EA
+      - name: TRN_TNCIN_H_EA
+        data_field: TRN_TNCIN_H_EA        
+      - name: TRN_TOT_H_EA
+        data_field: TRN_TOT_H_EA
+#AM
+  - file_name: trips_am_taz.omx
+    tables:
+      - name: intSOV_NT_L_AM
+        data_field: SOV_NT_L_AM
+      - name: intSOV_TR_L_AM
+        data_field: SOV_TR_L_AM
+      - name: intHOV2_L_AM
+        data_field: HOV2_L_AM
+      - name: intHOV3_L_AM
+        data_field: HOV3_L_AM
+      - name: intSOV_NT_M_AM
+        data_field: SOV_NT_M_AM
+      - name: intSOV_TR_M_AM
+        data_field: SOV_TR_M_AM
+      - name: intHOV2_M_AM
+        data_field: HOV2_M_AM
+      - name: intHOV3_M_AM
+        data_field: HOV3_M_AM
+      - name: intSOV_NT_H_AM
+        data_field: SOV_NT_H_AM
+      - name: intSOV_TR_H_AM
+        data_field: SOV_TR_H_AM
+      - name: intHOV2_H_AM
+        data_field: HOV2_H_AM
+      - name: intHOV3_H_AM
+        data_field: HOV3_H_AM
+      - name: WALK_AM
+        data_field: WALK_AM
+      - name: BIKE_AM
+        data_field: BIKE_AM
+      - name: SCHBUS_AM
+        data_field: SCHBUS_AM
+        
+  - file_name: trn_am_taz.omx
+    tables:       
+      - name: TRN_WALK_L_AM
+        data_field: TRN_WALK_L_AM
+      - name: TRN_PNROUT_L_AM
+        data_field: TRN_PNROUT_L_AM
+      - name: TRN_PNRIN_L_AM
+        data_field: TRN_PNRIN_L_AM        
+      - name: TRN_KNROUT_L_AM
+        data_field: TRN_KNROUT_L_AM
+      - name: TRN_KNRIN_L_AM
+        data_field: TRN_KNRIN_L_AM        
+      - name: TRN_TNCOUT_L_AM
+        data_field: TRN_TNCOUT_L_AM
+      - name: TRN_TNCIN_L_AM
+        data_field: TRN_TNCIN_L_AM        
+      - name: TRN_TOT_L_AM
+        data_field: TRN_TOT_L_AM
+      - name: TRN_WALK_M_AM
+        data_field: TRN_WALK_M_AM
+      - name: TRN_PNROUT_M_AM
+        data_field: TRN_PNROUT_M_AM
+      - name: TRN_PNRIN_M_AM
+        data_field: TRN_PNRIN_M_AM        
+      - name: TRN_KNROUT_M_AM
+        data_field: TRN_KNROUT_M_AM
+      - name: TRN_KNRIN_M_AM
+        data_field: TRN_KNRIN_M_AM        
+      - name: TRN_TNCOUT_M_AM
+        data_field: TRN_TNCOUT_M_AM
+      - name: TRN_TNCIN_M_AM
+        data_field: TRN_TNCIN_M_AM        
+      - name: TRN_TOT_M_AM
+        data_field: TRN_TOT_M_AM
+      - name: TRN_WALK_H_AM
+        data_field: TRN_WALK_H_AM
+      - name: TRN_PNROUT_H_AM
+        data_field: TRN_PNROUT_H_AM
+      - name: TRN_PNRIN_H_AM
+        data_field: TRN_PNRIN_H_AM        
+      - name: TRN_KNROUT_H_AM
+        data_field: TRN_KNROUT_H_AM
+      - name: TRN_KNRIN_H_AM
+        data_field: TRN_KNRIN_H_AM        
+      - name: TRN_TNCOUT_H_AM
+        data_field: TRN_TNCOUT_H_AM
+      - name: TRN_TNCIN_H_AM
+        data_field: TRN_TNCIN_H_AM        
+      - name: TRN_TOT_H_AM
+        data_field: TRN_TOT_H_AM
+  #MM
+  - file_name: trips_mm_taz.omx
+    tables:
+      - name: intSOV_NT_L_MM
+        data_field: SOV_NT_L_MM
+      - name: intSOV_TR_L_MM
+        data_field: SOV_TR_L_MM
+      - name: intHOV2_L_MM
+        data_field: HOV2_L_MM
+      - name: intHOV3_L_MM
+        data_field: HOV3_L_MM
+      - name: intSOV_NT_M_MM
+        data_field: SOV_NT_M_MM
+      - name: intSOV_TR_M_MM
+        data_field: SOV_TR_M_MM
+      - name: intHOV2_M_MM
+        data_field: HOV2_M_MM
+      - name: intHOV3_M_MM
+        data_field: HOV3_M_MM
+      - name: intSOV_NT_H_MM
+        data_field: SOV_NT_H_MM
+      - name: intSOV_TR_H_MM
+        data_field: SOV_TR_H_MM
+      - name: intHOV2_H_MM
+        data_field: HOV2_H_MM
+      - name: intHOV3_H_MM
+        data_field: HOV3_H_MM
+      - name: WALK_MM
+        data_field: WALK_MM
+      - name: BIKE_MM
+        data_field: BIKE_MM
+      - name: SCHBUS_MM
+        data_field: SCHBUS_MM
+
+  - file_name: trn_mm_taz.omx
+    tables:                
+      - name: TRN_WALK_L_MM
+        data_field: TRN_WALK_L_MM
+      - name: TRN_PNROUT_L_MM
+        data_field: TRN_PNROUT_L_MM
+      - name: TRN_PNRIN_L_MM
+        data_field: TRN_PNRIN_L_MM        
+      - name: TRN_KNROUT_L_MM
+        data_field: TRN_KNROUT_L_MM
+      - name: TRN_KNRIN_L_MM
+        data_field: TRN_KNRIN_L_MM        
+      - name: TRN_TNCOUT_L_MM
+        data_field: TRN_TNCOUT_L_MM
+      - name: TRN_TNCIN_L_MM
+        data_field: TRN_TNCIN_L_MM        
+      - name: TRN_TOT_L_MM
+        data_field: TRN_TOT_L_MM
+      - name: TRN_WALK_M_MM
+        data_field: TRN_WALK_M_MM
+      - name: TRN_PNROUT_M_MM
+        data_field: TRN_PNROUT_M_MM
+      - name: TRN_PNRIN_M_MM
+        data_field: TRN_PNRIN_M_MM        
+      - name: TRN_KNROUT_M_MM
+        data_field: TRN_KNROUT_M_MM
+      - name: TRN_KNRIN_M_MM
+        data_field: TRN_KNRIN_M_MM        
+      - name: TRN_TNCOUT_M_MM
+        data_field: TRN_TNCOUT_M_MM
+      - name: TRN_TNCIN_M_MM
+        data_field: TRN_TNCIN_M_MM        
+      - name: TRN_TOT_M_MM
+        data_field: TRN_TOT_M_MM
+      - name: TRN_WALK_H_MM
+        data_field: TRN_WALK_H_MM
+      - name: TRN_PNROUT_H_MM
+        data_field: TRN_PNROUT_H_MM
+      - name: TRN_PNRIN_H_MM
+        data_field: TRN_PNRIN_H_MM        
+      - name: TRN_KNROUT_H_MM
+        data_field: TRN_KNROUT_H_MM
+      - name: TRN_KNRIN_H_MM
+        data_field: TRN_KNRIN_H_MM        
+      - name: TRN_TNCOUT_H_MM
+        data_field: TRN_TNCOUT_H_MM
+      - name: TRN_TNCIN_H_MM
+        data_field: TRN_TNCIN_H_MM        
+      - name: TRN_TOT_H_MM
+        data_field: TRN_TOT_H_MM
+  # #MD
+  - file_name: trips_md_taz.omx
+    tables:
+      - name: intSOV_NT_L_MD
+        data_field: SOV_NT_L_MD
+      - name: intSOV_TR_L_MD
+        data_field: SOV_TR_L_MD
+      - name: intHOV2_L_MD
+        data_field: HOV2_L_MD
+      - name: intHOV3_L_MD
+        data_field: HOV3_L_MD
+      - name: intSOV_NT_M_MD
+        data_field: SOV_NT_M_MD
+      - name: intSOV_TR_M_MD
+        data_field: SOV_TR_M_MD
+      - name: intHOV2_M_MD
+        data_field: HOV2_M_MD
+      - name: intHOV3_M_MD
+        data_field: HOV3_M_MD
+      - name: intSOV_NT_H_MD
+        data_field: SOV_NT_H_MD
+      - name: intSOV_TR_H_MD
+        data_field: SOV_TR_H_MD
+      - name: intHOV2_H_MD
+        data_field: HOV2_H_MD
+      - name: intHOV3_H_MD
+        data_field: HOV3_H_MD
+      - name: WALK_MD
+        data_field: WALK_MD
+      - name: BIKE_MD
+        data_field: BIKE_MD
+      - name: SCHBUS_MD
+        data_field: SCHBUS_MD
+ 
+  - file_name: trn_md_taz.omx
+    tables:                
+      - name: TRN_WALK_L_MD
+        data_field: TRN_WALK_L_MD
+      - name: TRN_PNROUT_L_MD
+        data_field: TRN_PNROUT_L_MD
+      - name: TRN_PNRIN_L_MD
+        data_field: TRN_PNRIN_L_MD        
+      - name: TRN_KNROUT_L_MD
+        data_field: TRN_KNROUT_L_MD
+      - name: TRN_KNRIN_L_MD
+        data_field: TRN_KNRIN_L_MD        
+      - name: TRN_TNCOUT_L_MD
+        data_field: TRN_TNCOUT_L_MD
+      - name: TRN_TNCIN_L_MD
+        data_field: TRN_TNCIN_L_MD        
+      - name: TRN_TOT_L_MD
+        data_field: TRN_TOT_L_MD
+      - name: TRN_WALK_M_MD
+        data_field: TRN_WALK_M_MD
+      - name: TRN_PNROUT_M_MD
+        data_field: TRN_PNROUT_M_MD
+      - name: TRN_PNRIN_M_MD
+        data_field: TRN_PNRIN_M_MD        
+      - name: TRN_KNROUT_M_MD
+        data_field: TRN_KNROUT_M_MD
+      - name: TRN_KNRIN_M_MD
+        data_field: TRN_KNRIN_M_MD        
+      - name: TRN_TNCOUT_M_MD
+        data_field: TRN_TNCOUT_M_MD
+      - name: TRN_TNCIN_M_MD
+        data_field: TRN_TNCIN_M_MD        
+      - name: TRN_TOT_M_MD
+        data_field: TRN_TOT_M_MD
+      - name: TRN_WALK_H_MD
+        data_field: TRN_WALK_H_MD
+      - name: TRN_PNROUT_H_MD
+        data_field: TRN_PNROUT_H_MD
+      - name: TRN_PNRIN_H_MD
+        data_field: TRN_PNRIN_H_MD        
+      - name: TRN_KNROUT_H_MD
+        data_field: TRN_KNROUT_H_MD
+      - name: TRN_KNRIN_H_MD
+        data_field: TRN_KNRIN_H_MD        
+      - name: TRN_TNCOUT_H_MD
+        data_field: TRN_TNCOUT_H_MD
+      - name: TRN_TNCIN_H_MD
+        data_field: TRN_TNCIN_H_MD        
+      - name: TRN_TOT_H_MD
+        data_field: TRN_TOT_H_MD
+
+  #AF
+  - file_name: trips_af_taz.omx
+    tables:
+      - name: intSOV_NT_L_AF
+        data_field: SOV_NT_L_AF
+      - name: intSOV_TR_L_AF
+        data_field: SOV_TR_L_AF
+      - name: intHOV2_L_AF
+        data_field: HOV2_L_AF
+      - name: intHOV3_L_AF
+        data_field: HOV3_L_AF
+      - name: intSOV_NT_M_AF
+        data_field: SOV_NT_M_AF
+      - name: intSOV_TR_M_AF
+        data_field: SOV_TR_M_AF
+      - name: intHOV2_M_AF
+        data_field: HOV2_M_AF
+      - name: intHOV3_M_AF
+        data_field: HOV3_M_AF
+      - name: intSOV_NT_H_AF
+        data_field: SOV_NT_H_AF
+      - name: intSOV_TR_H_AF
+        data_field: SOV_TR_H_AF
+      - name: intHOV2_H_AF
+        data_field: HOV2_H_AF
+      - name: intHOV3_H_AF
+        data_field: HOV3_H_AF
+      - name: WALK_AF
+        data_field: WALK_AF
+      - name: BIKE_AF
+        data_field: BIKE_AF
+      - name: SCHBUS_AF
+        data_field: SCHBUS_AF
+     
+  - file_name: trn_af_taz.omx
+    tables:                
+      - name: TRN_WALK_L_AF
+        data_field: TRN_WALK_L_AF
+      - name: TRN_PNROUT_L_AF
+        data_field: TRN_PNROUT_L_AF
+      - name: TRN_PNRIN_L_AF
+        data_field: TRN_PNRIN_L_AF        
+      - name: TRN_KNROUT_L_AF
+        data_field: TRN_KNROUT_L_AF
+      - name: TRN_KNRIN_L_AF
+        data_field: TRN_KNRIN_L_AF        
+      - name: TRN_TNCOUT_L_AF
+        data_field: TRN_TNCOUT_L_AF
+      - name: TRN_TNCIN_L_AF
+        data_field: TRN_TNCIN_L_AF        
+      - name: TRN_TOT_L_AF
+        data_field: TRN_TOT_L_AF
+      - name: TRN_WALK_M_AF
+        data_field: TRN_WALK_M_AF
+      - name: TRN_PNROUT_M_AF
+        data_field: TRN_PNROUT_M_AF
+      - name: TRN_PNRIN_M_AF
+        data_field: TRN_PNRIN_M_AF        
+      - name: TRN_KNROUT_M_AF
+        data_field: TRN_KNROUT_M_AF
+      - name: TRN_KNRIN_M_AF
+        data_field: TRN_KNRIN_M_AF        
+      - name: TRN_TNCOUT_M_AF
+        data_field: TRN_TNCOUT_M_AF
+      - name: TRN_TNCIN_M_AF
+        data_field: TRN_TNCIN_M_AF        
+      - name: TRN_TOT_M_AF
+        data_field: TRN_TOT_M_AF
+      - name: TRN_WALK_H_AF
+        data_field: TRN_WALK_H_AF
+      - name: TRN_PNROUT_H_AF
+        data_field: TRN_PNROUT_H_AF
+      - name: TRN_PNRIN_H_AF
+        data_field: TRN_PNRIN_H_AF        
+      - name: TRN_KNROUT_H_AF
+        data_field: TRN_KNROUT_H_AF
+      - name: TRN_KNRIN_H_AF
+        data_field: TRN_KNRIN_H_AF        
+      - name: TRN_TNCOUT_H_AF
+        data_field: TRN_TNCOUT_H_AF
+      - name: TRN_TNCIN_H_AF
+        data_field: TRN_TNCIN_H_AF        
+      - name: TRN_TOT_H_AF
+        data_field: TRN_TOT_H_AF
+
+  #PM
+  - file_name: trips_pm_taz.omx
+    tables:
+      - name: intSOV_NT_L_PM
+        data_field: SOV_NT_L_PM
+      - name: intSOV_TR_L_PM
+        data_field: SOV_TR_L_PM
+      - name: intHOV2_L_PM
+        data_field: HOV2_L_PM
+      - name: intHOV3_L_PM
+        data_field: HOV3_L_PM
+      - name: intSOV_NT_M_PM
+        data_field: SOV_NT_M_PM
+      - name: intSOV_TR_M_PM
+        data_field: SOV_TR_M_PM
+      - name: intHOV2_M_PM
+        data_field: HOV2_M_PM
+      - name: intHOV3_M_PM
+        data_field: HOV3_M_PM
+      - name: intSOV_NT_H_PM
+        data_field: SOV_NT_H_PM
+      - name: intSOV_TR_H_PM
+        data_field: SOV_TR_H_PM
+      - name: intHOV2_H_PM
+        data_field: HOV2_H_PM
+      - name: intHOV3_H_PM
+        data_field: HOV3_H_PM
+      - name: WALK_PM
+        data_field: WALK_PM
+      - name: BIKE_PM
+        data_field: BIKE_PM
+      - name: SCHBUS_PM
+        data_field: SCHBUS_PM
+
+  - file_name: trn_pm_taz.omx
+    tables:                
+      - name: TRN_WALK_L_PM
+        data_field: TRN_WALK_L_PM
+      - name: TRN_PNROUT_L_PM
+        data_field: TRN_PNROUT_L_PM
+      - name: TRN_PNRIN_L_PM
+        data_field: TRN_PNRIN_L_PM        
+      - name: TRN_KNROUT_L_PM
+        data_field: TRN_KNROUT_L_PM
+      - name: TRN_KNRIN_L_PM
+        data_field: TRN_KNRIN_L_PM        
+      - name: TRN_TNCOUT_L_PM
+        data_field: TRN_TNCOUT_L_PM
+      - name: TRN_TNCIN_L_PM
+        data_field: TRN_TNCIN_L_PM        
+      - name: TRN_TOT_L_PM
+        data_field: TRN_TOT_L_PM
+      - name: TRN_WALK_M_PM
+        data_field: TRN_WALK_M_PM
+      - name: TRN_PNROUT_M_PM
+        data_field: TRN_PNROUT_M_PM
+      - name: TRN_PNRIN_M_PM
+        data_field: TRN_PNRIN_M_PM        
+      - name: TRN_KNROUT_M_PM
+        data_field: TRN_KNROUT_M_PM
+      - name: TRN_KNRIN_M_PM
+        data_field: TRN_KNRIN_M_PM        
+      - name: TRN_TNCOUT_M_PM
+        data_field: TRN_TNCOUT_M_PM
+      - name: TRN_TNCIN_M_PM
+        data_field: TRN_TNCIN_M_PM        
+      - name: TRN_TOT_M_PM
+        data_field: TRN_TOT_M_PM
+      - name: TRN_WALK_H_PM
+        data_field: TRN_WALK_H_PM
+      - name: TRN_PNROUT_H_PM
+        data_field: TRN_PNROUT_H_PM
+      - name: TRN_PNRIN_H_PM
+        data_field: TRN_PNRIN_H_PM        
+      - name: TRN_KNROUT_H_PM
+        data_field: TRN_KNROUT_H_PM
+      - name: TRN_KNRIN_H_PM
+        data_field: TRN_KNRIN_H_PM        
+      - name: TRN_TNCOUT_H_PM
+        data_field: TRN_TNCOUT_H_PM
+      - name: TRN_TNCIN_H_PM
+        data_field: TRN_TNCIN_H_PM        
+      - name: TRN_TOT_H_PM
+        data_field: TRN_TOT_H_PM
+
+  #EV
+  - file_name: trips_ev_taz.omx
+    tables:
+      - name: intSOV_NT_L_EV
+        data_field: SOV_NT_L_EV
+      - name: intSOV_TR_L_EV
+        data_field: SOV_TR_L_EV
+      - name: intHOV2_L_EV
+        data_field: HOV2_L_EV
+      - name: intHOV3_L_EV
+        data_field: HOV3_L_EV
+      - name: intSOV_NT_M_EV
+        data_field: SOV_NT_M_EV
+      - name: intSOV_TR_M_EV
+        data_field: SOV_TR_M_EV
+      - name: intHOV2_M_EV
+        data_field: HOV2_M_EV
+      - name: intHOV3_M_EV
+        data_field: HOV3_M_EV
+      - name: intSOV_NT_H_EV
+        data_field: SOV_NT_H_EV
+      - name: intSOV_TR_H_EV
+        data_field: SOV_TR_H_EV
+      - name: intHOV2_H_EV
+        data_field: HOV2_H_EV
+      - name: intHOV3_H_EV
+        data_field: HOV3_H_EV
+      - name: WALK_EV
+        data_field: WALK_EV
+      - name: BIKE_EV
+        data_field: BIKE_EV
+      - name: SCHBUS_EV
+        data_field: SCHBUS_EV
+                
+  - file_name: trn_ev_taz.omx
+    tables:                
+      - name: TRN_WALK_L_EV
+        data_field: TRN_WALK_L_EV
+      - name: TRN_PNROUT_L_EV
+        data_field: TRN_PNROUT_L_EV
+      - name: TRN_PNRIN_L_EV
+        data_field: TRN_PNRIN_L_EV        
+      - name: TRN_KNROUT_L_EV
+        data_field: TRN_KNROUT_L_EV
+      - name: TRN_KNRIN_L_EV
+        data_field: TRN_KNRIN_L_EV        
+      - name: TRN_TNCOUT_L_EV
+        data_field: TRN_TNCOUT_L_EV
+      - name: TRN_TNCIN_L_EV
+        data_field: TRN_TNCIN_L_EV        
+      - name: TRN_TOT_L_EV
+        data_field: TRN_TOT_L_EV
+      - name: TRN_WALK_M_EV
+        data_field: TRN_WALK_M_EV
+      - name: TRN_PNROUT_M_EV
+        data_field: TRN_PNROUT_M_EV
+      - name: TRN_PNRIN_M_EV
+        data_field: TRN_PNRIN_M_EV        
+      - name: TRN_KNROUT_M_EV
+        data_field: TRN_KNROUT_M_EV
+      - name: TRN_KNRIN_M_EV
+        data_field: TRN_KNRIN_M_EV        
+      - name: TRN_TNCOUT_M_EV
+        data_field: TRN_TNCOUT_M_EV
+      - name: TRN_TNCIN_M_EV
+        data_field: TRN_TNCIN_M_EV        
+      - name: TRN_TOT_M_EV
+        data_field: TRN_TOT_M_EV
+      - name: TRN_WALK_H_EV
+        data_field: TRN_WALK_H_EV
+      - name: TRN_PNROUT_H_EV
+        data_field: TRN_PNROUT_H_EV
+      - name: TRN_PNRIN_H_EV
+        data_field: TRN_PNRIN_H_EV        
+      - name: TRN_KNROUT_H_EV
+        data_field: TRN_KNROUT_H_EV
+      - name: TRN_KNRIN_H_EV
+        data_field: TRN_KNRIN_H_EV        
+      - name: TRN_TNCOUT_H_EV
+        data_field: TRN_TNCOUT_H_EV
+      - name: TRN_TNCIN_H_EV
+        data_field: TRN_TNCIN_H_EV        
+      - name: TRN_TOT_H_EV
+        data_field: TRN_TOT_H_EV
+
+  #NT
+  - file_name: trips_nt_taz.omx
+    tables:
+      - name: intSOV_NT_L_NT
+        data_field: SOV_NT_L_NT
+      - name: intSOV_TR_L_NT
+        data_field: SOV_TR_L_NT
+      - name: intHOV2_L_NT
+        data_field: HOV2_L_NT
+      - name: intHOV3_L_NT
+        data_field: HOV3_L_NT
+      - name: intSOV_NT_M_NT
+        data_field: SOV_NT_M_NT
+      - name: intSOV_TR_M_NT
+        data_field: SOV_TR_M_NT
+      - name: intHOV2_M_NT
+        data_field: HOV2_M_NT
+      - name: intHOV3_M_NT
+        data_field: HOV3_M_NT
+      - name: intSOV_NT_H_NT
+        data_field: SOV_NT_H_NT
+      - name: intSOV_TR_H_NT
+        data_field: SOV_TR_H_NT
+      - name: intHOV2_H_NT
+        data_field: HOV2_H_NT
+      - name: intHOV3_H_NT
+        data_field: HOV3_H_NT
+      - name: WALK_NT
+        data_field: WALK_NT
+      - name: BIKE_NT
+        data_field: BIKE_NT
+      - name: SCHBUS_NT
+        data_field: SCHBUS_NT
+
+  - file_name: trn_nt_taz.omx
+    tables:                
+      - name: TRN_WALK_L_NT
+        data_field: TRN_WALK_L_NT
+      - name: TRN_PNROUT_L_NT
+        data_field: TRN_PNROUT_L_NT
+      - name: TRN_PNRIN_L_NT
+        data_field: TRN_PNRIN_L_NT        
+      - name: TRN_KNROUT_L_NT
+        data_field: TRN_KNROUT_L_NT
+      - name: TRN_KNRIN_L_NT
+        data_field: TRN_KNRIN_L_NT        
+      - name: TRN_TNCOUT_L_NT
+        data_field: TRN_TNCOUT_L_NT
+      - name: TRN_TNCIN_L_NT
+        data_field: TRN_TNCIN_L_NT        
+      - name: TRN_TOT_L_NT
+        data_field: TRN_TOT_L_NT
+      - name: TRN_WALK_M_NT
+        data_field: TRN_WALK_M_NT
+      - name: TRN_PNROUT_M_NT
+        data_field: TRN_PNROUT_M_NT
+      - name: TRN_PNRIN_M_NT
+        data_field: TRN_PNRIN_M_NT        
+      - name: TRN_KNROUT_M_NT
+        data_field: TRN_KNROUT_M_NT
+      - name: TRN_KNRIN_M_NT
+        data_field: TRN_KNRIN_M_NT        
+      - name: TRN_TNCOUT_M_NT
+        data_field: TRN_TNCOUT_M_NT
+      - name: TRN_TNCIN_M_NT
+        data_field: TRN_TNCIN_M_NT        
+      - name: TRN_TOT_M_NT
+        data_field: TRN_TOT_M_NT
+      - name: TRN_WALK_H_NT
+        data_field: TRN_WALK_H_NT
+      - name: TRN_PNROUT_H_NT
+        data_field: TRN_PNROUT_H_NT
+      - name: TRN_PNRIN_H_NT
+        data_field: TRN_PNRIN_H_NT        
+      - name: TRN_KNROUT_H_NT
+        data_field: TRN_KNROUT_H_NT
+      - name: TRN_KNRIN_H_NT
+        data_field: TRN_KNRIN_H_NT        
+      - name: TRN_TNCOUT_H_NT
+        data_field: TRN_TNCOUT_H_NT
+      - name: TRN_TNCIN_H_NT
+        data_field: TRN_TNCIN_H_NT        
+      - name: TRN_TOT_H_NT
+        data_field: TRN_TOT_H_NT
+
+
+CONSTANTS:
+  time_periods:
+    #  periods: [0, 4, 5, 7, 8, 12, 14, 16, 18, 24]
+    #labels: &skim_time_period_labels ['VE', 'EA', 'AM', 'MM', 'MD', 'AF', 'PM', 'EV', 'NT']
+    # VE = 3a - 6a (same skim data as NT)
+    # EA = 6a - 7a
+    # AM = 7a - 9a
+    # MM = 9a - 10a
+    # MD = 10a - 2p
+    # AF = 2p - 4p
+    # PM = 4p - 6p
+    # EV = 6p - 8p
+    # NT = 8p - 3a
+    VE:
+      first_hour: 0
+      last_hour: 3
+    EA:
+      first_hour: 4
+      last_hour: 4
+    AM:
+      first_hour: 5
+      last_hour: 6
+    MM:
+      first_hour: 7
+      last_hour: 7
+    MD:
+      first_hour: 8
+      last_hour: 11
+    AF:
+      first_hour: 12
+      last_hour: 13
+    PM:
+      first_hour: 14
+      last_hour: 15
+    EV:
+      first_hour: 16
+      last_hour: 17
+    NT:
+      first_hour: 18
+      last_hour: 24
+      
+  # SHARED2 and SHARED3 Occupancies
+  OCC_SHARED2: 2.0
+  OCC_SHARED3: 3.33

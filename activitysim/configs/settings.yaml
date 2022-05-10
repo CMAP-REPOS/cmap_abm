@@ -1,0 +1,220 @@
+inherit_settings: False
+
+# area_types less than this are considered urban
+urban_threshold: 2
+cbd_threshold: 1
+rural_threshold: 4
+
+# - value of time
+min_value_of_time: 1
+max_value_of_time: 50
+distributed_vot_mu: 0.684
+distributed_vot_sigma: 0.87
+
+household_median_value_of_time:
+  1: 3.61
+  2: 7.61
+  3: 30.85
+
+fail_fast: True
+# - ------------------------- dev config
+multiprocess: False
+strict: False
+mem_tick: 30
+use_shadow_pricing: False
+
+## - example sample
+
+households_sample_size: 1
+chunk_size: 250_000_000_000
+
+# 100 percent sample full scale won't fit in 512GB with chunking disabled
+# so train with 100,000 HHs and then run production mode
+# and make sure to trim maz to tap max distances to a reasonable amount in network_los.yaml
+# cmap comfortable with running just 50% samples too
+
+chunk_training_mode: disabled
+
+num_processes: 26 
+
+# minimum fraction of total chunk_size to reserve for adaptive chunking
+min_available_chunk_ratio: 0.05
+# method to calculate memory overhead when chunking is enabled (chunk_size > 0)
+chunk_method: hybrid_uss
+# whether to preserve or delete subprocess chunk and mem logs when they are consolidated at end of multiprocess run
+keep_chunk_logs: False #Should be false when chunk_training_mode = production?
+keep_mem_logs: False
+
+# initial number of chooser rows for first chunk in training mode
+# when there is no pre-existing chunk_cache to set initial value
+# ordinarily bigger is better as long as it is not so big it causes memory issues (e.g. accessibility with lots of zones)
+default_initial_rows_per_chunk: 10000
+
+# - tracing
+trace_od:
+trace_hh_id: 119
+resume_after: 
+
+# input tables
+input_table_list:
+  - tablename: households
+    filename: households.csv
+    index_col: household_id
+    rename_columns:
+      HHID: household_id
+      PERSONS: hhsize
+      hworkers: num_workers
+      VEHICL: auto_ownership
+      maz: home_zone_id
+      HINC: income
+      hunittype: TYPE
+    keep_columns:
+      - home_zone_id
+      - income
+      - hhsize
+      - HHT
+      - auto_ownership
+      - num_workers
+      - TAZ
+      - TYPE
+  - tablename: persons
+    filename: persons.csv
+    index_col: person_id
+    rename_columns:
+      PERID: person_id
+      AGE: age
+      SEX: sex
+    keep_columns:
+      - household_id
+      - age
+      - PNUM
+      - sex
+      - pemploy
+      - pstudent
+      - ptype
+  - tablename: land_use
+    filename: land_use.csv
+    index_col: zone_id
+    rename_columns:
+      maz: zone_id
+      hshld: TOTHH
+      emp: TOTEMP
+      pop: TOTPOP
+      PARKRATE: PRKCST
+      taz: TAZ
+    keep_columns:
+      - TAZ
+      - TOTHH
+      - TOTPOP
+      - acres
+      - areatype
+      - TOTEMP
+      - construc
+      - manufac
+      - tcu
+      - wholesl
+      - retail
+      - fire
+      - service
+      - k8_enroll
+      - highschool_enroll
+      - lg_college
+      - small_coll
+      - PRKCST
+      - county
+      - walk_dist_local_bus
+      - walk_dist_express_bus
+      - walk_dist_cta_rail
+      - walk_dist_metra_rail
+
+
+output_tables:
+  h5_store: True
+  action: include
+  prefix: final_
+  sort: True
+  tables:
+    - checkpoints
+    - accessibility
+    - land_use
+    - households
+    - persons
+    - tours
+    - trips
+
+models:
+  ## mp_initialize step
+  - initialize_landuse
+  - initialize_households
+  - initialize_los
+  ## mp_accessibility step
+  - compute_accessibility
+  ## mp_households step
+  - school_location
+  - workplace_location
+  - work_from_home
+  - auto_ownership_simulate
+  - free_parking
+  - telecommute_frequency
+  - cdap_simulate
+  - mandatory_tour_frequency
+  - mandatory_tour_scheduling
+  - joint_tour_frequency
+  - joint_tour_composition
+  - joint_tour_participation
+  - joint_tour_destination
+  - joint_tour_scheduling
+  - non_mandatory_tour_frequency
+  - non_mandatory_tour_destination
+  - non_mandatory_tour_scheduling
+  - tour_mode_choice_simulate
+  - atwork_subtour_frequency
+  - atwork_subtour_destination
+  - atwork_subtour_scheduling
+  - atwork_subtour_mode_choice
+  - stop_frequency
+  - trip_purpose
+  - trip_destination
+  - trip_purpose_and_destination
+  - trip_scheduling
+  - trip_mode_choice
+  ### mp_summarize_step
+  - write_tables
+  - write_trip_matrices
+  - write_data_dictionary
+  - track_skim_usage
+  
+  
+
+multiprocess_steps:
+  - name: mp_initialize
+    begin: initialize_landuse
+  - name: mp_accessibility
+    begin: compute_accessibility
+    slice:
+      tables:
+        - accessibility
+  - name: mp_households
+    begin: school_location
+    slice:
+      tables:
+        - households
+        - persons
+  - name: mp_summarize
+    begin: write_tables
+
+output_tables:
+  action: include
+  prefix: final_
+  tables:
+    - checkpoints
+    - accessibility
+    - land_use
+    - households
+    - persons
+    - tours
+    - trips
+    - joint_tour_participants
+    - school_shadow_prices
+    - workplace_shadow_prices
+
