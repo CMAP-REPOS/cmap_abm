@@ -1,7 +1,7 @@
 #
-# Import warm start matrices
+# importScalars.py
 #
-# importwsmatrices.py
+# Import scalar matrices warm start matrices
 #
 
 import inro.modeller as _m

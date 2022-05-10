@@ -125,7 +125,7 @@ class CMapMatrix(_m.Tool()):
             create_matrix(matrix_id = matrixId, matrix_name = matrixName, matrix_description = "", scenario = scenario, overwrite = True)
             scenario.emmebank.matrix("mf%s%s"%(scenario, m)).set_numpy_data(inMtxIN, scenario)
             
-    def outputSkimsToOMX(self, period, scenario, outputfilename):
+    def outputAutoSkimsToOMX(self, period, scenario, outputfilename):
         """
         Description #TODO
         ----------
@@ -202,16 +202,21 @@ class CMapMatrix(_m.Tool()):
                     "skims": ["TIME", "DIST", "FTIME", "TOLLCOST.HOV3", "TOLLDIST", "HOVDIST"]
                 },
                 {   # 12
+                    "name": 'TRK_B', "mode": 'b', "PCE": 1.0, "VOT": 60., "cost": '@toll',
+                    "toll": "@toll",
+                    "skims": ["TIME", "DIST", "TOLLCOST.TRK_L"]
+                },                
+                {   # 13
                     "name": 'TRK_L', "mode": 'l', "PCE": 1.3, "VOT": 60., "cost": '@toll2',
                     "toll": "@toll2",
                     "skims": ["TIME", "DIST", "TOLLCOST.TRK_L"]
                 },
-                {   # 13
+                {   # 14
                     "name": 'TRK_M', "mode": 'm', "PCE": 1.5, "VOT": 60., "cost": '@toll3',
                     "toll": "@toll3",
                     "skims": ["TIME", "DIST", "TOLLCOST.TRK_M"]
                 },
-                {   # 14
+                {   # 15
                     "name": 'TRK_H', "mode": 'h', "PCE": 2.5, "VOT": 100., "cost": '@toll4',
                     "toll": "@toll4",
                     "skims": ["TIME", "DIST", "TOLLCOST.TRK_H"]
@@ -219,8 +224,34 @@ class CMapMatrix(_m.Tool()):
                 ]
         for vehClass in classes:
             for skim in vehClass['skims']:
-                skimList.append("%s_%s_%s"%(period, vehClass['name'], skim.split(".")[0]))
-        exportOMX(matrices=skimList, export_file=outputfilename, append_to_file=False, omx_key = "NAME")
+                skimList.append("%s_%s__%s"%(vehClass['name'], skim.split(".")[0], period))
+        exportOMX(matrices=skimList, export_file=outputfilename, append_to_file=True, omx_key = "NAME")
+
+    def outputTransitSkimsToOMX(self, period, scenario, outputfilename):
+        """
+        Description #TODO
+        ----------
+        inputvar : Type
+            input variable description
+        
+        Returns
+        -------
+        int_var_name : type
+        """
+        exportOMX = _m.Modeller().tool("inro.emme.data.matrix.export_to_omx")
+        skimList = []        
+        skim_matrices = ["GENCOST", "FIRSTWAIT", "XFERWAIT", "TOTALWAIT", "FARE", "XFERS", "ACC", "XFERWALK", "EGR", "TOTALAUX", 
+                    "TOTALIVTT", "DWELLTIME", "CTABUSLIVTT", "PACEBUSRIVTT", "PACEBUSLIVTT", "PACEBUSEIVTT", "CTABUSEIVTT", 
+                    "CTARAILIVTT", "METRARAILIVTT", "CTABUSLDIST", "PACEBUSRDIST", "PACEBUSLDIST", "PACEBUSEDIST", 
+                    "CTABUSEDIST", "CTARAILDIST", "METRARAILDIST", "TOTTRNDIST"]
+        access_modes = ["WALK", "PNROUT", "PNRIN", "KNROUT", "KNRIN"]
+        user_classes = ["L","M","H"]
+        for amode in access_modes:
+            for uc in user_classes:
+                for skim in skim_matrices:
+                    #print("%s_%s_%s_%s"%(skim, amode, uc, period))
+                    skimList.append("%s_%s_%s__%s"%(skim, amode, uc, period))
+        exportOMX(matrices=skimList, export_file=outputfilename, append_to_file=True, omx_key = "NAME")
 
     def outputTripTablesToOMX(self, period, scenario, outputfilename):
         """
