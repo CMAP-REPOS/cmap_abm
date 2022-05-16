@@ -13,8 +13,8 @@ utils = _u.CMapUtilities()
 parms = utils.readYaml(modelYaml)
 
 #TODO: to be removed
-#ip = _a.ASimInputPrep()
-#ip(parms)
+ip = _a.ASimInputPrep()
+ip(parms)
 
 mmms = _cmt.CMapMazStop()
 mmms(parms)

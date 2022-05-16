@@ -21,7 +21,7 @@ acc_modes = ["uvw", "uw", "vw", "u", "v", "w"]
 WORK_FOLDER = "C:\\projects\\cmap_activitysim\\cmap_abm\\emme_inputs\\netfiles"
 PROJECT = os.environ["EMMEBANK"]
 
-desktop = _app.start_dedicated(project=PROJECT, visible=True, user_initials="ASR")
+desktop = _app.start_dedicated(project=PROJECT, visible=True, user_initials="TL")
 modeller = _m.Modeller(desktop)
 databank = desktop.data_explorer().active_database().core_emmebank
 emmebank_dir = os.path.dirname(_m.Modeller().emmebank.path)

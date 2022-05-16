@@ -141,86 +141,18 @@ class CMapMatrix(_m.Tool()):
         #TODO: below is a copy/paste from the assignment script, it would be better to set
         # this up somewhere else so it's not here twice
         classes = [
-                {   # 0
-                    "name": 'SOV_NT_L', "mode": 'S', "PCE": 1, "VOT": 36.4, "cost": '@toll',
-                    "toll": "@toll",
-                    "skims": ["TIME", "DIST", "FTIME", "TOLLCOST.SOV", "TOLLDIST"]
-                },
-                {   # 1
-                    "name": 'SOV_TR_L', "mode": 'S', "PCE": 1, "VOT": 36.4, "cost": '@toll',
-                    "toll": "@toll",
-                    "skims": ["TIME", "DIST", "FTIME", "TOLLCOST.SOV", "TOLLDIST"]
-                },
-                {   # 2
-                    "name": 'HOV2_L', "mode": 'H', "PCE": 1, "VOT": 61.46, "cost": '@toll',
-                    "toll": "@toll",
-                    "skims": ["TIME", "DIST", "FTIME", "TOLLCOST.HOV2", "TOLLDIST", "HOVDIST"]
-                },
-                {   # 3
-                    "name": 'HOV3_L', "mode": 'H', "PCE": 1, "VOT": 91.17, "cost": '@toll',
-                    "toll": "@toll",
-                    "skims": ["TIME", "DIST", "FTIME", "TOLLCOST.HOV3", "TOLLDIST", "HOVDIST"]
-                },
-                {   # 4
-                    "name": 'SOV_NT_M', "mode": 'S', "PCE": 1, "VOT": 152.4, "cost": '@toll',
-                    "toll": "@toll",
-                    "skims": ["TIME", "DIST", "FTIME", "TOLLCOST.SOV", "TOLLDIST"]
-                },
-                {   # 5
-                    "name": 'SOV_TR_M', "mode": 'S', "PCE": 1, "VOT": 152.4, "cost": '@toll',
-                    "toll": "@toll",
-                    "skims": ["TIME", "DIST", "FTIME", "TOLLCOST.SOV", "TOLLDIST"]
-                },
-                {   # 6
-                    "name": 'HOV2_M', "mode": 'H', "PCE": 1, "VOT": 252.3, "cost": '@toll',
-                    "toll": "@toll",
-                    "skims": ["TIME", "DIST", "FTIME", "TOLLCOST.HOV2", "TOLLDIST", "HOVDIST"]
-                },
-                {   # 7
-                    "name": 'HOV3_M', "mode": 'H', "PCE": 1, "VOT": 380.5, "cost": '@toll',
-                    "toll": "@toll",
-                    "skims": ["TIME", "DIST", "FTIME", "TOLLCOST.HOV3", "TOLLDIST", "HOVDIST"]
-                },
-                {   # 8
-                    "name": 'SOV_NT_H', "mode": 'S', "PCE": 1, "VOT": 268.4, "cost": '@toll',
-                    "toll": "@toll",
-                    "skims": ["TIME", "DIST", "FTIME", "TOLLCOST.SOV", "TOLLDIST"]
-                },
-                {   # 9
-                    "name": 'SOV_TR_H', "mode": 'S', "PCE": 1, "VOT": 268.4, "cost": '@toll',
-                    "toll": "@toll",
-                    "skims": ["TIME", "DIST", "FTIME", "TOLLCOST.SOV", "TOLLDIST"]
-                },
-                {   # 10
-                    "name": 'HOV2_H', "mode": 'H', "PCE": 1, "VOT": 443.17, "cost": '@toll',
-                    "toll": "@toll",
-                    "skims": ["TIME", "DIST", "FTIME", "TOLLCOST.HOV2", "TOLLDIST", "HOVDIST"]
-                },
-                {   # 11
-                    "name": 'HOV3_H', "mode": 'H', "PCE": 1, "VOT": 669.29, "cost": '@toll',
-                    "toll": "@toll",
-                    "skims": ["TIME", "DIST", "FTIME", "TOLLCOST.HOV3", "TOLLDIST", "HOVDIST"]
-                },
-                {   # 12
-                    "name": 'TRK_B', "mode": 'b', "PCE": 1.0, "VOT": 60., "cost": '@toll',
-                    "toll": "@toll",
-                    "skims": ["TIME", "DIST", "TOLLCOST.TRK_L"]
-                },                
-                {   # 13
-                    "name": 'TRK_L', "mode": 'l', "PCE": 1.3, "VOT": 60., "cost": '@toll2',
-                    "toll": "@toll2",
-                    "skims": ["TIME", "DIST", "TOLLCOST.TRK_L"]
-                },
-                {   # 14
-                    "name": 'TRK_M', "mode": 'm', "PCE": 1.5, "VOT": 60., "cost": '@toll3',
-                    "toll": "@toll3",
-                    "skims": ["TIME", "DIST", "TOLLCOST.TRK_M"]
-                },
-                {   # 15
-                    "name": 'TRK_H', "mode": 'h', "PCE": 2.5, "VOT": 100., "cost": '@toll4',
-                    "toll": "@toll4",
-                    "skims": ["TIME", "DIST", "TOLLCOST.TRK_H"]
-                }
+                {"name": 'SOV_NT_L', "skims": ["TIME", "DIST", "TOLLCOST.SOV"]},
+                {"name": 'SOV_TR_L', "skims": ["TIME", "DIST", "TOLLCOST.SOV"]},
+                {"name": 'HOV2_L', "skims": ["TIME", "DIST", "TOLLCOST.HOV2"]},
+                {"name": 'HOV3_L', "skims": ["TIME", "DIST", "TOLLCOST.HOV3"]},
+                {"name": 'SOV_NT_M', "skims": ["TIME", "DIST", "FTIME", "TOLLCOST.SOV"]},
+                {"name": 'SOV_TR_M', "skims": ["TIME", "DIST", "TOLLCOST.SOV"]},
+                {"name": 'HOV2_M', "skims": ["TIME", "DIST", "TOLLCOST.HOV2"]},
+                {"name": 'HOV3_M', "skims": ["TIME", "DIST", "TOLLCOST.HOV3"]},
+                {"name": 'SOV_NT_H', "skims": ["TIME", "DIST", "TOLLCOST.SOV"]},
+                {"name": 'SOV_TR_H', "skims": ["TIME", "DIST", "TOLLCOST.SOV"]},
+                {"name": 'HOV2_H', "skims": ["TIME", "DIST", "TOLLCOST.HOV2"]},
+                {"name": 'HOV3_H', "skims": ["TIME", "DIST", "TOLLCOST.HOV3"]}
                 ]
         for vehClass in classes:
             for skim in vehClass['skims']:
@@ -240,10 +172,8 @@ class CMapMatrix(_m.Tool()):
         """
         exportOMX = _m.Modeller().tool("inro.emme.data.matrix.export_to_omx")
         skimList = []        
-        skim_matrices = ["GENCOST", "FIRSTWAIT", "XFERWAIT", "TOTALWAIT", "FARE", "XFERS", "ACC", "XFERWALK", "EGR", "TOTALAUX", 
-                    "TOTALIVTT", "DWELLTIME", "CTABUSLIVTT", "PACEBUSRIVTT", "PACEBUSLIVTT", "PACEBUSEIVTT", "CTABUSEIVTT", 
-                    "CTARAILIVTT", "METRARAILIVTT", "CTABUSLDIST", "PACEBUSRDIST", "PACEBUSLDIST", "PACEBUSEDIST", 
-                    "CTABUSEDIST", "CTARAILDIST", "METRARAILDIST", "TOTTRNDIST"]
+        skim_matrices = ["FIRSTWAIT", "XFERWAIT", "FARE", "XFERS", "ACC", "XFERWALK", "EGR", "TOTALIVTT", "CTABUSLIVTT", 
+                            "PACEBUSRIVTT", "PACEBUSLIVTT", "PACEBUSEIVTT", "CTABUSEIVTT", "CTARAILIVTT", "METRARAILIVTT"]
         access_modes = ["WALK", "PNROUT", "PNRIN", "KNROUT", "KNRIN"]
         user_classes = ["L","M","H"]
         for amode in access_modes:

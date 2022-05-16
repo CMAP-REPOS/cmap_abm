@@ -18,22 +18,22 @@ household_median_value_of_time:
 
 fail_fast: True
 # - ------------------------- dev config
-multiprocess: False
+multiprocess: True
 strict: False
 mem_tick: 30
 use_shadow_pricing: False
 
 ## - example sample
 
-households_sample_size: 1
-chunk_size: 250_000_000_000
+#households_sample_size: 2047214 # 50% sample
+chunk_size: 900_000_000_000
 
 # 100 percent sample full scale won't fit in 512GB with chunking disabled
 # so train with 100,000 HHs and then run production mode
 # and make sure to trim maz to tap max distances to a reasonable amount in network_los.yaml
 # cmap comfortable with running just 50% samples too
 
-chunk_training_mode: disabled
+chunk_training_mode: production
 
 num_processes: 26 
 
@@ -52,7 +52,7 @@ default_initial_rows_per_chunk: 10000
 
 # - tracing
 trace_od:
-trace_hh_id: 119
+trace_hh_id:
 resume_after: 
 
 # input tables

@@ -17,6 +17,10 @@ desktop = _app.start_dedicated(project = PROJECT, visible = True, user_initials 
 modeller = _m.Modeller(desktop)
 my_emmebank = modeller.emmebank
 databank = desktop.data_explorer().active_database().core_emmebank
+copy_att = _m.Modeller().tool("inro.emme.data.network.copy_attribute")
+netcalc = _m.Modeller().tool("inro.emme.network_calculation.network_calculator")
+#scens = [{"periodNum": 1, "scenNum": 201, "period": "NT"}]
+
 scens = [{"periodNum": 1, "scenNum": 201, "period": "NT"},
    {"periodNum": 2, "scenNum": 202, "period": "EA"},
    {"periodNum": 3, "scenNum": 203, "period": "AM"},
@@ -39,7 +43,7 @@ for s in scens:
     # copy congested auto travel time from highway scenarios
     from_att = "timau"
     to_att = "ul2"
-    from_scen = _m.Modeller().emmebank.scenario(scen-200)
+    from_scen = _m.Modeller().emmebank.scenario(s['periodNum'])
     if not from_scen.has_traffic_results:
         raise Exception("missing traffic assignment results for scenario %s" % (str(scen-200)))
     copy_att(from_attribute_name=from_att,

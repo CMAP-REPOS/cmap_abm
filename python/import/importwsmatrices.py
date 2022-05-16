@@ -18,6 +18,7 @@ import datetime
 HSCENS = [1,2,3,4,5,6,7,8]
 transitImport = 200
 TSCENS = [transitImport + i for i in HSCENS]
+per = {1: "NT", 2: "EA", 3: "AM", 4: "MM", 5: "MD", 6: "AF", 7: "PM", 8: "EV"}
 
 WORK_FOLDER = os.environ["WARM_START"] + os.sep + "wsmatrices"
 PROJECT = os.environ["EMMEBANK"]
@@ -32,8 +33,6 @@ importOMX = _m.Modeller().tool("inro.emme.data.matrix.import_from_omx")
 deleteMatrix = _m.Modeller().tool("inro.emme.data.matrix.delete_matrix")
 computeMatrix = _m.Modeller().tool("inro.emme.matrix_calculation.matrix_calculator")
 
-per = {1: "NT", 2: "EA", 3: "AM", 4: "MM", 5: "MD", 6: "AF", 7: "PM", 8: "EV"}
-
 TODFactor_intTRK_B = [0.161, 0.054, 0.129, 0.050, 0.214, 0.132, 0.150, 0.110]
 TODFactor_intTRK_L = [0.143, 0.052, 0.142, 0.066, 0.264, 0.147, 0.112, 0.074]
 TODFactor_intTRK_M = [0.174, 0.049, 0.129, 0.061, 0.251, 0.139, 0.113, 0.084]
@@ -45,20 +44,30 @@ TODFactor_extAP = [0.161, 0.054, 0.129, 0.050, 0.214, 0.132, 0.150, 0.110]
 finalAssnMats = {300: "SOV_NT_TOT_L", 301: "SOV_TR_TOT_L", 302: "HOV2_TOT_L", 303: "HOV3_TOT_L", 304: "SOV_NT_TOT_M", 
                 305: "SOV_TR_TOT_M", 306: "HOV2_TOT_M", 307: "HOV3_TOT_M", 308: "SOV_NT_TOT_H", 309: "SOV_TR_TOT_H", 
                 310: "HOV2_TOT_H", 311: "HOV3_TOT_H", 312: "TRK_TOT_B", 313: "TRK_TOT_L", 314: "TRK_TOT_M", 315: "TRK_TOT_H"}
-
-# Import truck and external trips
-dailyMatrices = ["truck_trip_matrices.in", "poe_trip_matrices.in"]
-for m in dailyMatrices: 
-    importMatrix(transaction_file = WORK_FOLDER + os.sep + m, throw_on_error = False)
-
+'''
+# Delete unused skims: TODO to be removed
+for skim in ["CTABUSLDIST", "PACEBUSRDIST", "PACEBUSLDIST", "PACEBUSEDIST", "CTABUSEDIST", "CTARAILDIST", "METRARAILDIST"]:
+    for amode in ["WALK", "PNROUT", "PNRIN", "KNROUT", "KNRIN"]: 
+        for uc in ["L", "M", "H"]:
+            for period in ["NT", "EA", "AM", "MM", "MD", "AF", "PM", "EV"]
+                try:
+                    deleteMatrix(matrix = databank.matrix("mf%s_%s_%s__%s"%(skim, amode, uc, period)))
+                except:
+                    pass
+'''  
 # Delete any old skims: TODO to be removed
 for scen in HSCENS:
-    for skid in range(100, 1000):
+    for skid in range(400, 1000):
         try:
             deleteMatrix(matrix = databank.matrix("mf%s%s"%(scen, skid)))
         except:
             pass
-
+'''
+# Import truck and external trips
+dailyMatrices = ["truck_trip_matrices.in", "poe_trip_matrices.in"]
+for m in dailyMatrices: 
+    importMatrix(transaction_file = WORK_FOLDER + os.sep + m, throw_on_error = False)
+'''
 # Import Highway Warm Start
 for scen in HSCENS:
     scenario = databank.scenario(scen)
@@ -228,25 +237,25 @@ for scen in HSCENS:
     # Prepare truck matrices
     spec13 = {
         "type": "MATRIX_CALCULATION",
-        "result": "TRK_B_%s"%period,
+        "result": "TRK_TOT_B_%s"%period,
         "expression": "TRK_B_%s"%period,
     }
     
     spec14 = {
         "type": "MATRIX_CALCULATION",
-        "result": "TRK_L_%s"%period,
+        "result": "TRK_TOT_L_%s"%period,
         "expression": "TRK_L_%s"%period,
     }
     
     spec15 = {
         "type": "MATRIX_CALCULATION",
-        "result": "TRK_M_%s"%period,
+        "result": "TRK_TOT_M_%s"%period,
         "expression": "TRK_M_%s"%period,
     }
     
     spec16 = {
         "type": "MATRIX_CALCULATION",
-        "result": "TRK_H_%s"%period,
+        "result": "TRK_TOT_H_%s"%period,
         "expression": "TRK_H_%s + extTRK_H_%s"%(period,period),
     }
     
@@ -259,7 +268,7 @@ for scen in TSCENS:
     desktop.data_explorer().replace_primary_scenario(scenario)
     period = per[scen-200]
     for vot, V, vint in zip(['low','mid','hi'], ['L', 'M', 'H'], [0, 1, 2]):
-        matsToImport = {
+        trnMatsToImport = {
                 "TRN_TOT_%s_%s"%(V,period): "mf%s%s"%(scen-200, 262 + vint),
                 "TRN_WALK_%s_%s"%(V,period): "mf%s%s"%(scen-200, 265 + 7 * vint),
                 "TRN_PNROUT_%s_%s"%(V,period): "mf%s%s"%(scen-200, 266 + 7 * vint), 
@@ -270,7 +279,7 @@ for scen in TSCENS:
                 "TRN_TNCIN_%s_%s"%(V,period): "mf%s%s"%(scen-200, 271 + 7 * vint)                
             }
         
-        for n, m in matsToImport.items():
+        for n, m in trnMatsToImport.items():
             createMatrix(matrix_id = m, matrix_name = n, scenario = scenario, overwrite = True)
             spec1 = {
                 "type": "MATRIX_CALCULATION",
@@ -278,5 +287,28 @@ for scen in TSCENS:
                 "expression": "0.0001",
             }
             computeMatrix(spec1)
-    #importOMX(file_path = "%s\\trn_%s_taz.omx"%(WORK_FOLDER, period), matrices = matsToImport, scenario = scenario)
+        #importOMX(file_path = "%s\\trn_%s_taz.omx"%(WORK_FOLDER, period), matrices = trnMatsToImport, scenario = scenario)
+
+        # Combine KNR transit and TNC transit into KNR transit
+        spec1 = {
+            "type": "MATRIX_CALCULATION",
+            "result": "TRN_KNROUT_%s_%s"%(V,period),
+            "expression": "TRN_KNROUT_%s_%s + TRN_TNCOUT_%s_%s"%(V,period,V,period),
+        }
+        spec2 = {
+            "type": "MATRIX_CALCULATION",
+            "result": "TRN_KNRIN_%s_%s"%(V,period),
+            "expression": "TRN_KNRIN_%s_%s + TRN_TNCIN_%s_%s"%(V,period,V,period),
+        }
+        spec3 = {
+            "type": "MATRIX_CALCULATION",
+            "result": "0",
+            "expression": "TRN_TNCOUT_%s_%s"%(V,period),
+        }
+        spec4 = {
+            "type": "MATRIX_CALCULATION",
+            "result": "0",
+            "expression": "TRN_TNCIN_%s_%s"%(V,period),
+        }        
+        computeMatrix([spec1, spec2])
 print("Completed importing warmstart matrices at %s"%(datetime.datetime.now()))

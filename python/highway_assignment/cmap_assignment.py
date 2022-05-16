@@ -27,9 +27,9 @@ class TrafficAssignment(_m.Tool()):
     timeFactors = {}
     
     def __init__(self):
-        self.msa_iteration = 1
-        self.relative_gap = 0.0005
-        self.max_iterations = 100
+        #self.msa_iteration = 1
+        #self.relative_gap = 0.0005
+        #self.max_iterations = 100
         self.num_processors = "MAX-1"
         self.raise_zero_dist = True
         self.select_link = '[]'

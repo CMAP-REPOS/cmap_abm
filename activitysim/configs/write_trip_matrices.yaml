@@ -18,29 +18,29 @@ MATRICES:
   #EA
   - file_name: trips_ea_taz.omx
     tables:
-      - name: intSOV_NT_L_EA
+      - name: SOV_NT_L_EA
         data_field: SOV_NT_L_EA
-      - name: intSOV_TR_L_EA
+      - name: SOV_TR_L_EA
         data_field: SOV_TR_L_EA
-      - name: intHOV2_L_EA
+      - name: HOV2_L_EA
         data_field: HOV2_L_EA
-      - name: intHOV3_L_EA
+      - name: HOV3_L_EA
         data_field: HOV3_L_EA
-      - name: intSOV_NT_M_EA
+      - name: SOV_NT_M_EA
         data_field: SOV_NT_M_EA
-      - name: intSOV_TR_M_EA
+      - name: SOV_TR_M_EA
         data_field: SOV_TR_M_EA
-      - name: intHOV2_M_EA
+      - name: HOV2_M_EA
         data_field: HOV2_M_EA
-      - name: intHOV3_M_EA
+      - name: HOV3_M_EA
         data_field: HOV3_M_EA
-      - name: intSOV_NT_H_EA
+      - name: SOV_NT_H_EA
         data_field: SOV_NT_H_EA
-      - name: intSOV_TR_H_EA
+      - name: SOV_TR_H_EA
         data_field: SOV_TR_H_EA
-      - name: intHOV2_H_EA
+      - name: HOV2_H_EA
         data_field: HOV2_H_EA
-      - name: intHOV3_H_EA
+      - name: HOV3_H_EA
         data_field: HOV3_H_EA
       - name: WALK_EA
         data_field: WALK_EA
@@ -102,29 +102,29 @@ MATRICES:
 #AM
   - file_name: trips_am_taz.omx
     tables:
-      - name: intSOV_NT_L_AM
+      - name: SOV_NT_L_AM
         data_field: SOV_NT_L_AM
-      - name: intSOV_TR_L_AM
+      - name: SOV_TR_L_AM
         data_field: SOV_TR_L_AM
-      - name: intHOV2_L_AM
+      - name: HOV2_L_AM
         data_field: HOV2_L_AM
-      - name: intHOV3_L_AM
+      - name: HOV3_L_AM
         data_field: HOV3_L_AM
-      - name: intSOV_NT_M_AM
+      - name: SOV_NT_M_AM
         data_field: SOV_NT_M_AM
-      - name: intSOV_TR_M_AM
+      - name: SOV_TR_M_AM
         data_field: SOV_TR_M_AM
-      - name: intHOV2_M_AM
+      - name: HOV2_M_AM
         data_field: HOV2_M_AM
-      - name: intHOV3_M_AM
+      - name: HOV3_M_AM
         data_field: HOV3_M_AM
-      - name: intSOV_NT_H_AM
+      - name: SOV_NT_H_AM
         data_field: SOV_NT_H_AM
-      - name: intSOV_TR_H_AM
+      - name: SOV_TR_H_AM
         data_field: SOV_TR_H_AM
-      - name: intHOV2_H_AM
+      - name: HOV2_H_AM
         data_field: HOV2_H_AM
-      - name: intHOV3_H_AM
+      - name: HOV3_H_AM
         data_field: HOV3_H_AM
       - name: WALK_AM
         data_field: WALK_AM
@@ -186,29 +186,29 @@ MATRICES:
   #MM
   - file_name: trips_mm_taz.omx
     tables:
-      - name: intSOV_NT_L_MM
+      - name: SOV_NT_L_MM
         data_field: SOV_NT_L_MM
-      - name: intSOV_TR_L_MM
+      - name: SOV_TR_L_MM
         data_field: SOV_TR_L_MM
-      - name: intHOV2_L_MM
+      - name: HOV2_L_MM
         data_field: HOV2_L_MM
-      - name: intHOV3_L_MM
+      - name: HOV3_L_MM
         data_field: HOV3_L_MM
-      - name: intSOV_NT_M_MM
+      - name: SOV_NT_M_MM
         data_field: SOV_NT_M_MM
-      - name: intSOV_TR_M_MM
+      - name: SOV_TR_M_MM
         data_field: SOV_TR_M_MM
-      - name: intHOV2_M_MM
+      - name: HOV2_M_MM
         data_field: HOV2_M_MM
-      - name: intHOV3_M_MM
+      - name: HOV3_M_MM
         data_field: HOV3_M_MM
-      - name: intSOV_NT_H_MM
+      - name: SOV_NT_H_MM
         data_field: SOV_NT_H_MM
-      - name: intSOV_TR_H_MM
+      - name: SOV_TR_H_MM
         data_field: SOV_TR_H_MM
-      - name: intHOV2_H_MM
+      - name: HOV2_H_MM
         data_field: HOV2_H_MM
-      - name: intHOV3_H_MM
+      - name: HOV3_H_MM
         data_field: HOV3_H_MM
       - name: WALK_MM
         data_field: WALK_MM
@@ -270,29 +270,29 @@ MATRICES:
   # #MD
   - file_name: trips_md_taz.omx
     tables:
-      - name: intSOV_NT_L_MD
+      - name: SOV_NT_L_MD
         data_field: SOV_NT_L_MD
-      - name: intSOV_TR_L_MD
+      - name: SOV_TR_L_MD
         data_field: SOV_TR_L_MD
-      - name: intHOV2_L_MD
+      - name: HOV2_L_MD
         data_field: HOV2_L_MD
-      - name: intHOV3_L_MD
+      - name: HOV3_L_MD
         data_field: HOV3_L_MD
-      - name: intSOV_NT_M_MD
+      - name: SOV_NT_M_MD
         data_field: SOV_NT_M_MD
-      - name: intSOV_TR_M_MD
+      - name: SOV_TR_M_MD
         data_field: SOV_TR_M_MD
-      - name: intHOV2_M_MD
+      - name: HOV2_M_MD
         data_field: HOV2_M_MD
-      - name: intHOV3_M_MD
+      - name: HOV3_M_MD
         data_field: HOV3_M_MD
-      - name: intSOV_NT_H_MD
+      - name: SOV_NT_H_MD
         data_field: SOV_NT_H_MD
-      - name: intSOV_TR_H_MD
+      - name: SOV_TR_H_MD
         data_field: SOV_TR_H_MD
-      - name: intHOV2_H_MD
+      - name: HOV2_H_MD
         data_field: HOV2_H_MD
-      - name: intHOV3_H_MD
+      - name: HOV3_H_MD
         data_field: HOV3_H_MD
       - name: WALK_MD
         data_field: WALK_MD
@@ -355,29 +355,29 @@ MATRICES:
   #AF
   - file_name: trips_af_taz.omx
     tables:
-      - name: intSOV_NT_L_AF
+      - name: SOV_NT_L_AF
         data_field: SOV_NT_L_AF
-      - name: intSOV_TR_L_AF
+      - name: SOV_TR_L_AF
         data_field: SOV_TR_L_AF
-      - name: intHOV2_L_AF
+      - name: HOV2_L_AF
         data_field: HOV2_L_AF
-      - name: intHOV3_L_AF
+      - name: HOV3_L_AF
         data_field: HOV3_L_AF
-      - name: intSOV_NT_M_AF
+      - name: SOV_NT_M_AF
         data_field: SOV_NT_M_AF
-      - name: intSOV_TR_M_AF
+      - name: SOV_TR_M_AF
         data_field: SOV_TR_M_AF
-      - name: intHOV2_M_AF
+      - name: HOV2_M_AF
         data_field: HOV2_M_AF
-      - name: intHOV3_M_AF
+      - name: HOV3_M_AF
         data_field: HOV3_M_AF
-      - name: intSOV_NT_H_AF
+      - name: SOV_NT_H_AF
         data_field: SOV_NT_H_AF
-      - name: intSOV_TR_H_AF
+      - name: SOV_TR_H_AF
         data_field: SOV_TR_H_AF
-      - name: intHOV2_H_AF
+      - name: HOV2_H_AF
         data_field: HOV2_H_AF
-      - name: intHOV3_H_AF
+      - name: HOV3_H_AF
         data_field: HOV3_H_AF
       - name: WALK_AF
         data_field: WALK_AF
@@ -440,29 +440,29 @@ MATRICES:
   #PM
   - file_name: trips_pm_taz.omx
     tables:
-      - name: intSOV_NT_L_PM
+      - name: SOV_NT_L_PM
         data_field: SOV_NT_L_PM
-      - name: intSOV_TR_L_PM
+      - name: SOV_TR_L_PM
         data_field: SOV_TR_L_PM
-      - name: intHOV2_L_PM
+      - name: HOV2_L_PM
         data_field: HOV2_L_PM
-      - name: intHOV3_L_PM
+      - name: HOV3_L_PM
         data_field: HOV3_L_PM
-      - name: intSOV_NT_M_PM
+      - name: SOV_NT_M_PM
         data_field: SOV_NT_M_PM
-      - name: intSOV_TR_M_PM
+      - name: SOV_TR_M_PM
         data_field: SOV_TR_M_PM
-      - name: intHOV2_M_PM
+      - name: HOV2_M_PM
         data_field: HOV2_M_PM
-      - name: intHOV3_M_PM
+      - name: HOV3_M_PM
         data_field: HOV3_M_PM
-      - name: intSOV_NT_H_PM
+      - name: SOV_NT_H_PM
         data_field: SOV_NT_H_PM
-      - name: intSOV_TR_H_PM
+      - name: SOV_TR_H_PM
         data_field: SOV_TR_H_PM
-      - name: intHOV2_H_PM
+      - name: HOV2_H_PM
         data_field: HOV2_H_PM
-      - name: intHOV3_H_PM
+      - name: HOV3_H_PM
         data_field: HOV3_H_PM
       - name: WALK_PM
         data_field: WALK_PM
@@ -525,29 +525,29 @@ MATRICES:
   #EV
   - file_name: trips_ev_taz.omx
     tables:
-      - name: intSOV_NT_L_EV
+      - name: SOV_NT_L_EV
         data_field: SOV_NT_L_EV
-      - name: intSOV_TR_L_EV
+      - name: SOV_TR_L_EV
         data_field: SOV_TR_L_EV
-      - name: intHOV2_L_EV
+      - name: HOV2_L_EV
         data_field: HOV2_L_EV
-      - name: intHOV3_L_EV
+      - name: HOV3_L_EV
         data_field: HOV3_L_EV
-      - name: intSOV_NT_M_EV
+      - name: SOV_NT_M_EV
         data_field: SOV_NT_M_EV
-      - name: intSOV_TR_M_EV
+      - name: SOV_TR_M_EV
         data_field: SOV_TR_M_EV
-      - name: intHOV2_M_EV
+      - name: HOV2_M_EV
         data_field: HOV2_M_EV
-      - name: intHOV3_M_EV
+      - name: HOV3_M_EV
         data_field: HOV3_M_EV
-      - name: intSOV_NT_H_EV
+      - name: SOV_NT_H_EV
         data_field: SOV_NT_H_EV
-      - name: intSOV_TR_H_EV
+      - name: SOV_TR_H_EV
         data_field: SOV_TR_H_EV
-      - name: intHOV2_H_EV
+      - name: HOV2_H_EV
         data_field: HOV2_H_EV
-      - name: intHOV3_H_EV
+      - name: HOV3_H_EV
         data_field: HOV3_H_EV
       - name: WALK_EV
         data_field: WALK_EV
@@ -610,29 +610,29 @@ MATRICES:
   #NT
   - file_name: trips_nt_taz.omx
     tables:
-      - name: intSOV_NT_L_NT
+      - name: SOV_NT_L_NT
         data_field: SOV_NT_L_NT
-      - name: intSOV_TR_L_NT
+      - name: SOV_TR_L_NT
         data_field: SOV_TR_L_NT
-      - name: intHOV2_L_NT
+      - name: HOV2_L_NT
         data_field: HOV2_L_NT
-      - name: intHOV3_L_NT
+      - name: HOV3_L_NT
         data_field: HOV3_L_NT
-      - name: intSOV_NT_M_NT
+      - name: SOV_NT_M_NT
         data_field: SOV_NT_M_NT
-      - name: intSOV_TR_M_NT
+      - name: SOV_TR_M_NT
         data_field: SOV_TR_M_NT
-      - name: intHOV2_M_NT
+      - name: HOV2_M_NT
         data_field: HOV2_M_NT
-      - name: intHOV3_M_NT
+      - name: HOV3_M_NT
         data_field: HOV3_M_NT
-      - name: intSOV_NT_H_NT
+      - name: SOV_NT_H_NT
         data_field: SOV_NT_H_NT
-      - name: intSOV_TR_H_NT
+      - name: SOV_TR_H_NT
         data_field: SOV_TR_H_NT
-      - name: intHOV2_H_NT
+      - name: HOV2_H_NT
         data_field: HOV2_H_NT
-      - name: intHOV3_H_NT
+      - name: HOV3_H_NT
         data_field: HOV3_H_NT
       - name: WALK_NT
         data_field: WALK_NT

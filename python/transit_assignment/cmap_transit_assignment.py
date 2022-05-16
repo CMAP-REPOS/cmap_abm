@@ -107,12 +107,11 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
         self.xfer_penalty = "15.0"
         self.skim_matrices = ["GENCOST", "FIRSTWAIT", "XFERWAIT", "TOTALWAIT", "FARE", "XFERS", "ACC", "XFERWALK", "EGR", 
                                 "TOTALAUX", "TOTALIVTT", "DWELLTIME", "CTABUSLIVTT", "PACEBUSRIVTT", "PACEBUSLIVTT", 
-                                "PACEBUSEIVTT", "CTABUSEIVTT", "CTARAILIVTT", "METRARAILIVTT", "CTABUSLDIST", "PACEBUSRDIST", 
-                                "PACEBUSLDIST", "PACEBUSEDIST", "CTABUSEDIST", "CTARAILDIST", "METRARAILDIST", "TOTTRNDIST"]
+                                "PACEBUSEIVTT", "CTABUSEIVTT", "CTARAILIVTT", "METRARAILIVTT"]
         self.basematrixnumber = 500
 
 
-    def __call__(self, period, matrix_count, scenario, assignment_only=False, skims_only=False, summary=True,
+    def __call__(self, period, matrix_count, scenario, assignment_only=False, skims_only=False, summary=False,
                  num_processors="MAX-1"):
         attrs = {
             "period": period,
@@ -1181,15 +1180,7 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
             ("PACEBUSEIVTT", "CTA bus in-vehicle time"),
             ("CTABUSEIVTT", "CTA bus in-vehicle time"),
             ("CTARAILIVTT", "CTA bus in-vehicle time"),
-            ("METRARAILIVTT", "CTA bus in-vehicle time"),
-            ("CTABUSLDIST", "CTA bus in-vehicle distance"),
-            ("PACEBUSRDIST", "CTA bus in-vehicle distance"),
-            ("PACEBUSLDIST", "CTA bus in-vehicle distance"),
-            ("PACEBUSEDIST", "CTA bus in-vehicle distance"),
-            ("CTABUSEDIST", "CTA bus in-vehicle distance"),
-            ("CTARAILDIST", "CTA bus in-vehicle distance"),
-            ("METRARAILDIST", "CTA bus in-vehicle distance"),
-            ("TOTTRNDIST",    "Total transit distance")
+            ("METRARAILIVTT", "CTA bus in-vehicle time")
         ]
         skim_sets = [
             #("BUS",    "Local bus only"),
@@ -1332,21 +1323,21 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
                     "type": "EXTENDED_TRANSIT_MATRIX_RESULTS",
                     "by_mode_subset": {
                         "modes": modes,
-                        "distance": dist,
+                        #"distance": dist,
                         "actual_in_vehicle_times": ivtt,
                     },
                 }
                 matrix_results(spec, class_name=class_name, scenario=scenario, num_processors=num_processors)
             # Sum total distance
-            spec = {
-                "type": "MATRIX_CALCULATION",
-                "constraint": None,
-                "result": 'mf"TOTTRNDIST_%s_%s__%s"' % (amode, self.user_class_labels[user_class], self.periodLabel[int(period)]),
-                "expression": ('mf"CTABUSLDIST_{amode}_{uc}__{period}" + mf"PACEBUSRDIST_{amode}_{uc}__{period}" + mf"PACEBUSLDIST_{amode}_{uc}__{period}"'
-                            ' + mf"PACEBUSEDIST_{amode}_{uc}__{period}" + mf"CTABUSEDIST_{amode}_{uc}__{period}"  + mf"CTARAILDIST_{amode}_{uc}__{period}"'
-                            ' + mf"METRARAILDIST_{amode}_{uc}__{period}"').format(amode=amode, uc=self.user_class_labels[user_class], period=self.periodLabel[int(period)]),
-            }
-            matrix_calc(spec, scenario=scenario, num_processors=num_processors)
+            #spec = {
+            #    "type": "MATRIX_CALCULATION",
+            #    "constraint": None,
+            #    "result": 'mf"TOTTRNDIST_%s_%s__%s"' % (amode, self.user_class_labels[user_class], self.periodLabel[int(period)]),
+            #    "expression": ('mf"CTABUSLDIST_{amode}_{uc}__{period}" + mf"PACEBUSRDIST_{amode}_{uc}__{period}" + mf"PACEBUSLDIST_{amode}_{uc}__{period}"'
+            #                ' + mf"PACEBUSEDIST_{amode}_{uc}__{period}" + mf"CTABUSEDIST_{amode}_{uc}__{period}"  + mf"CTARAILDIST_{amode}_{uc}__{period}"'
+            #                ' + mf"METRARAILDIST_{amode}_{uc}__{period}"').format(amode=amode, uc=self.user_class_labels[user_class], period=self.periodLabel[int(period)]),
+            #}
+            #matrix_calc(spec, scenario=scenario, num_processors=num_processors)
 
         # convert number of boardings to number of transfers
         # and subtract transfers to the same line at layover points

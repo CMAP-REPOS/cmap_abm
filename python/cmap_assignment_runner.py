@@ -13,12 +13,13 @@ print("Starting Auto Skim Process at %s"%(datetime.datetime.now()))
 EMME_OUTPUT = os.environ["BASE_PATH"] + os.sep + "emme_outputs"
 ASIM_INPUTS = os.environ["ASIM_INPUTS"]
 PROJECT = os.environ["EMMEBANK"]
+msa_iteration = int(sys.argv[1])
 
 desktop = _app.start_dedicated(project=PROJECT, visible = True, user_initials = "TL")
 modeller = _m.Modeller(desktop)
 databank = desktop.data_explorer().active_database().core_emmebank
-scens = [{"periodNum": 1, "period": "NT"}]
-'''
+#scens = [{"periodNum": 1, "period": "NT"}]
+
 scens = [{"periodNum": 1, "period": "NT"},
    {"periodNum": 2, "period": "EA"},
    {"periodNum": 3, "period": "AM"},
@@ -27,7 +28,11 @@ scens = [{"periodNum": 1, "period": "NT"},
    {"periodNum": 6, "period": "AF"},
    {"periodNum": 7, "period": "PM"},
    {"periodNum": 8, "period": "EV"}]
-'''
+
+# initialize omx to save auto and transit skims
+taz_skims = omx.open_file('%s\\taz_skims.omx' % ASIM_INPUTS,'w')
+taz_skims.close()
+
 for s in scens:
     print('Scenario %s Auto Assignment'%s['period'])
     scenario = desktop.data_explorer().active_database().scenario_by_number(s['periodNum'])
@@ -35,7 +40,7 @@ for s in scens:
     try:
         #cmap_matrix.CMapMatrix().prepTripTables(databank.scenario(s['periodNum']), s['period'])
         cmap_network.CMapNetwork().__call__(databank.scenario(s['periodNum']), runCapacities = True)
-        cmap_assignment.TrafficAssignment().__call__(s['period'], 1, 0.001, 40, 27, databank.scenario(s['periodNum']))
+        cmap_assignment.TrafficAssignment().__call__(s['period'], msa_iteration, 0.001, 40, 27, databank.scenario(s['periodNum']))
         cmap_network.CMapNetwork().__call__(databank.scenario(s['periodNum']), runPrep = False, export = True, 
                                             output_directory = "%s\\emme_outputs\\scen0%s" % (EMME_OUTPUT, s['periodNum']))
         print('Export auto matrices to OMX for time period ' + s['period'])
@@ -47,9 +52,9 @@ for s in scens:
 
 # placeholder for distance, walk distance, and bike distance
 taz_skims = omx.open_file('%s\\taz_skims.omx' % ASIM_INPUTS,'a')
-taz_skims['DIST'] = old_skims['SOV_TR_M_DIST__MD']
-taz_skims['DISTWALK'] = old_skims['SOV_TR_M_DIST__MD']
-taz_skims['DISTBIKE'] = old_skims['SOV_TR_M_DIST__MD']
+taz_skims['DIST'] = taz_skims['SOV_TR_M_DIST__MD']
+taz_skims['DISTWALK'] = taz_skims['SOV_TR_M_DIST__MD']
+taz_skims['DISTBIKE'] = taz_skims['SOV_TR_M_DIST__MD']
 taz_skims.close()
 
 print("Completed Auto Skim Process at %s"%(datetime.datetime.now()))
