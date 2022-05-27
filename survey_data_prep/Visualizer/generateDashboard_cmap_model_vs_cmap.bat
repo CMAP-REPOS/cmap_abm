@@ -16,8 +16,8 @@ SET WORKING_DIR= "C:/projects/cmap_activitysim/cmap_abm/survey_data_prep/Visuali
 :: ###########
 :: Set up dependencies
 :: ###################
-SET R_SCRIPT="C:\Program Files\R\R-3.6.2\bin\rscript"
-SET R_LIBRARY=C:\Users\andrew.rohne\r_library
+SET R_SCRIPT="C:\Program Files\R\R-3.6.2\bin\Rscript"
+SET R_LIBRARY=C:\Users\%USERNAME%\r_library
 :: Set PANDOC path
 SET RSTUDIO_PANDOC=C:\projects\cmap_activitysim\pandoc-2.14.2
 :: Parameters file

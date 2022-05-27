@@ -1,4 +1,4 @@
-@ECHO OFF
+::@ECHO OFF
 
 SETLOCAL EnableDelayedExpansion
 SET ANACONDA=C:\Users\%USERNAME%\.conda\envs\cmapasim\python.exe
@@ -20,14 +20,15 @@ ECHO Activate ActivitySim Environment....
 CALL %CONDA_ACT% cmapasim
 
 set MKL_NUM_THREADS=1
-echo %PYTHONPATH%
+::ECHO %PYTHONPATH%
 
 :: Removing old outputs
-DEL /s /q %ASIM%\output\*
+::DEL /s /q %ASIM%\output_little\*
 ::#TODO: output skim matrices to ActivitySim folder
 
 ::
 :: Prepare files for ActivitySim and run ActivitySim
 ::
 ::%ANACONDA% python\prepAsim.py
+::%ANACONDA% python\crop.py little
 %ANACONDA% %ASIM%\simulation.py -c %ASIM%\configs -o %ASIM%\output -d %ASIM%\data

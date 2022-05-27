@@ -26,6 +26,7 @@ SET PYTHONPATH="C:\Program Files\INRO\Emme\Emme 4\Emme-4.4.5.1\Python27\lib"
 
 SET ASIM=%BASE_PATH%\activitysim
 SET ASIM_INPUTS=%ASIM%\data
+SET ASIM_OUTPUTS=%ASIM%\output
 ::#TODO: check output folder, delete all prior outputs
 :: Removing old outputs
 ::DEL /y %SCENARIO_OUTPUT%
@@ -46,15 +47,15 @@ SET ASIM_INPUTS=%ASIM%\data
 
 :: Iteration 1
 :: Run ActivitySim
-runAsim.bat
+CALL runAsim.bat
 :: Run Emme Assignment
-::%EMMEPY% %BASE_PATH%\python\import\importMatrices.py
+::%EMMEPY% %BASE_PATH%\python\import\importMatrices.py 1
 ::%EMMEPY% %BASE_PATH%\python\cmap_assignment_runner.py 1
 ::%EMMEPY% %BASE_PATH%\python\cmap_transit_assignment_runner.py
 
 :: Iteration 2
 :: Run ActivitySim
-::runAsim.bat
+::CALL runAsim.bat
 :: Run Emme Assignment
 ::%EMMEPY% %BASE_PATH%\python\import\importMatrices.py
 ::%EMMEPY% %BASE_PATH%\python\cmap_assignment_runner.py 2
@@ -62,7 +63,7 @@ runAsim.bat
 
 :: Iteration 3
 :: Run ActivitySim
-::runAsim.bat
+::CALL runAsim.bat
 :: Run Emme Assignment
 ::%EMMEPY% %BASE_PATH%\python\import\importMatrices.py
 ::%EMMEPY% %BASE_PATH%\python\cmap_assignment_runner.py 3

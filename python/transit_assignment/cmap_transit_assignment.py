@@ -1513,7 +1513,7 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
                             report["average"], report["sum"]])
             df = pd.DataFrame(data, columns=['Skim', 'Max', 'Max orig', 'Max dest', 'Avg', 'Sum'])
             filename = "%s\\matrix_list_%s.csv"%(EMME_OUTPUT, datetime.date.today())
-            df.to_csv(filename, mode='a', index=False, header=not os.path.exists(filename))
+            df.to_csv(filename, mode='a', index=False, header=not os.path.exists(filename), line_terminator='\n')
             # export number of OD pairs with non-zero in-vehicle time by transit mode
             data = [self.periodLabel[int(period)], amode, self.user_class_labels[user_class]]
             #in_veh_name = ["CTABUSLIVTT", "PACEBUSRIVTT", "PACEBUSLIVTT", "PACEBUSEIVTT", "CTABUSEIVTT", "CTARAILIVTT", "METRARAILIVTT"]
@@ -1542,7 +1542,7 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
             header.extend(modes)
             df = pd.DataFrame([data], columns=header)
             filename = "%s\\transit_skim_OD_summary_%s.csv"%(EMME_OUTPUT, datetime.date.today())
-            df.to_csv(filename, mode='a', index=False, header=not os.path.exists(filename))            
+            df.to_csv(filename, mode='a', index=False, header=not os.path.exists(filename), line_terminator='\n')            
         return
 
     def define_aux_perception(self, amode):

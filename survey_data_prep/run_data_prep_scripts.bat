@@ -5,7 +5,7 @@ SET SETTINGS_FILE="C:\projects\cmap_activitysim\cmap_abm\survey_data_prep\cmap_i
 @echo off
 
 SET R_SCRIPT="C:\Program Files\R\R-3.6.2\bin\rscript"
-SET R_LIBRARY=C:\Users\andrew.rohne\r_library
+SET R_LIBRARY=C:\Users\%USERNAME%\r_library
 
 ::%R_SCRIPT% Visualizer\scripts\CMAP_RLibInst.R %SETTINGS_FILE%
 

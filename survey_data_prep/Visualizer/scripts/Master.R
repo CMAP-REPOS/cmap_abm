@@ -93,7 +93,7 @@ SYSTEM_REPORT_PKGS <- c("DT", "flexdashboard", "leaflet", "geojsonio", "htmltool
                         "knitr", "mapview", "plotly", "RColorBrewer", "rgdal", "rgeos", "crosstalk","treemap", "htmlTable",
                         "rmarkdown", "scales", "stringr", "jsonlite", "pander", "ggplot2", "reshape", "raster", "dplyr")
 
-lib_inst <- suppressWarnings(suppressMessages(lapply(SYSTEM_REPORT_PKGS, function(x){if (x %in% rownames(installed.packages()) == FALSE) install.packages(x, repos='http://cran.us.r-project.org')})))
+lib_inst <- suppressWarnings(suppressMessages(lapply(SYSTEM_REPORT_PKGS, function(x){if (x %in% rownames(installed.packages()) == FALSE) install.packages(x, repos='http://cran.us.r-project.org', dependencies = TRUE, lib = R_LIBRARY)})))
 lib_sink <- suppressWarnings(suppressMessages(lapply(SYSTEM_REPORT_PKGS, library, character.only = TRUE)))
 
 ### Read Target and Output SUmmary files

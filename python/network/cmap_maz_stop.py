@@ -2,7 +2,7 @@
 """
 Created on Mon Jan 17 12:06:45 2022
 
-@author: andrew.rohne
+author: Andrew Rohne, Ted Lin
 """
 
 import sys
@@ -122,7 +122,7 @@ class CMapMazStop():
         print(f"{time.ctime()} Get Shortest Path Length...")
         maz_to_stop_walk_cost["DISTWALK"] = net.shortest_path_lengths(maz_to_stop_walk_cost["OMAZ_NODE"], maz_to_stop_walk_cost["DSTOP_NODE"])
         print(f"{time.ctime()} Remove Maz Stop Pairs Beyond Max Walk Distance...")
-        maz_to_stop_walk_cost.to_csv(os.path.join(asim_inputs, "maz_to_stop_walk_cost.csv"), index=False)
+        #maz_to_stop_walk_cost.to_csv(os.path.join(asim_inputs, "maz_to_stop_walk_cost.csv"), index=False)
         
         #maz_to_stop_walk_cost = pd.read_csv(os.path.join(asim_inputs, "maz_to_stop_walk_cost.csv"))
         maz_to_stop_walk_cost_out = maz_to_stop_walk_cost[(maz_to_stop_walk_cost["DISTANCE"] <= max_maz_local_bus_stop_walk_dist_feet / 5280.0) & (maz_to_stop_walk_cost['MODE'] == 'L') | 
@@ -130,7 +130,7 @@ class CMapMazStop():
                                                             (maz_to_stop_walk_cost["DISTANCE"] <= max_maz_express_bus_stop_walk_dist_feet / 5280.0) & (maz_to_stop_walk_cost['MODE'] == 'LE') | 
                                                             (maz_to_stop_walk_cost["DISTANCE"] <= max_maz_cta_rail_stop_walk_dist_feet / 5280.0) & (maz_to_stop_walk_cost['MODE'] == 'C') | 
                                                             (maz_to_stop_walk_cost["DISTANCE"] <= max_maz_metra_rail_stop_walk_dist_feet / 5280.0) & (maz_to_stop_walk_cost['MODE'] == 'M')].copy()
-        land_use = pd.read_csv(os.path.join(asim_inputs, parms['land_use']['file']))
+        land_use = pd.read_csv(os.path.join(model_inputs, parms['land_use']['file']))
         modes = {"L": "local_bus", "E": "express_bus", "C": "cta_rail", "M": "metra_rail"}
         for mode, output in modes.items():
             max_walk_dist = parms['mmms']['max_maz_' + output + '_stop_walk_dist_feet'] / 5280.0

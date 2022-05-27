@@ -9,7 +9,7 @@ import datetime
 import traceback
 
 print("Starting Transit Skim Process at %s"%(datetime.datetime.now()))
-EMME_OUTPUT = os.environ["BASE_PATH"] + os.sep + "emme_outputs"
+#EMME_OUTPUT = os.environ["BASE_PATH"] + os.sep + "emme_outputs"
 ASIM_INPUTS = os.environ["ASIM_INPUTS"]
 PROJECT = os.environ["EMMEBANK"]
 
@@ -19,7 +19,6 @@ my_emmebank = modeller.emmebank
 databank = desktop.data_explorer().active_database().core_emmebank
 copy_att = _m.Modeller().tool("inro.emme.data.network.copy_attribute")
 netcalc = _m.Modeller().tool("inro.emme.network_calculation.network_calculator")
-#scens = [{"periodNum": 1, "scenNum": 201, "period": "NT"}]
 
 scens = [{"periodNum": 1, "scenNum": 201, "period": "NT"},
    {"periodNum": 2, "scenNum": 202, "period": "EA"},

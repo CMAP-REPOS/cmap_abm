@@ -14,6 +14,7 @@ import os
 import json as _json
 import inro.emme.desktop.app as _app
 import datetime
+import pandas as pd
 
 HSCENS = [1,2,3,4,5,6,7,8]
 transitImport = 200
@@ -21,6 +22,7 @@ TSCENS = [transitImport + i for i in HSCENS]
 per = {1: "NT", 2: "EA", 3: "AM", 4: "MM", 5: "MD", 6: "AF", 7: "PM", 8: "EV"}
 
 WORK_FOLDER = os.environ["WARM_START"] + os.sep + "wsmatrices"
+EMME_OUTPUT = os.environ["BASE_PATH"] + os.sep + "emme_outputs"
 PROJECT = os.environ["EMMEBANK"]
 
 desktop = _app.start_dedicated(project=PROJECT, visible=True, user_initials="ASR")
@@ -44,6 +46,10 @@ TODFactor_extAP = [0.161, 0.054, 0.129, 0.050, 0.214, 0.132, 0.150, 0.110]
 finalAssnMats = {300: "SOV_NT_TOT_L", 301: "SOV_TR_TOT_L", 302: "HOV2_TOT_L", 303: "HOV3_TOT_L", 304: "SOV_NT_TOT_M", 
                 305: "SOV_TR_TOT_M", 306: "HOV2_TOT_M", 307: "HOV3_TOT_M", 308: "SOV_NT_TOT_H", 309: "SOV_TR_TOT_H", 
                 310: "HOV2_TOT_H", 311: "HOV3_TOT_H", 312: "TRK_TOT_B", 313: "TRK_TOT_L", 314: "TRK_TOT_M", 315: "TRK_TOT_H"}
+summary = False
+if summary:
+    create_matrix = _m.Modeller().tool("inro.emme.data.matrix.create_matrix")           
+    temp_matrix = create_matrix(matrix_id = "ms1", matrix_name = "TEMP_SUM", matrix_description = "temp mf sum", default_value = 0, overwrite = True)
 '''
 # Delete unused skims: TODO to be removed
 for skim in ["CTABUSLDIST", "PACEBUSRDIST", "PACEBUSLDIST", "PACEBUSEDIST", "CTABUSEDIST", "CTARAILDIST", "METRARAILDIST"]:
@@ -54,7 +60,7 @@ for skim in ["CTABUSLDIST", "PACEBUSRDIST", "PACEBUSLDIST", "PACEBUSEDIST", "CTA
                     deleteMatrix(matrix = databank.matrix("mf%s_%s_%s__%s"%(skim, amode, uc, period)))
                 except:
                     pass
-'''  
+
 # Delete any old skims: TODO to be removed
 for scen in HSCENS:
     for skid in range(400, 1000):
@@ -62,12 +68,13 @@ for scen in HSCENS:
             deleteMatrix(matrix = databank.matrix("mf%s%s"%(scen, skid)))
         except:
             pass
-'''
+
 # Import truck and external trips
 dailyMatrices = ["truck_trip_matrices.in", "poe_trip_matrices.in"]
 for m in dailyMatrices: 
     importMatrix(transaction_file = WORK_FOLDER + os.sep + m, throw_on_error = False)
 '''
+
 # Import Highway Warm Start
 for scen in HSCENS:
     scenario = databank.scenario(scen)
@@ -120,7 +127,7 @@ for scen in HSCENS:
 
     for n, m in finalAssnMats.items():
         createMatrix(matrix_id = "mf%s%s"%(scen, n), matrix_name = "%s_%s"%(m, period), scenario = scenario, overwrite = True)
-    '''
+    
     # matrix calc mfx113-x119 using mf4-10 and TOD factors
     spec1 = {
         "type": "MATRIX_CALCULATION",
@@ -158,7 +165,7 @@ for scen in HSCENS:
         "expression": "mfpoeair*%f"%(TODFactor[scen-1]),
     }        
     computeMatrix([spec1,spec2,spec3,spec4,spec5,spec6,spec7]) 
-    '''
+    
     # Prepare matrices for assignment - Low VoT
     spec1 = {
         "type": "MATRIX_CALCULATION",
@@ -311,4 +318,26 @@ for scen in TSCENS:
             "expression": "TRN_TNCIN_%s_%s"%(V,period),
         }        
         computeMatrix([spec1, spec2])
+        
+        if summary:
+            # export max, average, sum for each transit skim matrix
+            data = []
+            matrices = ["TOT", "WALK", "PNROUT", "PNRIN", "KNROUT", "KNRIN", "TNCOUT", "TNCIN"]
+            for name in matrices:
+                demand_name = "TRN_%s_%s_%s" % (name, V, period)
+                spec_sum={
+                    "expression": demand_name,
+                    "result": "msTEMP_SUM",
+                    "aggregation": {
+                        "origins": "+",
+                        "destinations": "+"
+                    },
+                    "type": "MATRIX_CALCULATION"
+                }
+                report = computeMatrix(spec_sum) 
+                data.append([demand_name, report["maximum"], report["maximum_at"]["origin"], report["maximum_at"]["destination"], 
+                            report["average"], report["sum"]])
+            df = pd.DataFrame(data, columns=['Demand', 'Max', 'Max orig', 'Max dest', 'Avg', 'Sum'])
+            filename = "%s\\trn_matrix_list_iter0_%s.csv"%(EMME_OUTPUT, datetime.date.today())
+            df.to_csv(filename, mode='a', index=False, header=not os.path.exists(filename), line_terminator='\n')
 print("Completed importing warmstart matrices at %s"%(datetime.datetime.now()))
