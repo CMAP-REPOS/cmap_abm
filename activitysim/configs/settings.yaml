@@ -18,13 +18,13 @@ household_median_value_of_time:
 
 fail_fast: True
 # - ------------------------- dev config
-multiprocess: True
+multiprocess: False
 strict: False
 mem_tick: 30
 use_shadow_pricing: False
 
 ## - example sample
-
+households_sample_size: 2000
 #households_sample_size: 2047214 # 50% sample
 chunk_size: 900_000_000_000
 
@@ -33,7 +33,7 @@ chunk_size: 900_000_000_000
 # and make sure to trim maz to tap max distances to a reasonable amount in network_los.yaml
 # cmap comfortable with running just 50% samples too
 
-chunk_training_mode: production
+chunk_training_mode: disabled
 
 num_processes: 26 
 

@@ -18,6 +18,7 @@ msa_iteration = int(sys.argv[1])
 desktop = _app.start_dedicated(project=PROJECT, visible = True, user_initials = "TL")
 modeller = _m.Modeller(desktop)
 databank = desktop.data_explorer().active_database().core_emmebank
+#scens = [{"periodNum": 1, "period": "NT"}]
 
 scens = [{"periodNum": 1, "period": "NT"},
    {"periodNum": 2, "period": "EA"},

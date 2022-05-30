@@ -19,6 +19,7 @@ my_emmebank = modeller.emmebank
 databank = desktop.data_explorer().active_database().core_emmebank
 copy_att = _m.Modeller().tool("inro.emme.data.network.copy_attribute")
 netcalc = _m.Modeller().tool("inro.emme.network_calculation.network_calculator")
+#scens = [{"periodNum": 1, "scenNum": 201, "period": "NT"}]
 
 scens = [{"periodNum": 1, "scenNum": 201, "period": "NT"},
    {"periodNum": 2, "scenNum": 202, "period": "EA"},
@@ -35,7 +36,7 @@ database = data_explorer.active_database()
 matrix_count = 0
 for s in scens:
     print("time period: " + s['period'] + " and new matrix count: " + str(matrix_count) +  "...")
-    
+    '''
     current_scenario = my_emmebank.scenario(s['scenNum'])
     data_explorer.replace_primary_scenario(database.scenario_by_number(s['scenNum']))
 
@@ -85,9 +86,9 @@ for s in scens:
         "type": "NETWORK_CALCULATION"
     }
     netcalc([spec1,spec2,spec3,spec4])
-
+    '''
     try:
-        cmap_transit_assignment.TransitAssignment().__call__(str(s['periodNum']), matrix_count, current_scenario, num_processors = 27)
+        #cmap_transit_assignment.TransitAssignment().__call__(str(s['periodNum']), matrix_count, current_scenario, num_processors = 27)
         print('Export transit matrices to OMX for time period ' + s['period'])
         cmap_matrix.CMapMatrix().outputTransitSkimsToOMX(s['period'], databank.scenario(s['periodNum']), 
                                                             "%s\\taz_skims.omx" % ASIM_INPUTS)

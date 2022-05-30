@@ -106,8 +106,7 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
         self.egr_spd_fac = {"WALK": "3.0", "PNROUT": "3.0", "PNRIN": "25.0", "KNROUT": "3.0", "KNRIN": "25.0"}
         self.xfer_penalty = "15.0"
         self.skim_matrices = ["GENCOST", "FIRSTWAIT", "XFERWAIT", "TOTALWAIT", "FARE", "XFERS", "ACC", "XFERWALK", "EGR", 
-                                "TOTALAUX", "TOTALIVTT", "DWELLTIME", "CTABUSLIVTT", "PACEBUSRIVTT", "PACEBUSLIVTT", 
-                                "PACEBUSEIVTT", "CTABUSEIVTT", "CTARAILIVTT", "METRARAILIVTT"]
+                                "TOTALAUX", "TOTALIVTT", "DWELLTIME", "BUSLOCIVTT", "BUSEXPIVTT", "CTARAILIVTT", "METRARAILIVTT"]
         self.basematrixnumber = 500
 
 
@@ -1174,13 +1173,10 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
             ("TOTALAUX",  "total walk time"),
             ("TOTALIVTT",  "in-vehicle time"),
             ("DWELLTIME",  "dwell time"),
-            ("CTABUSLIVTT",    "CTA bus in-vehicle time"),
-            ("PACEBUSRIVTT", "CTA bus in-vehicle time"),
-            ("PACEBUSLIVTT", "CTA bus in-vehicle time"),
-            ("PACEBUSEIVTT", "CTA bus in-vehicle time"),
-            ("CTABUSEIVTT", "CTA bus in-vehicle time"),
-            ("CTARAILIVTT", "CTA bus in-vehicle time"),
-            ("METRARAILIVTT", "CTA bus in-vehicle time")
+            ("BUSLOCIVTT", "local bus in-vehicle time"),
+            ("BUSEXPIVTT", "express bus in-vehicle time"),
+            ("CTARAILIVTT", "CTA rail in-vehicle time"),
+            ("METRARAILIVTT", "Metra rail in-vehicle time")
         ]
         skim_sets = [
             #("BUS",    "Local bus only"),
@@ -1308,13 +1304,10 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
             matrix_results(spec, class_name=class_name, scenario=scenario, num_processors=num_processors)
         with _m.logbook_trace("Distance and in-vehicle time by mode"):
             mode_combinations = [
-                ("CTABUSL", ["B"],       ["IVTT", "DIST"]),
-                ("PACEBUSR", ["P"],      ["IVTT", "DIST"]),
-                ("PACEBUSL", ["L"],      ["IVTT", "DIST"]),
-                ("PACEBUSE", ["Q"],      ["IVTT", "DIST"]),
-                ("CTABUSE", ["E"],       ["IVTT", "DIST"]),
-                ("CTARAIL", ["C"],       ["IVTT", "DIST"]),
-                ("METRARAIL", ["M"],     ["IVTT", "DIST"]),
+                ("BUSLOC", ["B", "P", "L"], ["IVTT", "DIST"]),
+                ("BUSEXP", ["E", "Q"],      ["IVTT", "DIST"]),
+                ("CTARAIL", ["C"],          ["IVTT", "DIST"]),
+                ("METRARAIL", ["M"],        ["IVTT", "DIST"]),
             ]
             for mode_name, modes, skim_types in mode_combinations:
                 dist = 'mf"%sDIST_%s_%s__%s"' % (mode_name, amode, self.user_class_labels[user_class], self.periodLabel[int(period)]) if "DIST" in skim_types else None
@@ -1333,8 +1326,7 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
             #    "type": "MATRIX_CALCULATION",
             #    "constraint": None,
             #    "result": 'mf"TOTTRNDIST_%s_%s__%s"' % (amode, self.user_class_labels[user_class], self.periodLabel[int(period)]),
-            #    "expression": ('mf"CTABUSLDIST_{amode}_{uc}__{period}" + mf"PACEBUSRDIST_{amode}_{uc}__{period}" + mf"PACEBUSLDIST_{amode}_{uc}__{period}"'
-            #                ' + mf"PACEBUSEDIST_{amode}_{uc}__{period}" + mf"CTABUSEDIST_{amode}_{uc}__{period}"  + mf"CTARAILDIST_{amode}_{uc}__{period}"'
+            #    "expression": ('mf"BUSLOCDIST_{amode}_{uc}__{period}" + mf"BUSEXPDIST_{amode}_{uc}__{period}" + mf"CTARAILDIST_{amode}_{uc}__{period}"'
             #                ' + mf"METRARAILDIST_{amode}_{uc}__{period}"').format(amode=amode, uc=self.user_class_labels[user_class], period=self.periodLabel[int(period)]),
             #}
             #matrix_calc(spec, scenario=scenario, num_processors=num_processors)
@@ -1516,16 +1508,15 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
             df.to_csv(filename, mode='a', index=False, header=not os.path.exists(filename), line_terminator='\n')
             # export number of OD pairs with non-zero in-vehicle time by transit mode
             data = [self.periodLabel[int(period)], amode, self.user_class_labels[user_class]]
-            #in_veh_name = ["CTABUSLIVTT", "PACEBUSRIVTT", "PACEBUSLIVTT", "PACEBUSEIVTT", "CTABUSEIVTT", "CTARAILIVTT", "METRARAILIVTT"]
             spec = "_%s_%s__%s" % (amode, self.user_class_labels[user_class], self.periodLabel[int(period)])
             modes = ["bus", "CTA rail", "Metra rail", "bus and CTA rail", "bus and Metra rail", "CTA rail and Metra rail", "bus, CTA rail and Metra rail"]
-            expressions = ["CTABUSLIVTT%s+CTABUSEIVTT%s+PACEBUSLIVTT%s+PACEBUSEIVTT%s+PACEBUSRIVTT%s"%(spec,spec,spec,spec,spec),
+            expressions = ["BUSLOCIVTT%s+BUSEXPIVTT%s"%(spec,spec),
                             "CTARAILIVTT%s"%(spec), 
                             "METRARAILIVTT%s"%(spec), 
-                            "(CTABUSLIVTT%s+CTABUSEIVTT%s+PACEBUSLIVTT%s+PACEBUSEIVTT%s+PACEBUSRIVTT%s)*CTARAILIVTT%s"%(spec,spec,spec,spec,spec,spec),
-                            "(CTABUSLIVTT%s+CTABUSEIVTT%s+PACEBUSLIVTT%s+PACEBUSEIVTT%s+PACEBUSRIVTT%s)*METRARAILIVTT%s"%(spec,spec,spec,spec,spec,spec),
+                            "(BUSLOCIVTT%s+BUSEXPIVTT%s)*CTARAILIVTT%s"%(spec,spec,spec),
+                            "(BUSLOCIVTT%s+BUSEXPIVTT%s)*METRARAILIVTT%s"%(spec,spec,spec),
                             "CTARAILIVTT%s*METRARAILIVTT%s"%(spec,spec),
-                            "(CTABUSLIVTT%s+CTABUSEIVTT%s+PACEBUSLIVTT%s+PACEBUSEIVTT%s+PACEBUSRIVTT%s)*CTARAILIVTT%s*METRARAILIVTT%s"%(spec,spec,spec,spec,spec,spec,spec)]
+                            "(BUSLOCIVTT%s+BUSEXPIVTT%s)*CTARAILIVTT%s*METRARAILIVTT%s"%(spec,spec,spec,spec)]
             for mode, expression in zip(modes, expressions):
                 spec_sum={
                     "expression": "(%s)>0" % expression,

@@ -36,7 +36,7 @@ SET ASIM_OUTPUTS=%ASIM%\output
 ::%EMMEPY% %BASE_PATH%\python\import\importScenarios.py
 ::%EMMEPY% %BASE_PATH%\python\import\importScalars.py
 ::%EMMEPY% %BASE_PATH%\python\import\importwsmatrices.py
-::%EMMEPY% %BASE_PATH%\python\add_acc_egr_links.py
+::%EMMEPY% %BASE_PATH%\python\import\importConnectors.py
 
 ::%EMMEPY% %BASE_PATH%\python\rename_omx.py :: to be removed
 

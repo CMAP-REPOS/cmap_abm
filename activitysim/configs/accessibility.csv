@@ -19,11 +19,11 @@ auto off-peak total,auOpTotal,df.TOTEMP * _decay
 #,, transit peak
 #,,
 #,, assume peak outbound transit occurs in AM
-o-d peak transit ivt,_inVehicleTime,"skim_od[('TOTALIVTT_WALK_M','AM')]"
+o-d peak transit ivt,_inVehicleTime,"skim_od[('BUSLOCIVTT_WALK_M','AM')] + skim_od[('BUSEXPIVTT_WALK_M','AM')] + skim_od[('CTARAILIVTT_WALK_M','AM')] + skim_od[('METRARAILIVTT_WALK_M','AM')]"
 o-d peak transit ovt,_outOfVehicleTime,"skim_od[('FIRSTWAIT_WALK_M','AM')] + skim_od[('XFERWAIT_WALK_M','AM')] + skim_od[('ACC_WALK_M','AM')] + skim_od[('XFERWALK_WALK_M','AM')] + skim_od[('EGR_WALK_M','AM')]"
 o-d peak transit time,_trPkTime_od,(_inVehicleTime + out_of_vehicle_time_weight * _outOfVehicleTime)
 #,, assume peak inbound transit occurs in PM
-d-o peak transit ivt,_inVehicleTime,"skim_do[('TOTALIVTT_WALK_M','PM')]"
+d-o peak transit ivt,_inVehicleTime,"skim_do[('BUSLOCIVTT_WALK_M','PM')] + skim_do[('BUSEXPIVTT_WALK_M','PM')] + skim_do[('CTARAILIVTT_WALK_M','PM')] + skim_do[('METRARAILIVTT_WALK_M','PM')]"
 d-o peak transit ovt,_outOfVehicleTime,"skim_do[('FIRSTWAIT_WALK_M','PM')] + skim_do[('XFERWAIT_WALK_M','PM')] + skim_do[('ACC_WALK_M','PM')] + skim_do[('XFERWALK_WALK_M','PM')] + skim_do[('EGR_WALK_M','PM')]"
 d-o peak transit time,_trPkTime_do,(_inVehicleTime + out_of_vehicle_time_weight * _outOfVehicleTime)
 peak transit time,_trPkTime,_trPkTime_od + _trPkTime_do
@@ -35,11 +35,11 @@ transit peak total,trPkTotal,df.TOTEMP * _decay
 ####,, transit off-peak
 ####,,
 ####,, assume off-peak inbound and outbound transit occurs in the MD time period
-o-d off-peak transit ivt,_inVehicleTime,"skim_od[('TOTALIVTT_WALK_M','MD')]"
+o-d off-peak transit ivt,_inVehicleTime,"skim_od[('BUSLOCIVTT_WALK_M','MD')] + skim_od[('BUSEXPIVTT_WALK_M','MD')] + skim_od[('CTARAILIVTT_WALK_M','MD')] + skim_od[('METRARAILIVTT_WALK_M','MD')]"
 o-d off-peak transit ovt,_outOfVehicleTime,"skim_od[('FIRSTWAIT_WALK_M','MD')] + skim_od[('XFERWAIT_WALK_M','MD')] + skim_od[('ACC_WALK_M','MD')] + skim_od[('XFERWALK_WALK_M','MD')] + skim_od[('EGR_WALK_M','MD')]"
 o-d off-peak transit time,_trOpTime_od,(_inVehicleTime + out_of_vehicle_time_weight * _outOfVehicleTime)
-d-o off-peak transit ivt,_inVehicleTime,"skim_od[('TOTALIVTT_WALK_M','MD')]"
-d-o off-peak transit ovt,_outOfVehicleTime,"skim_od[('FIRSTWAIT_WALK_M','MD')] + skim_od[('XFERWAIT_WALK_M','MD')] + skim_od[('ACC_WALK_M','MD')] + skim_od[('XFERWALK_WALK_M','MD')] + skim_od[('EGR_WALK_M','MD')]"
+d-o off-peak transit ivt,_inVehicleTime,"skim_do[('BUSLOCIVTT_WALK_M','MD')] + skim_do[('BUSEXPIVTT_WALK_M','MD')] + skim_do[('CTARAILIVTT_WALK_M','MD')] + skim_do[('METRARAILIVTT_WALK_M','MD')]"
+d-o off-peak transit ovt,_outOfVehicleTime,"skim_do[('FIRSTWAIT_WALK_M','MD')] + skim_do[('XFERWAIT_WALK_M','MD')] + skim_do[('ACC_WALK_M','MD')] + skim_do[('XFERWALK_WALK_M','MD')] + skim_do[('EGR_WALK_M','MD')]"
 d-o off-peak transit time,_trOpTime_do,(_inVehicleTime + out_of_vehicle_time_weight * _outOfVehicleTime)
 off-peak transit time,_trOpTime,_trOpTime_od + _trPkTime_do
 round trip path is available,_rt_available,(_trOpTime_od > 0) & (_trOpTime_do > 0)

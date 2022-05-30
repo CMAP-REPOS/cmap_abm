@@ -52,10 +52,10 @@ if summary:
     temp_matrix = create_matrix(matrix_id = "ms1", matrix_name = "TEMP_SUM", matrix_description = "temp mf sum", default_value = 0, overwrite = True)
 '''
 # Delete unused skims: TODO to be removed
-for skim in ["CTABUSLDIST", "PACEBUSRDIST", "PACEBUSLDIST", "PACEBUSEDIST", "CTABUSEDIST", "CTARAILDIST", "METRARAILDIST"]:
+for skim in [""]:
     for amode in ["WALK", "PNROUT", "PNRIN", "KNROUT", "KNRIN"]: 
         for uc in ["L", "M", "H"]:
-            for period in ["NT", "EA", "AM", "MM", "MD", "AF", "PM", "EV"]
+            for period in ["NT", "EA", "AM", "MM", "MD", "AF", "PM", "EV"]:
                 try:
                     deleteMatrix(matrix = databank.matrix("mf%s_%s_%s__%s"%(skim, amode, uc, period)))
                 except:
@@ -80,7 +80,7 @@ for scen in HSCENS:
     scenario = databank.scenario(scen)
     desktop.data_explorer().replace_primary_scenario(scenario)
     period = per[scen]
-    for skid in range(300, 316) + range(101, 126) + range(262, 283):
+    for skid in range(300, 316) + range(101, 126) + range(262, 286):
         try:
             deleteMatrix(matrix = databank.matrix("mf%s%s"%(scen, skid)))
         except:
@@ -123,11 +123,11 @@ for scen in HSCENS:
 
     for n, m in auxMatsToImport.items():
         createMatrix(matrix_id = m, matrix_name = n, scenario = scenario, overwrite = True)
-    importOMX(file_path = "%s\\AUX_%s.omx"%(WORK_FOLDER, period), matrices = auxMatsToImport, scenario = scenario)
+    #importOMX(file_path = "%s\\AUX_%s.omx"%(WORK_FOLDER, period), matrices = auxMatsToImport, scenario = scenario)
 
     for n, m in finalAssnMats.items():
         createMatrix(matrix_id = "mf%s%s"%(scen, n), matrix_name = "%s_%s"%(m, period), scenario = scenario, overwrite = True)
-    
+    '''
     # matrix calc mfx113-x119 using mf4-10 and TOD factors
     spec1 = {
         "type": "MATRIX_CALCULATION",
@@ -152,20 +152,20 @@ for scen in HSCENS:
     spec5 = {
         "type": "MATRIX_CALCULATION",
         "result": "mfextAuto_%s"%(period),
-        "expression": "mfpoeaut*%f"%(TODFactor[scen-1]),
+        "expression": "mfpoeaut*%f"%(TODFactor_extAuto[scen-1]),
     }
     spec6 = {
         "type": "MATRIX_CALCULATION",
         "result": "mfextTRK_H_%s"%(period),
-        "expression": "mfpoetrk*%f"%(TODFactor[scen-1]),
+        "expression": "mfpoetrk*%f"%(TODFactor_extTRK_H[scen-1]),
     }
     spec7 = {
         "type": "MATRIX_CALCULATION",
         "result": "mfextAP_%s"%(period),
-        "expression": "mfpoeair*%f"%(TODFactor[scen-1]),
+        "expression": "mfpoeair*%f"%(TODFactor_extAP[scen-1]),
     }        
     computeMatrix([spec1,spec2,spec3,spec4,spec5,spec6,spec7]) 
-    
+    '''
     # Prepare matrices for assignment - Low VoT
     spec1 = {
         "type": "MATRIX_CALCULATION",
