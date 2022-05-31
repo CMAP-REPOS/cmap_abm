@@ -123,4 +123,12 @@ class CMapNetwork(_m.Tool()):
         int_var_name : type
         """
         export_linkshape = _m.Modeller().tool("inro.emme.data.network.export_network_as_shapefile")
-        export_linkshape(export_path = outputFolder, selection = {'link': 'all'})
+        if int(scenario) <= 8: # scen 1-8 are highway scenarios
+            export_linkshape(export_path = outputFolder, selection = {'link': 'all'}) # default is all elements
+        else: # scen 201-208 are transit scenarios
+            export_linkshape(export_path = outputFolder, 
+                            transit_shapes = "LINES",
+                            selection = {"node": "all", 
+                                        "link": "none", 
+                                        "turn": "none",
+                                        "transit_line": "all"} )

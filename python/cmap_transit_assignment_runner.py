@@ -1,7 +1,7 @@
 import inro.emme.desktop.app as _app
 import inro.modeller as _m
 import transit_assignment.cmap_transit_assignment as cmap_transit_assignment
-#import network.cmap_network as cmap_network
+import network.cmap_network as cmap_network
 import matrix.cmap_matrix as cmap_matrix
 import sys
 import os
@@ -9,7 +9,7 @@ import datetime
 import traceback
 
 print("Starting Transit Skim Process at %s"%(datetime.datetime.now()))
-#EMME_OUTPUT = os.environ["BASE_PATH"] + os.sep + "emme_outputs"
+EMME_OUTPUT = os.environ["BASE_PATH"] + os.sep + "emme_outputs"
 ASIM_INPUTS = os.environ["ASIM_INPUTS"]
 PROJECT = os.environ["EMMEBANK"]
 
@@ -36,7 +36,7 @@ database = data_explorer.active_database()
 matrix_count = 0
 for s in scens:
     print("time period: " + s['period'] + " and new matrix count: " + str(matrix_count) +  "...")
-    '''
+
     current_scenario = my_emmebank.scenario(s['scenNum'])
     data_explorer.replace_primary_scenario(database.scenario_by_number(s['scenNum']))
 
@@ -86,10 +86,12 @@ for s in scens:
         "type": "NETWORK_CALCULATION"
     }
     netcalc([spec1,spec2,spec3,spec4])
-    '''
+
     try:
-        #cmap_transit_assignment.TransitAssignment().__call__(str(s['periodNum']), matrix_count, current_scenario, num_processors = 27)
-        print('Export transit matrices to OMX for time period ' + s['period'])
+        cmap_transit_assignment.TransitAssignment().__call__(str(s['periodNum']), matrix_count, current_scenario, num_processors = 27)
+        cmap_network.CMapNetwork().__call__(databank.scenario(s['scenNum']), runPrep = False, export = True, 
+                                            output_directory = "%s\\scen%s" % (EMME_OUTPUT, s['scenNum']))          
+        print('Export transit matrices to OMX for time period ' + s['period'])      
         cmap_matrix.CMapMatrix().outputTransitSkimsToOMX(s['period'], databank.scenario(s['periodNum']), 
                                                             "%s\\taz_skims.omx" % ASIM_INPUTS)
     except:
