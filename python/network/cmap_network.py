@@ -15,7 +15,7 @@ import general as gen_utils
 
 class CMapNetwork(_m.Tool()):
     __MODELLER_NAMESPACE__ = "cmap"
-    period = _m.Attribute(unicode)
+    period = _m.Attribute(str)
     input_directory = _m.Attribute(str)
     tool_run_msg = ""
     timeFactors = {}

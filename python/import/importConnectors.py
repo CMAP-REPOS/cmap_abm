@@ -10,7 +10,7 @@ import os
 import inro.modeller as _m
 import inro.emme.desktop.app as _app
 
-generate_connectors = True
+generate_connectors = False
 
 TSCENS = [201,202,203,204,205,206,207,208]
 line_haul_modes_bus = ["bl", "be"] # bus local and bus express
@@ -26,7 +26,7 @@ max_length_knr = [5, 5, 5]
 max_length_pnr = [10, 15, 15]
 acc_modes = ["uvw", "uw", "vw", "u", "v", "w"]
 
-WORK_FOLDER = "C:\\projects\\cmap_activitysim\\cmap_abm\\emme_inputs\\netfiles"
+WORK_FOLDER = os.environ["BASE_PATH"] + os.sep + "emme_inputs\\netfiles"
 PROJECT = os.environ["EMMEBANK"]
 
 desktop = _app.start_dedicated(project=PROJECT, visible=True, user_initials="TL")

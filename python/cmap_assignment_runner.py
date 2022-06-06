@@ -34,20 +34,19 @@ taz_skims = omx.open_file('%s\\taz_skims.omx' % ASIM_INPUTS,'w')
 taz_skims.close()
 
 for s in scens:
-    print('Scenario %s Auto Assignment'%s['period'])
+    print("Scenario %s Auto Assignment"%s['period'])
     scenario = desktop.data_explorer().active_database().scenario_by_number(s['periodNum'])
     desktop.data_explorer().replace_primary_scenario(scenario)
     try:
-        #cmap_matrix.CMapMatrix().prepTripTables(databank.scenario(s['periodNum']), s['period'])
         cmap_network.CMapNetwork().__call__(databank.scenario(s['periodNum']), runCapacities = True)
         cmap_assignment.TrafficAssignment().__call__(s['period'], msa_iteration, 0.001, 40, 27, databank.scenario(s['periodNum']))
         cmap_network.CMapNetwork().__call__(databank.scenario(s['periodNum']), runPrep = False, export = True, 
                                             output_directory = "%s\\scen0%s" % (EMME_OUTPUT, s['periodNum']))
-        print('Export auto matrices to OMX for time period ' + s['period'])
+        print("Export auto matrices to OMX for time period " + s['period'])
         cmap_matrix.CMapMatrix().outputAutoSkimsToOMX(s['period'], databank.scenario(s['periodNum']), 
                                                         "%s\\taz_skims.omx" % ASIM_INPUTS)
     except:
-        print "There was an error in the %s period"%s['period']
+        print("There was an error in the %s period"%s['period'])
         traceback.print_exc()
 
 # placeholder for distance, walk distance, and bike distance

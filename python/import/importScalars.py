@@ -14,8 +14,8 @@ import os
 import json as _json
 import inro.emme.desktop.app as _app
 
-WORK_FOLDER = "C:\\projects\\cmap_activitysim\\cmap_abm\\emme_inputs\\scalarmatrices\\cmap_scalars2.out"
-PROJECT = "C:\\projects\\cmap_activitysim\\cmap_abm\\CMAP-ABM\\CMAP-ABM.emp"
+WORK_FOLDER = os.environ["BASE_PATH"] + os.sep + "emme_inputs\\scalarmatrices\\cmap_scalars2.out"
+PROJECT = os.environ["EMMEBANK"]
 
 desktop = _app.start_dedicated(project=PROJECT, visible=True, user_initials="ASR")
 modeller = _m.Modeller(desktop)

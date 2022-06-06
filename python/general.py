@@ -8,7 +8,6 @@ import inro.emme.datatable as _dt
 import inro.emme.core.exception as _except
 from osgeo import ogr as _ogr
 from contextlib import contextmanager as _context
-from itertools import izip as _izip
 import traceback as _traceback
 import re as _re
 import json as _json
@@ -16,8 +15,10 @@ import time as _time
 import os
 import numpy as _numpy
 
-#_omx = _m.Modeller().module("cmap.utilities.omxwrapper")
-
+try:
+    basestring
+except NameError:
+    basestring = str
 
 class UtilityTool(_m.Tool()):
 
@@ -105,12 +106,12 @@ def temp_attrs(scenario, attr_type, idents, default_value=0.0):
 @_context
 def backup_and_restore(scenario, backup_attributes):
     backup = {}
-    for elem_type, attributes in backup_attributes.iteritems():
+    for elem_type, attributes in backup_attributes.items():
         backup[elem_type] = scenario.get_attribute_values(elem_type, attributes)
     try:
         yield
     finally:
-        for elem_type, attributes in backup_attributes.iteritems():
+        for elem_type, attributes in backup_attributes.items():
             scenario.set_attribute_values(elem_type, attributes, backup[elem_type])
 
 
@@ -167,8 +168,8 @@ class DataTableProc(object):
 
     def __iter__(self):
         values, attr_names = self._values, self._attr_names
-        return (dict(_izip(attr_names, record))
-                for record in _izip(*values))
+        return (dict(zip(attr_names, record))
+                for record in zip(*values))
 
     def save(self, name, overwrite=False):
         self._dt_db.create_table(name, self._data, overwrite=overwrite)
@@ -267,7 +268,7 @@ class ExportOMX(object):
 
     def write_matrices(self, matrices):
         if isinstance(matrices, dict):
-            for key, matrix in matrices.iteritems():
+            for key, matrix in matrices.items():
                 self.write_matrix(matrix, key)
         else:
             for matrix in matrices:

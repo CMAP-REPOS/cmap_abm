@@ -80,7 +80,7 @@ for scen in HSCENS:
     scenario = databank.scenario(scen)
     desktop.data_explorer().replace_primary_scenario(scenario)
     period = per[scen]
-    for skid in range(300, 316) + range(101, 126) + range(262, 286):
+    for skid in list(range(300, 316)) + list(range(101, 126)) + list(range(262, 286)):
         try:
             deleteMatrix(matrix = databank.matrix("mf%s%s"%(scen, skid)))
         except:

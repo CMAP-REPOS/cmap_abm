@@ -18,8 +18,8 @@ HSCENS = [1,2,3,4,5,6,7,8]
 transitImport = 200
 TSCENS = [transitImport + i for i in HSCENS]
 
-WORK_FOLDER = "C:\\projects\\cmap_activitysim\\cmap_abm\\emme_inputs\\netfiles"
-RECIP_PROJECT = "C:\\projects\\cmap_activitysim\\cmap_abm\\CMAP-ABM\\CMAP-ABM.emp"
+WORK_FOLDER = os.environ["BASE_PATH"] + os.sep + "emme_inputs\\netfiles"
+RECIP_PROJECT = os.environ["EMMEBANK"]
 
 with open(WORK_FOLDER+os.sep+"scens.json", 'r') as file:
     scen_desc = _json.load(file)
@@ -40,7 +40,7 @@ import_attrib = _m.Modeller().tool("inro.emme.data.extra_attribute.import_extra_
 importTurns = _m.Modeller().tool("inro.emme.data.network.turn.turn_transaction")
 
 for scen in HSCENS:
-    print "Importing Highway Scenario %s"%scen
+    print("Importing Highway Scenario %s"%scen)
     createScenario(scenario_id = int(scen), scenario_title = scen_desc[str(scen)], overwrite = True, set_as_primary = True)    
     eFolder = WORK_FOLDER+os.sep+"scen"+str(scen)
     # Import highway mode table    
@@ -55,7 +55,7 @@ for scen in HSCENS:
     importTurns (transaction_file  = eFolder + os.sep + "turns%s.out"%scen, revert_on_error = False)
     
 for scen in TSCENS:
-    print "Importing Transit Scenario %s"%scen
+    print("Importing Transit Scenario %s"%scen)
     createScenario(scenario_id = scen, scenario_title = scen_desc[str(scen)], overwrite = True, set_as_primary = True)
     eFolder = WORK_FOLDER+os.sep+"scen"+str(scen)
     # Import transit modes

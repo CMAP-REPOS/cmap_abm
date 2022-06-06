@@ -37,9 +37,7 @@ class CMapMazStop():
         max_maz_cta_rail_stop_walk_dist_feet = int(parms['mmms']['max_maz_cta_rail_stop_walk_dist_feet']) 
         max_maz_metra_rail_stop_walk_dist_feet = int(parms['mmms']['max_maz_metra_rail_stop_walk_dist_feet'])
 
-        max_maz_metra_rail_stop_walk_dist_feet
-        walk_speed_mph = float(parms['mmms']["walk_speed_mph"])
-        drive_speed_mph = float(parms['mmms']["drive_speed_mph"])
+        #walk_speed_mph = float(parms['mmms']["walk_speed_mph"])
         print(f"{time.ctime()} Getting Nodes...")
         nodes = self.getNodes(gpd.read_file(sf), parms)
         print(f"{time.ctime()} Getting Links...")
@@ -109,10 +107,9 @@ class CMapMazStop():
         o_m_y = np.repeat(centroids['network_node_y'].tolist(), len(stops))
         d_t_x = np.tile(stops['network_node_x'].tolist(), len(centroids))
         d_t_y = np.tile(stops['network_node_y'].tolist(), len(centroids))
-        d_t_canpnr = np.tile(stops[parms['mmms']['drive_stop_field']].tolist(), len(centroids))
         mode = np.tile(stops['mode'].tolist(), len(centroids))
         maz_to_stop_cost = pd.DataFrame({"MAZ":o_m, "stop":d_t, "OMAZ_NODE":o_m_nn, "DSTOP_NODE":d_t_nn, "OMAZ_NODE_X":o_m_x, "OMAZ_NODE_Y":o_m_y, 
-                                        "DSTOP_NODE_X":d_t_x, "DSTOP_NODE_Y":d_t_y, "DSTOP_CANPNR":d_t_canpnr, "MODE": mode})
+                                        "DSTOP_NODE_X":d_t_x, "DSTOP_NODE_Y":d_t_y, "MODE": mode})
         maz_to_stop_cost["DISTANCE"] = maz_to_stop_cost.eval("(((OMAZ_NODE_X-DSTOP_NODE_X)**2 + (OMAZ_NODE_Y-DSTOP_NODE_Y)**2)**0.5) / 5280.0")
         maz_to_stop_walk_cost = maz_to_stop_cost[(maz_to_stop_cost["DISTANCE"] <= max_maz_local_bus_stop_walk_dist_feet / 5280.0) & (maz_to_stop_cost['MODE'] == 'L') | 
                                                     (maz_to_stop_cost["DISTANCE"] <= max_maz_express_bus_stop_walk_dist_feet / 5280.0) & (maz_to_stop_cost['MODE'] == 'E') | 
@@ -122,9 +119,6 @@ class CMapMazStop():
         print(f"{time.ctime()} Get Shortest Path Length...")
         maz_to_stop_walk_cost["DISTWALK"] = net.shortest_path_lengths(maz_to_stop_walk_cost["OMAZ_NODE"], maz_to_stop_walk_cost["DSTOP_NODE"])
         print(f"{time.ctime()} Remove Maz Stop Pairs Beyond Max Walk Distance...")
-        #maz_to_stop_walk_cost.to_csv(os.path.join(asim_inputs, "maz_to_stop_walk_cost.csv"), index=False)
-        
-        #maz_to_stop_walk_cost = pd.read_csv(os.path.join(asim_inputs, "maz_to_stop_walk_cost.csv"))
         maz_to_stop_walk_cost_out = maz_to_stop_walk_cost[(maz_to_stop_walk_cost["DISTANCE"] <= max_maz_local_bus_stop_walk_dist_feet / 5280.0) & (maz_to_stop_walk_cost['MODE'] == 'L') | 
                                                             (maz_to_stop_walk_cost["DISTANCE"] <= max_maz_express_bus_stop_walk_dist_feet / 5280.0) & (maz_to_stop_walk_cost['MODE'] == 'E') | 
                                                             (maz_to_stop_walk_cost["DISTANCE"] <= max_maz_express_bus_stop_walk_dist_feet / 5280.0) & (maz_to_stop_walk_cost['MODE'] == 'LE') | 
@@ -138,12 +132,8 @@ class CMapMazStop():
             maz_to_stop_walk_cost_out_mode.loc[:, 'MODE'] = mode
             # in case straight line distance is less than max and actual distance is greater than max (e.g., street net), set actual distance to max
             maz_to_stop_walk_cost_out_mode['DISTWALK'] = maz_to_stop_walk_cost_out_mode['DISTWALK'].clip(upper=max_walk_dist)
-            #maz_to_stop_walk_cost_out_mode.to_csv(os.path.join(asim_inputs, "maz_to_stop_walk_cost_out_%s.csv"%mode), index=False)
             missing_maz = pd.DataFrame(centroids[~centroids['MAZ'].isin(maz_to_stop_walk_cost_out_mode['MAZ'])]['MAZ']).merge(maz_to_stop_cost.sort_values('DISTANCE').groupby(['MAZ', 'MODE']).agg({'stop': 'first', 'DISTANCE': 'first'}).reset_index(), on = 'MAZ', how = 'left')            
-            #missing_maz.to_csv(os.path.join(asim_inputs, "missing_maz_%s.csv"%mode), index=False)
-            #missing_maz = pd.read_csv(os.path.join(asim_inputs, "missing_maz_%s.csv"%mode))
             maz_to_stop_walk_cost = maz_to_stop_walk_cost_out_mode.append(missing_maz.rename(columns = {'DISTANCE': 'DISTWALK'})).sort_values(['MAZ', 'stop'])            
-            #maz_to_stop_walk_cost.to_csv(os.path.join(asim_inputs, "maz_to_stop_walk_cost_%s.csv"%mode), index=False)
             del(maz_to_stop_walk_cost_out_mode)
             del(missing_maz)            
             maz_stop_walk = maz_to_stop_walk_cost[maz_to_stop_walk_cost.MODE==mode].groupby('MAZ')['DISTWALK'].min().reset_index()            

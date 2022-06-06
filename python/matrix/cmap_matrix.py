@@ -14,7 +14,7 @@ import general as gen_utils
 
 class CMapMatrix(_m.Tool()):
     __MODELLER_NAMESPACE__ = "cmap"
-    period = _m.Attribute(unicode)
+    period = _m.Attribute(str)
     input_directory = _m.Attribute(str)
     tool_run_msg = ""
     
@@ -26,105 +26,6 @@ class CMapMatrix(_m.Tool()):
     def __call__(self, period):
         pass
         
-    def prepTripTables(self, scenario, period):
-        """
-        This is a temporary subroutine to prepare trip tables for assignment. This should
-        be replaced when possible with trip tables from either ASIM or warm start inputs.
-        ----------
-        scenario : Scenario
-            The scenario to work on
-        period : text (NT, EA, AM, MM, MD, AF, PM, EV)
-        
-        Returns
-        -------
-        nothing
-        """
-        sm = 1000 * int(scenario)
-        create_matrix = _m.Modeller().tool("inro.emme.data.matrix.create_matrix")
-        mNames = {
-            400: "%s_SOV_NT_L"%period,
-            401: "%s_SOV_TR_L"%period,
-            402: "%s_HOV2_L"%period,
-            403: "%s_HOV3_L"%period,
-            404: "%s_SOV_NT_M"%period,
-            405: "%s_SOV_TR_M"%period,
-            406: "%s_HOV2_M"%period,
-            407: "%s_HOV3_M"%period,
-            408: "%s_SOV_NT_H"%period,
-            409: "%s_SOV_TR_H"%period,
-            410: "%s_HOV2_H"%period,
-            411: "%s_HOV3_H"%period,
-            412: "%s_TRK_L"%period,
-            413: "%s_TRK_M"%period,
-            414: "%s_TRK_H"%period
-        }    
-
-        # SOV - 400, 401, 404, 405, 408, 409 (from 167, 168, 169, 170)
-        inMtxIN = numpy.zeros(scenario.emmebank.matrix("mf%s315"%scenario).get_numpy_data(scenario).shape)
-        for m in [167, 168, 169, 170]:
-            inMtxIN += scenario.emmebank.matrix("mf%s%s"%(scenario, m)).get_numpy_data(scenario)
-        
-        for m in [400, 401, 404, 405, 408, 409]:
-            matrixName = mNames[m]
-            matrixId  = "mf%s"%(sm + m)
-            create_matrix(matrix_id = matrixId, matrix_name = matrixName, matrix_description = "", scenario = scenario, overwrite = True)
-            scenario.emmebank.matrix("mf%s%s"%(scenario, m)).set_numpy_data((1.0/6.0) * inMtxIN, scenario)
-        
-        # HOV2 - 402, 406, 410 (from 171, 172, 173, 174)
-        inMtxIN = numpy.zeros(scenario.emmebank.matrix("mf%s315"%scenario).get_numpy_data(scenario).shape)
-        for m in [171, 172, 173, 174]:
-            inMtxIN += scenario.emmebank.matrix("mf%s%s"%(scenario, m)).get_numpy_data(scenario)
-        
-        for m in [402, 406, 410]:
-            matrixName = mNames[m]
-            matrixId  = "mf%s"%(sm + m)
-            create_matrix(matrix_id = matrixId, matrix_name = matrixName, matrix_description = "", scenario = scenario, overwrite = True)
-            scenario.emmebank.matrix("mf%s%s"%(scenario, m)).set_numpy_data((1.0/3.0) * inMtxIN, scenario)
-            
-        # HOV3 - 403, 407, 411 (from 175, 176, 177, 178)
-        inMtxIN = numpy.zeros(scenario.emmebank.matrix("mf%s315"%scenario).get_numpy_data(scenario).shape)
-        for m in [175, 176, 177, 178]:
-            inMtxIN += scenario.emmebank.matrix("mf%s%s"%(scenario, m)).get_numpy_data(scenario)
-        
-        for m in [403, 407, 411]:
-            matrixName = mNames[m]
-            matrixId  = "mf%s"%(sm + m)
-            create_matrix(matrix_id = matrixId, matrix_name = matrixName, matrix_description = "", scenario = scenario, overwrite = True)
-            scenario.emmebank.matrix("mf%s%s"%(scenario, m)).set_numpy_data((1.0/3.0) * inMtxIN, scenario)
-            
-        # TRK_Lt - 412 (from 179, 180)
-        inMtxIN = numpy.zeros(scenario.emmebank.matrix("mf%s315"%scenario).get_numpy_data(scenario).shape)
-        for m in [179, 180]:
-            inMtxIN += scenario.emmebank.matrix("mf%s%s"%(scenario, m)).get_numpy_data(scenario)
-        
-        for m in [412]:
-            matrixName = mNames[m]
-            matrixId  = "mf%s"%(sm + m)
-            create_matrix(matrix_id = matrixId, matrix_name = matrixName, matrix_description = "", scenario = scenario, overwrite = True)
-            scenario.emmebank.matrix("mf%s%s"%(scenario, m)).set_numpy_data(inMtxIN, scenario)
-            
-        # TRK_Md - 413 (from 331-332)
-        inMtxIN = numpy.zeros(scenario.emmebank.matrix("mf%s315"%scenario).get_numpy_data(scenario).shape)
-        for m in range(331, 333):
-            inMtxIN += scenario.emmebank.matrix("mf%s%s"%(scenario, m)).get_numpy_data(scenario)
-        
-        for m in [413]:
-            matrixName = mNames[m]
-            matrixId  = "mf%s"%(sm + m)
-            create_matrix(matrix_id = matrixId, matrix_name = matrixName, matrix_description = "", scenario = scenario, overwrite = True)
-            scenario.emmebank.matrix("mf%s%s"%(scenario, m)).set_numpy_data(inMtxIN, scenario)
-            
-        # TRK_Hvy - 413 (from 333-334)
-        inMtxIN = numpy.zeros(scenario.emmebank.matrix("mf%s315"%scenario).get_numpy_data(scenario).shape)
-        for m in range(333, 335):
-            inMtxIN += scenario.emmebank.matrix("mf%s%s"%(scenario, m)).get_numpy_data(scenario)
-        
-        for m in [414]:
-            matrixName = mNames[m]
-            matrixId  = "mf%s"%(sm + m)
-            create_matrix(matrix_id = matrixId, matrix_name = matrixName, matrix_description = "", scenario = scenario, overwrite = True)
-            scenario.emmebank.matrix("mf%s%s"%(scenario, m)).set_numpy_data(inMtxIN, scenario)
-            
     def outputAutoSkimsToOMX(self, period, scenario, outputfilename):
         """
         Description #TODO

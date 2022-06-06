@@ -12,14 +12,19 @@ import os
 import json as _json
 import general as gen_utils
 
+try:
+    basestring
+except NameError:
+    basestring = str
+
 class TrafficAssignment(_m.Tool()):
     __MODELLER_NAMESPACE__ = "cmap"
-    period = _m.Attribute(unicode)
+    period = _m.Attribute(str)
     msa_iteration = _m.Attribute(int)
     relative_gap = _m.Attribute(float)
     max_iterations = _m.Attribute(int)
     num_processors = _m.Attribute(str)
-    select_link = _m.Attribute(unicode)
+    select_link = _m.Attribute(str)
     raise_zero_dist = _m.Attribute(bool)
     stochastic = _m.Attribute(bool)
     input_directory = _m.Attribute(str)
@@ -295,8 +300,8 @@ class TrafficAssignment(_m.Tool()):
                                 })
         # Run assignment
         out = traffic_assign(assign_spec, scenario, chart_log_interval=1)
-        print "Assigned %s trips"%out['initialization']['all_classes']['demand']['total']
-        print "Assignment complete, ended due to %s after %s iterations and at a RG of %s" % (out['stopping_criterion'], len(out['iterations']), out['iterations'][len(out['iterations'])-1]['gaps']['relative'])
+        print("Assigned %s trips"%out['initialization']['all_classes']['demand']['total'])
+        print("Assignment complete, ended due to %s after %s iterations and at a RG of %s" % (out['stopping_criterion'], len(out['iterations']), out['iterations'][len(out['iterations'])-1]['gaps']['relative']))
         return
         
     def run_skims(self, period, num_processors, scenario, classes):
@@ -599,5 +604,5 @@ def temp_functions(emmebank):
     finally:
         a=1 #nothing
 #    #with _m.logbook_trace("Reset functions to assignment parameters"):
-#        #for func, expression in orig_expression.iteritems():
+#        #for func, expression in orig_expression.items():
 #            #change_function(func, expression, emmebank)
