@@ -16,7 +16,7 @@ transitImport = 200
 TSCENS = [transitImport + i for i in HSCENS]
 
 ASIM_OUTPUTS = os.environ["ASIM_OUTPUTS"]
-EMME_OUTPUT = os.environ["BASE_PATH"] + os.sep + "emme_outputs"
+EMME_OUTPUT = os.environ["EMME_OUTPUT"]
 PROJECT = os.environ["EMMEBANK"]
 msa_iteration = int(sys.argv[1])
 

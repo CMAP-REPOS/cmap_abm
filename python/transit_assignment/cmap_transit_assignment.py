@@ -52,7 +52,7 @@ try:
 except NameError:
     basestring = str
 
-EMME_OUTPUT = os.environ["BASE_PATH"] + os.sep + "emme_outputs"
+EMME_OUTPUT = os.environ["EMME_OUTPUT"]
 
 #TODO - createa utilities scripts for these. Presently, required definitions are added to the bottom of the script
 #gen_utils = _m.Modeller().module("sandag.utilities.general")

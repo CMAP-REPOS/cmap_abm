@@ -9,7 +9,12 @@ output:
     source_code: embed
 runtime: shiny
 ---
-
+<style>
+.container-fluid.crosstalk-bscols{
+margin-left: 0px !important;
+margin-right: 0px !important;
+}
+</style>
 ```{r Setup}
 opts_knit$set(root.dir = SYSTEM_APP_PATH)
 knit_hooks$set(optipng = hook_optipng)
@@ -239,7 +244,7 @@ plotly_bar_plotter <- function(data, type = 'bar', xlabel = "", ylabel = "", per
     hformat <- ifelse(hoverformat=="", '.1%', hoverformat)
     eval_expr <- paste("p <- plot_ly(data, x = ~xvar, y = ~prop", start_pos, ", type = type, name = ynames[[1]]) %>% ",
                        "add_trace(y = ~prop", start_pos+1, ", name = ynames[[2]]) %>% ",
-                       "layout(yaxis = list(hoverformat = hformat, title = ylab, tickformat = '%'), xaxis = list(title = xlabel, tickangle = tickangle", exp_tickvals, exp_ticktext,"), barmode = 'group')", sep = "")
+                       "layout(yaxis = list(hoverformat = hformat, title = ylab, tickformat = '.0%'), xaxis = list(title = xlabel, tickangle = tickangle", exp_tickvals, exp_ticktext,"), barmode = 'group')", sep = "")
     eval(parse(text = eval_expr))
   }
 
@@ -272,13 +277,13 @@ plotly_density_plotter <- function(data_df, index = "one", colors=c("orange", "s
     p <- switch(index,
                 "one" = plot_ly(data=data_df,x = ~xvar, y = ~prop1, colors=c("steelblue", "orange"), color = ~run, fill=fill) %>%
                   add_lines(name=~run,alpha=alpha, line = list(shape = shape)) %>%
-                  layout(title = "",xaxis = list(title=xlabel, tickvals = tickvals, ticktext = ticktext, tickangle = tickangle), yaxis = list(title=ylab, tickformat = "%"), showlegend = legend),
+                  layout(title = "",xaxis = list(title=xlabel, tickvals = tickvals, ticktext = ticktext, tickangle = tickangle), yaxis = list(title=ylab, tickformat = ".0%"), showlegend = legend),
                 "two" = plot_ly(data=data_df,x = ~xvar, y = ~prop2, colors=c("steelblue", "orange"), color = ~run, fill=fill) %>%
                   add_lines(name=~run,alpha=alpha, line = list(shape = shape)) %>%
-                  layout(title = "",xaxis = list(title=xlabel, tickvals = tickvals, ticktext = ticktext, tickangle = tickangle), yaxis = list(title=ylab, tickformat = "%"), showlegend = legend),
+                  layout(title = "",xaxis = list(title=xlabel, tickvals = tickvals, ticktext = ticktext, tickangle = tickangle), yaxis = list(title=ylab, tickformat = ".0%"), showlegend = legend),
                 "three" = plot_ly(data=data_df,x = ~xvar, y = ~prop3, colors=c("steelblue", "orange"), color = ~run, fill=fill) %>%
                   add_lines(name=~run,alpha=alpha, line = list(shape = shape)) %>%
-                  layout(title = "",xaxis = list(title=xlabel, tickvals = tickvals, ticktext = ticktext, tickangle = tickangle), yaxis = list(title=ylab, tickformat = "%"), showlegend = legend)
+                  layout(title = "",xaxis = list(title=xlabel, tickvals = tickvals, ticktext = ticktext, tickangle = tickangle), yaxis = list(title=ylab, tickformat = ".0%"), showlegend = legend)
                 )
 
   }else{
@@ -1224,7 +1229,7 @@ build_df <- build_df %>%
 colnames(build_df) <- colnames(base_df)
 
 std_DF <- get_standardDF(data_df1 = base_df, data_df2 = build_df, x = "HHSIZE", y = c("percent"))
-p <- plotly_bar_plotter(data = std_DF, xlabel = "HH Size", ylabel = "Percent of Households", ynames = c(BASE_SCENARIO_NAME, BUILD_SCENARIO_NAME), percent = F, tickformat = "%", hoverformat = ".1%")
+p <- plotly_bar_plotter(data = std_DF, xlabel = "HH Size", ylabel = "Percent of Households", ynames = c(BASE_SCENARIO_NAME, BUILD_SCENARIO_NAME), percent = F, tickformat = ".0%", hoverformat = ".1%")
 p
 
 ```
@@ -2012,15 +2017,75 @@ Chart Column 2{.tabset}
 --------------------------------------------
 
 ### Count vs Volume - All Links{data-height=575}
-```{r count_vol2}
-
-
+```{r count_vol_dy}
+ggplot(hnet[hnet$DY_CNT > 0,], aes(x = DY_CNT, y = DY_ASN)) + geom_point() +
+	geom_abline(slope = 1, intercept = 0, color = "red") +
+	scale_x_continuous("Daily Count", labels = comma) +
+	scale_y_continuous("Daily Assignment", labels = comma)
 ```
 
-### Gap Statistics{data-height=575}
-```{r count_vol3}
+### RMSE Statistics{data-height=575}
+```{r rmse_vol_dy}
+ggplot(vgsum, aes(x = vgidx, y = prmse_DAILY, color = "Model")) + geom_line(stat = "identity", size = 1.2) +
+  geom_line(aes(y = limit/100, color = "Limit"), stat = "identity", size = 1.2) +
+  scale_y_continuous("Percent RMSE", labels = percent) +
+  scale_x_continuous("Volume Group", labels = function(x){return(vgsum[x + 1,"vg"])}, breaks = 0:nrow(vgsum)) + 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
+
+### Assigned VMT Statistics{data-height=575}
+```{r vmtcomp_dy}
+  df = rbind.data.frame(cbind("FTYPE" = vmtcomp$FTYPE, "VMT" = vmtcomp$asnvmt_DAILY, "source" = "Model"), cbind("FTYPE" = vmtcomp$FTYPE, "VMT" = vmtcomp$obsvmt_DAILY, "source" = "Observed"), stringsAsFactors = FALSE)
+df$VMT = as.numeric(df$VMT)
+  ggplot(df, aes(x = FTYPE, y = VMT, fill = source)) + geom_bar(stat = "identity", position = "dodge") +
+    scale_x_discrete("") +
+    scale_color_discrete("Source") +
+    scale_y_continuous("Vehicle Miles of Travel", labels = comma) 
+```
+
+Count vs Volume: NT{data-navmenu="Assignment"}
+============================================
+
+Description {.sidebar data-width=175}
+--------------------------------------------
+
+********
+
+**Link level count comparison**
+
+Results of auto assignment.
+
+Comparison of observed counts and assigned volumes on each link with a counted volume, by assignment time period.
 
 
+Chart Column 2{.tabset}
+--------------------------------------------
+
+### NT Count vs Volume - All Links{data-height=575}
+```{r count_vol_nt}
+ggplot(hnet[hnet$NT_CNT > 0,], aes(x = NT_CNT, y = NT_ASN)) + geom_point() +
+	geom_abline(slope = 1, intercept = 0, color = "red") +
+	scale_x_continuous("Night Count", labels = comma) +
+	scale_y_continuous("Night Assignment", labels = comma)
+```
+
+### RMSE Statistics{data-height=575}
+```{r rmse_vol_nt}
+ggplot(vgsum, aes(x = vgidx, y = prmse_NT, color = "Model")) + geom_line(stat = "identity", size = 1.2) +
+  geom_line(aes(y = limit/100, color = "Limit"), stat = "identity", size = 1.2) +
+  scale_y_continuous("Percent RMSE", labels = percent) +
+  scale_x_continuous("Volume Group", labels = function(x){return(vgsum[x + 1,"vg"])}, breaks = 0:nrow(vgsum)) + 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
+
+### Assigned VMT Statistics{data-height=575}
+```{r vmtcomp_nt}
+  df = rbind.data.frame(cbind("FTYPE" = vmtcomp$FTYPE, "VMT" = vmtcomp$asnvmt_NT, "source" = "Model"), cbind("FTYPE" = vmtcomp$FTYPE, "VMT" = vmtcomp$obsvmt_NT, "source" = "Observed"), stringsAsFactors = FALSE)
+df$VMT = as.numeric(df$VMT)
+  ggplot(df, aes(x = FTYPE, y = VMT, fill = source)) + geom_bar(stat = "identity", position = "dodge") +
+    scale_x_discrete("") +
+    scale_color_discrete("Source") +
+    scale_y_continuous("Vehicle Miles of Travel", labels = comma) 
 ```
 
 Count vs Volume: EA{data-navmenu="Assignment"}
@@ -2042,14 +2107,30 @@ Chart Column 2{.tabset}
 --------------------------------------------
 
 ### EA Count vs Volume - All Links{data-height=575}
-```{r count_vol4}
-
+```{r count_vol_ea}
+ggplot(hnet[hnet$EA_CNT > 0,], aes(x = EA_CNT, y = EA_ASN)) + geom_point() +
+	geom_abline(slope = 1, intercept = 0, color = "red") +
+	scale_x_continuous("Early Morning Count", labels = comma) +
+	scale_y_continuous("Early Morning Assignment", labels = comma)
 ```
 
-### EA Gap Statistics{data-height=575}
-```{r count_vol5}
+### RMSE Statistics{data-height=575}
+```{r rmse_vol_ea}
+ggplot(vgsum, aes(x = vgidx, y = prmse_EA, color = "Model")) + geom_line(stat = "identity", size = 1.2) +
+  geom_line(aes(y = limit/100, color = "Limit"), stat = "identity", size = 1.2) +
+  scale_y_continuous("Percent RMSE", labels = percent) +
+  scale_x_continuous("Volume Group", labels = function(x){return(vgsum[x + 1,"vg"])}, breaks = 0:nrow(vgsum)) + 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
 
-
+### Assigned VMT Statistics{data-height=575}
+```{r vmtcomp_ea}
+  df = rbind.data.frame(cbind("FTYPE" = vmtcomp$FTYPE, "VMT" = vmtcomp$asnvmt_EA, "source" = "Model"), cbind("FTYPE" = vmtcomp$FTYPE, "VMT" = vmtcomp$obsvmt_EA, "source" = "Observed"), stringsAsFactors = FALSE)
+df$VMT = as.numeric(df$VMT)
+  ggplot(df, aes(x = FTYPE, y = VMT, fill = source)) + geom_bar(stat = "identity", position = "dodge") +
+    scale_x_discrete("") +
+    scale_color_discrete("Source") +
+    scale_y_continuous("Vehicle Miles of Travel", labels = comma) 
 ```
 
 Count vs Volume: AM{data-navmenu="Assignment"}
@@ -2071,14 +2152,75 @@ Chart Column 2{.tabset}
 --------------------------------------------
 
 ### AM Count vs Volume - All Links{data-height=575}
-```{r count_vol6}
-
+```{r couAM_vol_am}
+ggplot(hnet[hnet$AM_CNT > 0,], aes(x = AM_CNT, y = AM_ASN)) + geom_point() +
+	geom_abline(slope = 1, intercept = 0, color = "red") +
+	scale_x_continuous("AM Peak Count", labels = comma) +
+	scale_y_continuous("AM Peak Assignment", labels = comma)
 ```
 
-### AM Gap Statistics{data-height=575}
-```{r count_vol7}
+### RMSE Statistics{data-height=575}
+```{r rmse_vol_am}
+ggplot(vgsum, aes(x = vgidx, y = prmse_AM, color = "Model")) + geom_line(stat = "identity", size = 1.2) +
+  geom_line(aes(y = limit/100, color = "Limit"), stat = "identity", size = 1.2) +
+  scale_y_continuous("Percent RMSE", labels = percent) +
+  scale_x_continuous("Volume Group", labels = function(x){return(vgsum[x + 1,"vg"])}, breaks = 0:nrow(vgsum)) + 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
+
+### Assigned VMT Statistics{data-height=575}
+```{r vmtcomp_am}
+  df = rbind.data.frame(cbind("FTYPE" = vmtcomp$FTYPE, "VMT" = vmtcomp$asnvmt_AM, "source" = "Model"), cbind("FTYPE" = vmtcomp$FTYPE, "VMT" = vmtcomp$obsvmt_AM, "source" = "Observed"), stringsAsFactors = FALSE)
+df$VMT = as.numeric(df$VMT)
+  ggplot(df, aes(x = FTYPE, y = VMT, fill = source)) + geom_bar(stat = "identity", position = "dodge") +
+    scale_x_discrete("") +
+    scale_color_discrete("Source") +
+    scale_y_continuous("Vehicle Miles of Travel", labels = comma) 
+```
+
+Count vs Volume: MM{data-navmenu="Assignment"}
+============================================
+
+Description {.sidebar data-width=175}
+--------------------------------------------
+
+********
+
+**Link level count comparison**
+
+Results of auto assignment.
+
+Comparison of observed counts and assigned volumes on each link with a counted volume, by assignment time period.
 
 
+Chart Column 2{.tabset}
+--------------------------------------------
+
+### MM Count vs Volume - All Links{data-height=575}
+```{r count_vol_mm}
+ggplot(hnet[hnet$MM_CNT > 0,], aes(x = MM_CNT, y = MM_ASN)) + geom_point() +
+	geom_abline(slope = 1, intercept = 0, color = "red") +
+	scale_x_continuous("Mid Morning Count", labels = comma) +
+	scale_y_continuous("Mid Morning Assignment", labels = comma)
+```
+
+### RMSE Statistics{data-height=575}
+```{r rmse_vol_mm}
+ggplot(vgsum, aes(x = vgidx, y = prmse_MM, color = "Model")) + geom_line(stat = "identity", size = 1.2) +
+  geom_line(aes(y = limit/100, color = "Limit"), stat = "identity", size = 1.2) +
+  scale_y_continuous("Percent RMSE", labels = percent) +
+  scale_x_continuous("Volume Group", labels = function(x){return(vgsum[x + 1,"vg"])}, breaks = 0:nrow(vgsum)) + 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
+
+### Assigned VMT Statistics{data-height=575}
+```{r vmtcomp_mm}
+  df = rbind.data.frame(cbind("FTYPE" = vmtcomp$FTYPE, "VMT" = vmtcomp$asnvmt_MM, "source" = "Model"), cbind("FTYPE" = vmtcomp$FTYPE, "VMT" = vmtcomp$obsvmt_MM, "source" = "Observed"), stringsAsFactors = FALSE)
+df$VMT = as.numeric(df$VMT)
+  ggplot(df, aes(x = FTYPE, y = VMT, fill = source)) + geom_bar(stat = "identity", position = "dodge") +
+    scale_x_discrete("") +
+    scale_color_discrete("Source") +
+    scale_y_continuous("Vehicle Miles of Travel", labels = comma) 
 ```
 
 Count vs Volume: MD{data-navmenu="Assignment"}
@@ -2100,14 +2242,75 @@ Chart Column 2{.tabset}
 --------------------------------------------
 
 ### MD Count vs Volume - All Links{data-height=575}
-```{r count_vol8}
-
+```{r count_vol_md}
+ggplot(hnet[hnet$MD_CNT > 0,], aes(x = MD_CNT, y = MD_ASN)) + geom_point() +
+	geom_abline(slope = 1, intercept = 0, color = "red") +
+	scale_x_continuous("Midday Count", labels = comma) +
+	scale_y_continuous("Midday Assignment", labels = comma)
 ```
 
-### MD Gap Statistics{data-height=575}
-```{r count_vol9}
+### RMSE Statistics{data-height=575}
+```{r rmse_vol_md}
+ggplot(vgsum, aes(x = vgidx, y = prmse_MD, color = "Model")) + geom_line(stat = "identity", size = 1.2) +
+  geom_line(aes(y = limit/100, color = "Limit"), stat = "identity", size = 1.2) +
+  scale_y_continuous("Percent RMSE", labels = percent) +
+  scale_x_continuous("Volume Group", labels = function(x){return(vgsum[x + 1,"vg"])}, breaks = 0:nrow(vgsum)) + 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
+
+### Assigned VMT Statistics{data-height=575}
+```{r vmtcomp_md}
+  df = rbind.data.frame(cbind("FTYPE" = vmtcomp$FTYPE, "VMT" = vmtcomp$asnvmt_MD, "source" = "Model"), cbind("FTYPE" = vmtcomp$FTYPE, "VMT" = vmtcomp$obsvmt_MD, "source" = "Observed"), stringsAsFactors = FALSE)
+df$VMT = as.numeric(df$VMT)
+  ggplot(df, aes(x = FTYPE, y = VMT, fill = source)) + geom_bar(stat = "identity", position = "dodge") +
+    scale_x_discrete("") +
+    scale_color_discrete("Source") +
+    scale_y_continuous("Vehicle Miles of Travel", labels = comma) 
+```
+
+Count vs Volume: AF{data-navmenu="Assignment"}
+============================================
+
+Description {.sidebar data-width=175}
+--------------------------------------------
+
+********
+
+**Link level count comparison**
+
+Results of auto assignment.
+
+Comparison of observed counts and assigned volumes on each link with a counted volume, by assignment time period.
 
 
+Chart Column 2{.tabset}
+--------------------------------------------
+
+### AF Count vs Volume - All Links{data-height=575}
+```{r count_vol_af}
+ggplot(hnet[hnet$AF_CNT > 0,], aes(x = AF_CNT, y = AF_ASN)) + geom_point() +
+	geom_abline(slope = 1, intercept = 0, color = "red") +
+	scale_x_continuous("Afternoon Count", labels = comma) +
+	scale_y_continuous("Afternoon Assignment", labels = comma)
+```
+
+### RMSE Statistics{data-height=575}
+```{r rmse_vol_af}
+ggplot(vgsum, aes(x = vgidx, y = prmse_AF, color = "Model")) + geom_line(stat = "identity", size = 1.2) +
+  geom_line(aes(y = limit/100, color = "Limit"), stat = "identity", size = 1.2) +
+  scale_y_continuous("Percent RMSE", labels = percent) +
+  scale_x_continuous("Volume Group", labels = function(x){return(vgsum[x + 1,"vg"])}, breaks = 0:nrow(vgsum)) + 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
+
+### Assigned VMT Statistics{data-height=575}
+```{r vmtcomp_af}
+  df = rbind.data.frame(cbind("FTYPE" = vmtcomp$FTYPE, "VMT" = vmtcomp$asnvmt_AF, "source" = "Model"), cbind("FTYPE" = vmtcomp$FTYPE, "VMT" = vmtcomp$obsvmt_AF, "source" = "Observed"), stringsAsFactors = FALSE)
+  df$VMT = as.numeric(df$VMT)
+  ggplot(df, aes(x = FTYPE, y = VMT, fill = source)) + geom_bar(stat = "identity", position = "dodge") +
+    scale_x_discrete("") +
+    scale_color_discrete("Source") +
+    scale_y_continuous("Vehicle Miles of Travel", labels = comma) 
 ```
 
 Count vs Volume: PM{data-navmenu="Assignment"}
@@ -2129,14 +2332,30 @@ Chart Column 2{.tabset}
 --------------------------------------------
 
 ### PM Count vs Volume - All Links{data-height=575}
-```{r count_vol10}
-
+```{r count_vol_pm}
+ggplot(hnet[hnet$PM_CNT > 0,], aes(x = PM_CNT, y = PM_ASN)) + geom_point() +
+	geom_abline(slope = 1, intercept = 0, color = "red") +
+	scale_x_continuous("PM Peak Count", labels = comma) +
+	scale_y_continuous("PM Peak Assignment", labels = comma)
 ```
 
-### PM Gap Statistics{data-height=575}
-```{r count_vol11}
+### RMSE Statistics{data-height=575}
+```{r rmse_vol_pm}
+ggplot(vgsum, aes(x = vgidx, y = prmse_PM, color = "Model")) + geom_line(stat = "identity", size = 1.2) +
+  geom_line(aes(y = limit/100, color = "Limit"), stat = "identity", size = 1.2) +
+  scale_y_continuous("Percent RMSE", labels = percent) +
+  scale_x_continuous("Volume Group", labels = function(x){return(vgsum[x + 1,"vg"])}, breaks = 0:nrow(vgsum)) + 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
 
-
+### Assigned VMT Statistics{data-height=575}
+```{r vmtcomp_pm}
+  df = rbind.data.frame(cbind("FTYPE" = vmtcomp$FTYPE, "VMT" = vmtcomp$asnvmt_PM, "source" = "Model"), cbind("FTYPE" = vmtcomp$FTYPE, "VMT" = vmtcomp$obsvmt_PM, "source" = "Observed"), stringsAsFactors = FALSE)
+df$VMT = as.numeric(df$VMT)
+  ggplot(df, aes(x = FTYPE, y = VMT, fill = source)) + geom_bar(stat = "identity", position = "dodge") +
+    scale_x_discrete("") +
+    scale_color_discrete("Source") +
+    scale_y_continuous("Vehicle Miles of Travel", labels = comma) 
 ```
 
 Count vs Volume: EV{data-navmenu="Assignment"}
@@ -2158,96 +2377,28 @@ Chart Column 2{.tabset}
 --------------------------------------------
 
 ### EV Count vs Volume - All Links{data-height=575}
-```{r count_vol12}
-
+```{r count_vol_ev}
+ggplot(hnet[hnet$EV_CNT > 0,], aes(x = EV_CNT, y = EV_ASN)) + geom_point() +
+	geom_abline(slope = 1, intercept = 0, color = "red") +
+	scale_x_continuous("Evening Count", labels = comma) +
+	scale_y_continuous("Evening Assignment", labels = comma)
 ```
 
-### EV Gap Statistics{data-height=575}
-```{r count_vol13}
-
-
+### RMSE Statistics{data-height=575}
+```{r rmse_vol_ev}
+ggplot(vgsum, aes(x = vgidx, y = prmse_EV, color = "Model")) + geom_line(stat = "identity", size = 1.2) +
+  geom_line(aes(y = limit/100, color = "Limit"), stat = "identity", size = 1.2) +
+  scale_y_continuous("Percent RMSE", labels = percent) +
+  scale_x_continuous("Volume Group", labels = function(x){return(vgsum[x + 1,"vg"])}, breaks = 0:nrow(vgsum)) + 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 ```
 
-MTC vs MARIN {data-navmenu="Assignment"}
-============================================
-
-Description {.sidebar data-width=175}
---------------------------------------------
-
-********
-
-**Link level count comparison**
-
-Results of auto assignment.
-
-Comparison of observed counts and assigned volumes on each link with a counted volume, by assignment time period.
-
-
-Chart Column 2{.tabset}
---------------------------------------------
-
-### Volume Comparison - Daily{data-height=575}
-```{r count_vol14}
-
-#knitr::include_graphics(file.path(SYSTEM_JPEG_PATH, "assign_summary_Daily.jpeg"))
-```
-
-### Volume Comparison - EA{data-height=575}
-```{r count_vol15}
-
-#knitr::include_graphics(file.path(SYSTEM_JPEG_PATH, "assign_summary_EA.jpeg"))
-```
-
-### Volume Comparison - AM{data-height=575}
-```{r count_vol16}
-
-#knitr::include_graphics(file.path(SYSTEM_JPEG_PATH, "assign_summary_AM.jpeg"))
-```
-
-### Volume Comparison - MD{data-height=575}
-```{r count_vol17}
-
-#knitr::include_graphics(file.path(SYSTEM_JPEG_PATH, "assign_summary_MD.jpeg"))
-```
-
-### Volume Comparison - PM{data-height=575}
-```{r count_vol18}
-
-#knitr::include_graphics(file.path(SYSTEM_JPEG_PATH, "assign_summary_PM.jpeg"))
-```
-
-### Volume Comparison - EV{data-height=575}
-```{r count_vol19}
-
-#knitr::include_graphics(file.path(SYSTEM_JPEG_PATH, "assign_summary_EV.jpeg"))
-```
-
-
-Non-Mandatory Trip Flows{data-navmenu="District Summaries"}
-=========================================================
-
-Description {.sidebar data-width=175}
---------------------------------------------
-
-********
-
-**District level flow comparison**
-
-Results of district summaries.
-
-Comparison of non-mandatory district flow summaries.
-
-Chart Column 2{.tabset}
---------------------------------------------
-
-### TLFD by District{data-height=575}
-```{r DFLOW_dis1}
-
-
-```
-
-### TLFD by District{data-height=575}
-```{r DFLOW_dis2}
-
-
+### Assigned VMT Statistics{data-height=575}
+```{r vmtcomp_ev}
+  df = rbind.data.frame(cbind("FTYPE" = vmtcomp$FTYPE, "VMT" = vmtcomp$asnvmt_EV, "source" = "Model"), cbind("FTYPE" = vmtcomp$FTYPE, "VMT" = vmtcomp$obsvmt_EV, "source" = "Observed"), stringsAsFactors = FALSE)
+df$VMT = as.numeric(df$VMT)
+  ggplot(df, aes(x = FTYPE, y = VMT, fill = source)) + geom_bar(stat = "identity", position = "dodge") +
+    scale_x_discrete("") +
+    scale_color_discrete("Source") +
+    scale_y_continuous("Vehicle Miles of Travel", labels = comma) 
 ```

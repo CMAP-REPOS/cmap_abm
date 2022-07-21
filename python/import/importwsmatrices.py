@@ -22,7 +22,7 @@ TSCENS = [transitImport + i for i in HSCENS]
 per = {1: "NT", 2: "EA", 3: "AM", 4: "MM", 5: "MD", 6: "AF", 7: "PM", 8: "EV"}
 
 WORK_FOLDER = os.environ["WARM_START"] + os.sep + "wsmatrices"
-EMME_OUTPUT = os.environ["BASE_PATH"] + os.sep + "emme_outputs"
+EMME_OUTPUT = os.environ["EMME_OUTPUT"]
 PROJECT = os.environ["EMMEBANK"]
 
 desktop = _app.start_dedicated(project=PROJECT, visible=True, user_initials="ASR")
@@ -68,12 +68,12 @@ for scen in HSCENS:
             deleteMatrix(matrix = databank.matrix("mf%s%s"%(scen, skid)))
         except:
             pass
+'''
 
-# Import truck and external trips
+# Import daily truck and external trips
 dailyMatrices = ["truck_trip_matrices.in", "poe_trip_matrices.in"]
 for m in dailyMatrices: 
     importMatrix(transaction_file = WORK_FOLDER + os.sep + m, throw_on_error = False)
-'''
 
 # Import Highway Warm Start
 for scen in HSCENS:
@@ -123,12 +123,12 @@ for scen in HSCENS:
 
     for n, m in auxMatsToImport.items():
         createMatrix(matrix_id = m, matrix_name = n, scenario = scenario, overwrite = True)
-    #importOMX(file_path = "%s\\AUX_%s.omx"%(WORK_FOLDER, period), matrices = auxMatsToImport, scenario = scenario)
+    importOMX(file_path = "%s\\AUX_%s.omx"%(WORK_FOLDER, period), matrices = auxMatsToImport, scenario = scenario)
 
     for n, m in finalAssnMats.items():
         createMatrix(matrix_id = "mf%s%s"%(scen, n), matrix_name = "%s_%s"%(m, period), scenario = scenario, overwrite = True)
-    '''
-    # matrix calc mfx113-x119 using mf4-10 and TOD factors
+    
+    # split daily truck demand (mf4-10) into 8 TOD periods (mfx113-x119) using fixed TOD factors
     spec1 = {
         "type": "MATRIX_CALCULATION",
         "result": "mfTRK_B_%s"%(period),
@@ -165,7 +165,7 @@ for scen in HSCENS:
         "expression": "mfpoeair*%f"%(TODFactor_extAP[scen-1]),
     }        
     computeMatrix([spec1,spec2,spec3,spec4,spec5,spec6,spec7]) 
-    '''
+    
     # Prepare matrices for assignment - Low VoT
     spec1 = {
         "type": "MATRIX_CALCULATION",
@@ -309,15 +309,15 @@ for scen in TSCENS:
         }
         spec3 = {
             "type": "MATRIX_CALCULATION",
-            "result": "0",
-            "expression": "TRN_TNCOUT_%s_%s"%(V,period),
+            "result": "TRN_TNCOUT_%s_%s"%(V,period),
+            "expression": "0",
         }
         spec4 = {
             "type": "MATRIX_CALCULATION",
-            "result": "0",
-            "expression": "TRN_TNCIN_%s_%s"%(V,period),
+            "result": "TRN_TNCIN_%s_%s"%(V,period),
+            "expression": "0",
         }        
-        computeMatrix([spec1, spec2])
+        computeMatrix([spec1, spec2, spec3, spec4])
         
         if summary:
             # export max, average, sum for each transit skim matrix

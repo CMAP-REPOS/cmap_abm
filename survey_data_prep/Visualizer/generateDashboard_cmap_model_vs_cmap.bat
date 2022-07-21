@@ -10,7 +10,8 @@
 :: #    with appropriate Census sources names wherever applicable
 :: ############################################################################
 @ECHO off
-SET WORKING_DIR= "C:/projects/cmap_activitysim/cmap_abm/survey_data_prep/Visualizer"
+SET CMAP_ABM_DIR=C:\projects\cmap_activitysim\cmap_abm
+SET WORKING_DIR=%CMAP_ABM_DIR%\survey_data_prep\Visualizer
 
 :: User Inputs
 :: ###########
@@ -21,8 +22,8 @@ SET R_LIBRARY=C:\Users\%USERNAME%\r_library
 :: Set PANDOC path
 SET RSTUDIO_PANDOC=C:\projects\cmap_activitysim\pandoc-2.14.2
 :: Parameters file
-SET PARAMETERS_FILE=C:/projects/cmap_activitysim/cmap_abm/survey_data_prep/Visualizer\runtime\parameters.csv
-SET SETTINGS_FILE=C:/projects/cmap_activitysim/cmap_abm/survey_data_prep\cmap_inputs.yml
+SET PARAMETERS_FILE=%WORKING_DIR%\runtime\parameters.csv
+SET SETTINGS_FILE=%CMAP_ABM_DIR%\survey_data_prep\cmap_inputs.yml
 
 SET FULL_HTML_NAME=CMAP_visualizer
 
@@ -74,6 +75,12 @@ ECHO CT_ZERO_AUTO_FILE_NAME,%CT_ZERO_AUTO_FILE_NAME% >> %PARAMETERS_FILE%
 ECHO IS_BASE_SURVEY,%IS_BASE_SURVEY% >> %PARAMETERS_FILE%
 
 %R_SCRIPT% scripts\settings_to_parameters_csv.R %SETTINGS_FILE%
+
+SET EMME_OUTPUT=%CMAP_ABM_DIR%\emme_outputs
+SET ANACONDA=C:\Users\%USERNAME%\.conda\envs\cmapasim
+SET ANACONDA_DIR=C:\ProgramData\Anaconda3
+SET CONDA_ACT=%ANACONDA_DIR%\scripts\activate.bat
+%ANACONDA%\python.exe scripts\Summarize_model_HNET.py
 
 :: Create calibration output directory
 :: ############################################################################

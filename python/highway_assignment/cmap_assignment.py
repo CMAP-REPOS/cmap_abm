@@ -134,7 +134,8 @@ class TrafficAssignment(_m.Tool()):
                     "skims": ["TIME", "DIST", "TOLLCOST.TRK_H", "TOLLDIST"]
                 }
                 ]
-
+            if msa_iteration == 0: # 0 is initial network skimming
+                self.prepOutputTables(period, scenario, classes)
             if 1 < msa_iteration < 4:
                 # Link and turn flows
                 link_attrs = ["auto_volume"]
@@ -171,10 +172,9 @@ class TrafficAssignment(_m.Tool()):
                 scenario.set_attribute_values("TURN", turn_attrs, values)
             self.calc_network_results(period, num_processors, scenario)
 
-            if msa_iteration < 5: #FIXME: Changed from 4 to 5... why is a 4 here?
-                self.prepOutputTables(period, scenario, classes)
+            if msa_iteration <= 4:
                 self.run_skims(period, num_processors, scenario, classes)
-                #self.report(period, scenario, classes) #FIXME
+                #self.report(period, scenario, classes)
                 # Check that the distance matrix is valid (no disconnected zones)
                 if raise_zero_dist:
                     name = "SOV_TR_H_DIST__%s"%period

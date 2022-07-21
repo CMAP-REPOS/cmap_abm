@@ -26,8 +26,10 @@ calib_dir = data.frame(Key = 'CALIBRATION_DIR', Value = file.path(settings$visua
 base_summary_dir = data.frame(Key = 'BASE_SUMMARY_DIR', Value = file.path(settings$visualizer_dir, 'summaries'))
 build_summary_dir = data.frame(Key = 'BUILD_SUMMARY_DIR', Value = file.path(settings$abm_summaries_dir))
 shp_file_name = data.frame(Key = 'SHP_FILE_NAME', Value = file.path(settings$zone_shp_file))
+vis_summary_dir = data.frame(Key = 'VIS_SUMMARY_DIR', Value = file.path(settings$visualizer_summaries))
+assigned = data.frame(Key = 'ASSIGNED', Value = file.path(settings$ASSIGNED))
 
 parameters = rbind(parameters, working_dir, project_dir, abm_summaries_dir, calib_dir, base_summary_dir,
-                   build_summary_dir, shp_file_name)
+                   build_summary_dir, shp_file_name, vis_summary_dir, assigned)
 
 write.csv(parameters, parameters_path, row.names = FALSE)

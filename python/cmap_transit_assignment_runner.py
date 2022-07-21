@@ -9,9 +9,10 @@ import datetime
 import traceback
 
 print("Starting Transit Skim Process at %s"%(datetime.datetime.now()))
-EMME_OUTPUT = os.environ["BASE_PATH"] + os.sep + "emme_outputs"
+EMME_OUTPUT = os.environ["EMME_OUTPUT"]
 ASIM_INPUTS = os.environ["ASIM_INPUTS"]
 PROJECT = os.environ["EMMEBANK"]
+msa_iteration = int(sys.argv[1])
 
 desktop = _app.start_dedicated(project = PROJECT, visible = True, user_initials = "TL") 
 modeller = _m.Modeller(desktop)
@@ -89,8 +90,9 @@ for s in scens:
 
     try:
         cmap_transit_assignment.TransitAssignment().__call__(str(s['periodNum']), matrix_count, current_scenario, num_processors = 27)
-        cmap_network.CMapNetwork().__call__(databank.scenario(s['scenNum']), runPrep = False, export = True, 
-                                            output_directory = "%s\\scen%s" % (EMME_OUTPUT, s['scenNum']))          
+        #if msa_iteration == 4:
+        #    cmap_network.CMapNetwork().__call__(databank.scenario(s['scenNum']), runPrep = False, export = True, 
+        #                                        output_directory = "%s\\scen%s" % (EMME_OUTPUT, s['scenNum']))          
         print("Export transit matrices to OMX for time period " + s['period'])      
         cmap_matrix.CMapMatrix().outputTransitSkimsToOMX(s['period'], databank.scenario(s['periodNum']), 
                                                             "%s\\taz_skims.omx" % ASIM_INPUTS)

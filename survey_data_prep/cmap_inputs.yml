@@ -33,4 +33,5 @@ abm_inputs: 'C:/projects/cmap_activitysim/cmap_abm/activitysim/data'
 abm_dir: 'C:/projects/cmap_activitysim/cmap_abm/activitysim/output'
 abm_summaries_dir: 'C:/projects/cmap_activitysim/cmap_abm/survey_data_prep/Visualizer/data/calibration_runs/summarized'
 
-R_LIBRARY: "C:/Users/andrew.rohne/r_library"
+R_LIBRARY: "C:/Users/%USERNAME%/r_library"
+ASSIGNED: 1

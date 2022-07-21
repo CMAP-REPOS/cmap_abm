@@ -10,7 +10,7 @@ import traceback
 import openmatrix as omx
 
 print("Starting Auto Skim Process at %s"%(datetime.datetime.now()))
-EMME_OUTPUT = os.environ["BASE_PATH"] + os.sep + "emme_outputs"
+EMME_OUTPUT = os.environ["EMME_OUTPUT"]
 ASIM_INPUTS = os.environ["ASIM_INPUTS"]
 PROJECT = os.environ["EMMEBANK"]
 msa_iteration = int(sys.argv[1])
@@ -40,8 +40,9 @@ for s in scens:
     try:
         cmap_network.CMapNetwork().__call__(databank.scenario(s['periodNum']), runCapacities = True)
         cmap_assignment.TrafficAssignment().__call__(s['period'], msa_iteration, 0.001, 40, 27, databank.scenario(s['periodNum']))
-        cmap_network.CMapNetwork().__call__(databank.scenario(s['periodNum']), runPrep = False, export = True, 
-                                            output_directory = "%s\\scen0%s" % (EMME_OUTPUT, s['periodNum']))
+        if msa_iteration == 4:
+            cmap_network.CMapNetwork().__call__(databank.scenario(s['periodNum']), runPrep = False, export = True, 
+                                                output_directory = "%s\\scen0%s" % (EMME_OUTPUT, s['periodNum']))
         print("Export auto matrices to OMX for time period " + s['period'])
         cmap_matrix.CMapMatrix().outputAutoSkimsToOMX(s['period'], databank.scenario(s['periodNum']), 
                                                         "%s\\taz_skims.omx" % ASIM_INPUTS)

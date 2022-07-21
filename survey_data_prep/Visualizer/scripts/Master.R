@@ -35,7 +35,9 @@ FULL_HTML_NAME      <- trimws(paste(parameters$Value[parameters$Key=="FULL_HTML_
 SHP_FILE_NAME       <- trimws(paste(parameters$Value[parameters$Key=="SHP_FILE_NAME"]))
 CT_ZERO_AUTO_FILE_NAME       <- trimws(paste(parameters$Value[parameters$Key=="CT_ZERO_AUTO_FILE_NAME"]))
 IS_BASE_SURVEY      <- trimws(paste(parameters$Value[parameters$Key=="IS_BASE_SURVEY"]))
-BUILD_SUMMARY_DIR      <- trimws(paste(parameters$Value[parameters$Key=="BUILD_SUMMARY_DIR"]))
+BUILD_SUMMARY_DIR   <- trimws(paste(parameters$Value[parameters$Key=="BUILD_SUMMARY_DIR"]))
+VIS_SUMMARY_DIR     <- trimws(paste(parameters$Value[parameters$Key=="VIS_SUMMARY_DIR"]))
+ASSIGNED            <- trimws(paste(parameters$Value[parameters$Key=="ASSIGNED"]))
 # BUILD_SUMMARY_DIR   <- ifelse(Run_switch=="SN",
 #                               file.path(CALIBRATION_DIR, "ABM_Summaries_subset"),
 #                               file.path(CALIBRATION_DIR, "ABM_Summaries"))
@@ -127,6 +129,18 @@ zone_shp <- spTransform(zone_shp, CRS("+proj=longlat +ellps=GRS80"))
 setwd(ABM_SUMMARY_DIR)
 ct_zero_auto_shp <- shapefile(CT_ZERO_AUTO_FILE_NAME)
 ct_zero_auto_shp <- spTransform(ct_zero_auto_shp, CRS("+proj=longlat +ellps=GRS80"))
+
+if(ASSIGNED==1){
+	vgsum = read.csv(paste(VIS_SUMMARY_DIR, "hassign_vgsum.csv", sep = '/'), stringsAsFactors = FALSE)
+	hnet = read.csv(paste(VIS_SUMMARY_DIR, "hnetcnt.csv", sep = '/'), stringsAsFactors = FALSE)
+	vmtsum = read.csv(paste(VIS_SUMMARY_DIR, "asnvmt.csv", sep = '/'), stringsAsFactors = FALSE)
+	vmtcomp = read.csv(paste(VIS_SUMMARY_DIR, "hassign_vmtcomp.csv", sep = '/'), stringsAsFactors = FALSE)
+}else{
+	vgsum = data.frame()
+	hnet = data.frame()
+	vmtsum = data.frame()
+	vmtcomp = data.frame()
+}
 
 setwd(currDir)
 print("Read specified csv files, now loading visualizer.")

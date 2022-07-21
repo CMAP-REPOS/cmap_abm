@@ -2,7 +2,7 @@
 :: 
 :: Ted Lin, RSG
 
-:: READ FIRST: <<readme path>> #TODO
+:: READ FIRST: cmap_abm\README.md
 
 @ECHO OFF
 
@@ -10,9 +10,10 @@
 SET BASE_PATH=C:\projects\cmap_activitysim\cmap_abm
 SET MODEL_PARAMETERS=%BASE_PATH%\model_params.yaml
       
-SET EMMEBANK=C:\projects\cmap_activitysim\cmap_abm\CMAP-ABM\CMAP-ABM.emp
+SET EMMEBANK=%BASE_PATH%\CMAP-ABM\CMAP-ABM.emp
 SET INPUT_FOLDER=%BASE_PATH%\inputs
 SET WARM_START=%BASE_PATH%\emme_inputs
+SET EMME_OUTPUT=%BASE_PATH%\emme_outputs
 SET SCENARIO_OUTPUT=%BASE_PATH%\outputs
 SET LOG_OUT=%BASE_PATH%\Reports
 MD %SCENARIO_OUTPUT%
@@ -43,31 +44,31 @@ SET ASIM_OUTPUTS=%ASIM%\output
 :: Iteration 0
 :: Skim highway and transit for ActivitySim
 ::%EMMEPY% %BASE_PATH%\python\cmap_assignment_runner.py 0
-::%EMMEPY% %BASE_PATH%\python\cmap_transit_assignment_runner.py
+::%EMMEPY% %BASE_PATH%\python\cmap_transit_assignment_runner.py 0
 
 :: Iteration 1
 :: Run ActivitySim
-CALL runAsim.bat
+::CALL runAsim.bat
 :: Run Emme Assignment
 ::%EMMEPY% %BASE_PATH%\python\import\importMatrices.py 1
 ::%EMMEPY% %BASE_PATH%\python\cmap_assignment_runner.py 1
-::%EMMEPY% %BASE_PATH%\python\cmap_transit_assignment_runner.py
+::%EMMEPY% %BASE_PATH%\python\cmap_transit_assignment_runner.py 1
 
 :: Iteration 2
 :: Run ActivitySim
 ::CALL runAsim.bat
 :: Run Emme Assignment
-::%EMMEPY% %BASE_PATH%\python\import\importMatrices.py
+::%EMMEPY% %BASE_PATH%\python\import\importMatrices.py 2
 ::%EMMEPY% %BASE_PATH%\python\cmap_assignment_runner.py 2
-::%EMMEPY% %BASE_PATH%\python\cmap_transit_assignment_runner.py
+::%EMMEPY% %BASE_PATH%\python\cmap_transit_assignment_runner.py 2
 
 :: Iteration 3
 :: Run ActivitySim
 ::CALL runAsim.bat
 :: Run Emme Assignment
-::%EMMEPY% %BASE_PATH%\python\import\importMatrices.py
+::%EMMEPY% %BASE_PATH%\python\import\importMatrices.py 3
 ::%EMMEPY% %BASE_PATH%\python\cmap_assignment_runner.py 3
-::%EMMEPY% %BASE_PATH%\python\cmap_transit_assignment_runner.py
+::%EMMEPY% %BASE_PATH%\python\cmap_transit_assignment_runner.py 3
 
 ::
 :: OUTPUTS

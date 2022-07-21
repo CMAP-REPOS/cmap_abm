@@ -31,4 +31,4 @@ set MKL_NUM_THREADS=1
 ::
 ::%ANACONDA% python\prepAsim.py
 ::%ANACONDA% python\crop.py little
-%ANACONDA% %ASIM%\simulation.py -c %ASIM%\configs -o %ASIM%\output_little -d %ASIM%\data_little
+%ANACONDA% %ASIM%\simulation.py -c %ASIM%\configs -o %ASIM%\output -d %ASIM%\data
