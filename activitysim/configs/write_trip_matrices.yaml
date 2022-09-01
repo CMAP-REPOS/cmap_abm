@@ -49,57 +49,7 @@ MATRICES:
       - name: SCHBUS_EA
         data_field: SCHBUS_EA
 
-  - file_name: trn_ea_taz.omx
-    tables:       
-      - name: TRN_WALK_L_EA
-        data_field: TRN_WALK_L_EA
-      - name: TRN_PNROUT_L_EA
-        data_field: TRN_PNROUT_L_EA
-      - name: TRN_PNRIN_L_EA
-        data_field: TRN_PNRIN_L_EA        
-      - name: TRN_KNROUT_L_EA
-        data_field: TRN_KNROUT_L_EA
-      - name: TRN_KNRIN_L_EA
-        data_field: TRN_KNRIN_L_EA        
-      - name: TRN_TNCOUT_L_EA
-        data_field: TRN_TNCOUT_L_EA
-      - name: TRN_TNCIN_L_EA
-        data_field: TRN_TNCIN_L_EA        
-      - name: TRN_TOT_L_EA
-        data_field: TRN_TOT_L_EA
-      - name: TRN_WALK_M_EA
-        data_field: TRN_WALK_M_EA
-      - name: TRN_PNROUT_M_EA
-        data_field: TRN_PNROUT_M_EA
-      - name: TRN_PNRIN_M_EA
-        data_field: TRN_PNRIN_M_EA        
-      - name: TRN_KNROUT_M_EA
-        data_field: TRN_KNROUT_M_EA
-      - name: TRN_KNRIN_M_EA
-        data_field: TRN_KNRIN_M_EA        
-      - name: TRN_TNCOUT_M_EA
-        data_field: TRN_TNCOUT_M_EA
-      - name: TRN_TNCIN_M_EA
-        data_field: TRN_TNCIN_M_EA        
-      - name: TRN_TOT_M_EA
-        data_field: TRN_TOT_M_EA
-      - name: TRN_WALK_H_EA
-        data_field: TRN_WALK_H_EA
-      - name: TRN_PNROUT_H_EA
-        data_field: TRN_PNROUT_H_EA
-      - name: TRN_PNRIN_H_EA
-        data_field: TRN_PNRIN_H_EA        
-      - name: TRN_KNROUT_H_EA
-        data_field: TRN_KNROUT_H_EA
-      - name: TRN_KNRIN_H_EA
-        data_field: TRN_KNRIN_H_EA        
-      - name: TRN_TNCOUT_H_EA
-        data_field: TRN_TNCOUT_H_EA
-      - name: TRN_TNCIN_H_EA
-        data_field: TRN_TNCIN_H_EA        
-      - name: TRN_TOT_H_EA
-        data_field: TRN_TOT_H_EA
-#AM
+  #AM
   - file_name: trips_am_taz.omx
     tables:
       - name: SOV_NT_L_AM
@@ -183,6 +133,7 @@ MATRICES:
         data_field: TRN_TNCIN_H_AM        
       - name: TRN_TOT_H_AM
         data_field: TRN_TOT_H_AM
+  
   #MM
   - file_name: trips_mm_taz.omx
     tables:
@@ -217,57 +168,7 @@ MATRICES:
       - name: SCHBUS_MM
         data_field: SCHBUS_MM
 
-  - file_name: trn_mm_taz.omx
-    tables:                
-      - name: TRN_WALK_L_MM
-        data_field: TRN_WALK_L_MM
-      - name: TRN_PNROUT_L_MM
-        data_field: TRN_PNROUT_L_MM
-      - name: TRN_PNRIN_L_MM
-        data_field: TRN_PNRIN_L_MM        
-      - name: TRN_KNROUT_L_MM
-        data_field: TRN_KNROUT_L_MM
-      - name: TRN_KNRIN_L_MM
-        data_field: TRN_KNRIN_L_MM        
-      - name: TRN_TNCOUT_L_MM
-        data_field: TRN_TNCOUT_L_MM
-      - name: TRN_TNCIN_L_MM
-        data_field: TRN_TNCIN_L_MM        
-      - name: TRN_TOT_L_MM
-        data_field: TRN_TOT_L_MM
-      - name: TRN_WALK_M_MM
-        data_field: TRN_WALK_M_MM
-      - name: TRN_PNROUT_M_MM
-        data_field: TRN_PNROUT_M_MM
-      - name: TRN_PNRIN_M_MM
-        data_field: TRN_PNRIN_M_MM        
-      - name: TRN_KNROUT_M_MM
-        data_field: TRN_KNROUT_M_MM
-      - name: TRN_KNRIN_M_MM
-        data_field: TRN_KNRIN_M_MM        
-      - name: TRN_TNCOUT_M_MM
-        data_field: TRN_TNCOUT_M_MM
-      - name: TRN_TNCIN_M_MM
-        data_field: TRN_TNCIN_M_MM        
-      - name: TRN_TOT_M_MM
-        data_field: TRN_TOT_M_MM
-      - name: TRN_WALK_H_MM
-        data_field: TRN_WALK_H_MM
-      - name: TRN_PNROUT_H_MM
-        data_field: TRN_PNROUT_H_MM
-      - name: TRN_PNRIN_H_MM
-        data_field: TRN_PNRIN_H_MM        
-      - name: TRN_KNROUT_H_MM
-        data_field: TRN_KNROUT_H_MM
-      - name: TRN_KNRIN_H_MM
-        data_field: TRN_KNRIN_H_MM        
-      - name: TRN_TNCOUT_H_MM
-        data_field: TRN_TNCOUT_H_MM
-      - name: TRN_TNCIN_H_MM
-        data_field: TRN_TNCIN_H_MM        
-      - name: TRN_TOT_H_MM
-        data_field: TRN_TOT_H_MM
-  # #MD
+  #MD
   - file_name: trips_md_taz.omx
     tables:
       - name: SOV_NT_L_MD
@@ -385,57 +286,6 @@ MATRICES:
         data_field: BIKE_AF
       - name: SCHBUS_AF
         data_field: SCHBUS_AF
-     
-  - file_name: trn_af_taz.omx
-    tables:                
-      - name: TRN_WALK_L_AF
-        data_field: TRN_WALK_L_AF
-      - name: TRN_PNROUT_L_AF
-        data_field: TRN_PNROUT_L_AF
-      - name: TRN_PNRIN_L_AF
-        data_field: TRN_PNRIN_L_AF        
-      - name: TRN_KNROUT_L_AF
-        data_field: TRN_KNROUT_L_AF
-      - name: TRN_KNRIN_L_AF
-        data_field: TRN_KNRIN_L_AF        
-      - name: TRN_TNCOUT_L_AF
-        data_field: TRN_TNCOUT_L_AF
-      - name: TRN_TNCIN_L_AF
-        data_field: TRN_TNCIN_L_AF        
-      - name: TRN_TOT_L_AF
-        data_field: TRN_TOT_L_AF
-      - name: TRN_WALK_M_AF
-        data_field: TRN_WALK_M_AF
-      - name: TRN_PNROUT_M_AF
-        data_field: TRN_PNROUT_M_AF
-      - name: TRN_PNRIN_M_AF
-        data_field: TRN_PNRIN_M_AF        
-      - name: TRN_KNROUT_M_AF
-        data_field: TRN_KNROUT_M_AF
-      - name: TRN_KNRIN_M_AF
-        data_field: TRN_KNRIN_M_AF        
-      - name: TRN_TNCOUT_M_AF
-        data_field: TRN_TNCOUT_M_AF
-      - name: TRN_TNCIN_M_AF
-        data_field: TRN_TNCIN_M_AF        
-      - name: TRN_TOT_M_AF
-        data_field: TRN_TOT_M_AF
-      - name: TRN_WALK_H_AF
-        data_field: TRN_WALK_H_AF
-      - name: TRN_PNROUT_H_AF
-        data_field: TRN_PNROUT_H_AF
-      - name: TRN_PNRIN_H_AF
-        data_field: TRN_PNRIN_H_AF        
-      - name: TRN_KNROUT_H_AF
-        data_field: TRN_KNROUT_H_AF
-      - name: TRN_KNRIN_H_AF
-        data_field: TRN_KNRIN_H_AF        
-      - name: TRN_TNCOUT_H_AF
-        data_field: TRN_TNCOUT_H_AF
-      - name: TRN_TNCIN_H_AF
-        data_field: TRN_TNCIN_H_AF        
-      - name: TRN_TOT_H_AF
-        data_field: TRN_TOT_H_AF
 
   #PM
   - file_name: trips_pm_taz.omx
@@ -556,57 +406,6 @@ MATRICES:
       - name: SCHBUS_EV
         data_field: SCHBUS_EV
                 
-  - file_name: trn_ev_taz.omx
-    tables:                
-      - name: TRN_WALK_L_EV
-        data_field: TRN_WALK_L_EV
-      - name: TRN_PNROUT_L_EV
-        data_field: TRN_PNROUT_L_EV
-      - name: TRN_PNRIN_L_EV
-        data_field: TRN_PNRIN_L_EV        
-      - name: TRN_KNROUT_L_EV
-        data_field: TRN_KNROUT_L_EV
-      - name: TRN_KNRIN_L_EV
-        data_field: TRN_KNRIN_L_EV        
-      - name: TRN_TNCOUT_L_EV
-        data_field: TRN_TNCOUT_L_EV
-      - name: TRN_TNCIN_L_EV
-        data_field: TRN_TNCIN_L_EV        
-      - name: TRN_TOT_L_EV
-        data_field: TRN_TOT_L_EV
-      - name: TRN_WALK_M_EV
-        data_field: TRN_WALK_M_EV
-      - name: TRN_PNROUT_M_EV
-        data_field: TRN_PNROUT_M_EV
-      - name: TRN_PNRIN_M_EV
-        data_field: TRN_PNRIN_M_EV        
-      - name: TRN_KNROUT_M_EV
-        data_field: TRN_KNROUT_M_EV
-      - name: TRN_KNRIN_M_EV
-        data_field: TRN_KNRIN_M_EV        
-      - name: TRN_TNCOUT_M_EV
-        data_field: TRN_TNCOUT_M_EV
-      - name: TRN_TNCIN_M_EV
-        data_field: TRN_TNCIN_M_EV        
-      - name: TRN_TOT_M_EV
-        data_field: TRN_TOT_M_EV
-      - name: TRN_WALK_H_EV
-        data_field: TRN_WALK_H_EV
-      - name: TRN_PNROUT_H_EV
-        data_field: TRN_PNROUT_H_EV
-      - name: TRN_PNRIN_H_EV
-        data_field: TRN_PNRIN_H_EV        
-      - name: TRN_KNROUT_H_EV
-        data_field: TRN_KNROUT_H_EV
-      - name: TRN_KNRIN_H_EV
-        data_field: TRN_KNRIN_H_EV        
-      - name: TRN_TNCOUT_H_EV
-        data_field: TRN_TNCOUT_H_EV
-      - name: TRN_TNCIN_H_EV
-        data_field: TRN_TNCIN_H_EV        
-      - name: TRN_TOT_H_EV
-        data_field: TRN_TOT_H_EV
-
   #NT
   - file_name: trips_nt_taz.omx
     tables:
@@ -695,6 +494,7 @@ MATRICES:
 
 CONSTANTS:
   time_periods:
+    # auto
     #  periods: [0, 4, 5, 7, 8, 12, 14, 16, 18, 24]
     #labels: &skim_time_period_labels ['VE', 'EA', 'AM', 'MM', 'MD', 'AF', 'PM', 'EV', 'NT']
     # VE = 3a - 6a (same skim data as NT)
@@ -707,33 +507,55 @@ CONSTANTS:
     # EV = 6p - 8p
     # NT = 8p - 3a
     VE:
-      first_hour: 0
-      last_hour: 3
-    EA:
-      first_hour: 4
-      last_hour: 4
-    AM:
-      first_hour: 5
+      first_hour: 1
       last_hour: 6
-    MM:
+    EA:
       first_hour: 7
-      last_hour: 7
+      last_hour: 8
+    AM:
+      first_hour: 9
+      last_hour: 12
+    MM:
+      first_hour: 13
+      last_hour: 14
     MD:
-      first_hour: 8
-      last_hour: 11
+      first_hour: 15
+      last_hour: 22
     AF:
-      first_hour: 12
-      last_hour: 13
+      first_hour: 23
+      last_hour: 26
     PM:
-      first_hour: 14
-      last_hour: 15
+      first_hour: 27
+      last_hour: 30
     EV:
-      first_hour: 16
-      last_hour: 17
+      first_hour: 31
+      last_hour: 34
     NT:
-      first_hour: 18
-      last_hour: 24
-      
+      first_hour: 35
+      last_hour: 48
+    # transit
+    #  periods: [0, 4, 5, 7, 8, 12, 14, 16, 18, 24]
+    #labels: &skim_time_period_labels ['TVE', 'TAM', 'TMD', 'TPM', 'TNT']
+    # TVE = 3a - 6a (same skim data as NT)
+    # TAM = 6a - 9a
+    # TMD = 9a - 4p
+    # TPM = 4p - 6p
+    # TNT = 6p - 3a
+    TVE:
+      first_hour: 1
+      last_hour: 6
+    TAM:
+      first_hour: 7
+      last_hour: 12
+    TMD:
+      first_hour: 13
+      last_hour: 26
+    TPM:
+      first_hour: 27
+      last_hour: 30
+    TNT:
+      first_hour: 31
+      last_hour: 48
   # SHARED2 and SHARED3 Occupancies
   OCC_SHARED2: 2.0
   OCC_SHARED3: 3.33

@@ -49,7 +49,10 @@ class CMapNetwork(_m.Tool()):
         -------
         int_var_name : type
         """
-        net_calc = gen_utils.NetworkCalculator(scenario) 
+        net_calc = gen_utils.NetworkCalculator(scenario)
+        create_extra = _m.Modeller().tool("inro.emme.data.extra_attribute.create_extra_attribute")
+        create_extra("LINK", "@ftime", 'Free-flow time', 0.0, overwrite = True, scenario = scenario)
+        net_calc("@ftime", "length/@speed*60", "modes=ASHbmh")
         net_calc("ul1", "@ftime", "modes=ASHbmh")
         net_calc("ul2", "@emcap * lanes * %s" % self.timeFactors[int(scenario)], "modes=ASHbmh")
         #net_calc("ul2", "@emcap * lanes", "modes=ASHbmh")
@@ -68,27 +71,13 @@ class CMapNetwork(_m.Tool()):
         int_var_name : type
         """
         netCalc = _m.Modeller().tool("inro.emme.network_calculation.network_calculator")
+        create_extra = _m.Modeller().tool("inro.emme.data.extra_attribute.create_extra_attribute")
         if not ("@sta_reliability" in scenario.attributes("LINK")):
-            scenario.create_extra_attribute("LINK", "@sta_reliability", 0.0)
+            create_extra("LINK", "@sta_reliability", "", 0.0, overwrite = True, scenario = scenario)
         if not ("@reliability_sq" in scenario.attributes("LINK")):
-            scenario.create_extra_attribute("LINK", "@reliability_sq", 0.0)
-        if not ("@tolldist" in scenario.attributes("LINK")):
-            scenario.create_extra_attribute("LINK", "@tolldist", 0.0)
-        spec = {
-            "type": "NETWORK_CALCULATION",
-            "expression": "length",
-            "selections":{
-                "link": "@tollv=1"
-            },
-            "result": "@tolldist"
-        }
-        report = netCalc(spec)
-        if not ("@hovdist" in scenario.attributes("LINK")):
-            scenario.create_extra_attribute("LINK", "@hovdist", 0.0) 
-        if("@auto_time" in scenario.attributes("LINK")):
-            scenario.delete_extra_attribute("@auto_time")
+            create_extra("LINK", "@reliability_sq", "Reliability factor squared", 0.0, overwrite = True, scenario = scenario)
         if not ("@auto_time" in scenario.attributes("LINK")):
-            scenario.create_extra_attribute("LINK", "@auto_time", 0.0)            
+            create_extra("LINK", "@auto_time", "traffic link volume (volau)", 0.0, overwrite = True, scenario = scenario)         
         spec = {
             "type": "NETWORK_CALCULATION",
             "expression": "@ftime",

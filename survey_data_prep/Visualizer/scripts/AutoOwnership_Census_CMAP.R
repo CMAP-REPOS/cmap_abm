@@ -8,7 +8,7 @@ start_time = Sys.time()
 ### Read Command Line Arguments
 # args                = commandArgs(trailingOnly = TRUE)
 # Parameters_File     = args[1]
-
+if (!"tigris" %in% installed.packages()) install.packages("tigris", repos='http://cran.us.r-project.org')
 LOAD_PKGS_LIST = c("leaflet", "htmlwidgets", "rgdal", "rgeos", "raster", "dplyr", 
                     "stringr", "data.table", "tigris", "yaml", "sf")
 lib_sink = suppressWarnings(suppressMessages(lapply(LOAD_PKGS_LIST, library, character.only = TRUE)))

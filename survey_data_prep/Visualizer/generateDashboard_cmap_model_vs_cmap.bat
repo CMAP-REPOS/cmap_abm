@@ -33,7 +33,7 @@ SET BUILD_SCENARIO_NAME=ASim
 SET IS_BASE_SURVEY=Yes
 SET MAX_ITER=1
 SET BASE_SAMPLE_RATE=1.0
-SET BUILD_SAMPLE_RATE=0.2761234
+SET BUILD_SAMPLE_RATE=0.5
 
 SET CT_ZERO_AUTO_FILE_NAME=ct_zero_auto.shp
 
@@ -80,7 +80,8 @@ SET EMME_OUTPUT=%CMAP_ABM_DIR%\emme_outputs
 SET ANACONDA=C:\Users\%USERNAME%\.conda\envs\cmapasim
 SET ANACONDA_DIR=C:\ProgramData\Anaconda3
 SET CONDA_ACT=%ANACONDA_DIR%\scripts\activate.bat
-%ANACONDA%\python.exe scripts\Summarize_model_HNET.py
+::CALL %CONDA_ACT% cmapasim
+::%ANACONDA%\python.exe scripts\Summarize_model_HNET.py
 
 :: Create calibration output directory
 :: ############################################################################
@@ -108,7 +109,11 @@ REM SET SWITCH=FULL
 REM %R_SCRIPT% %WORKING_DIR%\scripts\SummarizeABM_county_HHwgt.R %PARAMETERS_FILE% %SWITCH%
 REM IF %ERRORLEVEL% NEQ 0 GOTO MODEL_ERROR
 
+::ECHO Summarizing ActivitySim Outputs...
+::%R_SCRIPT% scripts\Summarize_ActivitySim_cmap.R %SETTINGS_FILE%
 
+::ECHO Preparing Auto Ownership Comparisons...
+::%R_SCRIPT% scripts\AutoOwnership_Census_CMAP.R %SETTINGS_FILE%
 
 :: Call the master R script to generate full visualizer
 :: #####################################################

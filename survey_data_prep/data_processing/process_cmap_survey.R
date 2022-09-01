@@ -21,6 +21,7 @@ library(sf)
 library(geosphere)
 library(yaml)
 library(stringr)
+library(omxr) 
 # 
 
 get_distance_meters =
@@ -137,7 +138,7 @@ codebook[, NAME := tolower(NAME)]
 
 # location file has 2017 zones. join to 2009 zones to use existing skims file in visualization.
 
-zones09 = st_read(file.path(settings$zone_dir, 'Zone09_CMAP_2009.shp'))
+zones09 = st_read(file.path(settings$zone_dir, 'zones17.shp'))
 zones09 = st_transform(zones09, st_crs("+proj=longlat +ellps=GRS80"))
 
 # 2017 skims
@@ -167,17 +168,22 @@ place_raw[codebook[NAME == 'tpurp' & TABLE == 'PLACE', .(VALUE = as.integer(VALU
 #---------------------------
 
 # codebook[NAME == 'hhinc']
-
-hh_raw[, HH_INC_CAT := fcase(hhinc %in% c(1:3), 1,  # 0-30k
-                             hhinc2 == 1, 1,  # 0-30k
-                             hhinc %in% c(4:6), 2, # 30-60k
-                             hhinc2 == 2, 2, # 30-60k
-                             hhinc %in% c(7:8), 3,  # 60-99k
-                             hhinc2 == 3, 3,  # 60-99k
-                             hhinc == 9, 4, # 100-150k
-                             hhinc2 == 4, 4, # 75-100k
-                             hhinc == 10, 5, # 150k plus
-                             hhinc == 5, 5, # 150k plus
+# need to interpolate for estimation, so keep both categories instead of grouping them
+hh_raw[, HH_INC_CAT := fcase(hhinc == 1, 1,  # 0-15k
+                             hhinc == 2, 2,  # 15-25k
+                             hhinc == 3, 2,  # 25-30k
+                             hhinc == 4, 2,  # 30-35k
+                             hhinc == 5, 5,  # 35-50k
+                             hhinc == 6, 6,  # 50-60k
+                             hhinc == 7, 7,  # 60-75k
+                             hhinc == 8, 8,  # 75-100k
+                             hhinc == 9, 9,  # 100-150k
+                             hhinc == 10, 10,  # 150 plus
+                             hhinc2 == 1, 11,  # 0-30k
+                             hhinc2 == 2, 12, # 30-60k
+                             hhinc2 == 3, 13,  # 60-99k
+                             hhinc2 == 4, 14, # 100-150k
+                             hhinc2 == 5, 15, # 150k plus
                              default = -9)
        ]  
 
@@ -250,13 +256,13 @@ HH = hh_raw[, .(SAMPN = sampno,
 #------------------
 
 
-per_raw[, AGE_CAT := fcase(age < 5 | aage == 1, 1, # <5
+per_raw[, AGE_CAT := fcase(age %in% c(0:4) | aage == 1, 1, # <5
                        age %in% c(5:15) | aage %in% c(2:3), 2, # 5-15
                        age %in% c(16:17) | aage == 4, 3, # 16-17
                        age %in% c(18:24), 4, # 18-24
                        age %in% c(25:44) | aage == 5, 5, # 25-44
-                       age %in% c(45:64) | aage == 6, 6, # 25-44
-                       age >= 65 | aage == 7, 7, # 25-44,
+                       age %in% c(45:64) | aage == 6, 6, # 45-64
+                       age >= 65 | aage == 7, 7, # 65+,
                        default = -9)]
                        
 
@@ -348,6 +354,7 @@ per_raw[location_raw[loctype == 2], `:=` (PER_WK_ZONE_ID = zone17,
 PER = per_raw[, .(PERNO = perno,
                   SAMPN = sampno,
                   PER_WEIGHT = wtperfin,
+                  AGE = age,
                   AGE_CAT,
                   PER_GENDER = sex,  # 1 is male, 2 is female; does SPA care?
                   PER_EMPLY_LOC_TYPE,
@@ -859,9 +866,9 @@ paste0("Distict people in PLACE file: ", num_persons_in_PLACE)
 HH_TEST = HH[1:400]
 PER_TEST = PER[SAMPN %in% HH_TEST[, SAMPN]]
 PLACE_TEST = PLACE[SAMPN %in% HH_TEST[, SAMPN]]
-write.csv(HH_TEST, file.path(output_dir, "HH_SPA_INPUT.csv"), row.names = F)
-write.csv(PER_TEST, file.path(output_dir, "PER_SPA_INPUT.csv"), row.names = F)
-write.csv(PLACE_TEST, file.path(output_dir, "PLACE_SPA_INPUT.csv"), row.names = F)
+# write.csv(HH_TEST, file.path(output_dir, "HH_SPA_INPUT_TEST.csv"), row.names = F)
+# write.csv(PER_TEST, file.path(output_dir, "PER_SPA_INPUT_TEST.csv"), row.names = F)
+# write.csv(PLACE_TEST, file.path(output_dir, "PLACE_SPA_INPUT_TEST.csv"), row.names = F)
 # 
 # # 
 write.csv(HH, file.path(output_dir, "HH_SPA_INPUT.csv"), row.names = F)

@@ -45,7 +45,7 @@ county_flows[, work_county_name := gsub(' County', '', work_county_name)]
 county_flows = county_flows[order(tolower(res_county_name), tolower(work_county_name))]
 
 omit_counties = c('Kankakee', 'Kenosha', 'LaSalle', 'Lee', 'Ogle', 'Racine','Boone', 'Winnebago', 'Walworth' )
-county_flows = county_flows[!work_county_name %in% omit_counties & !res_county_name %in% omit_counties]
+county_flows = county_flows[!rownames(county_flows) %in% omit_counties, !colnames(county_flowss) %in% omit_counties]
 
 county_flows[, fips := paste0(str_pad(res_state_fips, width = 2, side = "left", pad = "0"), str_pad(res_county_fips,  width = 3, side = "left", pad = "0"))]
 county_flows[, w_fips := paste0(str_pad(work_state_fips, width = 2, side = "left", pad = "0"), str_pad(work_county_fips,  width = 3, side = "left", pad = "0"))]
@@ -77,12 +77,13 @@ county_flows_matrix = dcast(county_flows, res_county_name ~ work_county_name , v
 county_flows_matrix[, Total := rowSums(.SD), .SDcols = names(county_flows_matrix)[-1]]
 county_flows_matrix = rollup(county_flows_matrix, j = lapply(.SD, sum), by = 'res_county_name', .SDcols = names(county_flows_matrix)[-1])
 county_flows_matrix[is.na(res_county_name), res_county_name := 'Total']
-setcolorder(county_flows_matrix, c("res_county_name", "Cook",     "DeKalb",   "DuPage",   
-                                   "Grundy" ,  "Kane" ,  "Kendall", "Lake, IL",
-             "McHenry"  , "Will"   , "Lake, IN",  "LaPorte",   "Porter" , "Total"   ))
-county_flows_matrix[, order_num := c(1:6, 8, 10, 12, 9, 7, 11, 13)]
-county_flows_matrix = county_flows_matrix[order(order_num)]
-county_flows_matrix[, order_num := NULL]
+#setcolorder(county_flows_matrix, c("res_county_name", "Cook",     "DeKalb",   "DuPage",   
+#                                   "Grundy" ,  "Kane" ,  "Kendall", "Lake, IL",
+#             "McHenry"  , "Will"   , "Lake, IN",  "LaPorte",   "Porter" , "Total"   ))
+county_flows_matrix = county_flows_matrix[c(1:6, 7, 10, 12, 8, 9, 11), c(1:6, 7, 10, 12, 8, 9, 11)]             
+#county_flows_matrix[, order_num := c(1:6, 8, 10, 12, 9, 7, 11, 13)]
+#county_flows_matrix = county_flows_matrix[order(order_num)]
+#county_flows_matrix[, order_num := NULL]
 
 setnames(county_flows_matrix, 'res_county_name', '')
 

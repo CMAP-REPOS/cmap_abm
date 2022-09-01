@@ -24,8 +24,7 @@ mem_tick: 30
 use_shadow_pricing: False
 
 ## - example sample
-households_sample_size: 2000
-#households_sample_size: 2047214 # 50% sample
+# households_sample_size: 2000 #2047214 # 50% sample
 chunk_size: 800_000_000_000
 
 # 100 percent sample full scale won't fit in 512GB with chunking disabled

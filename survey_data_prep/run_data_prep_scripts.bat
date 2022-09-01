@@ -9,7 +9,7 @@ SET R_LIBRARY=C:\Users\%USERNAME%\r_library
 
 ::%R_SCRIPT% Visualizer\scripts\CMAP_RLibInst.R %SETTINGS_FILE%
 
-::Rscript data_processing\process_cmap_survey.R %SETTINGS_FILE%
+%R_SCRIPT% data_processing\process_cmap_survey.R %SETTINGS_FILE%
 ::python SPA\__init__.py %SETTINGS_FILE%
 
 ::Rscript Visualizer\scripts\install_packages.R

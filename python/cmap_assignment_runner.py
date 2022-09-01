@@ -12,7 +12,7 @@ import openmatrix as omx
 print("Starting Auto Skim Process at %s"%(datetime.datetime.now()))
 EMME_OUTPUT = os.environ["EMME_OUTPUT"]
 ASIM_INPUTS = os.environ["ASIM_INPUTS"]
-PROJECT = os.environ["EMMEBANK"]
+PROJECT = os.environ["PROJECT"]
 msa_iteration = int(sys.argv[1])
 
 desktop = _app.start_dedicated(project=PROJECT, visible = True, user_initials = "TL")
@@ -27,10 +27,12 @@ scens = [{"periodNum": 1, "period": "NT"},
    {"periodNum": 5, "period": "MD"},
    {"periodNum": 6, "period": "AF"},
    {"periodNum": 7, "period": "PM"},
-   {"periodNum": 8, "period": "EV"}]
+   {"periodNum": 8, "period": "EV"}
+]
 
 # initialize omx to save auto and transit skims
-taz_skims = omx.open_file('%s\\taz_skims.omx' % ASIM_INPUTS,'w')
+taz_skims_filename = 'taz_skims.omx'
+taz_skims = omx.open_file('%s\\%s' % (ASIM_INPUTS,taz_skims_filename),'w')
 taz_skims.close()
 
 for s in scens:
@@ -45,13 +47,13 @@ for s in scens:
                                                 output_directory = "%s\\scen0%s" % (EMME_OUTPUT, s['periodNum']))
         print("Export auto matrices to OMX for time period " + s['period'])
         cmap_matrix.CMapMatrix().outputAutoSkimsToOMX(s['period'], databank.scenario(s['periodNum']), 
-                                                        "%s\\taz_skims.omx" % ASIM_INPUTS)
+                                                        "%s\\%s" % (ASIM_INPUTS, taz_skims_filename))
     except:
         print("There was an error in the %s period"%s['period'])
         traceback.print_exc()
 
 # placeholder for distance, walk distance, and bike distance
-taz_skims = omx.open_file('%s\\taz_skims.omx' % ASIM_INPUTS,'a')
+taz_skims = omx.open_file('%s\\%s' % (ASIM_INPUTS, taz_skims_filename),'a')
 if 'SOV_TR_M_DIST__MD' in taz_skims.list_matrices():
     taz_skims['DIST'] = taz_skims['SOV_TR_M_DIST__MD']
     taz_skims['DISTWALK'] = taz_skims['SOV_TR_M_DIST__MD']

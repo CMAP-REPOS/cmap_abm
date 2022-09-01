@@ -11,6 +11,7 @@ import array
 import os
 import json as _json
 import general as gen_utils
+import openmatrix as omx
 
 class CMapMatrix(_m.Tool()):
     __MODELLER_NAMESPACE__ = "cmap"
@@ -74,7 +75,7 @@ class CMapMatrix(_m.Tool()):
         exportOMX = _m.Modeller().tool("inro.emme.data.matrix.export_to_omx")
         skimList = []        
         skim_matrices = ["FIRSTWAIT", "XFERWAIT", "FARE", "XFERS", "ACC", "XFERWALK", "EGR", 
-                            "BUSLOCIVTT", "BUSEXPIVTT", "CTARAILIVTT", "METRARAILIVTT"]
+                            "BUSLOCIVTT", "BUSEXPIVTT", "CTARAILIVTT", "METRARAILIVTT", "CROWD", "CAPPEN"]
         access_modes = ["WALK", "PNROUT", "PNRIN", "KNROUT", "KNRIN"]
         user_classes = ["L","M","H"]
         for amode in access_modes:
@@ -83,6 +84,26 @@ class CMapMatrix(_m.Tool()):
                     #print("%s_%s_%s_%s"%(skim, amode, uc, period))
                     skimList.append("%s_%s_%s__%s"%(skim, amode, uc, period))
         exportOMX(matrices=skimList, export_file=outputfilename, append_to_file=True, omx_key = "NAME")
+        if period == "NT":
+            taz_skims = omx.open_file(outputfilename,'a')
+            for m in skimList:
+                new_skim = m[:-2] + "EV"
+                taz_skims[new_skim] = taz_skims[m]
+            taz_skims.close()
+        elif period == "AM":
+            taz_skims = omx.open_file(outputfilename,'a')
+            for m in skimList:
+                new_skim = m[:-2] + "EA"
+                taz_skims[new_skim] = taz_skims[m]
+            taz_skims.close()
+        elif period == "MD":
+            taz_skims = omx.open_file(outputfilename,'a')
+            for m in skimList:
+                new_skim = m[:-2] + "MM"
+                new_skim2 = m[:-2] + "AF"
+                taz_skims[new_skim] = taz_skims[m]
+                taz_skims[new_skim2] = taz_skims[m]
+            taz_skims.close()
 
     def outputTripTablesToOMX(self, period, scenario, outputfilename):
         """

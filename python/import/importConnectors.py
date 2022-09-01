@@ -12,7 +12,7 @@ import inro.emme.desktop.app as _app
 
 generate_connectors = False
 
-TSCENS = [201,202,203,204,205,206,207,208]
+TSCENS = [201,203,205,207]
 line_haul_modes_bus = ["bl", "be"] # bus local and bus express
 line_haul_mode_bus_descr = ["local bus stops", "express bus stops"]
 transit_modes_bus = ["BPL","EQ"] 
@@ -27,7 +27,7 @@ max_length_pnr = [10, 15, 15]
 acc_modes = ["uvw", "uw", "vw", "u", "v", "w"]
 
 WORK_FOLDER = os.environ["BASE_PATH"] + os.sep + "emme_inputs\\netfiles"
-PROJECT = os.environ["EMMEBANK"]
+PROJECT = os.environ["PROJECT"]
 
 desktop = _app.start_dedicated(project=PROJECT, visible=True, user_initials="TL")
 modeller = _m.Modeller(desktop)
@@ -44,7 +44,7 @@ import_basenet = _m.Modeller().tool("inro.emme.data.network.base.base_network_tr
 
 for scen in TSCENS: 
     change_scenario(scenario=scen)
-    eFolder = WORK_FOLDER+os.sep+"scen"+str(scen)
+    eFolder = WORK_FOLDER+os.sep+"scen_transit"
 
     if generate_connectors:
         
@@ -142,7 +142,7 @@ for scen in TSCENS:
                             delete_existing=True,
                             selection={
                                 "centroid":"all",
-                                "node": "%s and @pspac=1,5000" % line_haul_mode_specs[i],
+                                "node": "@pspac=1,9999 or @rspac=1,9999 and %s" % line_haul_mode_specs[i],
                                 "only_midblock_nodes": False},
                             max_length=max_length_pnr[i],
                             max_connectors=2,
@@ -150,7 +150,7 @@ for scen in TSCENS:
             export_basenet(selection = {"link": 'i=1,3649 or j=1,3649',
                                         "node": 'none'},
                         export_file = eFolder + os.sep + str(scen) + "connectors_v" + line_haul_modes[i] + ".out",
-                        field_separator = " ")                     
+                        field_separator = " ")
             create_connectors(access_modes=["w"],
                             egress_modes=["z"],
                             delete_existing=True,
@@ -184,7 +184,7 @@ for scen in TSCENS:
                             delete_existing=True,
                             selection={
                                 "centroid":"all",
-                                "node": "%s and @pspac=1,5000" % line_haul_mode_specs[i],
+                                "node": "@pspac=1,9999 or @rspac=1,9999 and %s" % line_haul_mode_specs[i],
                                 "only_midblock_nodes": False},
                             max_length=max_length_knr[i],
                             max_connectors=2,
@@ -198,7 +198,7 @@ for scen in TSCENS:
                             delete_existing=True,
                             selection={
                                 "centroid":"all",
-                                "node": "%s and @pspac=1,5000" % line_haul_mode_specs[i],
+                                "node": "@pspac=1,9999 or @rspac=1,9999 and %s" % line_haul_mode_specs[i],
                                 "only_midblock_nodes": False},
                             max_length=max_length_wlk[i],
                             max_connectors=2,
@@ -211,19 +211,15 @@ for scen in TSCENS:
         # import connectors; if a connector already exists, it's skipped because the connector with the most access modes is imported first
         for line_haul in line_haul_modes:
             for acc in acc_modes:
-                import_basenet(transaction_file = eFolder + os.sep + str(scen) + "connectors_" + acc + line_haul + ".out", revert_on_error = False)
+                filename = eFolder + os.sep + str(scen) + "connectors_" + acc + line_haul + ".out"
+                if os.path.exists(filename):
+                    import_basenet(transaction_file = filename, revert_on_error = False)
+                    os.remove(filename)
         # export all onnectors
         export_basenet(selection = {"link": 'i=1,3649 or j=1,3649',
                                     "node": 'none'},
                     export_file = eFolder + os.sep + str(scen) + "connectors.out",
                     field_separator = " ")
-        # delete individial connector files by transit mode and access mode
-        for line_haul in line_haul_modes:
-            for acc in acc_modes:
-                try:
-                    os.remove(eFolder + os.sep + str(scen) + "connectors_" + acc + line_haul + ".out")
-                except:
-                    pass
         
     import_basenet(transaction_file = eFolder + os.sep + str(scen) + "connectors.out", revert_on_error = False)
 print("Finished adding access and egress links")

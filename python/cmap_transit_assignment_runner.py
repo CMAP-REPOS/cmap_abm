@@ -11,7 +11,7 @@ import traceback
 print("Starting Transit Skim Process at %s"%(datetime.datetime.now()))
 EMME_OUTPUT = os.environ["EMME_OUTPUT"]
 ASIM_INPUTS = os.environ["ASIM_INPUTS"]
-PROJECT = os.environ["EMMEBANK"]
+PROJECT = os.environ["PROJECT"]
 msa_iteration = int(sys.argv[1])
 
 desktop = _app.start_dedicated(project = PROJECT, visible = True, user_initials = "TL") 
@@ -23,14 +23,10 @@ netcalc = _m.Modeller().tool("inro.emme.network_calculation.network_calculator")
 #scens = [{"periodNum": 1, "scenNum": 201, "period": "NT"}]
 
 scens = [{"periodNum": 1, "scenNum": 201, "period": "NT"},
-   {"periodNum": 2, "scenNum": 202, "period": "EA"},
    {"periodNum": 3, "scenNum": 203, "period": "AM"},
-   {"periodNum": 4, "scenNum": 204, "period": "MM"},
    {"periodNum": 5, "scenNum": 205, "period": "MD"},
-   {"periodNum": 6, "scenNum": 206, "period": "AF"},
-   {"periodNum": 7, "scenNum": 207, "period": "PM"},
-   {"periodNum": 8, "scenNum": 208, "period": "EV"}
-   ]
+   {"periodNum": 7, "scenNum": 207, "period": "PM"}
+]
 
 data_explorer = desktop.data_explorer()
 database = data_explorer.active_database()
@@ -52,8 +48,8 @@ for s in scens:
             from_scenario=from_scen)
 
     spec1 = {
-        "result": "@hwytm",
-        "expression": "ul2",
+        "result": "us1",
+        "expression": "(us1*(ttf.eq.2))+(us1.max.ul2)*(ttf.eq.1)", #ttf1=normal, ttf2=BRT
         "selections": {
             "link": "all",
             "transit_line": "all"
@@ -68,34 +64,16 @@ for s in scens:
         },        
         "type": "NETWORK_CALCULATION"
     }    
-    spec3 = {
-        "result": "us1",
-        "expression": "0",
-        "selections": {
-            "link": "all",
-            "transit_line": "all"
-        },        
-        "type": "NETWORK_CALCULATION"
-    }
-    spec4 = {
-        "result": "us1",
-        "expression": "(@ltime*(ttf.eq.2))+(@ltime.max.@hwytm)*(ttf.eq.1)", #ttf1=normal, ttf2=BRT
-        "selections": {
-            "link": "all",
-            "transit_line": "all"
-        },
-        "type": "NETWORK_CALCULATION"
-    }
-    netcalc([spec1,spec2,spec3,spec4])
+    netcalc([spec1,spec2])
 
     try:
-        cmap_transit_assignment.TransitAssignment().__call__(str(s['periodNum']), matrix_count, current_scenario, num_processors = 27)
-        #if msa_iteration == 4:
-        #    cmap_network.CMapNetwork().__call__(databank.scenario(s['scenNum']), runPrep = False, export = True, 
-        #                                        output_directory = "%s\\scen%s" % (EMME_OUTPUT, s['scenNum']))          
+        cmap_transit_assignment.TransitAssignment().__call__(str(s['periodNum']), matrix_count, current_scenario, ccr_periods = "AM,PM", num_processors = 27)
+        if msa_iteration == 4:
+            cmap_network.CMapNetwork().__call__(databank.scenario(s['scenNum']), runPrep = False, export = True, 
+                                                output_directory = "%s\\scen%s" % (EMME_OUTPUT, s['scenNum']))          
         print("Export transit matrices to OMX for time period " + s['period'])      
         cmap_matrix.CMapMatrix().outputTransitSkimsToOMX(s['period'], databank.scenario(s['periodNum']), 
-                                                            "%s\\taz_skims.omx" % ASIM_INPUTS)
+                                                            "%s\\taz_skims_new.omx" % ASIM_INPUTS) #TODO change skim filename
     except:
         print("There was an error in the %s period"%s['period'])
         traceback.print_exc() 

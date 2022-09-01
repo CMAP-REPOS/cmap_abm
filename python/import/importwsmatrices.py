@@ -17,13 +17,12 @@ import datetime
 import pandas as pd
 
 HSCENS = [1,2,3,4,5,6,7,8]
-transitImport = 200
-TSCENS = [transitImport + i for i in HSCENS]
+TSCENS = [201,203,205,207]
 per = {1: "NT", 2: "EA", 3: "AM", 4: "MM", 5: "MD", 6: "AF", 7: "PM", 8: "EV"}
 
 WORK_FOLDER = os.environ["WARM_START"] + os.sep + "wsmatrices"
 EMME_OUTPUT = os.environ["EMME_OUTPUT"]
-PROJECT = os.environ["EMMEBANK"]
+PROJECT = os.environ["PROJECT"]
 
 desktop = _app.start_dedicated(project=PROJECT, visible=True, user_initials="ASR")
 modeller = _m.Modeller(desktop)
@@ -286,15 +285,15 @@ for scen in TSCENS:
                 "TRN_TNCIN_%s_%s"%(V,period): "mf%s%s"%(scen-200, 271 + 7 * vint)                
             }
         
-        for n, m in trnMatsToImport.items():
-            createMatrix(matrix_id = m, matrix_name = n, scenario = scenario, overwrite = True)
-            spec1 = {
-                "type": "MATRIX_CALCULATION",
-                "result": "mf%s"%n,
-                "expression": "0.0001",
-            }
-            computeMatrix(spec1)
-        #importOMX(file_path = "%s\\trn_%s_taz.omx"%(WORK_FOLDER, period), matrices = trnMatsToImport, scenario = scenario)
+        #for n, m in trnMatsToImport.items():
+        #    createMatrix(matrix_id = m, matrix_name = n, scenario = scenario, overwrite = True)
+        #    spec1 = {
+        #        "type": "MATRIX_CALCULATION",
+        #        "result": "mf%s"%n,
+        #        "expression": "0.0001",
+        #   }
+        #    computeMatrix(spec1)
+        importOMX(file_path = "%s\\trn_%s_taz.omx"%(WORK_FOLDER, period), matrices = trnMatsToImport, scenario = scenario)
 
         # Combine KNR transit and TNC transit into KNR transit
         spec1 = {

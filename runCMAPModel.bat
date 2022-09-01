@@ -10,7 +10,7 @@
 SET BASE_PATH=C:\projects\cmap_activitysim\cmap_abm
 SET MODEL_PARAMETERS=%BASE_PATH%\model_params.yaml
       
-SET EMMEBANK=%BASE_PATH%\CMAP-ABM\CMAP-ABM.emp
+SET PROJECT=%BASE_PATH%\CMAP-ABM\CMAP-ABM.emp
 SET INPUT_FOLDER=%BASE_PATH%\inputs
 SET WARM_START=%BASE_PATH%\emme_inputs
 SET EMME_OUTPUT=%BASE_PATH%\emme_outputs
@@ -39,7 +39,8 @@ SET ASIM_OUTPUTS=%ASIM%\output
 ::%EMMEPY% %BASE_PATH%\python\import\importwsmatrices.py
 ::%EMMEPY% %BASE_PATH%\python\import\importConnectors.py
 
-::%EMMEPY% %BASE_PATH%\python\rename_omx.py :: to be removed
+:: to be removed
+::%EMMEPY% %BASE_PATH%\python\export_trn_los_maps.py
 
 :: Iteration 0
 :: Skim highway and transit for ActivitySim

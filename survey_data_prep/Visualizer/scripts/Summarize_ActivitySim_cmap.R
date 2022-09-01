@@ -305,8 +305,25 @@ countyFlows <- xtabs(finalweight~HDISTRICT+WDISTRICT, data = workers[levels(work
 countyFlows[is.na(countyFlows)] <- 0
 countyFlows <- addmargins(as.table(countyFlows))
 countyFlows <- as.data.frame.matrix(countyFlows)
-colnames(countyFlows)[colnames(countyFlows)=="Sum"] <- "Total"
-rownames(countyFlows)[rownames(countyFlows)=="Sum"] <- "Total"
+omit_counties = c('Kankakee', 'Kenosha', 'Lasalle', 'Lee', 'Ogle', 'Racine','Boone', 'Winnebago', 'Walworth' , 'Sum')
+countyFlows = countyFlows[!rownames(countyFlows) %in% omit_counties, !colnames(countyFlows) %in% omit_counties]
+#setcolorder(countyFlows, c("Cook",     "DeKalb",   "DuPage",   
+#                                   "Grundy" ,  "Kane" ,  "Kendall", "Lake, IL",
+#             "McHenry"  , "Will"   , "Lake, IN",  "LaPorte",   "Porter"))
+
+countyFlows = countyFlows[c(1:6, 7, 10, 12, 8, 9, 11), c(1:6, 7, 10, 12, 8, 9, 11)]
+
+#countyFlows <- addmargins(countyFlows, FUN = sum)
+countyFlows <- cbind(countyFlows, Total = rowSums(countyFlows))
+countyFlows <- rbind(countyFlows, Total = colSums(countyFlows))
+#countyFlows[, order_num := c(1:6, 8, 10, 12, 9, 7, 11, 13)]
+#countyFlows = countyFlows[order(order_num)]
+#countyFlows[, order_num := NULL]
+# setnames(countyFlows, 'res_county_name', '')
+
+#fwrite(county_flows_matrix, file.path(settings$visualizer_summaries, 'countyFlowsCensus.csv'))
+#colnames(countyFlows)[colnames(countyFlows)=="sum"] <- "Total"
+#rownames(countyFlows)[rownames(countyFlows)=="sum"] <- "Total"
 write.csv(countyFlows, "countyFlows.csv", row.names = T)
 
 
@@ -473,7 +490,7 @@ unique_joint_tours$JOINT_PURP <- unique_joint_tours$TOURPURP
 
 # Creating individual columns for up to 12 persons in each joint tour: PER1, PER2,... and PTYPE1, PTYPE2,....
 max_participant_num <- max(jtour_participants$participant_num)
-
+if (!"reshape2" %in% installed.packages()) install.packages("reshape2", repos='http://cran.us.r-project.org')
 participant_pivot <- reshape2::dcast(jtour_participants, tour_id ~ participant_num, value.var = "person_id")
 
 for(i in seq(1, 12)){

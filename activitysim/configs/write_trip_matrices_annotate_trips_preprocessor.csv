@@ -11,6 +11,10 @@ Description,Target,Expression
 ,is_pm,"trips.depart.between(time_periods['PM']['first_hour'], time_periods['PM']['last_hour'])"
 ,is_ev,"trips.depart.between(time_periods['EV']['first_hour'], time_periods['EV']['last_hour'])"
 ,is_nt,"(trips.depart.between(time_periods['VE']['first_hour'], time_periods['VE']['last_hour'])) | (trips.depart.between(time_periods['NT']['first_hour'], time_periods['NT']['last_hour']))"
+,is_tam,"trips.depart.between(time_periods['TAM']['first_hour'], time_periods['TAM']['last_hour'])"
+,is_tmd,"trips.depart.between(time_periods['TMD']['first_hour'], time_periods['TMD']['last_hour'])"
+,is_tpm,"trips.depart.between(time_periods['TPM']['first_hour'], time_periods['TPM']['last_hour'])"
+,is_tnt,"(trips.depart.between(time_periods['TVE']['first_hour'], time_periods['TVE']['last_hour'])) | (trips.depart.between(time_periods['TNT']['first_hour'], time_periods['TNT']['last_hour']))"
 # code income levels,,
 ,_income_group,"reindex(households.income_segment, trips.household_id)"
 ,is_low,_income_group == 1
@@ -32,30 +36,6 @@ Description,Target,Expression
 ,SOV_NT_H_EA,((trips.trip_mode == 'DRIVEALONE') & is_ea & is_high & no_tr)  * tour_participants
 ,HOV2_H_EA,((trips.trip_mode == 'SHAREDRIDE2') & is_ea & is_high) * tour_participants  / OCC_SHARED2 + ((tour_participants == 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_ea & is_high) * tour_participants / OCC_SHARED2
 ,HOV3_H_EA,((trips.trip_mode == 'SHAREDRIDE3') & is_ea & is_high) * tour_participants / OCC_SHARED3 + ((tour_participants > 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_ea & is_high) * tour_participants / OCC_SHARED3
-,TRN_WALK_L_EA,((trips.trip_mode == 'WALK_TRANSIT') & is_ea & is_low) * tour_participants
-,TRN_PNROUT_L_EA,((trips.trip_mode == 'PNR_TRANSIT') & is_ea & is_low & trips.outbound) * tour_participants
-,TRN_PNRIN_L_EA,((trips.trip_mode == 'PNR_TRANSIT') & is_ea & is_low & ~trips.outbound) * tour_participants
-,TRN_KNROUT_L_EA,((trips.trip_mode == 'KNR_TRANSIT') & is_ea & is_low & trips.outbound) * tour_participants
-,TRN_KNRIN_L_EA,((trips.trip_mode == 'KNR_TRANSIT') & is_ea & is_low & ~trips.outbound) * tour_participants
-,TRN_TNCOUT_L_EA,((trips.trip_mode == 'TNC_TRANSIT') & is_ea & is_low & trips.outbound) * tour_participants
-,TRN_TNCIN_L_EA,((trips.trip_mode == 'TNC_TRANSIT') & is_ea & is_low & ~trips.outbound) * tour_participants
-,TRN_WALK_M_EA,((trips.trip_mode == 'WALK_TRANSIT') & is_ea & is_mid) * tour_participants
-,TRN_PNROUT_M_EA,((trips.trip_mode == 'PNR_TRANSIT') & is_ea & is_mid & trips.outbound) * tour_participants
-,TRN_PNRIN_M_EA,((trips.trip_mode == 'PNR_TRANSIT') & is_ea & is_mid & ~trips.outbound) * tour_participants
-,TRN_KNROUT_M_EA,((trips.trip_mode == 'KNR_TRANSIT') & is_ea & is_mid & trips.outbound) * tour_participants
-,TRN_KNRIN_M_EA,((trips.trip_mode == 'KNR_TRANSIT') & is_ea & is_mid & ~trips.outbound) * tour_participants
-,TRN_TNCOUT_M_EA,((trips.trip_mode == 'TNC_TRANSIT') & is_ea & is_mid & trips.outbound) * tour_participants
-,TRN_TNCIN_M_EA,((trips.trip_mode == 'TNC_TRANSIT') & is_ea & is_mid & ~trips.outbound) * tour_participants
-,TRN_WALK_H_EA,((trips.trip_mode == 'WALK_TRANSIT') & is_ea & is_high) * tour_participants
-,TRN_PNROUT_H_EA,((trips.trip_mode == 'PNR_TRANSIT') & is_ea & is_high & trips.outbound) * tour_participants
-,TRN_PNRIN_H_EA,((trips.trip_mode == 'PNR_TRANSIT') & is_ea & is_high & ~trips.outbound) * tour_participants
-,TRN_KNROUT_H_EA,((trips.trip_mode == 'KNR_TRANSIT') & is_ea & is_high & trips.outbound) * tour_participants
-,TRN_KNRIN_H_EA,((trips.trip_mode == 'KNR_TRANSIT') & is_ea & is_high & ~trips.outbound) * tour_participants
-,TRN_TNCOUT_H_EA,((trips.trip_mode == 'TNC_TRANSIT') & is_ea & is_high & trips.outbound) * tour_participants
-,TRN_TNCIN_H_EA,((trips.trip_mode == 'TNC_TRANSIT') & is_ea & is_high & ~trips.outbound) * tour_participants
-,TRN_TOT_L_EA,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & (is_ea) & (is_low)) * tour_participants"
-,TRN_TOT_M_EA,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & (is_ea) & (is_mid)) * tour_participants"
-,TRN_TOT_H_EA,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & (is_ea) & (is_high)) * tour_participants"
 ,WALK_EA,((trips.trip_mode == 'WALK') & is_ea) * tour_participants
 ,BIKE_EA,((trips.trip_mode == 'BIKE') & is_ea) * tour_participants
 ,SCHBUS_EA,((trips.trip_mode == 'SCHBUS') & is_ea) * tour_participants
@@ -72,30 +52,30 @@ Description,Target,Expression
 ,SOV_NT_H_AM,((trips.trip_mode == 'DRIVEALONE') & is_am & is_high & no_tr) 
 ,HOV2_H_AM,((trips.trip_mode == 'SHAREDRIDE2') & is_am & is_high) * tour_participants  / OCC_SHARED2 + ((tour_participants == 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_am & is_high) * tour_participants / OCC_SHARED2
 ,HOV3_H_AM,((trips.trip_mode == 'SHAREDRIDE3') & is_am & is_high) * tour_participants / OCC_SHARED3 + ((tour_participants > 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_am & is_high) * tour_participants / OCC_SHARED3
-,TRN_WALK_L_AM,((trips.trip_mode == 'WALK_TRANSIT') & is_am & is_low) * tour_participants
-,TRN_PNROUT_L_AM,((trips.trip_mode == 'PNR_TRANSIT') & is_am & is_low & trips.outbound) * tour_participants
-,TRN_PNRIN_L_AM,((trips.trip_mode == 'PNR_TRANSIT') & is_am & is_low & ~trips.outbound) * tour_participants
-,TRN_KNROUT_L_AM,((trips.trip_mode == 'KNR_TRANSIT') & is_am & is_low & trips.outbound) * tour_participants
-,TRN_KNRIN_L_AM,((trips.trip_mode == 'KNR_TRANSIT') & is_am & is_low & ~trips.outbound) * tour_participants
-,TRN_TNCOUT_L_AM,((trips.trip_mode == 'TNC_TRANSIT') & is_am & is_low & trips.outbound) * tour_participants
-,TRN_TNCIN_L_AM,((trips.trip_mode == 'TNC_TRANSIT') & is_am & is_low & ~trips.outbound) * tour_participants
-,TRN_WALK_M_AM,((trips.trip_mode == 'WALK_TRANSIT') & is_am & is_mid) * tour_participants
-,TRN_PNROUT_M_AM,((trips.trip_mode == 'PNR_TRANSIT') & is_am & is_mid & trips.outbound) * tour_participants
-,TRN_PNRIN_M_AM,((trips.trip_mode == 'PNR_TRANSIT') & is_am & is_mid & ~trips.outbound) * tour_participants
-,TRN_KNROUT_M_AM,((trips.trip_mode == 'KNR_TRANSIT') & is_am & is_mid & trips.outbound) * tour_participants
-,TRN_KNRIN_M_AM,((trips.trip_mode == 'KNR_TRANSIT') & is_am & is_mid & ~trips.outbound) * tour_participants
-,TRN_TNCOUT_M_AM,((trips.trip_mode == 'TNC_TRANSIT') & is_am & is_mid & trips.outbound) * tour_participants
-,TRN_TNCIN_M_AM,((trips.trip_mode == 'TNC_TRANSIT') & is_am & is_mid & ~trips.outbound) * tour_participants
-,TRN_WALK_H_AM,((trips.trip_mode == 'WALK_TRANSIT') & is_am & is_high) * tour_participants
-,TRN_PNROUT_H_AM,((trips.trip_mode == 'PNR_TRANSIT') & is_am & is_high & trips.outbound) * tour_participants
-,TRN_PNRIN_H_AM,((trips.trip_mode == 'PNR_TRANSIT') & is_am & is_high & ~trips.outbound) * tour_participants
-,TRN_KNROUT_H_AM,((trips.trip_mode == 'KNR_TRANSIT') & is_am & is_high & trips.outbound) * tour_participants
-,TRN_KNRIN_H_AM,((trips.trip_mode == 'KNR_TRANSIT') & is_am & is_high & ~trips.outbound) * tour_participants
-,TRN_TNCOUT_H_AM,((trips.trip_mode == 'TNC_TRANSIT') & is_am & is_high & trips.outbound) * tour_participants
-,TRN_TNCIN_H_AM,((trips.trip_mode == 'TNC_TRANSIT') & is_am & is_high & ~trips.outbound) * tour_participants
-,TRN_TOT_L_AM,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & is_am & is_low) * tour_participants"
-,TRN_TOT_M_AM,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & is_am & is_mid) * tour_participants"
-,TRN_TOT_H_AM,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & is_am & is_high) * tour_participants"
+,TRN_WALK_L_AM,((trips.trip_mode == 'WALK_TRANSIT') & is_tam & is_low) * tour_participants
+,TRN_PNROUT_L_AM,((trips.trip_mode == 'PNR_TRANSIT') & is_tam & is_low & trips.outbound) * tour_participants
+,TRN_PNRIN_L_AM,((trips.trip_mode == 'PNR_TRANSIT') & is_tam & is_low & ~trips.outbound) * tour_participants
+,TRN_KNROUT_L_AM,((trips.trip_mode == 'KNR_TRANSIT') & is_tam & is_low & trips.outbound) * tour_participants
+,TRN_KNRIN_L_AM,((trips.trip_mode == 'KNR_TRANSIT') & is_tam & is_low & ~trips.outbound) * tour_participants
+,TRN_TNCOUT_L_AM,((trips.trip_mode == 'TNC_TRANSIT') & is_tam & is_low & trips.outbound) * tour_participants
+,TRN_TNCIN_L_AM,((trips.trip_mode == 'TNC_TRANSIT') & is_tam & is_low & ~trips.outbound) * tour_participants
+,TRN_WALK_M_AM,((trips.trip_mode == 'WALK_TRANSIT') & is_tam & is_mid) * tour_participants
+,TRN_PNROUT_M_AM,((trips.trip_mode == 'PNR_TRANSIT') & is_tam & is_mid & trips.outbound) * tour_participants
+,TRN_PNRIN_M_AM,((trips.trip_mode == 'PNR_TRANSIT') & is_tam & is_mid & ~trips.outbound) * tour_participants
+,TRN_KNROUT_M_AM,((trips.trip_mode == 'KNR_TRANSIT') & is_tam & is_mid & trips.outbound) * tour_participants
+,TRN_KNRIN_M_AM,((trips.trip_mode == 'KNR_TRANSIT') & is_tam & is_mid & ~trips.outbound) * tour_participants
+,TRN_TNCOUT_M_AM,((trips.trip_mode == 'TNC_TRANSIT') & is_tam & is_mid & trips.outbound) * tour_participants
+,TRN_TNCIN_M_AM,((trips.trip_mode == 'TNC_TRANSIT') & is_tam & is_mid & ~trips.outbound) * tour_participants
+,TRN_WALK_H_AM,((trips.trip_mode == 'WALK_TRANSIT') & is_tam & is_high) * tour_participants
+,TRN_PNROUT_H_AM,((trips.trip_mode == 'PNR_TRANSIT') & is_tam & is_high & trips.outbound) * tour_participants
+,TRN_PNRIN_H_AM,((trips.trip_mode == 'PNR_TRANSIT') & is_tam & is_high & ~trips.outbound) * tour_participants
+,TRN_KNROUT_H_AM,((trips.trip_mode == 'KNR_TRANSIT') & is_tam & is_high & trips.outbound) * tour_participants
+,TRN_KNRIN_H_AM,((trips.trip_mode == 'KNR_TRANSIT') & is_tam & is_high & ~trips.outbound) * tour_participants
+,TRN_TNCOUT_H_AM,((trips.trip_mode == 'TNC_TRANSIT') & is_tam & is_high & trips.outbound) * tour_participants
+,TRN_TNCIN_H_AM,((trips.trip_mode == 'TNC_TRANSIT') & is_tam & is_high & ~trips.outbound) * tour_participants
+,TRN_TOT_L_AM,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & is_tam & is_low) * tour_participants"
+,TRN_TOT_M_AM,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & is_tam & is_mid) * tour_participants"
+,TRN_TOT_H_AM,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & is_tam & is_high) * tour_participants"
 ,WALK_AM,((trips.trip_mode == 'WALK') & is_am) * tour_participants
 ,BIKE_AM,((trips.trip_mode == 'BIKE') & is_am) * tour_participants
 ,SCHBUS_AM,((trips.trip_mode == 'SCHBUS') & is_am) * tour_participants
@@ -112,30 +92,6 @@ Description,Target,Expression
 ,SOV_NT_H_MM,((trips.trip_mode == 'DRIVEALONE') & is_mm & is_high & no_tr) * tour_participants
 ,HOV2_H_MM,((trips.trip_mode == 'SHAREDRIDE2') & is_mm & is_high) * tour_participants  / OCC_SHARED2 + ((tour_participants == 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_mm & is_high) * tour_participants / OCC_SHARED2
 ,HOV3_H_MM,((trips.trip_mode == 'SHAREDRIDE3') & is_mm & is_high) * tour_participants / OCC_SHARED3 + ((tour_participants > 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_mm & is_high) * tour_participants / OCC_SHARED3
-,TRN_WALK_L_MM,((trips.trip_mode == 'WALK_TRANSIT') & is_mm & is_low) * tour_participants
-,TRN_PNROUT_L_MM,((trips.trip_mode == 'PNR_TRANSIT') & is_mm & is_low & trips.outbound) * tour_participants
-,TRN_PNRIN_L_MM,((trips.trip_mode == 'PNR_TRANSIT') & is_mm & is_low & ~trips.outbound) * tour_participants
-,TRN_KNROUT_L_MM,((trips.trip_mode == 'KNR_TRANSIT') & is_mm & is_low & trips.outbound) * tour_participants
-,TRN_KNRIN_L_MM,((trips.trip_mode == 'KNR_TRANSIT') & is_mm & is_low & ~trips.outbound) * tour_participants
-,TRN_TNCOUT_L_MM,((trips.trip_mode == 'TNC_TRANSIT') & is_mm & is_low & trips.outbound) * tour_participants
-,TRN_TNCIN_L_MM,((trips.trip_mode == 'TNC_TRANSIT') & is_mm & is_low & ~trips.outbound) * tour_participants
-,TRN_WALK_M_MM,((trips.trip_mode == 'WALK_TRANSIT') & is_mm & is_mid) * tour_participants
-,TRN_PNROUT_M_MM,((trips.trip_mode == 'PNR_TRANSIT') & is_mm & is_mid & trips.outbound) * tour_participants
-,TRN_PNRIN_M_MM,((trips.trip_mode == 'PNR_TRANSIT') & is_mm & is_mid & ~trips.outbound) * tour_participants
-,TRN_KNROUT_M_MM,((trips.trip_mode == 'KNR_TRANSIT') & is_mm & is_mid & trips.outbound) * tour_participants
-,TRN_KNRIN_M_MM,((trips.trip_mode == 'KNR_TRANSIT') & is_mm & is_mid & ~trips.outbound) * tour_participants
-,TRN_TNCOUT_M_MM,((trips.trip_mode == 'TNC_TRANSIT') & is_mm & is_mid & trips.outbound) * tour_participants
-,TRN_TNCIN_M_MM,((trips.trip_mode == 'TNC_TRANSIT') & is_mm & is_mid & ~trips.outbound) * tour_participants
-,TRN_WALK_H_MM,((trips.trip_mode == 'WALK_TRANSIT') & is_mm & is_high) * tour_participants
-,TRN_PNROUT_H_MM,((trips.trip_mode == 'PNR_TRANSIT') & is_mm & is_high & trips.outbound) * tour_participants
-,TRN_PNRIN_H_MM,((trips.trip_mode == 'PNR_TRANSIT') & is_mm & is_high & ~trips.outbound) * tour_participants
-,TRN_KNROUT_H_MM,((trips.trip_mode == 'KNR_TRANSIT') & is_mm & is_high & trips.outbound) * tour_participants
-,TRN_KNRIN_H_MM,((trips.trip_mode == 'KNR_TRANSIT') & is_mm & is_high & ~trips.outbound) * tour_participants
-,TRN_TNCOUT_H_MM,((trips.trip_mode == 'TNC_TRANSIT') & is_mm & is_high & trips.outbound) * tour_participants
-,TRN_TNCIN_H_MM,((trips.trip_mode == 'TNC_TRANSIT') & is_mm & is_high & ~trips.outbound) * tour_participants
-,TRN_TOT_L_MM,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & is_mm & is_low) * tour_participants"
-,TRN_TOT_M_MM,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & is_mm & is_mid) * tour_participants"
-,TRN_TOT_H_MM,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & is_mm & is_high) * tour_participants"
 ,WALK_MM,((trips.trip_mode == 'WALK') & is_mm) * tour_participants
 ,BIKE_MM,((trips.trip_mode == 'BIKE') & is_mm) * tour_participants
 ,SCHBUS_MM,((trips.trip_mode == 'SCHBUS') & is_mm) * tour_participants
@@ -152,30 +108,30 @@ Description,Target,Expression
 ,SOV_NT_H_MD,((trips.trip_mode == 'DRIVEALONE') & is_md & is_high & no_tr) * tour_participants 
 ,HOV2_H_MD,((trips.trip_mode == 'SHAREDRIDE2') & is_md & is_high) * tour_participants  / OCC_SHARED2 + ((tour_participants == 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_md & is_high) * tour_participants / OCC_SHARED2
 ,HOV3_H_MD,((trips.trip_mode == 'SHAREDRIDE3') & is_md & is_high) * tour_participants / OCC_SHARED3 + ((tour_participants > 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_md & is_high) * tour_participants / OCC_SHARED3
-,TRN_WALK_L_MD,((trips.trip_mode == 'WALK_TRANSIT') & is_md & is_low) * tour_participants
-,TRN_PNROUT_L_MD,((trips.trip_mode == 'PNR_TRANSIT') & is_md & is_low & trips.outbound) * tour_participants
-,TRN_PNRIN_L_MD,((trips.trip_mode == 'PNR_TRANSIT') & is_md & is_low & ~trips.outbound) * tour_participants
-,TRN_KNROUT_L_MD,((trips.trip_mode == 'KNR_TRANSIT') & is_md & is_low & trips.outbound) * tour_participants
-,TRN_KNRIN_L_MD,((trips.trip_mode == 'KNR_TRANSIT') & is_md & is_low & ~trips.outbound) * tour_participants
-,TRN_TNCOUT_L_MD,((trips.trip_mode == 'TNC_TRANSIT') & is_md & is_low & trips.outbound) * tour_participants
-,TRN_TNCIN_L_MD,((trips.trip_mode == 'TNC_TRANSIT') & is_md & is_low & ~trips.outbound) * tour_participants
-,TRN_WALK_M_MD,((trips.trip_mode == 'WALK_TRANSIT') & is_md & is_mid) * tour_participants
-,TRN_PNROUT_M_MD,((trips.trip_mode == 'PNR_TRANSIT') & is_md & is_mid & trips.outbound) * tour_participants
-,TRN_PNRIN_M_MD,((trips.trip_mode == 'PNR_TRANSIT') & is_md & is_mid & ~trips.outbound) * tour_participants
-,TRN_KNROUT_M_MD,((trips.trip_mode == 'KNR_TRANSIT') & is_md & is_mid & trips.outbound) * tour_participants
-,TRN_KNRIN_M_MD,((trips.trip_mode == 'KNR_TRANSIT') & is_md & is_mid & ~trips.outbound) * tour_participants
-,TRN_TNCOUT_M_MD,((trips.trip_mode == 'TNC_TRANSIT') & is_md & is_mid & trips.outbound) * tour_participants
-,TRN_TNCIN_M_MD,((trips.trip_mode == 'TNC_TRANSIT') & is_md & is_mid & ~trips.outbound) * tour_participants
-,TRN_WALK_H_MD,((trips.trip_mode == 'WALK_TRANSIT') & is_md & is_high) * tour_participants
-,TRN_PNROUT_H_MD,((trips.trip_mode == 'PNR_TRANSIT') & is_md & is_high & trips.outbound) * tour_participants
-,TRN_PNRIN_H_MD,((trips.trip_mode == 'PNR_TRANSIT') & is_md & is_high & ~trips.outbound) * tour_participants
-,TRN_KNROUT_H_MD,((trips.trip_mode == 'KNR_TRANSIT') & is_md & is_high & trips.outbound) * tour_participants
-,TRN_KNRIN_H_MD,((trips.trip_mode == 'KNR_TRANSIT') & is_md & is_high & ~trips.outbound) * tour_participants
-,TRN_TNCOUT_H_MD,((trips.trip_mode == 'TNC_TRANSIT') & is_md & is_high & trips.outbound) * tour_participants
-,TRN_TNCIN_H_MD,((trips.trip_mode == 'TNC_TRANSIT') & is_md & is_high & ~trips.outbound) * tour_participants
-,TRN_TOT_L_MD,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & is_md & is_low) * tour_participants"
-,TRN_TOT_M_MD,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & is_md & is_mid) * tour_participants"
-,TRN_TOT_H_MD,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & is_md & is_high) * tour_participants"
+,TRN_WALK_L_MD,((trips.trip_mode == 'WALK_TRANSIT') & is_tmd & is_low) * tour_participants
+,TRN_PNROUT_L_MD,((trips.trip_mode == 'PNR_TRANSIT') & is_tmd & is_low & trips.outbound) * tour_participants
+,TRN_PNRIN_L_MD,((trips.trip_mode == 'PNR_TRANSIT') & is_tmd & is_low & ~trips.outbound) * tour_participants
+,TRN_KNROUT_L_MD,((trips.trip_mode == 'KNR_TRANSIT') & is_tmd & is_low & trips.outbound) * tour_participants
+,TRN_KNRIN_L_MD,((trips.trip_mode == 'KNR_TRANSIT') & is_tmd & is_low & ~trips.outbound) * tour_participants
+,TRN_TNCOUT_L_MD,((trips.trip_mode == 'TNC_TRANSIT') & is_tmd & is_low & trips.outbound) * tour_participants
+,TRN_TNCIN_L_MD,((trips.trip_mode == 'TNC_TRANSIT') & is_tmd & is_low & ~trips.outbound) * tour_participants
+,TRN_WALK_M_MD,((trips.trip_mode == 'WALK_TRANSIT') & is_tmd & is_mid) * tour_participants
+,TRN_PNROUT_M_MD,((trips.trip_mode == 'PNR_TRANSIT') & is_tmd & is_mid & trips.outbound) * tour_participants
+,TRN_PNRIN_M_MD,((trips.trip_mode == 'PNR_TRANSIT') & is_tmd & is_mid & ~trips.outbound) * tour_participants
+,TRN_KNROUT_M_MD,((trips.trip_mode == 'KNR_TRANSIT') & is_tmd & is_mid & trips.outbound) * tour_participants
+,TRN_KNRIN_M_MD,((trips.trip_mode == 'KNR_TRANSIT') & is_tmd & is_mid & ~trips.outbound) * tour_participants
+,TRN_TNCOUT_M_MD,((trips.trip_mode == 'TNC_TRANSIT') & is_tmd & is_mid & trips.outbound) * tour_participants
+,TRN_TNCIN_M_MD,((trips.trip_mode == 'TNC_TRANSIT') & is_tmd & is_mid & ~trips.outbound) * tour_participants
+,TRN_WALK_H_MD,((trips.trip_mode == 'WALK_TRANSIT') & is_tmd & is_high) * tour_participants
+,TRN_PNROUT_H_MD,((trips.trip_mode == 'PNR_TRANSIT') & is_tmd & is_high & trips.outbound) * tour_participants
+,TRN_PNRIN_H_MD,((trips.trip_mode == 'PNR_TRANSIT') & is_tmd & is_high & ~trips.outbound) * tour_participants
+,TRN_KNROUT_H_MD,((trips.trip_mode == 'KNR_TRANSIT') & is_tmd & is_high & trips.outbound) * tour_participants
+,TRN_KNRIN_H_MD,((trips.trip_mode == 'KNR_TRANSIT') & is_tmd & is_high & ~trips.outbound) * tour_participants
+,TRN_TNCOUT_H_MD,((trips.trip_mode == 'TNC_TRANSIT') & is_tmd & is_high & trips.outbound) * tour_participants
+,TRN_TNCIN_H_MD,((trips.trip_mode == 'TNC_TRANSIT') & is_tmd & is_high & ~trips.outbound) * tour_participants
+,TRN_TOT_L_MD,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & is_tmd & is_low) * tour_participants"
+,TRN_TOT_M_MD,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & is_tmd & is_mid) * tour_participants"
+,TRN_TOT_H_MD,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & is_tmd & is_high) * tour_participants"
 ,WALK_MD,((trips.trip_mode == 'WALK') & is_md) * tour_participants
 ,BIKE_MD,((trips.trip_mode == 'BIKE') & is_md) * tour_participants
 ,SCHBUS_MD,((trips.trip_mode == 'SCHBUS') & is_md) * tour_participants
@@ -192,30 +148,6 @@ Description,Target,Expression
 ,SOV_NT_H_AF,((trips.trip_mode == 'DRIVEALONE') & is_af & is_high & no_tr) * tour_participants
 ,HOV2_H_AF,((trips.trip_mode == 'SHAREDRIDE2') & is_af & is_high) * tour_participants  / OCC_SHARED2 + ((tour_participants == 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_af & is_high) * tour_participants / OCC_SHARED2
 ,HOV3_H_AF,((trips.trip_mode == 'SHAREDRIDE3') & is_af & is_high) * tour_participants / OCC_SHARED3 + ((tour_participants > 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_af & is_high) * tour_participants / OCC_SHARED3
-,TRN_WALK_L_AF,((trips.trip_mode == 'WALK_TRANSIT') & is_af & is_low) * tour_participants
-,TRN_PNROUT_L_AF,((trips.trip_mode == 'PNR_TRANSIT') & is_af & is_low & trips.outbound) * tour_participants
-,TRN_PNRIN_L_AF,((trips.trip_mode == 'PNR_TRANSIT') & is_af & is_low & ~trips.outbound) * tour_participants
-,TRN_KNROUT_L_AF,((trips.trip_mode == 'KNR_TRANSIT') & is_af & is_low & trips.outbound) * tour_participants
-,TRN_KNRIN_L_AF,((trips.trip_mode == 'KNR_TRANSIT') & is_af & is_low & ~trips.outbound) * tour_participants
-,TRN_TNCOUT_L_AF,((trips.trip_mode == 'TNC_TRANSIT') & is_af & is_low & trips.outbound) * tour_participants
-,TRN_TNCIN_L_AF,((trips.trip_mode == 'TNC_TRANSIT') & is_af & is_low & ~trips.outbound) * tour_participants
-,TRN_WALK_M_AF,((trips.trip_mode == 'WALK_TRANSIT') & is_af & is_mid) * tour_participants
-,TRN_PNROUT_M_AF,((trips.trip_mode == 'PNR_TRANSIT') & is_af & is_mid & trips.outbound) * tour_participants
-,TRN_PNRIN_M_AF,((trips.trip_mode == 'PNR_TRANSIT') & is_af & is_mid & ~trips.outbound) * tour_participants
-,TRN_KNROUT_M_AF,((trips.trip_mode == 'KNR_TRANSIT') & is_af & is_mid & trips.outbound) * tour_participants
-,TRN_KNRIN_M_AF,((trips.trip_mode == 'KNR_TRANSIT') & is_af & is_mid & ~trips.outbound) * tour_participants
-,TRN_TNCOUT_M_AF,((trips.trip_mode == 'TNC_TRANSIT') & is_af & is_mid & trips.outbound) * tour_participants
-,TRN_TNCIN_M_AF,((trips.trip_mode == 'TNC_TRANSIT') & is_af & is_mid & ~trips.outbound) * tour_participants
-,TRN_WALK_H_AF,((trips.trip_mode == 'WALK_TRANSIT') & is_af & is_high) * tour_participants
-,TRN_PNROUT_H_AF,((trips.trip_mode == 'PNR_TRANSIT') & is_af & is_high & trips.outbound) * tour_participants
-,TRN_PNRIN_H_AF,((trips.trip_mode == 'PNR_TRANSIT') & is_af & is_high & ~trips.outbound) * tour_participants
-,TRN_KNROUT_H_AF,((trips.trip_mode == 'KNR_TRANSIT') & is_af & is_high & trips.outbound) * tour_participants
-,TRN_KNRIN_H_AF,((trips.trip_mode == 'KNR_TRANSIT') & is_af & is_high & ~trips.outbound) * tour_participants
-,TRN_TNCOUT_H_AF,((trips.trip_mode == 'TNC_TRANSIT') & is_af & is_high & trips.outbound) * tour_participants
-,TRN_TNCIN_H_AF,((trips.trip_mode == 'TNC_TRANSIT') & is_af & is_high & ~trips.outbound) * tour_participants
-,TRN_TOT_L_AF,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & is_af & is_low) * tour_participants"
-,TRN_TOT_M_AF,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & is_af & is_mid) * tour_participants"
-,TRN_TOT_H_AF,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & is_af & is_high) * tour_participants"
 ,WALK_AF,((trips.trip_mode == 'WALK') & is_af) * tour_participants
 ,BIKE_AF,((trips.trip_mode == 'BIKE') & is_af) * tour_participants
 ,SCHBUS_AF,((trips.trip_mode == 'SCHBUS') & is_af) * tour_participants
@@ -232,30 +164,30 @@ Description,Target,Expression
 ,SOV_NT_H_PM,((trips.trip_mode == 'DRIVEALONE') & is_pm & is_high & no_tr) * tour_participants 
 ,HOV2_H_PM,((trips.trip_mode == 'SHAREDRIDE2') & is_pm & is_high) * tour_participants  / OCC_SHARED2 + ((tour_participants == 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_pm & is_high) * tour_participants / OCC_SHARED2
 ,HOV3_H_PM,((trips.trip_mode == 'SHAREDRIDE3') & is_pm & is_high) * tour_participants / OCC_SHARED3 + ((tour_participants > 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_pm & is_high) * tour_participants / OCC_SHARED3
-,TRN_WALK_L_PM,((trips.trip_mode == 'WALK_TRANSIT') & is_pm & is_low) * tour_participants
-,TRN_PNROUT_L_PM,((trips.trip_mode == 'PNR_TRANSIT') & is_pm & is_low & trips.outbound) * tour_participants
-,TRN_PNRIN_L_PM,((trips.trip_mode == 'PNR_TRANSIT') & is_pm & is_low & ~trips.outbound) * tour_participants
-,TRN_KNROUT_L_PM,((trips.trip_mode == 'KNR_TRANSIT') & is_pm & is_low & trips.outbound) * tour_participants
-,TRN_KNRIN_L_PM,((trips.trip_mode == 'KNR_TRANSIT') & is_pm & is_low & ~trips.outbound) * tour_participants
-,TRN_TNCOUT_L_PM,((trips.trip_mode == 'TNC_TRANSIT') & is_pm & is_low & trips.outbound) * tour_participants
-,TRN_TNCIN_L_PM,((trips.trip_mode == 'TNC_TRANSIT') & is_pm & is_low & ~trips.outbound) * tour_participants
-,TRN_WALK_M_PM,((trips.trip_mode == 'WALK_TRANSIT') & is_pm & is_mid) * tour_participants
-,TRN_PNROUT_M_PM,((trips.trip_mode == 'PNR_TRANSIT') & is_pm & is_mid & trips.outbound) * tour_participants
-,TRN_PNRIN_M_PM,((trips.trip_mode == 'PNR_TRANSIT') & is_pm & is_mid & ~trips.outbound) * tour_participants
-,TRN_KNROUT_M_PM,((trips.trip_mode == 'KNR_TRANSIT') & is_pm & is_mid & trips.outbound) * tour_participants
-,TRN_KNRIN_M_PM,((trips.trip_mode == 'KNR_TRANSIT') & is_pm & is_mid & ~trips.outbound) * tour_participants
-,TRN_TNCOUT_M_PM,((trips.trip_mode == 'TNC_TRANSIT') & is_pm & is_mid & trips.outbound) * tour_participants
-,TRN_TNCIN_M_PM,((trips.trip_mode == 'TNC_TRANSIT') & is_pm & is_mid & ~trips.outbound) * tour_participants
-,TRN_WALK_H_PM,((trips.trip_mode == 'WALK_TRANSIT') & is_pm & is_high) * tour_participants
-,TRN_PNROUT_H_PM,((trips.trip_mode == 'PNR_TRANSIT') & is_pm & is_high & trips.outbound) * tour_participants
-,TRN_PNRIN_H_PM,((trips.trip_mode == 'PNR_TRANSIT') & is_pm & is_high & ~trips.outbound) * tour_participants
-,TRN_KNROUT_H_PM,((trips.trip_mode == 'KNR_TRANSIT') & is_pm & is_high & trips.outbound) * tour_participants
-,TRN_KNRIN_H_PM,((trips.trip_mode == 'KNR_TRANSIT') & is_pm & is_high & ~trips.outbound) * tour_participants
-,TRN_TNCOUT_H_PM,((trips.trip_mode == 'TNC_TRANSIT') & is_pm & is_high & trips.outbound) * tour_participants
-,TRN_TNCIN_H_PM,((trips.trip_mode == 'TNC_TRANSIT') & is_pm & is_high & ~trips.outbound) * tour_participants
-,TRN_TOT_L_PM,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & is_pm & is_low) * tour_participants"
-,TRN_TOT_M_PM,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & is_pm & is_mid) * tour_participants"
-,TRN_TOT_H_PM,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & is_pm & is_high) * tour_participants"
+,TRN_WALK_L_PM,((trips.trip_mode == 'WALK_TRANSIT') & is_tpm & is_low) * tour_participants
+,TRN_PNROUT_L_PM,((trips.trip_mode == 'PNR_TRANSIT') & is_tpm & is_low & trips.outbound) * tour_participants
+,TRN_PNRIN_L_PM,((trips.trip_mode == 'PNR_TRANSIT') & is_tpm & is_low & ~trips.outbound) * tour_participants
+,TRN_KNROUT_L_PM,((trips.trip_mode == 'KNR_TRANSIT') & is_tpm & is_low & trips.outbound) * tour_participants
+,TRN_KNRIN_L_PM,((trips.trip_mode == 'KNR_TRANSIT') & is_tpm & is_low & ~trips.outbound) * tour_participants
+,TRN_TNCOUT_L_PM,((trips.trip_mode == 'TNC_TRANSIT') & is_tpm & is_low & trips.outbound) * tour_participants
+,TRN_TNCIN_L_PM,((trips.trip_mode == 'TNC_TRANSIT') & is_tpm & is_low & ~trips.outbound) * tour_participants
+,TRN_WALK_M_PM,((trips.trip_mode == 'WALK_TRANSIT') & is_tpm & is_mid) * tour_participants
+,TRN_PNROUT_M_PM,((trips.trip_mode == 'PNR_TRANSIT') & is_tpm & is_mid & trips.outbound) * tour_participants
+,TRN_PNRIN_M_PM,((trips.trip_mode == 'PNR_TRANSIT') & is_tpm & is_mid & ~trips.outbound) * tour_participants
+,TRN_KNROUT_M_PM,((trips.trip_mode == 'KNR_TRANSIT') & is_tpm & is_mid & trips.outbound) * tour_participants
+,TRN_KNRIN_M_PM,((trips.trip_mode == 'KNR_TRANSIT') & is_tpm & is_mid & ~trips.outbound) * tour_participants
+,TRN_TNCOUT_M_PM,((trips.trip_mode == 'TNC_TRANSIT') & is_tpm & is_mid & trips.outbound) * tour_participants
+,TRN_TNCIN_M_PM,((trips.trip_mode == 'TNC_TRANSIT') & is_tpm & is_mid & ~trips.outbound) * tour_participants
+,TRN_WALK_H_PM,((trips.trip_mode == 'WALK_TRANSIT') & is_tpm & is_high) * tour_participants
+,TRN_PNROUT_H_PM,((trips.trip_mode == 'PNR_TRANSIT') & is_tpm & is_high & trips.outbound) * tour_participants
+,TRN_PNRIN_H_PM,((trips.trip_mode == 'PNR_TRANSIT') & is_tpm & is_high & ~trips.outbound) * tour_participants
+,TRN_KNROUT_H_PM,((trips.trip_mode == 'KNR_TRANSIT') & is_tpm & is_high & trips.outbound) * tour_participants
+,TRN_KNRIN_H_PM,((trips.trip_mode == 'KNR_TRANSIT') & is_tpm & is_high & ~trips.outbound) * tour_participants
+,TRN_TNCOUT_H_PM,((trips.trip_mode == 'TNC_TRANSIT') & is_tpm & is_high & trips.outbound) * tour_participants
+,TRN_TNCIN_H_PM,((trips.trip_mode == 'TNC_TRANSIT') & is_tpm & is_high & ~trips.outbound) * tour_participants
+,TRN_TOT_L_PM,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & is_tpm & is_low) * tour_participants"
+,TRN_TOT_M_PM,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & is_tpm & is_mid) * tour_participants"
+,TRN_TOT_H_PM,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & is_tpm & is_high) * tour_participants"
 ,WALK_PM,((trips.trip_mode == 'WALK') & is_pm) * tour_participants
 ,BIKE_PM,((trips.trip_mode == 'BIKE') & is_pm) * tour_participants
 ,SCHBUS_PM,((trips.trip_mode == 'SCHBUS') & is_pm) * tour_participants
@@ -272,30 +204,6 @@ Description,Target,Expression
 ,SOV_NT_H_EV,((trips.trip_mode == 'DRIVEALONE') & is_ev & is_high & no_tr) * tour_participants
 ,HOV2_H_EV,((trips.trip_mode == 'SHAREDRIDE2') & is_ev & is_high) * tour_participants  / OCC_SHARED2 + ((tour_participants == 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_ev & is_high) * tour_participants / OCC_SHARED2
 ,HOV3_H_EV,((trips.trip_mode == 'SHAREDRIDE3') & is_ev & is_high) * tour_participants / OCC_SHARED3 + ((tour_participants > 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_ev & is_high) * tour_participants / OCC_SHARED3
-,TRN_WALK_L_EV,((trips.trip_mode == 'WALK_TRANSIT') & is_ev & is_low) * tour_participants
-,TRN_PNROUT_L_EV,((trips.trip_mode == 'PNR_TRANSIT') & is_ev & is_low & trips.outbound) * tour_participants
-,TRN_PNRIN_L_EV,((trips.trip_mode == 'PNR_TRANSIT') & is_ev & is_low & ~trips.outbound) * tour_participants
-,TRN_KNROUT_L_EV,((trips.trip_mode == 'KNR_TRANSIT') & is_ev & is_low & trips.outbound) * tour_participants
-,TRN_KNRIN_L_EV,((trips.trip_mode == 'KNR_TRANSIT') & is_ev & is_low & ~trips.outbound) * tour_participants
-,TRN_TNCOUT_L_EV,((trips.trip_mode == 'TNC_TRANSIT') & is_ev & is_low & trips.outbound) * tour_participants
-,TRN_TNCIN_L_EV,((trips.trip_mode == 'TNC_TRANSIT') & is_ev & is_low & ~trips.outbound) * tour_participants
-,TRN_WALK_M_EV,((trips.trip_mode == 'WALK_TRANSIT') & is_ev & is_mid) * tour_participants
-,TRN_PNROUT_M_EV,((trips.trip_mode == 'PNR_TRANSIT') & is_ev & is_mid & trips.outbound) * tour_participants
-,TRN_PNRIN_M_EV,((trips.trip_mode == 'PNR_TRANSIT') & is_ev & is_mid & ~trips.outbound) * tour_participants
-,TRN_KNROUT_M_EV,((trips.trip_mode == 'KNR_TRANSIT') & is_ev & is_mid & trips.outbound) * tour_participants
-,TRN_KNRIN_M_EV,((trips.trip_mode == 'KNR_TRANSIT') & is_ev & is_mid & ~trips.outbound) * tour_participants
-,TRN_TNCOUT_M_EV,((trips.trip_mode == 'TNC_TRANSIT') & is_ev & is_mid & trips.outbound) * tour_participants
-,TRN_TNCIN_M_EV,((trips.trip_mode == 'TNC_TRANSIT') & is_ev & is_mid & ~trips.outbound) * tour_participants
-,TRN_WALK_H_EV,((trips.trip_mode == 'WALK_TRANSIT') & is_ev & is_high) * tour_participants
-,TRN_PNROUT_H_EV,((trips.trip_mode == 'PNR_TRANSIT') & is_ev & is_high & trips.outbound) * tour_participants
-,TRN_PNRIN_H_EV,((trips.trip_mode == 'PNR_TRANSIT') & is_ev & is_high & ~trips.outbound) * tour_participants
-,TRN_KNROUT_H_EV,((trips.trip_mode == 'KNR_TRANSIT') & is_ev & is_high & trips.outbound) * tour_participants
-,TRN_KNRIN_H_EV,((trips.trip_mode == 'KNR_TRANSIT') & is_ev & is_high & ~trips.outbound) * tour_participants
-,TRN_TNCOUT_H_EV,((trips.trip_mode == 'TNC_TRANSIT') & is_ev & is_high & trips.outbound) * tour_participants
-,TRN_TNCIN_H_EV,((trips.trip_mode == 'TNC_TRANSIT') & is_ev & is_high & ~trips.outbound) * tour_participants
-,TRN_TOT_L_EV,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & is_ev & is_low) * tour_participants"
-,TRN_TOT_M_EV,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & is_ev & is_mid) * tour_participants"
-,TRN_TOT_H_EV,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & is_ev & is_high) * tour_participants"
 ,WALK_EV,((trips.trip_mode == 'WALK') & is_ev) * tour_participants
 ,BIKE_EV,((trips.trip_mode == 'BIKE') & is_ev) * tour_participants
 ,SCHBUS_EV,((trips.trip_mode == 'SCHBUS') & is_ev) * tour_participants
@@ -312,30 +220,30 @@ Description,Target,Expression
 ,SOV_NT_H_NT,((trips.trip_mode == 'DRIVEALONE') & is_nt & is_high & no_tr) * tour_participants
 ,HOV2_H_NT,((trips.trip_mode == 'SHAREDRIDE2') & is_nt & is_high) * tour_participants  / OCC_SHARED2 + ((tour_participants == 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_nt & is_high) * tour_participants / OCC_SHARED2
 ,HOV3_H_NT,((trips.trip_mode == 'SHAREDRIDE3') & is_nt & is_high) * tour_participants / OCC_SHARED3 + ((tour_participants > 2) & ((trips.trip_mode == 'TAXI') | (trips.trip_mode == 'TNC_SHARED')) & is_nt & is_high) * tour_participants / OCC_SHARED3
-,TRN_WALK_L_NT,((trips.trip_mode == 'WALK_TRANSIT') & is_nt & is_low) * tour_participants
-,TRN_PNROUT_L_NT,((trips.trip_mode == 'PNR_TRANSIT') & is_nt & is_low & trips.outbound) * tour_participants
-,TRN_PNRIN_L_NT,((trips.trip_mode == 'PNR_TRANSIT') & is_nt & is_low & ~trips.outbound) * tour_participants
-,TRN_KNROUT_L_NT,((trips.trip_mode == 'KNR_TRANSIT') & is_nt & is_low & trips.outbound) * tour_participants
-,TRN_KNRIN_L_NT,((trips.trip_mode == 'KNR_TRANSIT') & is_nt & is_low & ~trips.outbound) * tour_participants
-,TRN_TNCOUT_L_NT,((trips.trip_mode == 'TNC_TRANSIT') & is_nt & is_low & trips.outbound) * tour_participants
-,TRN_TNCIN_L_NT,((trips.trip_mode == 'TNC_TRANSIT') & is_nt & is_low & ~trips.outbound) * tour_participants
-,TRN_WALK_M_NT,((trips.trip_mode == 'WALK_TRANSIT') & is_nt & is_mid) * tour_participants
-,TRN_PNROUT_M_NT,((trips.trip_mode == 'PNR_TRANSIT') & is_nt & is_mid & trips.outbound) * tour_participants
-,TRN_PNRIN_M_NT,((trips.trip_mode == 'PNR_TRANSIT') & is_nt & is_mid & ~trips.outbound) * tour_participants
-,TRN_KNROUT_M_NT,((trips.trip_mode == 'KNR_TRANSIT') & is_nt & is_mid & trips.outbound) * tour_participants
-,TRN_KNRIN_M_NT,((trips.trip_mode == 'KNR_TRANSIT') & is_nt & is_mid & ~trips.outbound) * tour_participants
-,TRN_TNCOUT_M_NT,((trips.trip_mode == 'TNC_TRANSIT') & is_nt & is_mid & trips.outbound) * tour_participants
-,TRN_TNCIN_M_NT,((trips.trip_mode == 'TNC_TRANSIT') & is_nt & is_mid & ~trips.outbound) * tour_participants
-,TRN_WALK_H_NT,((trips.trip_mode == 'WALK_TRANSIT') & is_nt & is_high) * tour_participants
-,TRN_PNROUT_H_NT,((trips.trip_mode == 'PNR_TRANSIT') & is_nt & is_high & trips.outbound) * tour_participants
-,TRN_PNRIN_H_NT,((trips.trip_mode == 'PNR_TRANSIT') & is_nt & is_high & ~trips.outbound) * tour_participants
-,TRN_KNROUT_H_NT,((trips.trip_mode == 'KNR_TRANSIT') & is_nt & is_high & trips.outbound) * tour_participants
-,TRN_KNRIN_H_NT,((trips.trip_mode == 'KNR_TRANSIT') & is_nt & is_high & ~trips.outbound) * tour_participants
-,TRN_TNCOUT_H_NT,((trips.trip_mode == 'TNC_TRANSIT') & is_nt & is_high & trips.outbound) * tour_participants
-,TRN_TNCIN_H_NT,((trips.trip_mode == 'TNC_TRANSIT') & is_nt & is_high & ~trips.outbound) * tour_participants
-,TRN_TOT_L_NT,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & is_nt & is_low) * tour_participants"
-,TRN_TOT_M_NT,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & is_nt & is_mid) * tour_participants"
-,TRN_TOT_H_NT,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & is_nt & is_high) * tour_participants"
+,TRN_WALK_L_NT,((trips.trip_mode == 'WALK_TRANSIT') & is_tnt & is_low) * tour_participants
+,TRN_PNROUT_L_NT,((trips.trip_mode == 'PNR_TRANSIT') & is_tnt & is_low & trips.outbound) * tour_participants
+,TRN_PNRIN_L_NT,((trips.trip_mode == 'PNR_TRANSIT') & is_tnt & is_low & ~trips.outbound) * tour_participants
+,TRN_KNROUT_L_NT,((trips.trip_mode == 'KNR_TRANSIT') & is_tnt & is_low & trips.outbound) * tour_participants
+,TRN_KNRIN_L_NT,((trips.trip_mode == 'KNR_TRANSIT') & is_tnt & is_low & ~trips.outbound) * tour_participants
+,TRN_TNCOUT_L_NT,((trips.trip_mode == 'TNC_TRANSIT') & is_tnt & is_low & trips.outbound) * tour_participants
+,TRN_TNCIN_L_NT,((trips.trip_mode == 'TNC_TRANSIT') & is_tnt & is_low & ~trips.outbound) * tour_participants
+,TRN_WALK_M_NT,((trips.trip_mode == 'WALK_TRANSIT') & is_tnt & is_mid) * tour_participants
+,TRN_PNROUT_M_NT,((trips.trip_mode == 'PNR_TRANSIT') & is_tnt & is_mid & trips.outbound) * tour_participants
+,TRN_PNRIN_M_NT,((trips.trip_mode == 'PNR_TRANSIT') & is_tnt & is_mid & ~trips.outbound) * tour_participants
+,TRN_KNROUT_M_NT,((trips.trip_mode == 'KNR_TRANSIT') & is_tnt & is_mid & trips.outbound) * tour_participants
+,TRN_KNRIN_M_NT,((trips.trip_mode == 'KNR_TRANSIT') & is_tnt & is_mid & ~trips.outbound) * tour_participants
+,TRN_TNCOUT_M_NT,((trips.trip_mode == 'TNC_TRANSIT') & is_tnt & is_mid & trips.outbound) * tour_participants
+,TRN_TNCIN_M_NT,((trips.trip_mode == 'TNC_TRANSIT') & is_tnt & is_mid & ~trips.outbound) * tour_participants
+,TRN_WALK_H_NT,((trips.trip_mode == 'WALK_TRANSIT') & is_tnt & is_high) * tour_participants
+,TRN_PNROUT_H_NT,((trips.trip_mode == 'PNR_TRANSIT') & is_tnt & is_high & trips.outbound) * tour_participants
+,TRN_PNRIN_H_NT,((trips.trip_mode == 'PNR_TRANSIT') & is_tnt & is_high & ~trips.outbound) * tour_participants
+,TRN_KNROUT_H_NT,((trips.trip_mode == 'KNR_TRANSIT') & is_tnt & is_high & trips.outbound) * tour_participants
+,TRN_KNRIN_H_NT,((trips.trip_mode == 'KNR_TRANSIT') & is_tnt & is_high & ~trips.outbound) * tour_participants
+,TRN_TNCOUT_H_NT,((trips.trip_mode == 'TNC_TRANSIT') & is_tnt & is_high & trips.outbound) * tour_participants
+,TRN_TNCIN_H_NT,((trips.trip_mode == 'TNC_TRANSIT') & is_tnt & is_high & ~trips.outbound) * tour_participants
+,TRN_TOT_L_NT,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & is_tnt & is_low) * tour_participants"
+,TRN_TOT_M_NT,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & is_tnt & is_mid) * tour_participants"
+,TRN_TOT_H_NT,"((trips.trip_mode.isin(['WALK_TRANSIT', 'PNR_TRANSIT', 'KNR_TRANSIT', 'TNC_TRANSIT'])) & is_tnt & is_high) * tour_participants"
 ,WALK_NT,((trips.trip_mode == 'WALK') & is_nt) * tour_participants
 ,BIKE_NT,((trips.trip_mode == 'BIKE') & is_nt) * tour_participants
 ,SCHBUS_NT,((trips.trip_mode == 'SCHBUS') & is_nt) * tour_participants

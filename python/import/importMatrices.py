@@ -12,12 +12,11 @@ import datetime
 import pandas as pd
 
 HSCENS = [1,2,3,4,5,6,7,8]
-transitImport = 200
-TSCENS = [transitImport + i for i in HSCENS]
+TSCENS = [201,203,205,207]
 
 ASIM_OUTPUTS = os.environ["ASIM_OUTPUTS"]
 EMME_OUTPUT = os.environ["EMME_OUTPUT"]
-PROJECT = os.environ["EMMEBANK"]
+PROJECT = os.environ["PROJECT"]
 msa_iteration = int(sys.argv[1])
 
 desktop = _app.start_dedicated(project=PROJECT, visible=True, user_initials="ASR")
@@ -28,7 +27,7 @@ importOMX = _m.Modeller().tool("inro.emme.data.matrix.import_from_omx")
 computeMatrix = _m.Modeller().tool("inro.emme.matrix_calculation.matrix_calculator")
 
 per = {1: "NT", 2: "EA", 3: "AM", 4: "MM", 5: "MD", 6: "AF", 7: "PM", 8: "EV"}
-summary = False
+summary = True
 if summary:
     create_matrix = _m.Modeller().tool("inro.emme.data.matrix.create_matrix")           
     temp_matrix = create_matrix(matrix_id = "ms1", matrix_name = "TEMP_SUM", matrix_description = "temp mf sum", default_value = 0, overwrite = True)

@@ -4,15 +4,12 @@ SETLOCAL EnableDelayedExpansion
 SET ANACONDA=C:\Users\%USERNAME%\.conda\envs\cmapasim\python.exe
 SET ANACONDA_DIR=C:\ProgramData\Anaconda3
 SET PATH=%ANACONDA_DIR%\Library\bin;%PATH%
-ECHO %PATH%
+::ECHO %PATH%
 SET PYTHONPATH="C:\Users\%USERNAME%\.conda\envs\cmapasim\lib"
 
 :: setup paths to Python application, Conda script, etc.
 SET CONDA_ACT=%ANACONDA_DIR%\scripts\activate.bat
-ECHO CONDA_ACT: %CONDA_ACT%
-
 SET CONDA_DEA=%ANACONDA_DIR%\Scripts\deactivate.bat
-ECHO CONDA_DEA: %CONDA_DEA%
 
 :: Run ActivitySim
 ECHO Activate ActivitySim Environment....

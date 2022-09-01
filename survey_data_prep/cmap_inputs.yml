@@ -9,7 +9,7 @@ cmap_weights_dir: 'C:/projects/cmap_activitysim/cmap_abm/survey_data_prep/survey
 SPA_code_dir: "C:/projects/cmap_activitysim/cmap_abm/survey_data_prep/SPA"
 SPA_input_dir: "C:/projects/cmap_activitysim/cmap_abm/survey_data_prep/SPA_Inputs"
 
-zone_dir: 'C:/projects/cmap_activitysim/cmap_abm/survey_data_prep/zone_data'
+zone_dir: 'C:/projects/cmap_activitysim/cmap_abm/survey_data_prep/Visualizer/data/SHP'
 zone_shp_file: 'zones17.shp'
 zones_maz_shp_file: 'subzones17.shp'
 
