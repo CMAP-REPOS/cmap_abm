@@ -105,7 +105,7 @@ jtours               = fread(file.path(Survey_Processed_Dir, "unique_joint_tours
 
 
 zones = st_read(file.path(zone_dir, "zones17.shp"), stringsAsFactors = FALSE)
-zones09 = st_read(file.path(zone_dir, 'Zone09_CMAP_2009.shp'))
+#zones09 = st_read(file.path(zone_dir, 'Zone09_CMAP_2009.shp'))
 zones_dt = setDT(zones)
 
 # source(file.path(settings$visualizer_dir, 'scripts', 'ZMX.R'))
@@ -377,7 +377,7 @@ colnames(wfh_summary) = c("District", "Workers", "WFH")
 totalwfh        = data.frame("Total", sum((per$worker==1)*per$finalweight), sum((per$worker==1 & per$wfh==1)*per$finalweight))
 colnames(totalwfh) = colnames(wfh_summary)
 wfh_summary = rbind(wfh_summary, totalwfh)
-write.csv(wfh_summary, "wfh_summary.csv", row.names = F)
+#write.csv(wfh_summary, "wfh_summary.csv", row.names = F) # use Census wfh summary instead
 
 # County-County Flows
 countyFlowWorkers = per[per$PER_WK_ZONE_ID > 0 & per$PER_WK_ZONE_ID < 9999 & per$EMPLY<3,] 
@@ -440,7 +440,7 @@ tours$TOURMODE_RECODE[tours$TOURMODE==5]  = '5_BIKE'
 tours$TOURMODE_RECODE[tours$TOURMODE==6]  = '6_WALK_TRANSIT'
 tours$TOURMODE_RECODE[tours$TOURMODE==7]  = '7_KNR_TRANSIT'
 tours$TOURMODE_RECODE[tours$TOURMODE==8]  = '8_PNR_TRANSIT'
-tours$TOURMODE_RECODE[tours$TOURMODE==9]  = '9_TNR_TRANSIT'
+tours$TOURMODE_RECODE[tours$TOURMODE==9]  = '9_TNC_TRANSIT'
 tours$TOURMODE_RECODE[tours$TOURMODE==10]  ='10_TAXI'
 tours$TOURMODE_RECODE[tours$TOURMODE==11]  ='11_TNC_REG'
 tours$TOURMODE_RECODE[tours$TOURMODE==12]  ='12_TNC_POOL'
@@ -623,7 +623,7 @@ trips$TRIPMODE_RECODE[trips$TRIPMODE==5]  = '5_BIKE'
 trips$TRIPMODE_RECODE[trips$TRIPMODE==6]  = '6_WALK_TRANSIT'
 trips$TRIPMODE_RECODE[trips$TRIPMODE==7]  = '7_KNR_TRANSIT'
 trips$TRIPMODE_RECODE[trips$TRIPMODE==8]  = '8_PNR_TRANSIT'
-trips$TRIPMODE_RECODE[trips$TRIPMODE==9]  = '9_TNR_TRANSIT'
+trips$TRIPMODE_RECODE[trips$TRIPMODE==9]  = '9_TNC_TRANSIT'
 trips$TRIPMODE_RECODE[trips$TRIPMODE==10]  ='10_TAXI'
 trips$TRIPMODE_RECODE[trips$TRIPMODE==11]  ='11_TNC_REG'
 trips$TRIPMODE_RECODE[trips$TRIPMODE==12]  ='12_TNC_POOL'
@@ -2325,6 +2325,6 @@ write.csv(jtrips, "jtrips.csv", row.names = F)
 end_time = Sys.time()
 end_time - start_time
 
-cat("\n Script finished, run time: ", end_time - start_time, "mins \n")
+cat("\n CMAP_visualizer_prep.R Script finished, run time: ", end_time - start_time, "mins \n")
 
 

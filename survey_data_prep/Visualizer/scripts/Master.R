@@ -43,7 +43,7 @@ ASSIGNED            <- trimws(paste(parameters$Value[parameters$Key=="ASSIGNED"]
 #                               file.path(CALIBRATION_DIR, "ABM_Summaries"))
 OUTPUT_HTML_NAME    <- FULL_HTML_NAME
 
-print(paste("ASRDBG Working directory:", WORKING_DIR))
+print(paste("Working directory:", WORKING_DIR))
 ### Initialization
 # Load global variables
 .libPaths(R_LIBRARY)

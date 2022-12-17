@@ -38,7 +38,7 @@ SHP_FILE_NAME           = settings$zone_shp_file
 # INPUTS
 ########
 # CensusData      = "E:/Projects/Clients/SEMCOG/Tasks/Task5_Visualizer/data/census/ACS_2017_5yr_MI_CT_AutoOwn.csv"
-CensusData      = file.path(settings$visualizer_census, 'ACS_2018_5yr_AutoOwn.csv')
+CensusData      = file.path(settings$visualizer_summaries, 'ACS_2019_5yr_AutoOwn.csv')
 # hh_file       =  file.path(ABM_DIR, "final_households.csv")
 hh_file         = file.path(settings$SPA_input_dir, 'HH_SPA_INPUT.csv')
 
@@ -209,4 +209,4 @@ writeOGR(ct_shp, ABM_SUMMARY_DIR,
 
 end_time = Sys.time()
 end_time - start_time
-cat("\n Script finished, run time: ", end_time - start_time, "sec \n")
+cat("\n AutoOwnership_Census_CMAP.R Script finished, run time: ", end_time - start_time, "sec \n")

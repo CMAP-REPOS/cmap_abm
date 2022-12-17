@@ -161,9 +161,9 @@ write.csv(xtabs(finalweight~HHVEH+WORKERS, data = hh), "xtab_HHVEH_WORKERS.csv",
 # Workers vs. employees by zone and county ####
 tazdat = read.csv(file.path(ABM_INPUTS, "land_use.csv"), header = TRUE)
 
-tazdat$WDISTRICT = xwalk$COUNTY_NAME[match(tazdat$maz, xwalk$MAZ)]
+tazdat$WDISTRICT = xwalk$COUNTY_NAME[match(tazdat$subzone, xwalk$MAZ)]
 emp_co = plyr::count(tazdat, c("WDISTRICT"), "emp")
-emp_taz = plyr::count(tazdat, c("taz"), "emp")
+emp_taz = plyr::count(tazdat, c("zone"), "emp")
 
 write.csv(emp_taz, "employees_per_taz.csv")
 write.csv(emp_co, "employees_per_co.csv")
@@ -303,15 +303,15 @@ write.csv(telecommuteFrequency, "telecommuteFrequency.csv", row.names = TRUE)
 # County-County Flows
 countyFlows <- xtabs(finalweight~HDISTRICT+WDISTRICT, data = workers[levels(workers$work_from_home)[workers$work_from_home] == 'False',])
 countyFlows[is.na(countyFlows)] <- 0
-countyFlows <- addmargins(as.table(countyFlows))
+#countyFlows <- addmargins(as.table(countyFlows))
 countyFlows <- as.data.frame.matrix(countyFlows)
-omit_counties = c('Kankakee', 'Kenosha', 'Lasalle', 'Lee', 'Ogle', 'Racine','Boone', 'Winnebago', 'Walworth' , 'Sum')
-countyFlows = countyFlows[!rownames(countyFlows) %in% omit_counties, !colnames(countyFlows) %in% omit_counties]
+#omit_counties = c('Kankakee', 'Kenosha', 'Lasalle', 'Lee', 'Ogle', 'Racine','Boone', 'Winnebago', 'Walworth' , 'Sum')
+#countyFlows = countyFlows[!rownames(countyFlows) %in% omit_counties, !colnames(countyFlows) %in% omit_counties]
 #setcolorder(countyFlows, c("Cook",     "DeKalb",   "DuPage",   
 #                                   "Grundy" ,  "Kane" ,  "Kendall", "Lake, IL",
 #             "McHenry"  , "Will"   , "Lake, IN",  "LaPorte",   "Porter"))
 
-countyFlows = countyFlows[c(1:6, 7, 10, 12, 8, 9, 11), c(1:6, 7, 10, 12, 8, 9, 11)]
+countyFlows = countyFlows[c(1:6, 7, 10, 12, 8, 9, 11, 13:21), c(1:6, 7, 10, 12, 8, 9, 11, 13:21)]
 
 #countyFlows <- addmargins(countyFlows, FUN = sum)
 countyFlows <- cbind(countyFlows, Total = rowSums(countyFlows))
@@ -2129,4 +2129,4 @@ trips_flow <- rbind(trips_flow, trips_flow_total[,c("OCOUNTY", "DCOUNTY", "trip_
 
 end_time <- Sys.time()
 end_time - start_time
-cat("\n Script finished, run time: ", end_time - start_time, "mins \n")
+cat("\n Summarize_ActivitySim_cmap.R Script finished\n")
