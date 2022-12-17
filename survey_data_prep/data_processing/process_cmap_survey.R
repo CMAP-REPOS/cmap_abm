@@ -199,6 +199,7 @@ hh_raw[per_raw[lic == 1, .N, .(sampno)],  HH_DRIVERS := i.N, on = .(sampno)]
 # join hh loc zone
 
 hh_raw[location_raw[loctype == 1], `:=` (HH_ZONE_ID = zone17,
+                                          HH_MAZ_ID = subzone17,
                                           home_lat = latitude,
                                           home_lon = longitude,
                                          home_tract_fips = paste0(state_fips, str_pad(county_fips, width = 3, pad = '0'),
@@ -244,6 +245,7 @@ HH = hh_raw[, .(SAMPN = sampno,
                 HHEXPFAC = wthhfin, 
                 HH_UNO = 1,  
                 HH_ZONE_ID = HH_ZONE_ID,
+                HH_MAZ_ID = HH_MAZ_ID,                
                 HH_TRACT_FIPS = home_tract_fips,
                 AREA = 0)]
   
@@ -303,11 +305,24 @@ per_raw[, STUDE := fcase(stude == 1, 1, # yes (ft)
 )]
 
 per_raw[location_raw[loctype == 3], `:=` (PER_SCHL_ZONE_ID = zone17,
+                                          PER_SCHL_MAZ_ID = subzone17,
                                           school_lat = latitude,
                                           school_lon = longitude), on = .(perno, sampno)]
 per_raw[location_raw[loctype == 2], `:=` (PER_WK_ZONE_ID = zone17, 
+                                          PER_WK_MAZ_ID = subzone17, 
                                           work_lat = latitude,
                                           work_lon = longitude), on = .(perno, sampno)]
+
+per_raw[, TELECOMM_FREQ := fcase(tcdays == 0, 0, # no telecommute
+                         tcdays == 1, 1, # 1 day a week
+                         tcdays == 2, 2, # 2 days a week
+                         tcdays == 3, 3, # 3 days a week
+                         tcdays == 4, 4, # 4 days a week
+                         tcdays == 5, 5, # 5 days a week
+                         tcdays == 6, 6, # 6 days a week
+                         tcdays == 7, 7, # 7 days a week
+                         default = -9 # not answered
+)]
 
 # geocode 09 zone 
 # school_coords = st_as_sf(per_raw[!is.na(school_lat), .(sampno, perno, school_lon, school_lat)], 
@@ -363,7 +378,10 @@ PER = per_raw[, .(PERNO = perno,
                   SCHOL,
                   PER_WFH = fifelse(PER_EMPLY_LOC_TYPE == 2, 1, 0),
                   PER_SCHL_ZONE_ID = PER_SCHL_ZONE_ID,
+                  PER_SCHL_MAZ_ID = PER_SCHL_MAZ_ID,                  
                   PER_WK_ZONE_ID = PER_WK_ZONE_ID,
+                  PER_WK_MAZ_ID = PER_WK_MAZ_ID,
+                  TELECOMM_FREQ,
                   PEREXPFAC = wtperfin
                   )]
 
@@ -617,6 +635,7 @@ place_raw[location_raw[loctype  == 1], `:=` (home_lat = latitude, home_lon = lon
 
 # location info 
 place_raw[location_raw, PLACE_ZONE_ID := zone17, on = .(sampno, locno)]
+place_raw[location_raw, PLACE_MAZ_ID := subzone17, on = .(sampno, locno)]
 place_raw[location_raw, PLACE_NAME := locname, on = .(sampno, locno)]
 # 
 # 
@@ -802,6 +821,7 @@ PLACE = place_raw[MODE != -9 | placeno == 1, .(SAMPN = sampno,
                       PLANO = placeno,
                       PERNO = perno,
                       TAZ = PLACE_ZONE_ID,
+                      MAZ = PLACE_MAZ_ID,
                       DEP_HR,
                       DEP_MIN,
                       ARR_HR,
