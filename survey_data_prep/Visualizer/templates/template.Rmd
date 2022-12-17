@@ -275,13 +275,13 @@ plotly_density_plotter <- function(data_df, index = "one", colors=c("orange", "s
     ylab <- ifelse(ylabel=="", "Percent", ylabel)
 
     p <- switch(index,
-                "one" = plot_ly(data=data_df,x = ~xvar, y = ~prop1, colors=c("steelblue", "orange"), color = ~run, fill=fill) %>%
+                "one" = plot_ly(data=data_df,x = ~xvar, y = ~prop1, colors=c("orange", "steelblue"), color = ~run, fill=fill) %>%
                   add_lines(name=~run,alpha=alpha, line = list(shape = shape)) %>%
                   layout(title = "",xaxis = list(title=xlabel, tickvals = tickvals, ticktext = ticktext, tickangle = tickangle), yaxis = list(title=ylab, tickformat = ".0%"), showlegend = legend),
-                "two" = plot_ly(data=data_df,x = ~xvar, y = ~prop2, colors=c("steelblue", "orange"), color = ~run, fill=fill) %>%
+                "two" = plot_ly(data=data_df,x = ~xvar, y = ~prop2, colors=c("orange", "steelblue"), color = ~run, fill=fill) %>%
                   add_lines(name=~run,alpha=alpha, line = list(shape = shape)) %>%
                   layout(title = "",xaxis = list(title=xlabel, tickvals = tickvals, ticktext = ticktext, tickangle = tickangle), yaxis = list(title=ylab, tickformat = ".0%"), showlegend = legend),
-                "three" = plot_ly(data=data_df,x = ~xvar, y = ~prop3, colors=c("steelblue", "orange"), color = ~run, fill=fill) %>%
+                "three" = plot_ly(data=data_df,x = ~xvar, y = ~prop3, colors=c("orange", "steelblue"), color = ~run, fill=fill) %>%
                   add_lines(name=~run,alpha=alpha, line = list(shape = shape)) %>%
                   layout(title = "",xaxis = list(title=xlabel, tickvals = tickvals, ticktext = ticktext, tickangle = tickangle), yaxis = list(title=ylab, tickformat = ".0%"), showlegend = legend)
                 )
@@ -290,18 +290,18 @@ plotly_density_plotter <- function(data_df, index = "one", colors=c("orange", "s
     ylab <- ifelse(ylabel=="", "Frequency", ylabel)
 
     p <- switch(index,
-                "one" = plot_ly(data=data_df,x = ~xvar, y = ~yvar1, colors=c("steelblue", "orange"), color = ~run, fill=fill) %>%
+                "one" = plot_ly(data=data_df,x = ~xvar, y = ~yvar1, colors=c("orange", "steelblue"), color = ~run, fill=fill) %>%
                   add_lines(name=~run,alpha=alpha, line = list(shape = shape)) %>%
                   layout(title = "",xaxis = list(title=xlabel, tickvals = tickvals, ticktext = ticktext, tickangle = tickangle), yaxis = list(title=ylab), showlegend = legend),
-                "two" = plot_ly(data=data_df,x = ~xvar, y = ~yvar2, colors=c("steelblue", "orange"), color = ~run, fill=fill) %>%
+                "two" = plot_ly(data=data_df,x = ~xvar, y = ~yvar2, colors=c("orange", "steelblue"), color = ~run, fill=fill) %>%
                   add_lines(name=~run,alpha=alpha, line = list(shape = shape)) %>%
                   layout(title = "",xaxis = list(title=xlabel, tickvals = tickvals, ticktext = ticktext, tickangle = tickangle), yaxis = list(title=ylab), showlegend = legend),
-                "three" = plot_ly(data=data_df,x = ~xvar, y = ~yvar3, colors=c("steelblue", "orange"), color = ~run, fill=fill) %>%
+                "three" = plot_ly(data=data_df,x = ~xvar, y = ~yvar3, colors=c("orange", "steelblue"), color = ~run, fill=fill) %>%
                   add_lines(name=~run,alpha=alpha, line = list(shape = shape)) %>%
                   layout(title = "",xaxis = list(title=xlabel, tickvals = tickvals, ticktext = ticktext, tickangle = tickangle), yaxis = list(title=ylab), showlegend = legend)
                 )
 
-    #p <- plot_ly(data=data_df,x = ~xvar, y = ~yvar1, colors=c("steelblue", "orange"), color = ~run, height=400, fill=fill) %>%
+    #p <- plot_ly(data=data_df,x = ~xvar, y = ~yvar1, colors=c("orange", "steelblue"), color = ~run, height=400, fill=fill) %>%
     #add_lines(name="",alpha=alpha, line = list(shape = shape)) %>%
     #layout(title = "",xaxis = list(title=xlabel), yaxis = list(title=ylab))
   }
@@ -726,15 +726,15 @@ build_df3 <- melt(build_df3, id = c("distbin"))
 build_df <- cbind(build_df1, build_df2$value, build_df3$value)
 colnames(build_df) <- c("distbin","variable","value1","value2","value3")
 
-sd.purpose <- get_sharedData(data_df1 = build_df, data_df2 = base_df, run1_name = BUILD_SCENARIO_NAME,
-                             run2_name = BASE_SCENARIO_NAME, x = "distbin", y = c("value1", "value2", "value3"), grp = "variable")
+sd.purpose <- get_sharedData(data_df1 = base_df, data_df2 = build_df, run1_name = BASE_SCENARIO_NAME,
+                             run2_name = BUILD_SCENARIO_NAME, x = "distbin", y = c("value1", "value2", "value3"), grp = "variable")
 
 p1 <- plotly_density_plotter(sd.purpose, index = "one", xlabel = "Miles to Work", percent = T, tickvals = seq(1,50,5), ticktext = seq(0,50,5), height = 240)
 p2 <- plotly_density_plotter(sd.purpose, index = "two", xlabel = "Miles to University", percent = T, tickvals = seq(1,50,5), ticktext = seq(0,50,5), height = 240)
 p3 <- plotly_density_plotter(sd.purpose, index = "three", xlabel = "Miles to School", percent = T, tickvals = seq(1,50,5), ticktext = seq(0,50,5), height = 240)
 
 bscols(widths=c(12),
-  list(filter_select("Purpose_County", "Select District", sd.purpose, ~grp_var,multiple=F),
+  list(filter_select("Purpose_County", "Select County", sd.purpose, ~grp_var,multiple=F),
   p1,
   p2,
   p3)
@@ -1017,7 +1017,7 @@ build_df <- build_data[[which(build_csv_names=="workers_per_taz")]]
 
 
 df = data.frame(taz = 1:3632) %>%
-  dplyr::left_join(base_df, by = "taz") %>%
+  dplyr::left_join(base_df, by = c("taz" = "zone")) %>%
   dplyr::left_join(build_df, by = c("taz" = "worktaz")) %>%
   rename(base = freq.x) %>%
   mutate(build = freq.y/BUILD_SAMPLE_RATE) %>%
@@ -1838,8 +1838,10 @@ df$Tour_Purpose <- purpose_type_df$name[match(df$Tour_Purpose, purpose_type_df$c
 #t1 <- kable(df, format = "html", digits = 2, row.names = F, align = 'c', format.args = list(big.mark = ',')) %>%
 #  kable_styling("striped", full_width = F)
 
-t1 <- htmlTable(txtRound(df, 2),
-                align = "c|r",
+df[,2:3] = round(100 * df[,2:3]) / 100
+
+t1 <- htmlTable(df,
+                align = "c|r|r",
                 rnames = F,
                 col.columns = c(rep("#E6E6F0", 1),
                           rep("none", ncol(df) - 1)),
