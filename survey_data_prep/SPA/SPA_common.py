@@ -805,10 +805,24 @@ class Household:
         _dep_time_list = sorted(self.joint_episodes.keys())  #sorted list of joint-trip departure times as key values
         #process each dep_time entry at a time
         #assign each consistent group of unlinked trip entries a unique joint trip id
+        print('_dep_time_list')
+        print(_dep_time_list)
+        print('self.joint_episodes')
+        print(self.joint_episodes)
+        #print('self.joint_episodes[_dep_time_list[0][0]].number_hh')
+        #print(self.joint_episodes[_dep_time_list[0][0]].number_hh)
+        #print('self.joint_episodes[_dep_time_list[0][0]].travel_party')
+        #print(self.joint_episodes[_dep_time_list[0][0]].travel_party)
+        #print('self.joint_episodes[_dep_time_list[0][1]].number_hh')
+        #print(self.joint_episodes[_dep_time_list[0][1]].number_hh)
+        #print('self.joint_episodes[_dep_time_list[0][1]].travel_party')
+        #print(self.joint_episodes[_dep_time_list[0][1]].travel_party)        
         _joint_ultrip_id = 0
         #_d = 0                          #index into _dep_time_list
         _d = -1                          #index into _dep_time_list
         _d_max = len(_dep_time_list)
+        print('_d_max: %d' % _d_max)
+        #print(_d_max)
 
         #while _d < _d_max:
         while (_d+1) < _d_max:
@@ -817,8 +831,14 @@ class Household:
 
             _dep_time = _dep_time_list[_d]
             _jt_list = self.joint_episodes[_dep_time]          #_jt_list includes all household members' joint travels departing at this time
-
+            print('self.joint_episodes[_dep_time][0].number_hh: %d' % self.joint_episodes[_dep_time][0].number_hh)
+            #print(self.joint_episodes[_dep_time][0].number_hh)
             _jt_list.sort(key=lambda jt: jt.travel_party)   #sort joint trip objects by reported travel party
+            print('_d: %d' % _d)
+            #print(_d)
+            #print('_jt_list')
+            #print(_jt_list)
+
             _error_merge = False
 
             #
@@ -869,6 +889,10 @@ class Household:
             #
             _start_ix = int(0)
             _max_ix = len(_jt_list)
+            #print('_max_ix: %d' % _max_ix)
+            #print(_max_ix)
+            #print('_jt_list')
+            #print(_jt_list)
             _error_travel_party = False
             _error_number_hh = False
             #joint trip objects departing at this time do not necessarily correspond to the same travel episode
@@ -877,6 +901,11 @@ class Household:
                 _stop_ix = int(_start_ix + _size)
                 #make pair-wise comparison among joint trip entries of the current travel group to verify consistency
                 for _i in range(_start_ix, _stop_ix-1):
+                    print('_i: %d' % _i)
+                    print('_jt_list[_i].number_hh: %d' % _jt_list[_i].number_hh)
+                    print('_jt_list[_i+1].number_hh: %d' % _jt_list[_i+1].number_hh)
+                    print('_jt_list[_i].travel_party: %d' % _jt_list[_i].travel_party)
+                    print('_jt_list[_i+1].travel_party: %d' % _jt_list[_i+1].travel_party)
                     if _jt_list[_i].number_hh == _jt_list[_i+1].number_hh:
                     #reported number of travelers is consistent
                         if _jt_list[_i].travel_party == _jt_list[_i+1].travel_party:
@@ -888,7 +917,9 @@ class Household:
                     else:
                     #reported number of travelers is inconsistent
                         _error_number_hh = True
-
+                #print('_start_ix: %d' % _start_ix)
+                #print('_error_travel_party: %d' % _error_travel_party)
+                #print('_error_number_hh: %d' % _error_number_hh)
 
                 # Attempt to resolve inconsistency in reported travel party
                 # Assuming that reported departure times and number of participants are accurate
@@ -908,6 +939,17 @@ class Household:
                     # otherwise, log as an error and break from loop
                     _set_participants = set(_jt_list[_start_ix].travel_party)   #union of the reported participants
                     _set_persons = {_jt_list[_start_ix].get_per_id()}        #ID of persons who made the trips
+                    #print('_start_ix')
+                    #print(_start_ix)
+                    #print('_stop_ix')
+                    #print(_stop_ix)                    
+                    #print('_set_participants')
+                    #print(_set_participants)
+                    #print('_set_persons')
+                    #print(_set_persons)
+                    #print('_jt_list[_start_ix].number_hh')
+                    #print(_jt_list[_start_ix].number_hh)
+
                     for _i in range(_start_ix+1, _stop_ix):
                         _set_participants |= set(_jt_list[_i].travel_party)
                         _set_persons |= {_jt_list[_i].get_per_id()}
@@ -938,6 +980,9 @@ class Household:
                     """
                     # 'fix' the incorrect number_hh and continue
                     _number_travelers = len(_jt_list[_start_ix].travel_party)
+                    print('_jt_list[_start_ix].travel_party')
+                    print(_jt_list[_start_ix].travel_party)
+                    print('_number_travelers: %d '% _number_travelers)
                     for _i in range(_start_ix, _stop_ix):
                         _jt_list[_i].recode_number_travelers(_number_travelers)
 
@@ -1049,6 +1094,10 @@ class Household:
                     #this is the last episode in the joint tour
                     _end_jtour = _jt_group_idx
                     _num_jtours = _num_jtours + 1
+                    print('num_jtours: %d' % _num_jtours)
+                    #print(_num_jtours)
+                    #print('unique_jt_groups')
+                    #print(self.unique_jt_groups[0][0])
                     self.set_joint_tour(_num_jtours, self.unique_jt_groups[_start_jtour:_end_jtour+1])
                     #reset markers
                     _start_jtour = -1
@@ -1077,7 +1126,13 @@ class Household:
         for _jt_group in jt_groups:
             for _jt in _jt_group:
                 _jt.set_jtour_id(jtour_id)
+        print('jtour_id: %d' % jtour_id)
+        #print(jtour_id)
+        #print('jt_groups')
+        #print(jt_groups[0][0])
         self.unique_jtours.append(Joint_tour(jtour_id, jt_groups))
+        #print('unique_jtours')
+        #print(self.unique_jtours[0])
 
     def process_escort_trips(self):
         #scan through each unique joint episode group
@@ -1863,6 +1918,10 @@ class Tour:
             self.fields['ORIG_TAZ'] = self.trips[_last_i].fields['ORIG_TAZ']
             self.fields['DEST_TAZ'] = self.trips[0].fields['DEST_TAZ']
 
+            # TL [09/28/2022] Added MAZ information available in pre-processing step
+            self.fields['ORIG_MAZ'] = self.trips[_last_i].fields['ORIG_MAZ']
+            self.fields['DEST_MAZ'] = self.trips[0].fields['DEST_MAZ']         
+
             #cannot calculate tour duration based on departure from anchor and arrival at anchor
             #no outbound stops
             self._set_outbound_stops(0, 0)
@@ -1897,6 +1956,10 @@ class Tour:
             # DH [02/27/2020] Added TAZ information available in preprocessing
             self.fields['ORIG_TAZ'] = self.trips[0].fields['ORIG_TAZ']
             self.fields['DEST_TAZ'] = self.trips[-1].fields['DEST_TAZ']
+
+            # TL [09/28/2022] Added MAZ information available in pre-processing step
+            self.fields['ORIG_MAZ'] = self.trips[0].fields['ORIG_MAZ']
+            self.fields['DEST_MAZ'] = self.trips[-1].fields['DEST_MAZ']            
 
             self.fields['PRIMDEST_ARRIVE_HOUR'] = self.trips[-1].fields['DEST_ARR_HR']
             self.fields['PRIMDEST_ARRIVE_MIN']  = self.trips[-1].fields['DEST_ARR_MIN']
@@ -1948,6 +2011,10 @@ class Tour:
             # DH [02/21/2020] Added TAZ information available in preprocessing
             self.fields['ORIG_TAZ'] = self.trips[0].fields['ORIG_TAZ']
             self.fields['DEST_TAZ'] = self.trips[_prim_i].fields['DEST_TAZ']
+
+            # TL [09/28/2022] Added MAZ information available in pre-processing step
+            self.fields['ORIG_MAZ'] = self.trips[0].fields['ORIG_MAZ']
+            self.fields['DEST_MAZ'] = self.trips[_prim_i].fields['DEST_MAZ']            
 
             #tour destination: given by trips[_prim_i]
             self.fields['DEST_PLACENO']         = self.trips[_prim_i].fields['DEST_PLACENO']
@@ -2225,10 +2292,11 @@ class Tour:
 
         for _i, _trip in enumerate(self.trips):
             #_trip = self.trips[_i]
-            if _trip.fields['ORIG_PURP']==NewPurp["WORK"]:
+            # TL [09/20/2022] add condition to ensure work-work trips do not generate an atwork subtour
+            if (_trip.fields['ORIG_PURP']==NewPurp["WORK"]) & (_trip.fields['DEST_PURP']!=NewPurp["WORK"]):
                 #found a trip leaving work
                 _from_work.append(_i)
-            if _trip.fields['DEST_PURP']==NewPurp["WORK"]:
+            if (_trip.fields['DEST_PURP']==NewPurp["WORK"]) & (_trip.fields['ORIG_PURP']!=NewPurp["WORK"]):
                 #found a trip going to work
                 _to_work.append(_i)
 
@@ -2467,6 +2535,10 @@ class Joint_ultrip:
     def recode_travel_party(self, set_participants):
         list_participants = list(set_participants)
         list_participants.sort()
+        #print('list_participants')
+        #print(list_participants)
+        #print('self.travel_party')
+        #print(self.travel_party)
         if list_participants!=self.travel_party:
             self.parent_trip.log_recode("reset TRAVEL PARTY from {} to {}".format(self.travel_party, list_participants) )
             self.travel_party = list_participants
@@ -2956,6 +3028,9 @@ class Trip:
         # DH [02/21/2020] Added TAZ information available in pre-processing step
         self.fields['ORIG_TAZ'] = df['TAZ'].iloc[0]
         self.fields['DEST_TAZ'] = df['TAZ'].iloc[_last_row]
+        # TL [09/28/2022] Added MAZ information available in pre-processing step
+        self.fields['ORIG_MAZ'] = df['MAZ'].iloc[0]
+        self.fields['DEST_MAZ'] = df['MAZ'].iloc[_last_row]   
 
         #arrival and departure time along all segments of the trip
         #calculate trip duration based on departure at origin and arrival at destination
