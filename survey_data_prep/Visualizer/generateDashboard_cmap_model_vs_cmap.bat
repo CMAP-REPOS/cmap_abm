@@ -33,7 +33,7 @@ SET BUILD_SCENARIO_NAME=ASim
 SET IS_BASE_SURVEY=Yes
 SET MAX_ITER=1
 SET BASE_SAMPLE_RATE=1.0
-SET BUILD_SAMPLE_RATE=0.5
+SET BUILD_SAMPLE_RATE=1.0
 
 SET CT_ZERO_AUTO_FILE_NAME=ct_zero_auto.shp
 
@@ -74,14 +74,14 @@ REM ECHO SHP_FILE_NAME,%SHP_FILE_NAME% >> %PARAMETERS_FILE%
 ECHO CT_ZERO_AUTO_FILE_NAME,%CT_ZERO_AUTO_FILE_NAME% >> %PARAMETERS_FILE%
 ECHO IS_BASE_SURVEY,%IS_BASE_SURVEY% >> %PARAMETERS_FILE%
 
-%R_SCRIPT% scripts\settings_to_parameters_csv.R %SETTINGS_FILE%
+%R_SCRIPT% %WORKING_DIR%\scripts\settings_to_parameters_csv.R %SETTINGS_FILE%
 
-SET EMME_OUTPUT=%CMAP_ABM_DIR%\emme_outputs
+SET EMME_OUTPUT=%CMAP_ABM_DIR%\emme\emme_outputs
 SET ANACONDA=C:\Users\%USERNAME%\.conda\envs\cmapasim
 SET ANACONDA_DIR=C:\ProgramData\Anaconda3
 SET CONDA_ACT=%ANACONDA_DIR%\scripts\activate.bat
-::CALL %CONDA_ACT% cmapasim
-::%ANACONDA%\python.exe scripts\Summarize_model_HNET.py
+CALL %CONDA_ACT% cmapasim
+%ANACONDA%\python.exe %WORKING_DIR%\scripts\Summarize_model_HNET.py
 
 :: Create calibration output directory
 :: ############################################################################
@@ -119,7 +119,7 @@ REM IF %ERRORLEVEL% NEQ 0 GOTO MODEL_ERROR
 :: #####################################################
 ECHO %startTime%%Time%: Running R script to generate visualizer...
 SET SWITCH=FULL
-%R_SCRIPT% scripts\Master.R %PARAMETERS_FILE% %SWITCH%
+%R_SCRIPT% %WORKING_DIR%\scripts\Master.R %PARAMETERS_FILE% %SWITCH%
 IF %ERRORLEVEL% EQU 11 (
    ECHO File missing error. Check error file in outputs.
    EXIT /b %errorlevel%

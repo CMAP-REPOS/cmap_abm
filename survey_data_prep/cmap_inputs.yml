@@ -21,7 +21,7 @@ visualizer_summaries: 'C:/projects/cmap_activitysim/cmap_abm/survey_data_prep/Vi
 visualizer_census: 'C:/projects/cmap_activitysim/cmap_abm/survey_data_prep/Visualizer/data/census'
 
 skims_dir: 'C:/projects/cmap_activitysim/cmap_abm/survey_data_prep/zone_data'
-skims_filename: 'TAZ_skims.omx'
+skims_filename: 'taz_skims.omx'
 
 # only needed if re-weighting
 popsim_folder: 'C:/projects/cmap_activitysim/cmap_abm/survey_data_prep/cmap_survey_weighting'
@@ -29,8 +29,8 @@ popsim_folder_nirpc: 'C:/projects/cmap_activitysim/cmap_abm/survey_data_prep/nir
 
 obs_dir: 'C:/projects/cmap_activitysim/cmap_abm/obs_processing'
 
-abm_inputs: 'C:/projects/cmap_activitysim/cmap_abm/activitysim/data'
-abm_dir: 'C:/projects/cmap_activitysim/cmap_abm/activitysim/output'
+abm_inputs: 'C:/projects/cmap_activitysim/cmap_abm/model_runs/2019_base/inputs'
+abm_dir: 'C:/projects/cmap_activitysim/cmap_abm/model_runs/2019_base/outputs'
 abm_summaries_dir: 'C:/projects/cmap_activitysim/cmap_abm/survey_data_prep/Visualizer/data/calibration_runs/summarized'
 
 R_LIBRARY: "C:/Users/%USERNAME%/r_library"
