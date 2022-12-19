@@ -52,3 +52,8 @@ Pre-driving-age child who is too young for school interaction with off-peak acce
 Telecommutes 1 day per week,telecommute_frequency=='1_day_week',,0.526,0.496
 Telecommutes 2-3 days per week,telecommute_frequency=='2_3_days_week',,1.387,1.584
 Telecommutes 4 days per week,telecommute_frequency=='4_days_week',,1.848,1.711
+#Calibration,,,,
+Full-time worker calibration constants,ptype == 1,ASC_calib_FT_M,ASC_calib_FT_N,
+Part-time worker calibration constants,ptype == 2,ASC_calib_PT_M,ASC_calib_PT_N,
+Driving-age child who is in school calibration constants,ptype == 6,ASC_calib_drive_student_M,ASC_calib_drive_student_N,
+Pre-driving-age child who is too young for school calibration constants,ptype == 8,ASC_calib_preschooler_M,ASC_calib_preschooler_N,
