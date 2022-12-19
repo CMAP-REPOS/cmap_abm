@@ -1,7 +1,6 @@
-# 5/28/2021 Andrew Rohne/RSG
-# Module for fixing CMAP's capacities
-# !important: does not actually need to be run
-# unless something overwrites el1, el2, and el3
+# 2022-12-19 Ted Lin/RSG
+# Module for fixing CMAP's capacities and initialize extra attributes
+# !important: fixCapacities should be turned off due to new coding conventions for toll facilities
 
 import inro.modeller as _m
 import inro.emme.core.exception as _except
@@ -31,7 +30,7 @@ class CMapNetwork(_m.Tool()):
         #TODO: ASR changed 2 and 4 to 1.0, check on these
         
     def __call__(self, scenario, input_directory=None, runCapacities = False, export = False, output_directory = None, runPrep = True):
-        if runCapacities:
+        if runCapacities: # with the current toll booth coding convention, runCapacities should always be False
             self.fixCapacities(scenario)
         if runPrep:
             self.prepNetwork(scenario)
@@ -51,8 +50,8 @@ class CMapNetwork(_m.Tool()):
         """
         net_calc = gen_utils.NetworkCalculator(scenario)
         create_extra = _m.Modeller().tool("inro.emme.data.extra_attribute.create_extra_attribute")
-        create_extra("LINK", "@ftime", 'Free-flow time', 0.0, overwrite = True, scenario = scenario)
-        net_calc("@ftime", "length/@speed*60", "modes=ASHbmh")
+        #create_extra("LINK", "@ftime", 'Free-flow time', 0.0, overwrite = True, scenario = scenario)
+        #net_calc("@ftime", "length/@speed*60", "modes=ASHbmh")
         net_calc("ul1", "@ftime", "modes=ASHbmh")
         net_calc("ul2", "@emcap * lanes * %s" % self.timeFactors[int(scenario)], "modes=ASHbmh")
         #net_calc("ul2", "@emcap * lanes", "modes=ASHbmh")
