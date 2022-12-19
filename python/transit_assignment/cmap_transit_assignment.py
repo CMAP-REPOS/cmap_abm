@@ -34,6 +34,7 @@ TOOLBOX_ORDER = 21
 
 import inro.modeller as _m
 import inro.emme.core.exception as _except
+import inro.emme.desktop.worksheet as worksheet
 import traceback as _traceback
 from copy import deepcopy as _copy
 from collections import defaultdict as _defaultdict, OrderedDict
@@ -160,7 +161,7 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
     #scenario =  _m.Attribute(_m.InstanceType)
     assignment_only = _m.Attribute(bool)
     skims_only = _m.Attribute(bool)
-    summary = _m.Attribute(bool)
+    matrix_summary = _m.Attribute(bool)
     num_processors = _m.Attribute(str)
 
     tool_run_msg = ""
@@ -198,14 +199,14 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
         self.basematrixnumber = 500
 
 
-    def __call__(self, period, matrix_count, scenario, assignment_only=False, skims_only=False, summary=True,
-                 ccr_periods="AM,PM", num_processors="MAX-1"):
+    def __call__(self, period, matrix_count, scenario, assignment_only=False, skims_only=False, matrix_summary=True,
+                 export_boardings = True, ccr_periods="AM,PM", num_processors="MAX-1"):
         attrs = {
             "period": period,
             "scenario": scenario.id,
             "assignment_only": assignment_only,
             "skims_only": skims_only,
-            "summary": summary,
+            "matrix_summary": matrix_summary,
             "num_processors": num_processors,
             "self": str(self)
         }
@@ -213,7 +214,7 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
         print("transit assignment for period %s scenario %s" % (period, scenario))
         with self.setup(attrs):
             #gen_utils.log_snapshot("Transit assignment", str(self), attrs)
-            create_extra = _m.Modeller().tool("inro.emme.data.extra_attribute.create_extra_attribute")  
+            create_extra = _m.Modeller().tool("inro.emme.data.extra_attribute.create_extra_attribute")
             netcalc = _m.Modeller().tool("inro.emme.network_calculation.network_calculator")                      
             periods = self.periods
             if not period in periods:
@@ -234,6 +235,18 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
             else:
                 use_ccr = False
                 print("use_ccr %s for %s" % (use_ccr, self.periodLabel[int(period)]))
+                delete_extra = _m.Modeller().tool("inro.emme.data.extra_attribute.delete_extra_attribute")
+                try:
+                    delete_extra("@capacity_penalty", scenario=scenario)
+                    delete_extra("@tot_capacity", scenario=scenario)
+                    delete_extra("@seated_capacity", scenario=scenario)
+                    delete_extra("@tot_vcr", scenario=scenario)
+                    delete_extra("@seated_vcr", scenario=scenario)
+                    delete_extra("@ccost_skim", scenario=scenario)
+                    delete_extra("@hfrac_ccr", scenario=scenario)
+                except:
+                    pass
+
             num_processors = attrs["num_processors"] #dem_utils.parse_num_processors(num_processors)
             #params = self.get_perception_parameters(period)
 
@@ -244,7 +257,7 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
             #network = scenario.get_partial_network(["TRANSIT_LINE", "TRANSIT_SEGMENT"], include_attributes=True)
             
             #day_pass = 5*100/2.0  # in cents.
-            regional_pass = 100*100/2.0 # in cents; removed cap on max fare per trip (set to $50)
+            regional_pass = (15.95+7)*100/2.0 # in cents; max Metra monthly $319/20 days + max CTA/Pace monthly $140/20 days
 
 
             create_extra('TRANSIT_SEGMENT', '@zfare', 'incremental zone fare', overwrite=True, scenario=scenario)
@@ -287,7 +300,7 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
                 "type": "NETWORK_CALCULATION"
             }            
             netcalc([wconf_bus, wconf_rail])
-            if summary:
+            if matrix_summary:
                 create_matrix = _m.Modeller().tool("inro.emme.data.matrix.create_matrix")           
                 temp_matrix = create_matrix(matrix_id = "ms1", matrix_name = "TEMP_SUM", matrix_description = "temp mf sum", scenario = self.scenario, default_value = 0, overwrite = True)
 
@@ -305,7 +318,10 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
                         class_name = "TRN_%s_%s_%s"%(amode, self.user_class_labels[int(uc)], self.periodLabel[int(period)])
                         #if scenario.emmebank.matrix(class_name).get_numpy_data(scenario.id).sum() == 0:
                         #    continue   # don't include if no demand
-                        self.run_skims(period, amode, int(uc), regional_pass, skims_only, summary, num_processors, network, use_ccr)                    
+                        self.run_skims(period, amode, int(uc), regional_pass, skims_only, matrix_summary, num_processors, network, use_ccr)
+            if export_boardings:
+                self.output_transit_boardings(desktop = _m.Modeller().desktop, use_ccr = use_ccr, 
+                                                output_location = EMME_OUTPUT, period = self.periodLabel[int(period)])
 
     @_context.contextmanager
     def setup(self, attrs):
@@ -314,7 +330,7 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
         period = attrs["period"]
         with _m.logbook_trace("Transit assignment for period %s" % period, attributes=attrs):
             #temp = gen_utils.temp_matrices(emmebank, "FULL", 3)
-            with gen_utils.temp_matrices(emmebank, "FULL", 3) as matrices:
+            with gen_utils.temp_matrices(emmebank, "FULL", 2) as matrices:
                 matrices[0].name = "TEMP_IN_VEHICLE_COST"
                 #matrices[1].name = "TEMP_LAYOVER_BOARD"
                 matrices[1].name = "TEMP_PERCEIVED_FARE"
@@ -348,7 +364,7 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
         # boarding fare
         Metra_fare = {
             "result": "ut1",
-            "expression": "400",
+            "expression": "400*0.725",
             "selections": {
                 "transit_line": "mode=M"
             },
@@ -390,7 +406,7 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
         # zore fare
         zfare={
             "result": "@zfare",
-            "expression": "@zfare_link",
+            "expression": "@zfare_link*0.725",
             "selections": {
                 "link": "all",
                 "transit_line": "all"
@@ -520,7 +536,6 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
                 "xfer_walk": self.xfer_walk_percep,
                 "egress": egress,
                 "eff_headway": "@hdwef",
-                "xfer_headway": "@headway_op",
                 "fare_percep": cost_percep,
                 "in_vehicle": 1.0,
             },
@@ -532,7 +547,6 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
                 "xfer_walk": self.xfer_walk_percep,
                 "egress": egress,
                 "eff_headway": "@hdwef",
-                "xfer_headway": "@headway_op",
                 "fare_percep": cost_percep,
                 "in_vehicle": 1.0,
             },
@@ -544,7 +558,6 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
                 "xfer_walk": self.xfer_walk_percep,
                 "egress": egress,
                 "eff_headway": "@hdwef",
-                "xfer_headway": "@headway_op",
                 "fare_percep": cost_percep,
                 "in_vehicle": 1.0,
             },
@@ -556,7 +569,6 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
                 "xfer_walk": self.xfer_walk_percep,
                 "egress": egress,
                 "eff_headway": "@hdwef",
-                "xfer_headway": "@headway_op",
                 "fare_percep": cost_percep,
                 "in_vehicle": 1.0,
             },
@@ -568,7 +580,6 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
                 "xfer_walk": self.xfer_walk_percep,
                 "egress": egress,
                 "eff_headway": "@hdwef",
-                "xfer_headway": "@headway_op",
                 "fare_percep": cost_percep,
                 "in_vehicle": 1.0,
             },
@@ -580,7 +591,6 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
                 "xfer_walk": self.xfer_walk_percep,
                 "egress": egress,
                 "eff_headway": "@hdwef",
-                "xfer_headway": "@headway_op",
                 "fare_percep": cost_percep,
                 "in_vehicle": 1.0,
             },
@@ -592,7 +602,6 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
                 "xfer_walk": self.xfer_walk_percep,
                 "egress": egress,
                 "eff_headway": "@hdwef",
-                "xfer_headway": "@headway_op",
                 "fare_percep": cost_percep,
                 "in_vehicle": 1.0,
             },
@@ -604,7 +613,6 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
                 "xfer_walk": self.xfer_walk_percep,
                 "egress": egress,
                 "eff_headway": "@hdwef",
-                "xfer_headway": "@headway_op",
                 "fare_percep": cost_percep,
                 "in_vehicle": 1.0,
             }
@@ -1458,7 +1466,7 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
             assign_transit = modeller.tool(
                 "inro.emme.transit_assignment.extended_transit_assignment")
             add_volumes = False
-            for amode, parameters in skim_parameters.iteritems():
+            for amode, parameters in skim_parameters.items():
                 for uc in self.user_classes:
                     spec = _copy(base_spec)
                     self.define_aux_perception(amode)
@@ -1480,7 +1488,7 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
                     add_volumes = True
 
     #@_m.logbook_trace("Extract skims", save_arguments=True)
-    def run_skims(self, period, amode, uc, max_fare, skims_only, summary, num_processors, network, use_ccr):
+    def run_skims(self, period, amode, uc, max_fare, skims_only, matrix_summary, num_processors, network, use_ccr):
         modeller = _m.Modeller()
         scenario = self.scenario
         #emmebank = scenario.emmebank
@@ -1738,7 +1746,6 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
         
         if use_ccr:
             with _m.logbook_trace("Calculate CCR skims"):
-                print('Skimming CCR for %s' % class_name)
                 network = scenario.get_partial_network(["TRANSIT_LINE", "TRANSIT_SEGMENT"], include_attributes=True)
                 attr_map = {
                     "TRANSIT_SEGMENT": ["@phdwy", "transit_volume", "transit_boardings", "@capacity_penalty",
@@ -1852,10 +1859,24 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
                 # skim capacity penalty
                 spec = self.get_strat_spec({"boarding": "@capacity_penalty"}, "CAPPEN_%s" % skim_name)
                 strategy_analysis(spec, class_name=class_name, scenario=scenario, num_processors=num_processors)
-        
+        else:
+            compute_matrix = _m.Modeller().tool("inro.emme.matrix_calculation.matrix_calculator")
+            # set crowd and cappen to 0 if no ccr
+            reset_crowd={
+                "expression": "0",
+                "result": "mfCROWD_%s" % skim_name,
+                "type": "MATRIX_CALCULATION"
+            }
+            report = compute_matrix(reset_crowd)
+            reset_cappen={
+                "expression": "0",
+                "result": "mfCROWD_%s" % skim_name,
+                "type": "MATRIX_CALCULATION"
+            }
+            report = compute_matrix(reset_cappen)               
         self.mask_highvalues_all(amode, self.user_class_labels[uc], self.periodLabel[int(period)], scenario, num_processors)
 
-        if summary:
+        if matrix_summary:
             compute_matrix = _m.Modeller().tool("inro.emme.matrix_calculation.matrix_calculator")
             # export max, average, sum for each transit skim matrix
             data = []
@@ -1874,7 +1895,7 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
                 data.append([skim_name, report["maximum"], report["maximum_at"]["origin"], report["maximum_at"]["destination"], 
                             report["average"], report["sum"]])
             df = pd.DataFrame(data, columns=['Skim', 'Max', 'Max orig', 'Max dest', 'Avg', 'Sum'])
-            filename = "%s\\matrix_list_%s.csv"%(EMME_OUTPUT, datetime.date.today())
+            filename = "%s\\trn_skim_list_%s.csv"%(EMME_OUTPUT, datetime.date.today())
             df.to_csv(filename, mode='a', index=False, header=not os.path.exists(filename), line_terminator='\n')
             # export number of OD pairs with non-zero in-vehicle time by transit mode
             data = [self.periodLabel[int(period)], amode, self.user_class_labels[uc]]
@@ -1902,7 +1923,7 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
             header = ["Period", "Access Mode", "User Class"]
             header.extend(modes)
             df = pd.DataFrame([data], columns=header)
-            filename = "%s\\transit_skim_OD_summary_%s.csv"%(EMME_OUTPUT, datetime.date.today())
+            filename = "%s\\transit_mode_OD_summary_%s.csv"%(EMME_OUTPUT, datetime.date.today())
             df.to_csv(filename, mode='a', index=False, header=not os.path.exists(filename), line_terminator='\n')            
         return
 
@@ -2016,6 +2037,145 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
                 "expression": '0',
             }
             matrix_calc(spec, scenario=scenario, num_processors=num_processors)
+    def export_boardings_by_line(self, desktop, output_transit_boardings_file):
+        """
+        Writes out csv file containing the transit boardings by line  for use in
+        validation summaries
+        Parameters:
+            - desktop: emme desktop object with an primary scenario that has transit
+                boardings assigned
+            - output_transit_boardings_file: str of file to write transit boardings to
+        """
+        project = desktop.project
+        table = project.new_network_table("TRANSIT_LINE")
+        column = worksheet.Column()
+
+        # Creating total boardings by line table
+        column.expression = "line"
+        column.name = "line_name"
+        table.add_column(0, column)
+
+        column.expression = "description"
+        column.name = "description"
+        table.add_column(1, column)
+
+        column.expression = "ca_board_t"
+        column.name = "total_boardings"
+        table.add_column(2, column)
+
+        column.expression = "mode"
+        column.name = "mode"
+        table.add_column(3, column)
+
+        column.expression = "mdesc"
+        column.name = "mode_description"
+        table.add_column(4, column)
+
+        table.export(output_transit_boardings_file)
+        table.close()
+
+
+    def export_boardings_by_segment(self, desktop, use_ccr, output_transit_boardings_file):
+        """
+        Writes out csv file containing the transit boardings by segment for use in
+        validation summaries
+        Parameters:
+            - desktop: emme desktop object with an primary scenario that has transit
+                boardings assigned
+            - output_transit_boardings_file: str of file to write transit boardings to
+        """
+        project = desktop.project
+        table = project.new_network_table("TRANSIT_SEGMENT")
+        column = worksheet.Column()
+
+        col_name_dict = {
+            "i": "i_node",
+            "j": "j_node",
+            "line": "line_name",
+            "description": "description",
+            "voltr": "volume",
+            "board": "boardings",
+            "alight": "alightings",
+            "mode": "mode",
+            "mdesc": "mode_description",
+            "capt": "total_cap_of_line_per_hr",
+            "caps": "seated_cap_of_line_per_hr",
+            "xi": "i_node_x",
+            "yi": "i_node_y",
+            "xj": "j_node_x",
+            "yj": "j_node_y",
+        }
+        if use_ccr: 
+            col_name_dict['@tot_capacity']: 'total_capacity'
+            col_name_dict['@seated_capacity']: 'seated_capacity'
+            col_name_dict['@capacity_penalty']: 'capacity_penalty'
+            col_name_dict['@tot_vcr']: 'tot_vcr'
+            col_name_dict['@seated_vcr']: 'seated_vcr'
+            col_name_dict['@ccost']: 'ccost'
+            #col_name_dict['@eawt']: 'eawt'
+            #col_name_dict['@seg_rel']: 'seg_rel'
+        col_num = 0
+        for expression, name in col_name_dict.items():
+            column.expression = expression
+            column.name = name
+            table.add_column(col_num, column)
+            col_num += 1
+
+        table.export(output_transit_boardings_file)
+        table.close()
+
+
+    def export_boardings_by_station(self, output_folder, period):
+        modeller = _m.Modeller()
+        scenario = self.scenario
+        sta2sta = modeller.tool(
+            "inro.emme.transit_assignment.extended.station_to_station_analysis")
+        sta2sta_spec = {
+            "type": "EXTENDED_TRANSIT_STATION_TO_STATION_ANALYSIS",
+            "transit_line_selections": {
+                "first_boarding": "mod=M",
+                "last_alighting": "mod=M"
+            },
+            "analyzed_demand": None,
+        }
+
+        # FIXME these expressions need to be more flexible if fares are applied
+        operator_dict = {
+        # mode: network_selection
+            'METRARail': "mode=M",
+            'CTARail': "mode=C"
+        }
+
+        with _m.logbook_trace("Writing station-to-station summaries for period %s" % period):
+            for amode in ["WALK", "PNROUT", "PNRIN", "KNROUT", "KNRIN"]:
+                for uc in self.user_classes:
+                    for op, cut in operator_dict.items():
+                        class_name = "TRN_%s_%s_%s" % (amode, self.user_class_labels[int(uc)], period)
+                        demand_matrix = "mf%s" % (class_name)
+                        output_file_name = "%s_station_to_station_%s_%s.txt" % (op, amode, period)
+                        print(class_name, demand_matrix, output_file_name)
+
+                        sta2sta_spec['transit_line_selections']['first_boarding'] = cut
+                        sta2sta_spec['transit_line_selections']['last_alighting'] = cut
+                        sta2sta_spec['analyzed_demand'] = demand_matrix
+
+                        output_path = os.path.join(output_folder, output_file_name)
+                        sta2sta(specification=sta2sta_spec,
+                                output_file=output_path,
+                                append_to_output_file=False,
+                                class_name=class_name)
+
+
+    def output_transit_boardings(self, desktop, use_ccr, output_location, period):
+        desktop.data_explorer().replace_primary_scenario(self.scenario)
+        output_transit_boardings_file = os.path.join(output_location, "boardings_by_line_{}.csv".format(period))
+        self.export_boardings_by_line(desktop, output_transit_boardings_file)
+
+        output_transit_segments_file = os.path.join(output_location, "boardings_by_segment_{}.csv".format(period))
+        self.export_boardings_by_segment(desktop, use_ccr, output_transit_segments_file)
+
+        output_station_to_station_folder = os.path.join(output_location)
+        self.export_boardings_by_station(output_station_to_station_folder, period)            
 '''
     #TODO - make the below definitions part of a utilities script. taken from general.py and demand.py
     def add_select_processors(tool_attr_name, pb, tool):
