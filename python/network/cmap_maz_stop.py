@@ -25,10 +25,10 @@ class CMapMazStop():
     def __call__(self, parms):
         print(f"{time.ctime()} Preparing MAZ-MAZ and MAZ-Stop Connectors")
         startTime = time.time()
-        asim_inputs = os.environ['ASIM_INPUTS']
-        model_inputs = os.environ['INPUT_FOLDER']
-        sf = os.path.join(model_inputs, parms['mmms']['shapefile_name'])
-        mazfile_name = os.path.join(model_inputs, parms['mazfile_name'])
+        asim_input = os.environ['ASIM_INPUT']
+        twozone_input = os.environ['TWOZONE_INPUT']
+        sf = os.path.join(twozone_input, parms['mmms']['shapefile_name'])
+        mazfile_name = os.path.join(twozone_input, parms['mazfile_name'])
         
         max_maz_maz_walk_dist_feet = int(parms['mmms']['max_maz_maz_walk_dist_feet'])
         max_maz_maz_bike_dist_feet = int(parms['mmms']['max_maz_maz_bike_dist_feet'])
@@ -50,7 +50,7 @@ class CMapMazStop():
         centroids["network_node_id"] = net.get_node_ids(centroids["X"], centroids["Y"])
         centroids["network_node_x"] = nodes["X"].loc[centroids["network_node_id"]].tolist()
         centroids["network_node_y"] = nodes["Y"].loc[centroids["network_node_id"]].tolist()
-        stops = pd.read_csv(os.path.join(model_inputs, parms['stop_attributes']['file']))
+        stops = pd.read_csv(os.path.join(twozone_input, parms['stop_attributes']['file']))
         stops["network_node_id"] = net.get_node_ids(stops[parms['stop_attributes']['x_field']], stops[parms['stop_attributes']['y_field']])
         stops["network_node_x"] = nodes["X"].loc[stops["network_node_id"]].tolist()
         stops["network_node_y"] = nodes["Y"].loc[stops["network_node_id"]].tolist()
@@ -80,7 +80,7 @@ class CMapMazStop():
         maz_to_maz_walk_cost_out = maz_to_maz_walk_cost[maz_to_maz_walk_cost["DISTWALK"] <= max_maz_maz_walk_dist_feet / 5280.0]
         missing_maz = pd.DataFrame(centroids[~centroids['MAZ'].isin(maz_to_maz_walk_cost_out['OMAZ'])]['MAZ']).rename(columns = {'MAZ': 'OMAZ'}).merge(maz_to_maz_cost[maz_to_maz_cost['OMAZ'] != maz_to_maz_cost['DMAZ']].sort_values('DISTWALK').groupby('OMAZ').agg({'DMAZ': 'first', 'DISTWALK': 'first'}).reset_index(), on = 'OMAZ', how = 'left')
         print(f"{time.ctime()} Write Results...")
-        maz_to_maz_walk_cost_out[["OMAZ","DMAZ","DISTWALK"]].append(missing_maz).sort_values(['OMAZ', 'DMAZ']).to_csv(os.path.join(asim_inputs, parms['mmms']["maz_maz_walk_output"]), index=False)
+        maz_to_maz_walk_cost_out[["OMAZ","DMAZ","DISTWALK"]].append(missing_maz).sort_values(['OMAZ', 'DMAZ']).to_csv(os.path.join(asim_input, parms['mmms']["maz_maz_walk_output"]), index=False)
         del(missing_maz)
         #
         # MAZ-to-MAZ Bike
@@ -92,7 +92,7 @@ class CMapMazStop():
         maz_to_maz_bike_cost_out = maz_to_maz_bike_cost[maz_to_maz_bike_cost["DISTBIKE"] <= max_maz_maz_bike_dist_feet / 5280.0]
         missing_maz = pd.DataFrame(centroids[~centroids['MAZ'].isin(maz_to_maz_bike_cost_out['OMAZ'])]['MAZ']).rename(columns = {'MAZ': 'OMAZ'}).merge(maz_to_maz_cost[maz_to_maz_cost['OMAZ'] != maz_to_maz_cost['DMAZ']].sort_values('DISTWALK').groupby('OMAZ').agg({'DMAZ': 'first', 'DISTWALK': 'first'}).reset_index().rename(columns = {'DISTWALK': 'DISTBIKE'}), on = 'OMAZ', how = 'left')
         print(f"{time.ctime()} Write Results...")
-        maz_to_maz_bike_cost_out[["OMAZ","DMAZ","DISTBIKE"]].append(missing_maz).sort_values(['OMAZ', 'DMAZ']).to_csv(os.path.join(asim_inputs, parms['mmms']["maz_maz_bike_output"]), index=False)
+        maz_to_maz_bike_cost_out[["OMAZ","DMAZ","DISTBIKE"]].append(missing_maz).sort_values(['OMAZ', 'DMAZ']).to_csv(os.path.join(asim_input, parms['mmms']["maz_maz_bike_output"]), index=False)
         del(missing_maz)
         
         #
@@ -124,7 +124,7 @@ class CMapMazStop():
                                                             (maz_to_stop_walk_cost["DISTANCE"] <= max_maz_express_bus_stop_walk_dist_feet / 5280.0) & (maz_to_stop_walk_cost['MODE'] == 'LE') | 
                                                             (maz_to_stop_walk_cost["DISTANCE"] <= max_maz_cta_rail_stop_walk_dist_feet / 5280.0) & (maz_to_stop_walk_cost['MODE'] == 'C') | 
                                                             (maz_to_stop_walk_cost["DISTANCE"] <= max_maz_metra_rail_stop_walk_dist_feet / 5280.0) & (maz_to_stop_walk_cost['MODE'] == 'M')].copy()
-        land_use = pd.read_csv(os.path.join(model_inputs, parms['land_use']['file']))
+        land_use = pd.read_csv(os.path.join(asim_input, parms['land_use']['input_file']))
         modes = {"L": "local_bus", "E": "express_bus", "C": "cta_rail", "M": "metra_rail"}
         for mode, output in modes.items():
             max_walk_dist = parms['mmms']['max_maz_' + output + '_stop_walk_dist_feet'] / 5280.0
@@ -140,11 +140,16 @@ class CMapMazStop():
             maz_stop_walk.loc[maz_stop_walk['DISTWALK'] > max_walk_dist, 'DISTWALK'] = np.nan
             #maz_stop_walk["walk_time"] = maz_stop_walk["DISTWALK"].apply(lambda x: x / parms['mmms']['walk_speed_mph'] * 60.0)                      
             maz_stop_walk['DISTWALK'].fillna(9999, inplace = True)
-            maz_stop_walk.rename({'MAZ': 'maz', 'DISTWALK': 'walk_dist_' + output}, axis='columns', inplace=True)
-            land_use = land_use.merge(maz_stop_walk[['maz', 'walk_dist_' + output]], how='left', on='maz')
+            maz_stop_walk.rename({'MAZ': 'subzone', 'DISTWALK': 'walk_dist_' + output}, axis='columns', inplace=True)
+            land_use = land_use.merge(maz_stop_walk[['subzone', 'walk_dist_' + output]], how='left', on='subzone')
 
+        # add external MAZs and TAZs
+        maxMAZ = land_use['subzone'].max()
+        maxTAZ = land_use['zone'].max()        
+        for i in range(maxTAZ + 1, maxTAZ + parms['land_use']['numExtTAZ'] + 1):
+            land_use.loc[len(land_use.index)] = [i + (maxMAZ - maxTAZ)] + [i] + [0] * (land_use.shape[1] - len(modes) - 2) + [9999] * len(modes)
         print(f"{time.ctime()} Write Results...")
-        land_use.to_csv(os.path.join(asim_inputs, parms['land_use']['file']), index=False)
+        land_use.to_csv(os.path.join(asim_input, parms['land_use']['output_file']), index=False)
         print(f"{time.ctime()} Completed MAZ-MAZ and MAZ-stop Connectors in {time.strftime('%H:%M:%S', time.gmtime(time.time() - startTime))}")
 
         
