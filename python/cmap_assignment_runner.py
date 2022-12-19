@@ -11,7 +11,7 @@ import openmatrix as omx
 
 print("Starting Auto Skim Process at %s"%(datetime.datetime.now()))
 EMME_OUTPUT = os.environ["EMME_OUTPUT"]
-ASIM_INPUTS = os.environ["ASIM_INPUTS"]
+ASIM_INPUT = os.environ["ASIM_INPUT"]
 PROJECT = os.environ["PROJECT"]
 msa_iteration = int(sys.argv[1])
 
@@ -32,7 +32,7 @@ scens = [{"periodNum": 1, "period": "NT"},
 
 # initialize omx to save auto and transit skims
 taz_skims_filename = 'taz_skims.omx'
-taz_skims = omx.open_file('%s\\%s' % (ASIM_INPUTS,taz_skims_filename),'w')
+taz_skims = omx.open_file('%s\\%s' % (ASIM_INPUT,taz_skims_filename),'w')
 taz_skims.close()
 
 for s in scens:
@@ -40,20 +40,20 @@ for s in scens:
     scenario = desktop.data_explorer().active_database().scenario_by_number(s['periodNum'])
     desktop.data_explorer().replace_primary_scenario(scenario)
     try:
-        cmap_network.CMapNetwork().__call__(databank.scenario(s['periodNum']), runCapacities = True)
-        cmap_assignment.TrafficAssignment().__call__(s['period'], msa_iteration, 0.001, 40, 27, databank.scenario(s['periodNum']))
+        cmap_network.CMapNetwork().__call__(databank.scenario(s['periodNum']))
+        cmap_assignment.TrafficAssignment().__call__(s['period'], msa_iteration, 0.001, 100, 27, databank.scenario(s['periodNum']))
         if msa_iteration == 4:
             cmap_network.CMapNetwork().__call__(databank.scenario(s['periodNum']), runPrep = False, export = True, 
                                                 output_directory = "%s\\scen0%s" % (EMME_OUTPUT, s['periodNum']))
         print("Export auto matrices to OMX for time period " + s['period'])
         cmap_matrix.CMapMatrix().outputAutoSkimsToOMX(s['period'], databank.scenario(s['periodNum']), 
-                                                        "%s\\%s" % (ASIM_INPUTS, taz_skims_filename))
+                                                        "%s\\%s" % (ASIM_INPUT, taz_skims_filename))
     except:
         print("There was an error in the %s period"%s['period'])
         traceback.print_exc()
 
 # placeholder for distance, walk distance, and bike distance
-taz_skims = omx.open_file('%s\\%s' % (ASIM_INPUTS, taz_skims_filename),'a')
+taz_skims = omx.open_file('%s\\%s' % (ASIM_INPUT, taz_skims_filename),'a')
 if 'SOV_TR_M_DIST__MD' in taz_skims.list_matrices():
     taz_skims['DIST'] = taz_skims['SOV_TR_M_DIST__MD']
     taz_skims['DISTWALK'] = taz_skims['SOV_TR_M_DIST__MD']
