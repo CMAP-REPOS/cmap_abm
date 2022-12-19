@@ -20,11 +20,11 @@ HSCENS = [1,2,3,4,5,6,7,8]
 TSCENS = [201,203,205,207]
 per = {1: "NT", 2: "EA", 3: "AM", 4: "MM", 5: "MD", 6: "AF", 7: "PM", 8: "EV"}
 
-WORK_FOLDER = os.environ["WARM_START"] + os.sep + "wsmatrices"
+WORK_FOLDER = os.environ["EMME_INPUT"] + os.sep + "wsmatrices"
 EMME_OUTPUT = os.environ["EMME_OUTPUT"]
 PROJECT = os.environ["PROJECT"]
 
-desktop = _app.start_dedicated(project=PROJECT, visible=True, user_initials="ASR")
+desktop = _app.start_dedicated(project=PROJECT, visible=True, user_initials="TL")
 modeller = _m.Modeller(desktop)
 databank = desktop.data_explorer().active_database().core_emmebank
 
@@ -45,7 +45,7 @@ TODFactor_extAP = [0.161, 0.054, 0.129, 0.050, 0.214, 0.132, 0.150, 0.110]
 finalAssnMats = {300: "SOV_NT_TOT_L", 301: "SOV_TR_TOT_L", 302: "HOV2_TOT_L", 303: "HOV3_TOT_L", 304: "SOV_NT_TOT_M", 
                 305: "SOV_TR_TOT_M", 306: "HOV2_TOT_M", 307: "HOV3_TOT_M", 308: "SOV_NT_TOT_H", 309: "SOV_TR_TOT_H", 
                 310: "HOV2_TOT_H", 311: "HOV3_TOT_H", 312: "TRK_TOT_B", 313: "TRK_TOT_L", 314: "TRK_TOT_M", 315: "TRK_TOT_H"}
-summary = False
+summary = True
 if summary:
     create_matrix = _m.Modeller().tool("inro.emme.data.matrix.create_matrix")           
     temp_matrix = create_matrix(matrix_id = "ms1", matrix_name = "TEMP_SUM", matrix_description = "temp mf sum", default_value = 0, overwrite = True)
@@ -104,16 +104,16 @@ for scen in HSCENS:
             "TRK_B_%s"%period: "mf%s%s"%(scen, 113), # As-is
             "TRK_L_%s"%period: "mf%s%s"%(scen, 114), # As-is
             "TRK_M_%s"%period: "mf%s%s"%(scen, 115), # As-is
-            "TRK_H_%s"%period: "mf%s%s"%(scen, 116), #            
-            "extAuto_%s"%period: "mf%s%s"%(scen, 117), # -> SOV TR M
+            "TRK_H_%s"%period: "mf%s%s"%(scen, 116), # TRK_H           
+            "extAuto_%s"%period: "mf%s%s"%(scen, 117), # -> SOV TR L/M/H
             "extTRK_H_%s"%period: "mf%s%s"%(scen, 118), ## -> TRK_H
-            "extAP_%s"%period: "mf%s%s"%(scen, 119), # -> SOV TR M
-			"AIR1_L_%s"%period: "mf%s%s"%(scen, 120), # -> SOV TR L
-			"AIR1_H_%s"%period: "mf%s%s"%(scen, 121), # -> SOV TR H
-			"AIR2_L_%s"%period: "mf%s%s"%(scen, 122), # -> HOV2 L
-			"AIR2_H_%s"%period: "mf%s%s"%(scen, 123), # -> HOV2 H
-			"AIR3_L_%s"%period: "mf%s%s"%(scen, 124), # -> HOV3 L
-			"AIR3_H_%s"%period: "mf%s%s"%(scen, 125) # -> HOV3 H
+            "extAP_%s"%period: "mf%s%s"%(scen, 119), # -> SOV TR L/M/H
+			"AIR1_L_%s"%period: "mf%s%s"%(scen, 120), # 
+			"AIR1_H_%s"%period: "mf%s%s"%(scen, 121), #
+			"AIR2_L_%s"%period: "mf%s%s"%(scen, 122), #
+			"AIR2_H_%s"%period: "mf%s%s"%(scen, 123), #
+			"AIR3_L_%s"%period: "mf%s%s"%(scen, 124), #
+			"AIR3_H_%s"%period: "mf%s%s"%(scen, 125) #
         }          
     scenario = databank.scenario(scen)    
     for n, m in autoMatsToImport.items():
@@ -175,19 +175,19 @@ for scen in HSCENS:
     spec2 = {
         "type": "MATRIX_CALCULATION",
         "result": "SOV_TR_TOT_L_%s"%period,
-        "expression": "SOV_TR_L_%s + AIR1_L_%s"%(period, period),
+        "expression": "SOV_TR_L_%s+0.1*extAuto_%s+0.1*extAP_%s"%(period, period, period),
     }
 
     spec3 = {
         "type": "MATRIX_CALCULATION",
         "result": "HOV2_TOT_L_%s"%period,
-        "expression": "HOV2_L_%s + AIR2_L_%s"%(period, period),
+        "expression": "HOV2_L_%s"%period,
     }
     
     spec4 = {
         "type": "MATRIX_CALCULATION",
         "result": "HOV3_TOT_L_%s"%period,
-        "expression": "HOV3_L_%s + AIR3_L_%s"%(period, period),
+        "expression": "HOV3_L_%s"%period,
     }
     
     # Prepare matrices for assignment - Mid VoT
@@ -200,7 +200,7 @@ for scen in HSCENS:
     spec6 = {
         "type": "MATRIX_CALCULATION",
         "result": "SOV_TR_TOT_M_%s"%period,
-        "expression": "SOV_TR_M_%s + extAuto_%s + extAP_%s"%(period, period, period),
+        "expression": "SOV_TR_M_%s+0.45*extAuto_%s+0.45*extAP_%s"%(period, period, period),
     }
     
     spec7 = {
@@ -225,19 +225,19 @@ for scen in HSCENS:
     spec10 = {
         "type": "MATRIX_CALCULATION",
         "result": "SOV_TR_TOT_H_%s"%period,
-        "expression": "SOV_TR_H_%s + AIR1_H_%s"%(period,period),
+        "expression": "SOV_TR_H_%s+0.45*extAuto_%s+0.45*extAP_%s"%(period, period, period),
     }
     
     spec11 = {
         "type": "MATRIX_CALCULATION",
         "result": "HOV2_TOT_H_%s"%period,
-        "expression": "HOV2_H_%s + AIR2_H_%s"%(period,period),
+        "expression": "HOV2_H_%s"%period,
     }
     
     spec12 = {
         "type": "MATRIX_CALCULATION",
         "result": "HOV3_TOT_H_%s"%period,
-        "expression": "HOV3_H_%s + AIR3_H_%s"%(period,period),
+        "expression": "HOV3_H_%s"%period,
     }
     
     # Prepare truck matrices
@@ -256,17 +256,55 @@ for scen in HSCENS:
     spec15 = {
         "type": "MATRIX_CALCULATION",
         "result": "TRK_TOT_M_%s"%period,
-        "expression": "TRK_M_%s"%period,
+        "expression": "TRK_M_%s*2"%period,
     }
     
     spec16 = {
         "type": "MATRIX_CALCULATION",
         "result": "TRK_TOT_H_%s"%period,
-        "expression": "TRK_H_%s + extTRK_H_%s"%(period,period),
+        "expression": "(TRK_H_%s + extTRK_H_%s)*3"%(period,period),
     }
     
     computeMatrix([spec1, spec2, spec3, spec4, spec5, spec6, spec7, spec8, 
                     spec9, spec10, spec11, spec12, spec13, spec14, spec15, spec16]) 
+
+    if summary:
+        # export max, average, sum for each transit skim matrix
+        data = []
+        matrices = ["SOV_NT", "SOV_TR", "HOV2", "HOV3"]
+        for V in ['L', 'M', 'H']:        
+            for name in matrices:
+                demand_name = "%s_%s_%s" % (name, V, period)
+                spec_sum={
+                    "expression": demand_name,
+                    "result": "msTEMP_SUM",
+                    "aggregation": {
+                        "origins": "+",
+                        "destinations": "+"
+                    },
+                    "type": "MATRIX_CALCULATION"
+                }
+                report = computeMatrix(spec_sum) 
+                data.append([demand_name, report["maximum"], report["maximum_at"]["origin"], report["maximum_at"]["destination"], 
+                            report["average"], report["sum"]])
+        nonres_matrices = ["TRK_B", "TRK_L", "TRK_M", "TRK_H", "extAuto", "extTRK_H", "extAP"]       
+        for name in nonres_matrices:
+            demand_name = "%s_%s" % (name, period)
+            spec_sum={
+                "expression": demand_name,
+                "result": "msTEMP_SUM",
+                "aggregation": {
+                    "origins": "+",
+                    "destinations": "+"
+                },
+                "type": "MATRIX_CALCULATION"
+            }
+            report = computeMatrix(spec_sum) 
+            data.append([demand_name, report["maximum"], report["maximum_at"]["origin"], report["maximum_at"]["destination"], 
+                        report["average"], report["sum"]])                                  
+        df = pd.DataFrame(data, columns=['Demand', 'Max', 'Max orig', 'Max dest', 'Avg', 'Sum'])
+        filename = "%s\\auto_matrix_list_iter0_%s.csv"%(EMME_OUTPUT, datetime.date.today())
+        df.to_csv(filename, mode='a', index=False, header=not os.path.exists(filename), line_terminator='\n')
 
 # Import Transit Warm Start    
 for scen in TSCENS:
@@ -285,15 +323,18 @@ for scen in TSCENS:
                 "TRN_TNCIN_%s_%s"%(V,period): "mf%s%s"%(scen-200, 271 + 7 * vint)                
             }
         
-        #for n, m in trnMatsToImport.items():
-        #    createMatrix(matrix_id = m, matrix_name = n, scenario = scenario, overwrite = True)
+        for n, m in trnMatsToImport.items():
+            createMatrix(matrix_id = m, matrix_name = n, scenario = scenario, overwrite = True)
         #    spec1 = {
         #        "type": "MATRIX_CALCULATION",
         #        "result": "mf%s"%n,
         #        "expression": "0.0001",
         #   }
         #    computeMatrix(spec1)
-        importOMX(file_path = "%s\\trn_%s_taz.omx"%(WORK_FOLDER, period), matrices = trnMatsToImport, scenario = scenario)
+        importOMX(file_path = "%s\\trn_%s_taz.omx"%(WORK_FOLDER, period), 
+                    matrices = trnMatsToImport, 
+                    zone_mapping='TAZ',                    
+                    scenario = scenario)
 
         # Combine KNR transit and TNC transit into KNR transit
         spec1 = {
