@@ -36,3 +36,13 @@ school_segment university,school_segment,"np.where(is_university, SCHOOL_SEGMENT
 is_worker,is_worker,"persons.pemploy.isin([PEMPLOY_FULL, PEMPLOY_PART])"
 #,,
 home_zone_id,home_zone_id,"reindex(households.home_zone_id, persons.household_id)"
+#,,
+,_mean_work,distributed_time_factor_work_mean
+,_stddev_work,distributed_time_factor_work_stddev
+,_mean_nonwork,distributed_time_factor_nonwork_mean
+,_stddev_nonwork,distributed_time_factor_nonwork_stddev
+,_min_time_factor,distributed_time_factor_min
+,_max_time_factor,distributed_time_factor_max
+#,,"Below expression was previously done using np.clip, but was producing a NotImplemented error for mixed DataFrame and Series Inputs.  Reimplemented using min & max"
+travel time sensitivity factor for work travel,time_factor_work,"np.minimum(_max_time_factor, np.maximum(rng.lognormal_for_df(persons, mu=_mean_work, sigma=_stddev_work), _min_time_factor))"
+travel time sensitivity factor for non-work travel,time_factor_nonwork,"np.minimum(_max_time_factor, np.maximum(rng.lognormal_for_df(persons, mu=_mean_nonwork, sigma=_stddev_nonwork), _min_time_factor))  "
