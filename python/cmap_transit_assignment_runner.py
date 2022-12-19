@@ -10,7 +10,7 @@ import traceback
 
 print("Starting Transit Skim Process at %s"%(datetime.datetime.now()))
 EMME_OUTPUT = os.environ["EMME_OUTPUT"]
-ASIM_INPUTS = os.environ["ASIM_INPUTS"]
+ASIM_INPUT = os.environ["ASIM_INPUT"]
 PROJECT = os.environ["PROJECT"]
 msa_iteration = int(sys.argv[1])
 
@@ -67,13 +67,14 @@ for s in scens:
     netcalc([spec1,spec2])
 
     try:
-        cmap_transit_assignment.TransitAssignment().__call__(str(s['periodNum']), matrix_count, current_scenario, ccr_periods = "AM,PM", num_processors = 27)
+        cmap_transit_assignment.TransitAssignment().__call__(str(s['periodNum']), matrix_count, current_scenario, 
+                                                            ccr_periods = "", num_processors = 27)
         if msa_iteration == 4:
             cmap_network.CMapNetwork().__call__(databank.scenario(s['scenNum']), runPrep = False, export = True, 
                                                 output_directory = "%s\\scen%s" % (EMME_OUTPUT, s['scenNum']))          
         print("Export transit matrices to OMX for time period " + s['period'])      
         cmap_matrix.CMapMatrix().outputTransitSkimsToOMX(s['period'], databank.scenario(s['periodNum']), 
-                                                            "%s\\taz_skims_new.omx" % ASIM_INPUTS) #TODO change skim filename
+                                                            "%s\\taz_skims.omx" % ASIM_INPUT)
     except:
         print("There was an error in the %s period"%s['period'])
         traceback.print_exc() 
