@@ -19,7 +19,7 @@ HSCENS = [1,2,3,4,5,6,7,8]
 TSCENS = [201,203,205,207]
 TPERIODS = [1,2,3,4]
 
-WORK_FOLDER = os.environ["BASE_PATH"] + os.sep + "emme_inputs\\netfiles"
+WORK_FOLDER = os.environ["EMME_INPUT"] + os.sep + "netfiles"
 autoFolder = WORK_FOLDER + os.sep + 'scen_auto'
 transitFolder = WORK_FOLDER + os.sep + 'scen_transit'
 RECIP_PROJECT = os.environ["PROJECT"]
@@ -27,7 +27,7 @@ RECIP_PROJECT = os.environ["PROJECT"]
 with open(WORK_FOLDER+os.sep+"scens.json", 'r') as file:
     scen_desc = _json.load(file)
 
-desktop = _app.start_dedicated(project=RECIP_PROJECT, visible=True, user_initials="ASR")
+desktop = _app.start_dedicated(project=RECIP_PROJECT, visible=True, user_initials="TL")
 modeller = _m.Modeller(desktop)
 databank = desktop.data_explorer().active_database().core_emmebank
 
@@ -67,7 +67,6 @@ for scen in HSCENS:
     import_attrib(file_path = autoFolder + os.sep + '10000.n2',
                     field_separator=' ',
                     column_labels=node_labels,
-                    #has_header=False,
                     revert_on_error = False)    
     link_att = ['@speed', '@width', '@parkl', '@cltl', '@toll', '@sigic', '@rrx', '@tipid']
     link_att_def = ['posted speed', 'average lane width', 'number of park lanes', '', 'auto toll (dollars)', 
@@ -79,12 +78,7 @@ for scen in HSCENS:
     import_attrib(file_path = autoFolder + os.sep + '10000.l2',
                     field_separator=' ',
                     column_labels=link_labels,
-                    #has_header=False,
                     revert_on_error = False)
-    #for f in ["extra_links_%s.txt"%scen, "extra_nodes_%s.txt"%scen]:
-    #    import_attrib(file_path = scenFolder + os.sep  + f, import_definitions = True, revert_on_error = False)
-    # Import Turns
-    #importTurns (transaction_file  = scenFolder + os.sep + "turns%s.out"%scen, revert_on_error = False)
 run_macro(macro_name = autoFolder + os.sep + "hwy_network_prep.txt")
 
 for scen, per in zip(TSCENS, TPERIODS):
