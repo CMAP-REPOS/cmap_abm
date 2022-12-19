@@ -1,5 +1,5 @@
 #
-# importConnectors.py
+# importTransitConnectors.py
 #
 # import transit connectors
 # if generate_connectors is False (default), only import connectors
@@ -26,7 +26,7 @@ max_length_knr = [5, 5, 5]
 max_length_pnr = [10, 15, 15]
 acc_modes = ["uvw", "uw", "vw", "u", "v", "w"]
 
-WORK_FOLDER = os.environ["BASE_PATH"] + os.sep + "emme_inputs\\netfiles"
+WORK_FOLDER = os.environ["EMME_INPUT"] + os.sep + "netfiles"
 PROJECT = os.environ["PROJECT"]
 
 desktop = _app.start_dedicated(project=PROJECT, visible=True, user_initials="TL")
