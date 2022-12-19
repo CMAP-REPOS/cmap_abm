@@ -3,7 +3,7 @@ Middle to Low Income HH ,0.45,coef_middle_to_low_income_hh_
 Number of eating tours tours undertaken by the person,-0.28,coef_number_of_eating_tours_tours_undertaken_by_the_person
 Subtour departure less than or equal to 11AM,0.31,coef_subtour_departure_less_than_or_equal_to_11am
 Subtour return time greater or equal to 2PM,0.34,coef_subtour_return_time_greater_or_equal_to_2pm
-Subtour duration in hours (integer),0.56,coef_subtour_duration_in_hours_integer_
+Subtour duration in hours,0.56,coef_subtour_duration_in_hours_
 dummy for subtour origin (tour destination) at Exurban  or Rual (AreaTypes = 6 or 7),0.27,coef_dummy_for_subtour_origin_tour_destination_at_exurban_or_rual_areatypes_6_or_7_
 Primary Destination Accessibility (LOG of it),0.18,coef_primary_destination_accessibility_log_of_it_
 subtour distance in miles (from tour destination to subtour primary destination one way),0.02,coef_subtour_distance_in_miles_from_tour_destination_to_subtour_primary_destination_one_way_
