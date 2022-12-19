@@ -1,42 +1,39 @@
 Label,Description,Expression,cars0,cars1,cars2,cars3,cars4
-util_drivers_2,2 Adults (age 16+),num_drivers==2,,coef_cars1_drivers_2,coef_cars2_drivers_2,coef_cars3_drivers_2,coef_cars4_drivers_2
-util_drivers_3,3 Adults (age 16+),num_drivers==3,,coef_cars1_drivers_3,coef_cars2_drivers_3,coef_cars3_drivers_3,coef_cars4_drivers_3
-util_drivers_4_up,4+ Adults (age 16+),num_drivers>3,,coef_cars1_drivers_4_up,coef_cars2_drivers_4_up,coef_cars3_drivers_4_up,coef_cars4_drivers_4_up
+util_drivers_1,1 Adult (age 16+),num_drivers==1,,coef_cars1_drivers_1,coef_cars2_drivers_1,coef_cars3_drivers_1,coef_cars4_drivers_1
+util_drivers_2,2 Adult (age 16+),num_drivers==2,,coef_cars1_drivers_2,coef_cars2_drivers_2,coef_cars3_drivers_2,coef_cars4_drivers_2
+util_drivers_3_up,3+ Adults (age 16+),num_drivers>=3,,coef_cars1_drivers_3_up,coef_cars2_drivers_3_up,coef_cars3_drivers_3_up,coef_cars4_drivers_3_up
 util_persons_16_17,Persons age 16-17,num_children_16_to_17,,coef_cars1_persons_16_17,coef_cars2_persons_16_17,coef_cars34_persons_16_17,coef_cars34_persons_16_17
 util_persons_18_24,Persons age 18-24,num_college_age,,coef_cars1_persons_18_24,coef_cars2_persons_18_24,coef_cars34_persons_18_24,coef_cars34_persons_18_24
 util_persons_25_34,Persons age 35-34,num_young_adults,,coef_cars1_persons_25_34,coef_cars2_persons_25_34,coef_cars34_persons_25_34,coef_cars34_persons_25_34
-util_presence_children_0_4,Presence of children age 0-4,num_young_children>0,,coef_cars1_presence_children_0_4,coef_cars234_presence_children_0_4,coef_cars234_presence_children_0_4,coef_cars234_presence_children_0_4
+util_presence_children_0_4,Presence of children age 0-4,num_young_children>0,,coef_cars1_presence_children_0_4,coef_cars2_presence_children_0_4,coef_cars34_presence_children_0_4,coef_cars34_presence_children_0_4
 util_presence_children_5_17,Presence of children age 5-17,(num_children_5_to_15+num_children_16_to_17)>0,,coef_cars1_presence_children_5_17,coef_cars2_presence_children_5_17,coef_cars34_presence_children_5_17,coef_cars34_presence_children_5_17
-util_num_workers_clip_3,"Number of workers, capped at 3",@df.num_workers.clip(upper=3),,coef_cars1_num_workers_clip_3,coef_cars2_num_workers_clip_3,coef_cars3_num_workers_clip_3,coef_cars4_num_workers_clip_3
-util_hh_income_0_30k,"Piecewise Linear household income, $0-30k","@df.income_in_thousands.clip(0, 30)",,coef_cars1_hh_income_0_30k,coef_cars2_hh_income_0_30k,coef_cars3_hh_income_0_30k,coef_cars4_hh_income_0_30k
-util_hh_income_30_75k,"Piecewise Linear household income, $30-75k","@(df.income_in_thousands-30).clip(0, 45)",,coef_cars1_hh_income_30_up,coef_cars2_hh_income_30_up,coef_cars3_hh_income_30_up,coef_cars4_hh_income_30_up
-util_hh_income_75k_up,"Piecewise Linear household income, $75k+, capped at $125k","@(df.income_in_thousands-75).clip(0, 50)",,coef_cars1_hh_income_30_up,coef_cars2_hh_income_30_up,coef_cars3_hh_income_30_up,coef_cars4_hh_income_30_up
-util_density_0_10_no_workers,"Density index up to 10, if 0 workers","@(df.num_workers==0)*df.density_index.clip(0, 10)",,coef_cars1_density_0_10_no_workers,coef_cars2_density_0_10_no_workers,coef_cars34_density_0_10_no_workers,coef_cars34_density_0_10_no_workers
-util_density_10_up_no_workers,"Density index in excess of 10, if 0 workers",@(df.num_workers==0)*(df.density_index-10).clip(0),,coef_cars1_density_10_up_no_workers,coef_cars2_density_10_up_no_workers,coef_cars34_density_10_up_no_workers,coef_cars34_density_10_up_no_workers
-util_density_0_10_workers,"Density index up to 10, if 1+ workers","@(df.num_workers>0)*df.density_index.clip(0, 10)",,coef_cars1_density_0_10_no_workers,coef_cars2_density_0_10_no_workers,coef_cars34_density_0_10_no_workers,coef_cars34_density_0_10_no_workers
-util_density_10_up_workers,"Density index in excess of 10, if 1+ workers",@(df.num_workers>0)*(df.density_index-10).clip(0),,coef_cars1_density_10_up_workers,coef_cars2_density_10_up_no_workers,coef_cars34_density_10_up_no_workers,coef_cars34_density_10_up_no_workers
-util_asc,Constants,1,,coef_cars1_asc,coef_cars2_asc,coef_cars3_asc,coef_cars4_asc
-#util_asc_san_francisco,San Francisco county,@df.county_id == ID_SAN_FRANCISCO,,coef_cars1_asc_san_francisco,coef_cars2_asc_san_francisco,coef_cars34_asc_san_francisco,coef_cars34_asc_san_francisco
-#util_asc_solano,Solano county,@df.county_id == ID_SOLANO,,coef_cars1_asc_county,coef_cars2_asc_county,coef_cars34_asc_county,coef_cars34_asc_county
-#util_asc_napa,Napa county,@df.county_id == ID_NAPA,,coef_cars1_asc_county,coef_cars2_asc_county,coef_cars34_asc_county,coef_cars34_asc_county
-#util_asc_sonoma,Sonoma county,@df.county_id == ID_SONOMA,,coef_cars1_asc_county,coef_cars2_asc_county,coef_cars34_asc_county,coef_cars34_asc_county
-#util_asc_marin,Marin county,@df.county_id == ID_MARIN,,coef_cars1_asc_marin,coef_cars234_asc_marin,coef_cars234_asc_marin,coef_cars234_asc_marin
-util_retail_auto_no_workers,"Retail accessibility (0.66*PK + 0.34*OP) by auto, if 0 workers",(num_workers==0)*(0.66*auPkRetail+0.34*auOpRetail),,coef_retail_auto_no_workers,coef_retail_auto_no_workers,coef_retail_auto_no_workers,coef_retail_auto_no_workers
-util_retail_auto_workers,"Retail accessibility (0.66*PK + 0.34*OP) by auto, if 1+ workers",(num_workers>0)*(0.66*auPkRetail+0.34*auOpRetail),,coef_retail_auto_workers,coef_retail_auto_workers,coef_retail_auto_workers,coef_retail_auto_workers
-util_retail_transit_no_workers,"Retail accessibility (0.66*PK + 0.34*OP) by transit, if 0 workers",(num_workers==0)*(0.66*trPkRetail+0.34*trOpRetail),,coef_retail_transit_no_workers,coef_retail_transit_no_workers,coef_retail_transit_no_workers,coef_retail_transit_no_workers
-util_retail_transit_workers,"Retail accessibility (0.66*PK + 0.34*OP) by transit, if 1+ workers",(num_workers>0)*(0.66*trPkRetail+0.34*trOpRetail),,coef_retail_transit_workers,coef_retail_transit_workers,coef_retail_transit_workers,coef_retail_transit_workers
-util_retail_non_motor_no_workers,"Retail accessibility by non-motorized, if 0 workers",(num_workers==0)*nmRetail,,coef_retail_non_motor,coef_retail_non_motor,coef_retail_non_motor,coef_retail_non_motor
-util_retail_non_motor_workers,"Retail accessibility by non-motorized, if 1+ workers",(num_workers>0)*nmRetail,,coef_retail_non_motor,coef_retail_non_motor,coef_retail_non_motor,coef_retail_non_motor
+util_num_workers_clip_3,Number of workers capped at 3,@df.num_workers.clip(upper=3),,coef_cars1_num_workers_clip_3,coef_cars2_num_workers_clip_3,coef_cars3_num_workers_clip_3,coef_cars4_num_workers_clip_3
+util_hh_income_0_15k,Piecewise Linear household income $0-15k,income_in_thousands <  15,,coef_cars1_hh_income_0_15k,coef_cars2_hh_income_0_15k,coef_cars3_hh_income_0_15k,coef_cars4_hh_income_0_15k
+util_hh_income_15_35k,Piecewise Linear household income $15-35k,(income_in_thousands >= 15) & (income_in_thousands<35),,coef_cars1_hh_income_15_35k,coef_cars2_hh_income_15_35k,coef_cars3_hh_income_15_35k,coef_cars4_hh_income_15_35k
+util_hh_income_35_50k,Piecewise Linear household income $35-50k,(income_in_thousands >= 35) & (income_in_thousands<50),,coef_cars1_hh_income_35_50k,coef_cars2_hh_income_35_50k,coef_cars3_hh_income_35_50k,coef_cars4_hh_income_35_50k
+util_hh_income_50_75k,Piecewise Linear household income $50-75k,(income_in_thousands >= 50) & (income_in_thousands<75),,coef_cars1_hh_income_50_75k,coef_cars2_hh_income_50_75k,coef_cars3_hh_income_50_75k,coef_cars4_hh_income_50_75k
+util_density,Density index,@df.density_index,,coef_cars1_density,coef_cars2_density,coef_cars3_density,coef_cars4_density
+util_retail_transit,Retail accessibility (0.66*PK + 0.34*OP) by transit,(0.66*trPkRetail+0.34*trOpRetail),,coef_cars1_retail_transit,coef_cars2_retail_transit,coef_cars3_retail_transit,coef_cars4_retail_transit
+util_retail_non_motor,Retail accessibility by non-motorized,nmRetail,,coef_cars1_retail_non_motor,coef_cars2_retail_non_motor,coef_cars3_retail_non_motor,coef_cars4_retail_non_motor
 util_auto_time_saving_per_worker,Auto time savings per worker to work,"@np.where(df.num_workers > 0, df.hh_work_auto_savings_ratio / df.num_workers, 0)",,coef_cars1_auto_time_saving_per_worker,coef_cars2_auto_time_saving_per_worker,coef_cars3_auto_time_saving_per_worker,coef_cars4_auto_time_saving_per_worker
-util_asc_cook,Cook County,@df.county == 17031,,coef_cars1_cook,coef_cars2_cook,coef_cars3_cook,coef_cars4_cook
-util_asc_dupage,DuPage County,@df.county == 17043,,coef_cars1_dupage,coef_cars2_dupage,coef_cars3_dupage,coef_cars4_dupage
-util_asc_kane,Kane County,@df.county == 17089,,coef_cars1_kane,coef_cars2_kane,coef_cars3_kane,coef_cars4_kane
-util_asc_kendall,Kendall County,@df.county == 17093,,coef_cars1_kendall,coef_cars2_kendall,coef_cars3_kendall,coef_cars4_kendall
-util_asc_lakeil,Lake County IL,@df.county == 17097,,coef_cars1_lakeil,coef_cars2_lakeil,coef_cars3_lakeil,coef_cars4_lakeil
-util_asc_mchenry,McHenry County,@df.county == 17111,,coef_cars1_mchenry,coef_cars2_mchenry,coef_cars3_mchenry,coef_cars4_mchenry
-util_asc_will,Will County,@df.county == 17197,,coef_cars1_will,coef_cars2_will,coef_cars3_will,coef_cars4_will
-util_asc_grundy,Grundy County,@df.county == 17063,,coef_cars1_grundy,coef_cars2_grundy,coef_cars3_grundy,coef_cars4_grundy
-util_asc_dekalb,DeKalb County,@df.county == 17037,,coef_cars1_dekalb,coef_cars2_dekalb,coef_cars3_dekalb,coef_cars4_dekalb
-util_asc_lakein,Lake County IN,@df.county == 18089,,coef_cars1_lakein,coef_cars2_lakein,coef_cars3_lakein,coef_cars4_lakein
-util_asc_laporte,LaPorte County,@df.county == 18091,,coef_cars1_laporte,coef_cars2_laporte,coef_cars3_laporte,coef_cars4_laporte
-util_asc_porter,Porter County,@df.county == 18127,,coef_cars1_porter,coef_cars2_porter,coef_cars3_porter,coef_cars4_porter
+util_univ_students_GQ,University Students living in GQ households,(num_college_age > 0) & ((HHT == 5) | (HHT == 7)),,coef_cars1_univ_GQ,coef_unavailable,coef_unavailable,coef_unavailable
+util_constants,Alternative-specific constants,1,,coef_cars1,coef_cars2,coef_cars3,coef_cars4
+#,,,,,,,
+calib_constant,calibration constant,1,coef_cars0_asc,coef_cars1_asc,coef_cars2_asc,coef_cars3_asc,coef_cars4_asc
+util_boone,Boone County Resident,@df.home_county == 17007,coef_cars0_boone,,,,
+util_dekalb,DeKalb County Resident,@df.home_county == 17037,coef_cars0_dekalb,,,,
+util_grundy,Grundy County Resident,@df.home_county == 17063,coef_cars0_grundy,,,,
+util_kankakee,Kankakee County Resident,@df.home_county == 17091,coef_cars0_kankakee,,,,
+util_kendall,Kendall County Resident,@df.home_county == 17093,coef_cars0_kendall,,,,
+util_kenosha,Kenosha County Resident,@df.home_county == 55059,coef_cars0_kenosha,,,,
+util_laporte,LaPorte County Resident,@df.home_county == 18091,coef_cars0_laporte,,,,
+util_lasalle,LaSalle County Resident,@df.home_county == 17099,coef_cars0_lasalle,,,,
+util_lake_il,"Lake, IL County Resident",@df.home_county == 17097,coef_cars0_lake_il,,,,
+util_lake_in,"Lake, IN County Resident",@df.home_county == 18089,coef_cars0_lake_in,,,,
+util_lee,Lee County Resident,@df.home_county == 17103,coef_cars0_lee,,,,
+util_mchenry,McHenry County Resident,@df.home_county == 17111,coef_cars0_mchenry,,,,
+util_ogle,Ogle County Resident,@df.home_county == 17141,coef_cars0_ogle,,,,
+util_porter,Porter County Resident,@df.home_county == 18127,coef_cars0_porter,,,,
+util_racine,Racine County Resident,@df.home_county == 55101,coef_cars0_racine,,,,
+util_walworth,Walworth County Resident,@df.home_county == 55127,coef_cars0_walworth,,,,
+util_winnebago,Winnebago County Resident,@df.home_county == 17201,coef_cars0_winnebago,,,,
