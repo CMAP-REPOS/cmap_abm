@@ -61,11 +61,40 @@ CDAP_ACTIVITY_MANDATORY: M
 CDAP_ACTIVITY_NONMANDATORY: N
 CDAP_ACTIVITY_HOME: H
 
+# % of resident employment (exlude WFH and in-commuting) by county for workplace location choice
+TC_ADJUST: 
+  17007: 0.878517 #BOONE
+  17031: 0.947245 #COOK
+  17037: 0.948049 #DEKALB
+  17043: 0.947847 #DUPAGE
+  17063: 0.915662 #GRUNDY
+  17089: 0.936993 #KANE
+  17091: 0.889296 #KANKAKEE
+  17093: 0.924214 #KENDALL
+  55059: 0.916779 #KENOSHA
+  17097: 0.927023 #LAKE, IL
+  18089: 0.937297 #LAKE, IN
+  18091: 0.865526 #LAPORTE
+  17099: 0.815812 #LASALLE
+  17103: 0.766068 #LEE
+  17111: 0.909250 #MCHENRY
+  17141: 0.875599 #OGLE
+  18127: 0.895274 #PORTER
+  55101: 0.860007 #RACINE
+  55127: 0.768901 #WALWORTH
+  17197: 0.935409 #WILL
+  17201: 0.906175 #WINNEBAGO
+  0: 1 #EXTERNAL
+
+# tour and trip mode choice
 max_walk_distance: 3
 max_bike_distance: 8
 costPerMile: 20.54
 costShareSr2: 1.75
 costShareSr3: 2.50
+waitThresh: 10.00
+walkThresh: 1.50
+bikeThresh: 6.00 
 walkSpeed: 3.00
 bikeSpeed: 12.00
 driveSpeed: 25.00
@@ -121,4 +150,30 @@ TNC_shared_waitTime_sd:
   5: 0
 min_waitTime: 0
 max_waitTime: 50
+cost_share_s2: 2
+cost_share_s3: 3
+vot_threshold_low: 8.81
+vot_threshold_med: 18.00
 
+# annotate households: area_types less than this are considered urban
+urban_threshold: 3
+cbd_threshold: 2
+rural_threshold: 5
+
+# annotate households: value of time
+min_value_of_time: 1
+max_value_of_time: 50
+distributed_vot_mu: 0.684
+distributed_vot_sigma: 0.87
+household_median_value_of_time:
+  1: 3.61
+  2: 7.61
+  3: 30.85
+
+# annotate persons: time_factor 
+distributed_time_factor_work_mean: 1.0
+distributed_time_factor_work_stddev: 0.7
+distributed_time_factor_nonwork_mean: 1.0
+distributed_time_factor_nonwork_stddev: 0.6
+distributed_time_factor_min: 0.1
+distributed_time_factor_max: 10
