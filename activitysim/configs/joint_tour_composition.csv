@@ -20,3 +20,5 @@ util_log_max_overlap_of_time_windows,Log of max pair-wise overlap of household a
 util_two_acive_adults,Two adults must have Mand or Non Mand activity patterns to have adult-only joint travel,num_travel_active_adults<2,coef_unavailable,,
 util_two_active_children,Two children must have Mand or Non Mand activity patterns to have children-only joint travel,num_travel_active_children<2,,coef_unavailable,
 util_travel_active_adult,At least one adult and at least one child must have Mand or Non Mand activity patterns to have adult/child joint travel,(num_travel_active_adults == 0) | (num_travel_active_children == 0),,,coef_unavailable
+#,,,,,
+util_calib,calibration cte,1,,asc_calib_children,asc_calib_mixed

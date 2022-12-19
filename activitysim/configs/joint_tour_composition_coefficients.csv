@@ -30,3 +30,5 @@ coef_household_in_suburban_area_mixed,0.1283,F
 coef_log_max_overlap_of_adults_time_windows,1.192,F
 coef_log_max_overlap_of_childrens_time_windows,1.841,F
 coef_log_max_overlap_of_time_windows,1.958,F
+asc_calib_children,-50,F
+asc_calib_mixed,-6.819770,F
