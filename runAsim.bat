@@ -1,10 +1,9 @@
 ::@ECHO OFF
-
+set ITERATION=%1
 SETLOCAL EnableDelayedExpansion
 SET ANACONDA=C:\Users\%USERNAME%\.conda\envs\cmapasim\python.exe
 SET ANACONDA_DIR=C:\ProgramData\Anaconda3
 SET PATH=%ANACONDA_DIR%\Library\bin;%PATH%
-::ECHO %PATH%
 SET PYTHONPATH="C:\Users\%USERNAME%\.conda\envs\cmapasim\lib"
 
 :: setup paths to Python application, Conda script, etc.
@@ -19,13 +18,13 @@ CALL %CONDA_ACT% cmapasim
 set MKL_NUM_THREADS=1
 ::ECHO %PYTHONPATH%
 
-:: Removing old outputs
-::DEL /s /q %ASIM%\output_little\*
-::#TODO: output skim matrices to ActivitySim folder
+:: Prepare files for ActivitySim
+IF %ITERATION% EQU 1 (
+    %ANACONDA% python\prepAsim.py
+)
 
-::
-:: Prepare files for ActivitySim and run ActivitySim
-::
-::%ANACONDA% python\prepAsim.py
+:: Crop files for testing ActivitySim
 ::%ANACONDA% python\crop.py little
-%ANACONDA% %ASIM%\simulation.py -c %ASIM%\configs -o %ASIM%\output -d %ASIM%\data
+
+:: Run ActivitySim
+%ANACONDA% %ASIM%\simulation.py -c %ASIM%\configs -o %ASIM_OUTPUT% -d %ASIM_INPUT%
