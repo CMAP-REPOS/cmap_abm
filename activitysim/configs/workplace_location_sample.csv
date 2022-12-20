@@ -1,5 +1,6 @@
 Label,Description,Expression,coefficient
 local_dist,,"_DIST@skims['SOV_NT_M_DIST','MD']",1
+dest_county,,_COUNTY@skims['COUNTY'],1
 util_dist_0_1,"Distance, piecewise linear from 0 to 1 miles","@_DIST.clip(0,1)",coef_dist_0_1
 util_dist_1_2,"Distance, piecewise linear from 1 to 2 miles","@(_DIST-1).clip(0,1)",coef_dist_1_2
 util_dist_2_5,"Distance, piecewise linear from 2 to 5 miles","@(_DIST-2).clip(0,3)",coef_dist_2_5
@@ -10,3 +11,46 @@ util_dist_15_up_high,"Distance 5+ mi, high and very high income",@(df['income_se
 util_size_variable,Size variable,@(df['size_term'] * df['shadow_price_size_term_adjustment']).apply(np.log1p),1
 util_utility_adjustment,utility adjustment,@df['shadow_price_utility_adjustment'],1
 util_no_attractions,No attractions,@df['size_term']==0,-999
+#Calibration,,,
+util_COOK_COOK_ASC,COOK_COOK calibration constant,"@np.where((df['home_county']==17031) & (_COUNTY==17031), 1, 0)",coef_COOK_COOK_asc
+util_COOK_DUPAGE_ASC,COOK_DUPAGE calibration constant,"@np.where((df['home_county']==17031) & (_COUNTY==17043), 1, 0)",coef_COOK_DUPAGE_asc
+util_COOK_KANE_ASC,COOK_KANE calibration constant,"@np.where((df['home_county']==17031) & (_COUNTY==17089), 1, 0)",coef_COOK_KANE_asc
+util_COOK_LAKE_IN_ASC,COOK_LAKE_IN calibration constant,"@np.where((df['home_county']==17031) & (_COUNTY==18089), 1, 0)",coef_COOK_LAKE_IN_asc
+util_COOK_MCHENRY_ASC,COOK_MCHENRY calibration constant,"@np.where((df['home_county']==17031) & (_COUNTY==17111), 1, 0)",coef_COOK_MCHENRY_asc
+util_COOK_WILL_ASC,COOK_WILL calibration constant,"@np.where((df['home_county']==17031) & (_COUNTY==17197), 1, 0)",coef_COOK_WILL_asc
+util_DEKALB_DEKALB_ASC,DEKALB_DEKALB calibration constant,"@np.where((df['home_county']==17037) & (_COUNTY==17037), 1, 0)",coef_DEKALB_DEKALB_asc
+util_DUPAGE_COOK_ASC,DUPAGE_COOK calibration constant,"@np.where((df['home_county']==17043) & (_COUNTY==17031), 1, 0)",coef_DUPAGE_COOK_asc
+util_DUPAGE_DUPAGE_ASC,DUPAGE_DUPAGE calibration constant,"@np.where((df['home_county']==17043) & (_COUNTY==17043), 1, 0)",coef_DUPAGE_DUPAGE_asc
+util_DUPAGE_KANE_ASC,DUPAGE_KANE calibration constant,"@np.where((df['home_county']==17043) & (_COUNTY==17089), 1, 0)",coef_DUPAGE_KANE_asc
+util_DUPAGE_WILL_ASC,DUPAGE_WILL calibration constant,"@np.where((df['home_county']==17043) & (_COUNTY==17197), 1, 0)",coef_DUPAGE_WILL_asc
+util_GRUNDY_GRUNDY_ASC,GRUNDY_GRUNDY calibration constant,"@np.where((df['home_county']==17063) & (_COUNTY==17063), 1, 0)",coef_GRUNDY_GRUNDY_asc
+util_KANE_COOK_ASC,KANE_COOK calibration constant,"@np.where((df['home_county']==17089) & (_COUNTY==17031), 1, 0)",coef_KANE_COOK_asc
+util_KANE_KANE_ASC,KANE_KANE calibration constant,"@np.where((df['home_county']==17089) & (_COUNTY==17089), 1, 0)",coef_KANE_KANE_asc
+util_KANE_MCHENRY_ASC,KANE_MCHENRY calibration constant,"@np.where((df['home_county']==17089) & (_COUNTY==17111), 1, 0)",coef_KANE_MCHENRY_asc
+util_KANE_WILL_ASC,KANE_WILL calibration constant,"@np.where((df['home_county']==17089) & (_COUNTY==17197), 1, 0)",coef_KANE_WILL_asc
+util_KANKAKEE_COOK_ASC,KANKAKEE_COOK calibration constant,"@np.where((df['home_county']==17091) & (_COUNTY==17031), 1, 0)",coef_KANKAKEE_COOK_asc
+util_KANKAKEE_KANKAKEE_ASC,KANKAKEE_KANKAKEE calibration constant,"@np.where((df['home_county']==17091) & (_COUNTY==17091), 1, 0)",coef_KANKAKEE_KANKAKEE_asc
+util_KENDALL_DUPAGE_ASC,KENDALL_DUPAGE calibration constant,"@np.where((df['home_county']==17093) & (_COUNTY==17043), 1, 0)",coef_KENDALL_DUPAGE_asc
+util_KENDALL_WILL_ASC,KENDALL_WILL calibration constant,"@np.where((df['home_county']==17093) & (_COUNTY==17197), 1, 0)",coef_KENDALL_WILL_asc
+util_KENOSHA_KENOSHA_ASC,KENOSHA_KENOSHA calibration constant,"@np.where((df['home_county']==55059) & (_COUNTY==55059), 1, 0)",coef_KENOSHA_KENOSHA_asc
+util_KENOSHA_RACINE_ASC,KENOSHA_RACINE calibration constant,"@np.where((df['home_county']==55059) & (_COUNTY==55101), 1, 0)",coef_KENOSHA_RACINE_asc
+util_LAKE_IL_COOK_ASC,LAKE_IL_COOK calibration constant,"@np.where((df['home_county']==17097) & (_COUNTY==17031), 1, 0)",coef_LAKE_IL_COOK_asc
+util_LAKE_IL_KENOSHA_ASC,LAKE_IL_KENOSHA calibration constant,"@np.where((df['home_county']==17097) & (_COUNTY==55059), 1, 0)",coef_LAKE_IL_KENOSHA_asc
+util_LAKE_IL_LAKE_IL_ASC,LAKE_IL_LAKE_IL calibration constant,"@np.where((df['home_county']==17097) & (_COUNTY==17097), 1, 0)",coef_LAKE_IL_LAKE_IL_asc
+util_LAKE_IL_MCHENRY_ASC,LAKE_IL_MCHENRY calibration constant,"@np.where((df['home_county']==17097) & (_COUNTY==17111), 1, 0)",coef_LAKE_IL_MCHENRY_asc
+util_LAKE_IN_COOK_ASC,LAKE_IN_COOK calibration constant,"@np.where((df['home_county']==18089) & (_COUNTY==17031), 1, 0)",coef_LAKE_IN_COOK_asc
+util_LAKE_IN_LAKE_IN_ASC,LAKE_IN_LAKE_IN calibration constant,"@np.where((df['home_county']==18089) & (_COUNTY==18089), 1, 0)",coef_LAKE_IN_LAKE_IN_asc
+util_MCHENRY_COOK_ASC,MCHENRY_COOK calibration constant,"@np.where((df['home_county']==17111) & (_COUNTY==17031), 1, 0)",coef_MCHENRY_COOK_asc
+util_MCHENRY_LAKE_IL_ASC,MCHENRY_LAKE_IL calibration constant,"@np.where((df['home_county']==17111) & (_COUNTY==17097), 1, 0)",coef_MCHENRY_LAKE_IL_asc
+util_MCHENRY_MCHENRY_ASC,MCHENRY_MCHENRY calibration constant,"@np.where((df['home_county']==17111) & (_COUNTY==17111), 1, 0)",coef_MCHENRY_MCHENRY_asc
+util_PORTER_COOK_ASC,PORTER_COOK calibration constant,"@np.where((df['home_county']==18127) & (_COUNTY==17031), 1, 0)",coef_PORTER_COOK_asc
+util_PORTER_PORTER_ASC,PORTER_PORTER calibration constant,"@np.where((df['home_county']==18127) & (_COUNTY==18127), 1, 0)",coef_PORTER_PORTER_asc
+util_RACINE_LAKE_IL_ASC,RACINE_LAKE_IL calibration constant,"@np.where((df['home_county']==55101) & (_COUNTY==17097), 1, 0)",coef_RACINE_LAKE_IL_asc
+util_RACINE_RACINE_ASC,RACINE_RACINE calibration constant,"@np.where((df['home_county']==55101) & (_COUNTY==55101), 1, 0)",coef_RACINE_RACINE_asc
+util_WALWORTH_WALWORTH_ASC,WALWORTH_WALWORTH calibration constant,"@np.where((df['home_county']==55127) & (_COUNTY==55127), 1, 0)",coef_WALWORTH_WALWORTH_asc
+util_WILL_COOK_ASC,WILL_COOK calibration constant,"@np.where((df['home_county']==17197) & (_COUNTY==17031), 1, 0)",coef_WILL_COOK_asc
+util_WILL_DUPAGE_ASC,WILL_DUPAGE calibration constant,"@np.where((df['home_county']==17197) & (_COUNTY==17043), 1, 0)",coef_WILL_DUPAGE_asc
+util_WILL_KANE_ASC,WILL_KANE calibration constant,"@np.where((df['home_county']==17197) & (_COUNTY==17089), 1, 0)",coef_WILL_KANE_asc
+util_WILL_KENDALL_ASC,WILL_KENDALL calibration constant,"@np.where((df['home_county']==17197) & (_COUNTY==17093), 1, 0)",coef_WILL_KENDALL_asc
+util_WILL_LAKE_IN_ASC,WILL_LAKE_IN calibration constant,"@np.where((df['home_county']==17197) & (_COUNTY==18089), 1, 0)",coef_WILL_LAKE_IN_asc
+util_WILL_WILL_ASC,WILL_WILL calibration constant,"@np.where((df['home_county']==17197) & (_COUNTY==17197), 1, 0)",coef_WILL_WILL_asc
