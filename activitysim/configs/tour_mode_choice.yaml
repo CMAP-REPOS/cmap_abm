@@ -39,50 +39,6 @@ SPEC: tour_mode_choice.csv
 COEFFICIENTS: tour_mode_choice_coefficients.csv
 COEFFICIENT_TEMPLATE: tour_mode_choice_coefficients_template.csv
 
-CONSTANTS:
-    waitThresh: 10.00
-    walkThresh: 1.50
-    shortWalk: 0.333
-    longWalk: 0.667
-    bikeThresh: 6.00   
-    maxCbdAreaTypeThresh: 2
-    indivTour: 1.00000
-
-    ivt_cost_multiplier: 0.6
-    #ivt_busl_multiplier: 1.0 # TODO add ivt multiplier
-    #ivt_buse_multiplier: 0.95
-    #ivt_cta_rail_multiplier: 0.9
-    #ivt_metra_rail_multiplier: 0.8
-    walktimeshort_multiplier: 2
-    walktimelong_multiplier: 10
-    biketimeshort_multiplier: 4
-    biketimelong_multiplier: 20
-    short_i_wait_multiplier: 2
-    long_i_wait_multiplier: 1
-    wacc_multiplier: 2
-    wegr_multiplier: 2
-    waux_multiplier: 2
-    crowd_multiplier: 1.62
-    cappen_multiplier: 2
-    dtim_multiplier: 2
-    xwait_multiplier: 2
-    dacc_ratio: 0
-    xfers_wlk_multiplier: 10
-    xfers_drv_multiplier: 20
-    drvtrn_distpen_0_multiplier: 270
-    drvtrn_distpen_max: 15
-    density_index_multiplier: -0.2
-#    joint_sr2_ASC_no_auto: 0
-#    joint_sr2_ASC_auto_deficient: 0
-#    joint_sr2_ASC_auto_sufficient: 0
-#    joint_drive_transit_ASC_no_auto: 0
-    ridehail_wait_time_multiplier: 1.5
-    cost_share_s2: 2
-    cost_share_s3: 3
-    vot_threshold_low: 8.81
-    vot_threshold_med: 18.00
-#    max_walk_time: 60
-
 # so far, we can use the same spec as for non-joint tours
 preprocessor:
   SPEC: tour_mode_choice_annotate_choosers_preprocessor
@@ -112,6 +68,9 @@ LOGSUM_CHOOSER_COLUMNS:
   - value_of_time
   - free_parking_at_work
   - income_segment
+  - income
+  - time_factor_work
+  - time_factor_nonwork
   - demographic_segment
   - is_student
 

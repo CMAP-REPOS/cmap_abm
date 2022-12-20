@@ -2,13 +2,6 @@ SPEC: trip_mode_choice.csv
 COEFFICIENTS: trip_mode_choice_coefficients.csv
 COEFFICIENT_TEMPLATE: trip_mode_choice_coefficients_template.csv
 
-tvpb_mode_path_types:
-  PNR_TRANSIT: DTW
-  WALK_TRANSIT: WTW
-  KNR_TRANSIT: KTW
-  TNC_TRANSIT: NTW
-
-
 LOGIT_TYPE: NL
 
 NESTS:
@@ -47,19 +40,9 @@ NESTS:
 CONSTANTS:
   orig_col_name: origin
   dest_col_name: destination
-  costShareSr2: 1.75
-  costShareSr3: 2.50
   waitThresh: 10.00
   walkThresh: 1.00
-  shortWalk: 0.333
-  longWalk: 0.667
   bikeThresh: 6.00
-#    maxCbdAreaTypeThresh: 2
-#    indivTour: 1.00000
-#    upperEA: 5
-#    upperAM: 10
-#    upperMD: 15
-#    upperPM: 19
   I_MODE_MAP:
     DRIVEALONE: 1
     SHAREDRIDE2: 2
@@ -88,35 +71,8 @@ CONSTANTS:
   I_TNC_TRN: 9
   I_RIDE_HAIL_MODES: [10, 11, 12]
   I_SCHBUS_MODE: 13
-  ivt_cost_multiplier: 0.6
-  topology_bike_multiplier: 20
-  topology_trn_multiplier: 2.20
-  topology_walk_multiplier: 15
-  walktimeshort_multiplier: 2
-  walktimelong_multiplier: 10
-  biketimeshort_multiplier: 4
-  biketimelong_multiplier: 20
-  short_i_wait_multiplier: 2
-  long_i_wait_multiplier: 1
-  wacc_multiplier: 2
-  wegr_multiplier: 2
-  waux_multiplier: 2
-  crowd_multiplier: 1.62
-  cappen_multiplier: 2  
-  dtim_multiplier: 2
-  xwait_multiplier: 2
-  dacc_ratio: 0
-  xfers_wlk_multiplier: 10
-  xfers_drv_multiplier: 20  
-  dacc_ratio_multiplier: 0
-  density_index_multiplier: -5
   origin_density_index_multiplier: -15
   origin_density_index_max: -15
-  ridehail_wait_time_multiplier: 1.5
-  cost_share_s2: 2
-  cost_share_s3: 3
-  vot_threshold_low: 8.81
-  vot_threshold_med: 18.00
   #max_walk_time: 60
 
 
@@ -127,11 +83,6 @@ preprocessor:
   TABLES:
     - land_use
     - tours
-
-#  - SPEC: trip_mode_choice_annotate_trips_preprocessor2
-#    DF: df
-#    TABLES:
-#      - land_use
 
 # to reduce memory needs filter chooser table to these fields
 TOURS_MERGED_CHOOSER_COLUMNS:
@@ -147,6 +98,9 @@ TOURS_MERGED_CHOOSER_COLUMNS:
   - tour_type
   - free_parking_at_work
   - income_segment
+  - income
+  - time_factor_work
+  - time_factor_nonwork  
 #  - demographic_segment
 
 MODE_CHOICE_LOGSUM_COLUMN_NAME: mode_choice_logsum
