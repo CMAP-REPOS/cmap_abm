@@ -32,12 +32,18 @@ def work_from_home(
 
     trace_label = 'work_from_home'
     model_settings_file_name = 'work_from_home.yaml'
-
+    model_settings = config.read_model_settings(model_settings_file_name)
+    
+    chooser_filter_column = model_settings["CHOOSER_FILTER_COLUMN_NAME"]
     choosers = persons_merged.to_frame()
-    choosers = choosers[choosers.workplace_zone_id > -1]
+    
+    print(f"Chooser column in choosers: {chooser_filter_column in choosers.columns}")
+    if chooser_filter_column in choosers.columns:
+        choosers = choosers[choosers[chooser_filter_column]]
+    
     logger.info("Running %s with %d persons", trace_label, len(choosers))
 
-    model_settings = config.read_model_settings(model_settings_file_name)
+    
     estimator = estimation.manager.begin_estimation('work_from_home')
 
     constants = config.get_model_constants(model_settings)
@@ -65,7 +71,7 @@ def work_from_home(
     if estimator:
         estimator.write_model_settings(model_settings, model_settings_file_name)
         estimator.write_spec(model_settings)
-        estimator.write_coefficients(coefficients_df)
+        estimator.write_coefficients(coefficients_df, model_settings)
         estimator.write_choosers(choosers)
 
     choices = simulate.simple_simulate(
@@ -80,9 +86,9 @@ def work_from_home(
 
     work_from_home_alt = model_settings['WORK_FROM_HOME_ALT']
     choices = (choices == work_from_home_alt)
-
-    dest_choice_column_name = model_settings['DEST_CHOICE_COLUMN_NAME']
-    print(dest_choice_column_name)
+    if 'workplace_zone_id' in choosers.columns:
+        dest_choice_column_name = model_settings['DEST_CHOICE_COLUMN_NAME']
+        print(dest_choice_column_name)
 
     if estimator:
         estimator.write_choices(choices)
@@ -92,7 +98,8 @@ def work_from_home(
 
     persons = persons.to_frame()
     persons['work_from_home'] = choices.reindex(persons.index).fillna(0).astype(bool)
-    persons[dest_choice_column_name] = np.where(persons.work_from_home is True, -1, persons[dest_choice_column_name])
+    if 'workplace_zone_id' in choosers.columns:
+        persons[dest_choice_column_name] = np.where(persons.work_from_home is True, -1, persons[dest_choice_column_name])
 
     pipeline.replace_table("persons", persons)
 
