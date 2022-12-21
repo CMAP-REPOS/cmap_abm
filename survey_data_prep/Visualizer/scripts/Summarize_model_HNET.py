@@ -47,7 +47,7 @@ distMult = 1.0 # in case the distance needs to be converted to another unit
 # each period (scenario) has a dbf network; import first network and merge other networks 
 scen_path = os.path.join(model_path, "scen01")
 hnet_TOD = Dbf5(os.path.join(scen_path, hnetfile)).to_dataframe()
-hnet_TOD.rename(columns={'VOLAU': 'NT_ASN'}, inplace=True)
+hnet_TOD['NT_ASN'] = hnet_TOD['VOLAU'] - (hnet_TOD['@trk_b'] + hnet_TOD['@trk_l'] + hnet_TOD['@trk_m'] + hnet_TOD['@trk_h'])
 #hnet_TOD['DY_ASN'] = hnet_TOD['NT_ASN']
 hnet = hnet_TOD[['ID', 'INODE', 'JNODE', 'LENGTH', 'VDF', 'NT_ASN']].copy()
 hnet.fillna(0, inplace=True)
@@ -59,10 +59,10 @@ for scen_num in range(2, len(periods_labels)):
         hnet_TOD = pd.read_csv(os.path.join(scen_path, hnetfile))
     else:
         raise ValueError('hnet_TOD File is not supported')
-    hnet = pd.merge(hnet, hnet_TOD[['ID', 'INODE', 'JNODE', 'VOLAU', 'LENGTH', 'VDF']],
+    TOD_header = periods[str(scen_num)] + '_ASN'        
+    hnet_TOD[TOD_header] = hnet_TOD['VOLAU'] - (hnet_TOD['@trk_b'] + hnet_TOD['@trk_l'] + hnet_TOD['@trk_m'] + hnet_TOD['@trk_h'])
+    hnet = pd.merge(hnet, hnet_TOD[['ID', 'INODE', 'JNODE', TOD_header, 'LENGTH', 'VDF']],
                  on = ['ID', 'INODE', 'JNODE', 'LENGTH', 'VDF'], how='outer')
-    TOD_header = periods[str(scen_num)] + '_ASN'
-    hnet.rename(columns={'VOLAU': TOD_header}, inplace=True)
     hnet.fillna(0, inplace=True)
     #hnet['DY_ASN'] += hnet[TOD_header]
 hnet['DY_ASN'] = 0
@@ -88,10 +88,13 @@ elif countsfile_AADT[-4:].lower() == ".csv":
     counts_AADT = pd.read_csv(os.path.join(net_in_path, countsfile_AADT), encoding='cp1252')
 else:
     raise ValueError('counts_AADT file is not supported')
-
+counts_AADT['hvy_pct'] = np.where((counts_AADT['AADT19adj'] == 0), 0, counts_AADT['HCAADT19adj'] / counts_AADT['AADT19adj'])
+counts = counts.merge(counts_AADT[['Anode', 'Bnode', 'hvy_pct']], on = ['Anode', 'Bnode'], how = 'left')
+counts['hvy_pct'].fillna(0, inplace = True)
 for per in range(1,len(periods_labels)):
     TOD_counts = counts[counts["TOD"] == per].copy()
     TOD_counts.rename(columns={'Anode': 'INODE', 'Bnode': 'JNODE'}, inplace=True)
+    TOD_counts['AADT'] = TOD_counts['AADT'] * (1 - TOD_counts['hvy_pct'])
     #hnet = hnet.merge(TOD_counts[['INODE', 'JNODE', 'AADT']], on = ['INODE', 'JNODE'], how = 'left')
     #hnet.rename(columns={'AADT': 'COUNTS_' + periods[str(per)]}, inplace=True)
     TOD_counts_Toll = counts_Toll[counts_Toll["TOD"] == per].copy()
