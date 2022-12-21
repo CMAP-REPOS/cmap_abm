@@ -62,7 +62,9 @@ copy %ASIM_INPUT%\taz_skims.omx %ASIM_INPUT%\taz_skims_iter1.omx
 ::#TODO: copy outputs to destination folder
 
 ::#TODO: run visualizer, send to output folder
-
+cd survey_data_prep
+CALL run_data_prep_scripts.bat
+cd .. 
 :: export skims maps from Emme
 ::%EMMEPY% %BASE_PATH%\python\export_trn_los_maps.py
 
