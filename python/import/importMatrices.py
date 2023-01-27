@@ -265,7 +265,7 @@ for scen in TSCENS:
         if summary:
             # export max, average, sum for each transit skim matrix
             data = []
-            matrices = ["TOT", "WALK", "PNROUT", "PNRIN", "KNROUT", "KNRIN", "TNCOUT", "TNCIN"]
+            matrices = ["TOT", "WALK", "PNROUT", "PNRIN", "KNROUT", "KNRIN"]
             for name in matrices:
                 demand_name = "TRN_%s_%s_%s" % (name, V, period)
                 spec_sum={
@@ -281,6 +281,50 @@ for scen in TSCENS:
                 data.append([demand_name, report["maximum"], report["maximum_at"]["origin"], report["maximum_at"]["destination"], 
                             report["average"], report["sum"]])
             df = pd.DataFrame(data, columns=['Demand', 'Max', 'Max orig', 'Max dest', 'Avg', 'Sum'])
-            filename = "%s\\trn_matrix_list_iter%s_%s.csv"%(EMME_OUTPUT, msa_iteration, datetime.date.today())
+            filename = "%s\\trn_demand_iter%s_%s.csv"%(EMME_OUTPUT, msa_iteration, datetime.date.today())
             df.to_csv(filename, mode='a', index=False, header=not os.path.exists(filename), line_terminator='\n')
+
+            data = []
+            matrices = ["WALK", "PNROUT", "PNRIN", "KNROUT", "KNRIN"]
+            for name in matrices:
+                demand_name = "TRN_%s_%s_%s" % (name, V, period)
+                metra_demand_name = "(mfMETRARAILIVTT_%s_%s__%s>0)*mfTRN_%s_%s_%s" % (name, V, period, name, V, period)
+                spec_sum={
+                    "expression": metra_demand_name,
+                    "result": "msTEMP_SUM",
+                    "aggregation": {
+                        "origins": "+",
+                        "destinations": "+"
+                    },
+                    "type": "MATRIX_CALCULATION"
+                }
+                report = computeMatrix(spec_sum) 
+                data.append([demand_name, report["maximum"], report["maximum_at"]["origin"], report["maximum_at"]["destination"], 
+                            report["average"], report["sum"]])
+            df = pd.DataFrame(data, columns=['Demand', 'Max', 'Max orig', 'Max dest', 'Avg', 'Sum'])
+            filename = "%s\\metra_demand_iter%s_%s.csv"%(EMME_OUTPUT, msa_iteration, datetime.date.today())
+            df.to_csv(filename, mode='a', index=False, header=not os.path.exists(filename), line_terminator='\n')
+            filename = "%s\\trn_demand_iter%s_%s.csv"%(EMME_OUTPUT, msa_iteration, datetime.date.today())
+            df.to_csv(filename, mode='a', index=False, header=not os.path.exists(filename), line_terminator='\n')
+
+            data = []
+            matrices = ["WALK", "PNROUT", "PNRIN", "KNROUT", "KNRIN"]
+            for name in matrices:
+                demand_name = "TRN_%s_%s_%s" % (name, V, period)
+                metra_demand_name = "mfMETRARAILIVTT_%s_%s__%s*mfTRN_%s_%s_%s/60" % (name, V, period, name, V, period)
+                spec_sum={
+                    "expression": metra_demand_name,
+                    "result": "msTEMP_SUM",
+                    "aggregation": {
+                        "origins": "+",
+                        "destinations": "+"
+                    },
+                    "type": "MATRIX_CALCULATION"
+                }
+                report = computeMatrix(spec_sum) 
+                data.append([demand_name, report["maximum"], report["maximum_at"]["origin"], report["maximum_at"]["destination"], 
+                            report["average"], report["sum"]])
+            df = pd.DataFrame(data, columns=['Demand', 'Max', 'Max orig', 'Max dest', 'Avg', 'Sum'])
+            filename = "%s\\metra_PHT_iter%s_%s.csv"%(EMME_OUTPUT, msa_iteration, datetime.date.today())
+            df.to_csv(filename, mode='a', index=False, header=not os.path.exists(filename), line_terminator='\n')                     
 print("Completed importing matrices at %s"%(datetime.datetime.now()))
