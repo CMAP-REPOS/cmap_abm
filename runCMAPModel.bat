@@ -5,18 +5,17 @@
 :: READ FIRST: cmap_abm\README.md
 
 @ECHO OFF
-set SCEN_NAME=%1
 :: Scenario Paths - These define the inputs and outputs
 SET BASE_PATH=C:\projects\cmap_activitysim\cmap_abm
 SET MODEL_PARAMETERS=%BASE_PATH%\model_params.yaml
 
 SET PROJECT=%BASE_PATH%\emme\CMAP-ABM\CMAP-ABM.emp
 SET TWOZONE_INPUT=%BASE_PATH%\twozone_inputs
-SET EMME_INPUT=%BASE_PATH%\emme\emme_inputs
-SET EMME_OUTPUT=%BASE_PATH%\emme\emme_outputs
+SET EMME_INPUT=%BASE_PATH%\emme_inputs
+SET EMME_OUTPUT=%BASE_PATH%\emme_outputs
 SET ASIM=%BASE_PATH%\activitysim
-SET ASIM_INPUT=%BASE_PATH%\model_runs\%SCEN_NAME%\inputs
-SET ASIM_OUTPUT=%BASE_PATH%\model_runs\%SCEN_NAME%\outputs
+SET ASIM_INPUT=%BASE_PATH%\activitysim_inputs
+SET ASIM_OUTPUT=%BASE_PATH%\activitysim_outputs
 MD %ASIM_OUTPUT%
 
 :: Python paths - EMMEPY should point to the Emme installation
