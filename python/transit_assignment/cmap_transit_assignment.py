@@ -300,6 +300,26 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
                 "type": "NETWORK_CALCULATION"
             }            
             netcalc([wconf_bus, wconf_rail])
+            create_extra('TRANSIT_SEGMENT', '@ivtf', 'in-vehicle time factor', 1, overwrite=True, scenario=scenario)
+            ivtf_cta={
+                "result": "@ivtf",
+                "expression": "0.9",
+                "selections": {
+                    "link": "all",
+                    "transit_line": "mode=C"
+                },                
+                "type": "NETWORK_CALCULATION"
+            }
+            ivtf_metra={
+                "result": "@ivtf",
+                "expression": "0.65",
+                "selections": {
+                    "link": "all",
+                    "transit_line": "mode=M"
+                },                
+                "type": "NETWORK_CALCULATION"
+            }            
+            netcalc([ivtf_cta, ivtf_metra])
             if matrix_summary:
                 create_matrix = _m.Modeller().tool("inro.emme.data.matrix.create_matrix")           
                 temp_matrix = create_matrix(matrix_id = "ms1", matrix_name = "TEMP_SUM", matrix_description = "temp mf sum", scenario = self.scenario, default_value = 0, overwrite = True)
@@ -618,163 +638,7 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
             }
         }
         return perception_parameters[period]
-    '''
-    #@_m.logbook_trace("Generate network attributes", save_arguments=True)
-    def calc_network_attribute(self, user_class):
-        modeller = _m.Modeller()
-        scenario = self.scenario
-        #emmebank = scenario.emmebank
 
-        netcalc = modeller.tool("inro.emme.network_calculation.network_calculator")
-
-        #current_scenario = my_emmebank.scenario(scen)
-        #tranScen = database.scenario_by_number(scen)
-        #data_explorer.replace_primary_scenario(tranScen)
-
-        network = scenario.get_network()
-        new_attrs = [
-            #("TRANSIT_LINE", "@xfer_from_day", "Fare for xfer from daypass/trolley"),
-            #("TRANSIT_LINE", "@xfer_from_premium", "Fare for first xfer from premium"),
-            #("TRANSIT_LINE", "@xfer_from_coaster", "Fare for first xfer from coaster"),
-            #("TRANSIT_LINE", "@xfer_regional_pass", "0-fare for regional pass"),
-            #("TRANSIT_SEGMENT", "@xfer_from_bus", "Fare for first xfer from bus"),
-            #("TRANSIT_SEGMENT", "@headway_seg", "Headway adj for special xfers"),
-            #("TRANSIT_SEGMENT", "@transfer_penalty_s", "Xfer pen adj for special xfers"),
-            ("TRANSIT_SEGMENT", "@layover_board", "Boarding cost adj for special xfers"),
-            #("TRANSIT_SEGMENT", "@boardpm", "Boarding cost percep"),
-            ("TRANSIT_SEGMENT", "@ivtf", "In-vehicle time factor"),
-        ]
-        #if there are circular lines or loops, @layover_board needs to be populated by transit line and node
-        for elem, name, desc in new_attrs:
-            if not scenario.extra_attribute(name):
-                attr = scenario.create_extra_attribute(elem, name)
-                attr.description = desc
-
-        #segCostP_calc = {
-        #    "result": "@boardpm",
-        #    "expression": str(self.cost_percep['uc1']),
-        #    "aggregation": None,
-        #    "selections": {
-        #        "link": "all",
-        #        "transit_line": "all"
-        #    },
-        #    "type": "NETWORK_CALCULATION"
-        #}
-        #netcalc(segCostP_calc, scenario=scenario) # num_processors=self.num_processors
-
-        #calculate @ivtf by userclass        
-        uc_name = "uc%s" % (user_class)
-        segCostP_calc = {
-            "result": "@ivtf%s" % (user_class),
-            "expression": "@ivtpf*(1+@soba%s+@crowf+@clnob*%s+@prof%s*(@pseat+0.001)/(@pseat+@pstan+0.001))" % (user_class, self.clean_importance[uc_name], user_class),
-            "aggregation": None,
-            "selections": {
-                "link": "all",
-                "transit_line": "all"
-            },
-            "type": "NETWORK_CALCULATION"
-        }
-        netcalc(segCostP_calc, scenario=scenario)
-
-        #new - calculate @ivtf as average of @ivtf by user class.
-        #segCostP_calc = {
-        #    "result": "@ivtf",
-        #    "expression": "(@ivtf1 + @ivtf2 + @ivtf3)/3",
-        #    "aggregation": None,
-        #    "selections": {
-        #        "link": "all",
-        #        "transit_line": "all"
-        #    },
-        #    "type": "NETWORK_CALCULATION"
-        #}
-        #netcalc(segCostP_calc, scenario=scenario) # num_processors=self.num_processors
-
-        # Pace Bus
-        Pace_InVeh = {
-            "result": "@ivtf%s" %(user_class),
-            "expression": "@ivtf%s" %(user_class) + "*8",
-            "aggregation": None,
-            "selections": {
-                "link": "all",
-                "transit_line": "line=p_____ | q_____ "
-            },
-            "type": "NETWORK_CALCULATION"
-        }
-
-        metra_InVeh = {
-            "result": "@ivtf%s" %(user_class),
-            "expression": "@ivtf%s" %(user_class) + "*4.5",
-            "aggregation": None,
-            "selections": {
-                "link": "@zone=89,309",
-                "transit_line": "line=m_____"
-            },
-            "type": "NETWORK_CALCULATION"
-        }
-
-        metra_InVeh_noCook = {
-            "result": "@ivtf%s" %(user_class),
-            "expression": "@ivtf%s" %(user_class) + "*.10",
-            "aggregation": None,
-            "selections": {
-                "link": "@zone=310,1711",
-                "transit_line": "line=m_____"
-            },
-            "type": "NETWORK_CALCULATION"
-        }
-
-        netcalc([Pace_InVeh, metra_InVeh, metra_InVeh_noCook], scenario=scenario)
-
-        metra_electric = {
-            "result": "@ivtf%s" %(user_class),
-            "expression": "@ivtf%s" %(user_class) + "*1.4",
-            "aggregation": None,
-            "selections": {
-                "link": "all",
-                "transit_line": "line=mme___"
-            },
-            "type": "NETWORK_CALCULATION"
-        }
-        metra_hc = {
-            "result": "@ivtf%s" %(user_class),
-            "expression": "@ivtf%s" %(user_class) + "*5",
-            "aggregation": None,
-            "selections": {
-                "link": "all",
-                "transit_line": "line=mh____"
-            },
-            "type": "NETWORK_CALCULATION"
-        }
-
-        cta_red = {
-            "result": "@ivtf%s" %(user_class),
-            "expression": "@ivtf%s" %(user_class) + "*.3",
-            "aggregation": None,
-            "selections": {
-                "link": "all",
-                "transit_line": "line=cr____"
-            },
-            "type": "NETWORK_CALCULATION"
-        }
-
-        netcalc([metra_electric, cta_red, metra_hc], scenario=scenario)
-
-        initial = 1
-        if initial > 0:
-            # Pace Bus
-            Pace_InVeh = {
-                "result": "@ivtf%s" %(user_class),
-                "expression": "@ivtf%s" %(user_class) + "*10",
-                "aggregation": None,
-                "selections": {
-                    "link": "all",
-                    "transit_line": "line=p_____ | q_____ "
-                },
-                "type": "NETWORK_CALCULATION"
-            }
-
-            netcalc([Pace_InVeh], scenario=scenario)
-    '''
     def all_modes_journey_levels(self, params, uc_name):
         board_cost_percep = 1 / self.vots[uc_name]
 
@@ -1316,7 +1180,7 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
             "boarding_time": {"at_nodes": {"penalty": "@timbo", "perception_factor": "@perbf"}, "on_lines": {"penalty": "@easbp", "perception_factor": 1}, "on_segments": None},
             "in_vehicle_cost": {"penalty": "@zfare",
                                 "perception_factor": None},
-            "in_vehicle_time": {"perception_factor": None},
+            "in_vehicle_time": {"perception_factor": "@ivtf"},
             "aux_transit_time": {"perception_factor": "@aperf"},
             "aux_transit_cost": {"penalty": "ul1", "perception_factor": 0},
             "journey_levels": [],
@@ -1437,7 +1301,7 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
                     spec["journey_levels"] = self.all_modes_journey_levels(params, "uc%s" % (uc))
                     spec["waiting_time"]["effective_headways"] = params["eff_headway"]
                     spec["waiting_time"]["perception_factor"] = params["init_wait"]
-                    spec["in_vehicle_time"]["perception_factor"] = params["in_vehicle"]
+                    spec["in_vehicle_time"]["perception_factor"] = "@ivtf"
                     spec["in_vehicle_cost"]["perception_factor"] = float(cost_percep)
                     spec["boarding_cost"]["on_lines"]["perception_factor"] = float(cost_percep)                                     
                     specs.append(spec)
@@ -1479,7 +1343,7 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
                     spec["journey_levels"] = self.all_modes_journey_levels(params, "uc%s" % (uc))
                     spec["waiting_time"]["effective_headways"] = params["eff_headway"]
                     spec["waiting_time"]["perception_factor"] = params["init_wait"]
-                    spec["in_vehicle_time"]["perception_factor"] = params["in_vehicle"]                    
+                    spec["in_vehicle_time"]["perception_factor"] = "@ivtf"
                     spec["in_vehicle_cost"]["perception_factor"] = float(cost_percep)
                     spec["boarding_cost"]["on_lines"]["perception_factor"] = float(cost_percep)
                     #print("Running transit assignment for %s"%name)
@@ -2094,6 +1958,7 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
             "line": "line_name",
             "description": "description",
             "voltr": "volume",
+            "length": "length",
             "board": "boardings",
             "alight": "alightings",
             "mode": "mode",
@@ -2176,56 +2041,3 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
 
         output_station_to_station_folder = os.path.join(output_location)
         self.export_boardings_by_station(output_station_to_station_folder, period)            
-'''
-    #TODO - make the below definitions part of a utilities script. taken from general.py and demand.py
-    def add_select_processors(tool_attr_name, pb, tool):
-        max_processors = _multiprocessing.cpu_count()
-        tool._max_processors = max_processors
-        options = [("MAX-1", "Maximum available - 1"), ("MAX", "Maximum available")]
-        options.extend([(n, "%s processors" % n) for n in range(1, max_processors + 1)])
-        pb.add_select(tool_attr_name, options, title="Number of processors:")
-
-    def parse_num_processors(value):
-        max_processors = _multiprocessing.cpu_count()
-        if isinstance(value, int):
-            return value
-        if isinstance(value, basestring):
-            if value == "MAX":
-                return max_processors
-            if _re.match("^[0-9]+$", value):
-                return int(value)
-            result = _re.split("^MAX[\s]*-[\s]*", value)
-            if len(result) == 2:
-                return max(max_processors - int(result[1]), 1)
-        if value:
-            return int(value)
-        return value
-
-    def temp_attrs(scenario, attr_type, idents, default_value=0.0):
-        attrs = []
-        try:
-            for ident in idents:
-                attrs.append(scenario.create_extra_attribute(attr_type, ident, default_value))
-            yield attrs[:]
-        finally:
-            for attr in attrs:
-                scenario.delete_extra_attribute(attr)
-
-    def temp_matrices(emmebank, mat_type, total=1, default_value=0.0):
-        matrices = []
-        try:
-            while len(matrices) != int(total):
-                try:
-                    ident = emmebank.available_matrix_identifier(mat_type)
-                except _except.CapacityError:
-                    raise _except.CapacityError(
-                        "Insufficient room for %s required temp matrices." % total)
-                matrices.append(emmebank.create_matrix(ident, default_value))
-            yield matrices[:]
-        finally:
-            for matrix in matrices:
-                # In case of transient file conflicts and lag in windows file handles over the network
-                # attempt to delete file 10 times with increasing delays 0.05, 0.2, 0.45, 0.8 ... 5
-                remove_matrix = lambda: emmebank.delete_matrix(matrix)
-                retry(remove_matrix)
-'''
