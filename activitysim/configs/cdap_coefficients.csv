@@ -162,19 +162,19 @@ coef_N_246_226_446,-0.8571,F
 # cdap_all_people,,
 coef_M_xxx,-0.0671,F
 coef_N_xxx,-0.3653,F
-coef_H_xxx,-1.1810,F
+coef_H_xxx,-1.181,F
 coef_M_xxxx,-0.6104,F
-coef_N_xxxx,-1.3460,F
-coef_H_xxxx,-3.7330,F
-coef_M_xxxxx,-1.5280,F
-coef_N_xxxxx,-3.4530,F
-coef_H_xxxxx,-8.6210,F
+coef_N_xxxx,-1.346,F
+coef_H_xxxx,-3.733,F
+coef_M_xxxxx,-1.528,F
+coef_N_xxxxx,-3.453,F
+coef_H_xxxxx,-8.621,F
 # calibration constants,,
-ASC_calib_FT_M,0.975302,
-ASC_calib_PT_M,1.400276,
+ASC_calib_FT_M,0.436132,
+ASC_calib_FT_N,1.157989,
+ASC_calib_PT_M,0.393889,
+ASC_calib_PT_N,0.683962,
 ASC_calib_drive_student_M,0.513722,
-ASC_calib_preschooler_M,-2.201653,
-ASC_calib_FT_N,1.116533,
-ASC_calib_PT_N,0.708487,
 ASC_calib_drive_student_N,0.94703,
+ASC_calib_preschooler_M,-2.201653,
 ASC_calib_preschooler_N,-0.184576,
