@@ -56,3 +56,7 @@ util_WILL_KANE_ASC,WILL_KANE calibration constant,"@np.where((df['home_county']=
 util_WILL_KENDALL_ASC,WILL_KENDALL calibration constant,"@np.where((df['home_county']==17197) & (_COUNTY==17093), 1, 0)",coef_WILL_KENDALL_asc
 util_WILL_LAKE_IN_ASC,WILL_LAKE_IN calibration constant,"@np.where((df['home_county']==17197) & (_COUNTY==18089), 1, 0)",coef_WILL_LAKE_IN_asc
 util_WILL_WILL_ASC,WILL_WILL calibration constant,"@np.where((df['home_county']==17197) & (_COUNTY==17197), 1, 0)",coef_WILL_WILL_asc
+util_COOK_LAKE_IL_ASC,COOK_LAKE_IL calibration constant,"@np.where((df['home_county']==17031) & (_COUNTY==17097), 1, 0)",coef_COOK_LAKE_IL_asc
+util_KANE_DUPAGE_ASC,KANE_DUPAGE calibration constant,"@np.where((df['home_county']==17089) & (_COUNTY==17043), 1, 0)",coef_KANE_DUPAGE_asc
+util_KENDALL_KENDALL_ASC,KENDALL_KENDALL calibration constant,"@np.where((df['home_county']==17093) & (_COUNTY==17093), 1, 0)",coef_KENDALL_KENDALL_asc
+util_LAKE_IN_PORTER_ASC,LAKE_IN_PORTER calibration constant,"@np.where((df['home_county']==18089) & (_COUNTY==18127), 1, 0)",coef_LAKE_IN_PORTER_asc
