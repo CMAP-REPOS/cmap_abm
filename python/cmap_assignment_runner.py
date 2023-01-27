@@ -42,7 +42,7 @@ for s in scens:
     try:
         cmap_network.CMapNetwork().__call__(databank.scenario(s['periodNum']))
         cmap_assignment.TrafficAssignment().__call__(s['period'], msa_iteration, 0.001, 100, 27, databank.scenario(s['periodNum']))
-        if msa_iteration == 4:
+        if msa_iteration == 2:
             cmap_network.CMapNetwork().__call__(databank.scenario(s['periodNum']), runPrep = False, export = True, 
                                                 output_directory = "%s\\scen0%s" % (EMME_OUTPUT, s['periodNum']))
         print("Export auto matrices to OMX for time period " + s['period'])

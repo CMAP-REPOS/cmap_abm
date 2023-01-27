@@ -69,7 +69,7 @@ for s in scens:
     try:
         cmap_transit_assignment.TransitAssignment().__call__(str(s['periodNum']), matrix_count, current_scenario, 
                                                             ccr_periods = "", num_processors = 27)
-        if msa_iteration == 4:
+        if msa_iteration == 2:
             cmap_network.CMapNetwork().__call__(databank.scenario(s['scenNum']), runPrep = False, export = True, 
                                                 output_directory = "%s\\scen%s" % (EMME_OUTPUT, s['scenNum']))          
         print("Export transit matrices to OMX for time period " + s['period'])      
