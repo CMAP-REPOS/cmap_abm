@@ -98,7 +98,14 @@ bikeThresh: 6.00
 walkSpeed: 3.00
 bikeSpeed: 12.00
 driveSpeed: 25.00
-schbusSpeed: 20.00  
+schbusSpeed: 20.00
+#drvtrn_distpen_0_multiplier: 270
+wlktrn_distpen_max: 15
+drvtrn_distpen_max: 15
+#busl_ivt_factor: 1.0
+#buse_ivt_factor: 1.0
+cta_rail_ivt_factor: 0.9
+metra_rail_ivt_factor: 0.65
 # RIDEHAIL Settings
 Taxi_baseFare: 3.25
 Taxi_costPerMile: 2.25
