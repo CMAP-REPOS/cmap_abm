@@ -23,7 +23,7 @@ line_haul_mode_specs = ["i=5000,29999 and @num_stops_b=1,99","i=30000,39999 and 
                         "i=40000,49999 and @num_stops_m=1,99"]
 max_length_wlk = [0.55, 1.2, 1.2] # length in miles
 max_length_knr = [5, 5, 5]
-max_length_pnr = [10, 15, 15]
+max_length_pnr = [10, 10, 15]
 acc_modes = ["uvw", "uw", "vw", "u", "v", "w"]
 
 WORK_FOLDER = os.environ["EMME_INPUT"] + os.sep + "netfiles"
