@@ -24,6 +24,7 @@ line_haul_mode_specs = ["i=5000,29999 and @num_stops_b=1,99","i=30000,39999 and 
 max_length_wlk = [0.55, 1.2, 1.2] # length in miles
 max_length_knr = [5, 5, 5]
 max_length_pnr = [10, 10, 15]
+max_drive_connectors = [1, 1, 2]
 acc_modes = ["uvw", "uw", "vw", "u", "v", "w"]
 
 WORK_FOLDER = os.environ["EMME_INPUT"] + os.sep + "netfiles"
@@ -145,7 +146,7 @@ for scen in TSCENS:
                                 "node": "@pspac=1,9999 or @rspac=1,9999 and %s" % line_haul_mode_specs[i],
                                 "only_midblock_nodes": False},
                             max_length=max_length_pnr[i],
-                            max_connectors=2,
+                            max_connectors=max_drive_connectors[i],
                             min_angle=0)
             export_basenet(selection = {"link": 'i=1,3649 or j=1,3649',
                                         "node": 'none'},
@@ -159,7 +160,7 @@ for scen in TSCENS:
                                 "node": "%s" % line_haul_mode_specs[i],
                                 "only_midblock_nodes": False},
                             max_length=max_length_knr[i],
-                            max_connectors=2,
+                            max_connectors=max_drive_connectors[i],
                             min_angle=0)
             export_basenet(selection = {"link": 'i=1,3649 or j=1,3649',
                                         "node": 'none'},
@@ -173,7 +174,7 @@ for scen in TSCENS:
                                 "node": "%s" % line_haul_mode_specs[i],
                                 "only_midblock_nodes": False},
                             max_length=max_length_wlk[i],
-                            max_connectors=2,
+                            max_connectors=max_drive_connectors[i],
                             min_angle=0)
             export_basenet(selection = {"link": 'i=1,3649 or j=1,3649',
                                         "node": 'none'},
@@ -187,7 +188,7 @@ for scen in TSCENS:
                                 "node": "@pspac=1,9999 or @rspac=1,9999 and %s" % line_haul_mode_specs[i],
                                 "only_midblock_nodes": False},
                             max_length=max_length_knr[i],
-                            max_connectors=2,
+                            max_connectors=max_drive_connectors[i],
                             min_angle=0)
             export_basenet(selection = {"link": 'i=1,3649 or j=1,3649',
                                         "node": 'none'},
@@ -201,7 +202,7 @@ for scen in TSCENS:
                                 "node": "@pspac=1,9999 or @rspac=1,9999 and %s" % line_haul_mode_specs[i],
                                 "only_midblock_nodes": False},
                             max_length=max_length_wlk[i],
-                            max_connectors=2,
+                            max_connectors=max_drive_connectors[i],
                             min_angle=0)
             export_basenet(selection = {"link": 'i=1,3649 or j=1,3649',
                                         "node": 'none'},
