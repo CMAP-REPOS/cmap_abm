@@ -49,30 +49,16 @@ summary = True
 if summary:
     create_matrix = _m.Modeller().tool("inro.emme.data.matrix.create_matrix")           
     temp_matrix = create_matrix(matrix_id = "ms1", matrix_name = "TEMP_SUM", matrix_description = "temp mf sum", default_value = 0, overwrite = True)
-'''
-# Delete unused skims: TODO to be removed
-for skim in [""]:
-    for amode in ["WALK", "PNROUT", "PNRIN", "KNROUT", "KNRIN"]: 
-        for uc in ["L", "M", "H"]:
-            for period in ["NT", "EA", "AM", "MM", "MD", "AF", "PM", "EV"]:
-                try:
-                    deleteMatrix(matrix = databank.matrix("mf%s_%s_%s__%s"%(skim, amode, uc, period)))
-                except:
-                    pass
-
-# Delete any old skims: TODO to be removed
-for scen in HSCENS:
-    for skid in range(400, 1000):
-        try:
-            deleteMatrix(matrix = databank.matrix("mf%s%s"%(scen, skid)))
-        except:
-            pass
-'''
 
 # Import daily truck and external trips
+for skid in range(4, 11):
+    try:
+        deleteMatrix(matrix = databank.matrix("mf%s"%(skid)))
+    except:
+        pass
 dailyMatrices = ["truck_trip_matrices.in", "poe_trip_matrices.in"]
 for m in dailyMatrices: 
-    importMatrix(transaction_file = WORK_FOLDER + os.sep + m, throw_on_error = False)
+    importMatrix(transaction_file = WORK_FOLDER + os.sep + m, throw_on_error = True)
 
 # Import Highway Warm Start
 for scen in HSCENS:
@@ -107,13 +93,7 @@ for scen in HSCENS:
             "TRK_H_%s"%period: "mf%s%s"%(scen, 116), # TRK_H           
             "extAuto_%s"%period: "mf%s%s"%(scen, 117), # -> SOV TR L/M/H
             "extTRK_H_%s"%period: "mf%s%s"%(scen, 118), ## -> TRK_H
-            "extAP_%s"%period: "mf%s%s"%(scen, 119), # -> SOV TR L/M/H
-			"AIR1_L_%s"%period: "mf%s%s"%(scen, 120), # 
-			"AIR1_H_%s"%period: "mf%s%s"%(scen, 121), #
-			"AIR2_L_%s"%period: "mf%s%s"%(scen, 122), #
-			"AIR2_H_%s"%period: "mf%s%s"%(scen, 123), #
-			"AIR3_L_%s"%period: "mf%s%s"%(scen, 124), #
-			"AIR3_H_%s"%period: "mf%s%s"%(scen, 125) #
+            "extAP_%s"%period: "mf%s%s"%(scen, 119) # -> SOV TR L/M/H
         }          
     scenario = databank.scenario(scen)    
     for n, m in autoMatsToImport.items():
@@ -122,7 +102,6 @@ for scen in HSCENS:
 
     for n, m in auxMatsToImport.items():
         createMatrix(matrix_id = m, matrix_name = n, scenario = scenario, overwrite = True)
-    importOMX(file_path = "%s\\AUX_%s.omx"%(WORK_FOLDER, period), matrices = auxMatsToImport, scenario = scenario)
 
     for n, m in finalAssnMats.items():
         createMatrix(matrix_id = "mf%s%s"%(scen, n), matrix_name = "%s_%s"%(m, period), scenario = scenario, overwrite = True)
@@ -325,12 +304,6 @@ for scen in TSCENS:
         
         for n, m in trnMatsToImport.items():
             createMatrix(matrix_id = m, matrix_name = n, scenario = scenario, overwrite = True)
-        #    spec1 = {
-        #        "type": "MATRIX_CALCULATION",
-        #        "result": "mf%s"%n,
-        #        "expression": "0.0001",
-        #   }
-        #    computeMatrix(spec1)
         importOMX(file_path = "%s\\trn_%s_taz.omx"%(WORK_FOLDER, period), 
                     matrices = trnMatsToImport, 
                     zone_mapping='TAZ',                    
