@@ -189,10 +189,10 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
         self.clean_importance = {"uc1":0.5, "uc2": 0.75, "uc3":1.0} #by user_class
         self.acc_egr_walk_percep = "2"
         self.acc_egr_drive_percep = "2"
-        self.xfer_walk_percep = "3"
+        self.xfer_walk_percep = "2"
         self.acc_spd_fac = {"WALK": "3.0", "PNROUT": "25.0", "PNRIN": "3.0", "KNROUT": "25.0", "KNRIN": "3.0"}
         self.egr_spd_fac = {"WALK": "3.0", "PNROUT": "3.0", "PNRIN": "25.0", "KNROUT": "3.0", "KNRIN": "25.0"}
-        self.xfer_penalty = "15.0"
+        self.xfer_penalty = "7.5"
         self.skim_matrices = ["GENCOST", "FIRSTWAIT", "XFERWAIT", "TOTALWAIT", "FARE", "XFERS", "ACC", "XFERWALK", "EGR", 
                                 "TOTALAUX", "TOTALIVTT", "DWELLTIME", "BUSLOCIVTT", "BUSEXPIVTT", "CTARAILIVTT", "METRARAILIVTT", 
                                 "CROWD", "CAPPEN"] # "LINKREL", "EAWT"
@@ -270,7 +270,7 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
             create_extra('TRANSIT_SEGMENT', '@hdwef', 'Effective hdwy for capacity constraint', overwrite=True, scenario=scenario)
             self.calculate_default_eff_headway()
             create_extra('LINK', '@aperf', 'auxiliary transit perception factor', overwrite=True, scenario=scenario)
-            create_extra('NODE', '@perbf', 'Final boarding time perception factor', 2.8, overwrite=True, scenario=scenario)
+            create_extra('NODE', '@perbf', 'Final boarding time perception factor', 2.0, overwrite=True, scenario=scenario)
             create_extra('TRANSIT_LINE', '@easbp', 'Ease of boarding penalty', overwrite=True, scenario=scenario)
             easbp={
                 "result": "@easbp",
