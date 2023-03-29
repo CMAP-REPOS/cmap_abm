@@ -136,40 +136,9 @@ class TrafficAssignment(_m.Tool()):
                 ]
             if msa_iteration == 0: # 0 is initial network skimming
                 self.prepOutputTables(period, scenario, classes)
-            if 1 < msa_iteration < 4:
-                # Link and turn flows
-                link_attrs = ["auto_volume"]
-                turn_attrs = ["auto_volume"]
-                for traffic_class in classes:
-                    link_attrs.append("@%s" % (traffic_class["name"].lower()))
-                    turn_attrs.append("@p%s" % (traffic_class["name"].lower()))
-                msa_link_flows = scenario.get_attribute_values("LINK", link_attrs)[1:]
-                msa_turn_flows = scenario.get_attribute_values("TURN", turn_attrs)[1:]
 
             self.run_assignment(period, relative_gap, max_iterations, num_processors, scenario, classes, select_link)
 
-            if 1 < msa_iteration < 4:
-                link_flows = scenario.get_attribute_values("LINK", link_attrs)
-                values = [link_flows.pop(0)]
-                for msa_array, flow_array in zip(msa_link_flows, link_flows):
-                    msa_vals = numpy.frombuffer(msa_array, dtype='float32')
-                    flow_vals = numpy.frombuffer(flow_array, dtype='float32')
-                    result = msa_vals + (1.0 / msa_iteration) * (flow_vals - msa_vals)
-                    result_array = array.array('f')
-                    result_array.fromstring(result.tostring())
-                    values.append(result_array)
-                scenario.set_attribute_values("LINK", link_attrs, values)
-
-                turn_flows = scenario.get_attribute_values("TURN", turn_attrs)
-                values = [turn_flows.pop(0)]
-                for msa_array, flow_array in zip(msa_turn_flows, turn_flows):
-                    msa_vals = numpy.frombuffer(msa_array, dtype='float32')
-                    flow_vals = numpy.frombuffer(flow_array, dtype='float32')
-                    result = msa_vals + (1.0 / msa_iteration) * (flow_vals - msa_vals)
-                    result_array = array.array('f')
-                    result_array.fromstring(result.tostring())
-                    values.append(result_array)
-                scenario.set_attribute_values("TURN", turn_attrs, values)
             self.calc_network_results(period, num_processors, scenario)
 
             if msa_iteration <= 4:
