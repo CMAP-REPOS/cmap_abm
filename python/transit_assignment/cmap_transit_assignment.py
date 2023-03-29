@@ -194,7 +194,7 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
         self.egr_spd_fac = {"WALK": "3.0", "PNROUT": "3.0", "PNRIN": "25.0", "KNROUT": "3.0", "KNRIN": "25.0"}
         self.xfer_penalty = "10.0"
         self.skim_matrices = ["GENCOST", "FIRSTWAIT", "XFERWAIT", "TOTALWAIT", "FARE", "XFERS", "ACC", "XFERWALK", "EGR", 
-                                "TOTALAUX", "TOTALIVTT", "DWELLTIME", "BUSLOCIVTT", "BUSEXPIVTT", "CTARAILIVTT", "METRARAILIVTT", 
+                                "TOTALAUX", "TOTALIVTT", "DWELLTIME", "CTABUSLOCIVTT", "PACEBUSLOCIVTT", "BUSEXPIVTT", "CTARAILIVTT", "METRARAILIVTT", 
                                 "CROWD", "CAPPEN"] # "LINKREL", "EAWT"
         self.basematrixnumber = 500
 
@@ -1452,7 +1452,7 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
                     #    "type": "MATRIX_CALCULATION",
                     #    "constraint": None,
                     #    "result": 'mf"TOTTRNDIST_%s_%s__%s"' % (amode, self.user_class_labels[uc], self.periodLabel[int(period)]),
-                    #    "expression": ('mf"BUSLOCDIST_{amode}_{uc}__{period}" + mf"BUSEXPDIST_{amode}_{uc}__{period}" + mf"CTARAILDIST_{amode}_{uc}__{period}"'
+                    #    "expression": ('mf"CTABUSLOCDIST_{amode}_{uc}__{period}" + mf"PACEBUSLOCDIST_{amode}_{uc}__{period}" + mf"BUSEXPDIST_{amode}_{uc}__{period}" + mf"CTARAILDIST_{amode}_{uc}__{period}"'
                     #                ' + mf"METRARAILDIST_{amode}_{uc}__{period}"').format(amode=amode, uc=self.user_class_labels[uc], period=self.periodLabel[int(period)]),
                     #}
                     #matrix_calc(spec, scenario=scenario, num_processors=num_processors)
@@ -1778,13 +1778,13 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
             data = [self.periodLabel[int(period)], amode, self.user_class_labels[uc]]
             spec = "_%s_%s__%s" % (amode, self.user_class_labels[uc], self.periodLabel[int(period)])
             modes = ["bus", "CTA rail", "Metra rail", "bus and CTA rail", "bus and Metra rail", "CTA rail and Metra rail", "bus, CTA rail and Metra rail"]
-            expressions = ["BUSLOCIVTT%s+BUSEXPIVTT%s"%(spec,spec),
+            expressions = ["CTABUSLOCIVTT%s+PACEBUSLOCIVTT%s+BUSEXPIVTT%s"%(spec,spec,spec),
                             "CTARAILIVTT%s"%(spec), 
                             "METRARAILIVTT%s"%(spec), 
-                            "(BUSLOCIVTT%s+BUSEXPIVTT%s)*CTARAILIVTT%s"%(spec,spec,spec),
-                            "(BUSLOCIVTT%s+BUSEXPIVTT%s)*METRARAILIVTT%s"%(spec,spec,spec),
+                            "(CTABUSLOCIVTT%s+PACEBUSLOCIVTT%s+BUSEXPIVTT%s)*CTARAILIVTT%s"%(spec,spec,spec,spec),
+                            "(CTABUSLOCIVTT%s+PACEBUSLOCIVTT%s+BUSEXPIVTT%s)*METRARAILIVTT%s"%(spec,spec,spec,spec),
                             "CTARAILIVTT%s*METRARAILIVTT%s"%(spec,spec),
-                            "(BUSLOCIVTT%s+BUSEXPIVTT%s)*CTARAILIVTT%s*METRARAILIVTT%s"%(spec,spec,spec,spec)]
+                            "(CTABUSLOCIVTT%s+PACEBUSLOCIVTT%s+BUSEXPIVTT%s)*CTARAILIVTT%s*METRARAILIVTT%s"%(spec,spec,spec,spec,spec)]
             for mode, expression in zip(modes, expressions):
                 spec_sum={
                     "expression": "(%s)>0" % expression,
