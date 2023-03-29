@@ -185,14 +185,14 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
         self._count = {}
         self.user_classes = ["1","2","3"]
         self.user_class_labels = {1: "L", 2: "M", 3: "H"}
-        self.vots = {"uc1": 9.02, "uc2": 19.03, "uc3": 77.12}  # by user class - 5.41 $/hr (9.02 cents/min), 11.42 $/hr (19.03 cents/min), 46.27 $/hr (77.12 cents/min)
+        self.vots = {"uc1": 22.65, "uc2": 47.37, "uc3": 125.08}  # by user class - 13.59 $/hr (22.65 cents/min), 28.43 $/hr (47.37 cents/min), 75.05 $/hr (125.08 cents/min)
         self.clean_importance = {"uc1":0.5, "uc2": 0.75, "uc3":1.0} #by user_class
         self.acc_egr_walk_percep = "2"
         self.acc_egr_drive_percep = "2"
         self.xfer_walk_percep = "2"
         self.acc_spd_fac = {"WALK": "3.0", "PNROUT": "25.0", "PNRIN": "3.0", "KNROUT": "25.0", "KNRIN": "3.0"}
         self.egr_spd_fac = {"WALK": "3.0", "PNROUT": "3.0", "PNRIN": "25.0", "KNROUT": "3.0", "KNRIN": "25.0"}
-        self.xfer_penalty = "7.5"
+        self.xfer_penalty = "10.0"
         self.skim_matrices = ["GENCOST", "FIRSTWAIT", "XFERWAIT", "TOTALWAIT", "FARE", "XFERS", "ACC", "XFERWALK", "EGR", 
                                 "TOTALAUX", "TOTALIVTT", "DWELLTIME", "BUSLOCIVTT", "BUSEXPIVTT", "CTARAILIVTT", "METRARAILIVTT", 
                                 "CROWD", "CAPPEN"] # "LINKREL", "EAWT"
@@ -281,7 +281,19 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
                 },
                 "type": "NETWORK_CALCULATION"
             }
-            netcalc(easbp)            
+            netcalc(easbp)
+            # Pace boardings over-assigned; Pace travel time sometimes incorrectly coded to be faster than CTA
+            # adding an extra 15 minutes of boarding penalty to Pace 
+            bpPace={
+                "result": "@easbp",
+                "expression": "@easbp+15",
+                "aggregation": None,
+                "selections": {
+                    "transit_line": "mode=PLQ"
+                },
+                "type": "NETWORK_CALCULATION"
+            }
+            netcalc(bpPace)           
             create_extra('NODE', '@wconf', 'Wait convenience final factor', overwrite=True, scenario=scenario)
             wconf_bus={
                 "result": "@wconf",
@@ -1390,7 +1402,8 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
             matrix_results(spec, class_name=class_name, scenario=scenario, num_processors=num_processors)
         with _m.logbook_trace("Distance and in-vehicle time by mode"):
             mode_combinations = [
-                    ("BUSLOC", ["B", "P", "L"], ["IVTT", "DIST"]),
+                    ("CTABUSLOC", ["B"],        ["IVTT", "DIST"]),
+                    ("PACEBUSLOC", ["P", "L"],  ["IVTT", "DIST"]),
                     ("BUSEXP", ["E", "Q"],      ["IVTT", "DIST"]),
                     ("CTARAIL", ["C"],          ["IVTT", "DIST"]),
                     ("METRARAIL", ["M"],        ["IVTT", "DIST"]),
