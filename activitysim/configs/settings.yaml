@@ -4,7 +4,7 @@ fail_fast: True
 multiprocess: True
 strict: False
 mem_tick: 30
-use_shadow_pricing: False
+use_shadow_pricing: True
 
 ## - example sample
 # households_sample_size: 2000 #2047214 # 50% sample
