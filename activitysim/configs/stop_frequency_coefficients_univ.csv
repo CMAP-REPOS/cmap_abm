@@ -8,13 +8,13 @@ Number of escort tours tours undertaken by the person,0.9018,coef_number_of_esco
 Arrival later than 17:00.,0.389,coef_arrival_later_than_17_00_
 Dummy for the duration of the tour being equal or greater than or equal to 9 hours ,0.8434,coef_dummy_for_the_duration_of_the_tour_being_equal_or_greater_than_or_equal_to_9_hours_
 HH accesibility for inbound tours. Interaction,0.2481,coef_hh_accesibility_for_inbound_tours_interaction
-No stops if tour mode is driveTransit,-999.0,coef_no_stops_if_tour_mode_is_drivetransit
-Alternative specific constant for return  stops,-2.003,coef_alternative_specific_constant_for_return_stops_0out_1in
-Alternative specific constant for return  stops,-3.51,coef_alternative_specific_constant_for_return_stops_0out_2in
-Alternative specific constant for the total number of stops,0.0,coef_alternative_specific_constant_for_the_total_number_of_stops_0out_2in
-Alternative specific constant for return  stops,-3.677,coef_alternative_specific_constant_for_return_stops_0out_3in
-Alternative specific constant for outbound stops,-2.628,coef_alternative_specific_constant_for_outbound_stops_1out_0in
+No stops if tour mode is driveTransit,-999,coef_no_stops_if_tour_mode_is_drivetransit
+Alternative specific constant for the total number of stops,0,coef_alternative_specific_constant_for_the_total_number_of_stops_0out_2in
 Alternative specific constant for the total number of stops,1.272,coef_alternative_specific_constant_for_the_total_number_of_stops_1out_3in
-Alternative specific constant for outbound stops,-3.741,coef_alternative_specific_constant_for_outbound_stops_2out_0in
 Alternative specific constant for the total number of stops,1.871,coef_alternative_specific_constant_for_the_total_number_of_stops_2out_3in
-Alternative specific constant for outbound stops,-4.981,coef_alternative_specific_constant_for_outbound_stops_3out_0in
+ASC for 1 inbound stop,-1.35790909,coef_asc_1in
+ASC for 2 inbound stop,-2.699307849,coef_asc_2in
+ASC for 3 inbound stop,-2.932709152,coef_asc_3in
+ASC for 1 outbound stop,-2.632250728,coef_asc_1out
+ASC for 2 outbound stop,-3.808753172,coef_asc_2out
+ASC for 3 outbound stop,-4.57838753,coef_asc_3out
