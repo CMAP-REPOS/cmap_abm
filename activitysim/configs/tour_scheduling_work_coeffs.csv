@@ -95,4 +95,6 @@ coef_Duration_Constant_12_hours,-1.3551244638084843,F
 coef_Duration_Constant_Longer_than_12_hrs,-1.0959910217157498,F
 coef_Duration_Constant_Shift_for_every_30_minutes_more_than_12_hrs,-0.4918560543397093,F
 coef_Calibration_constant_Duration_0,-1.2069106964427703,F
+coef_Departure_Constant_06_AM_09_AM_7_12,0,F
+coef_Arrival_Constant_04_PM_06_PM_27_30,0,F
 zero_coef,0.0,T

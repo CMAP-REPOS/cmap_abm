@@ -22,6 +22,7 @@ SIMULATE_CHOOSER_COLUMNS:
   - TAZ
   - transit_pass_ownership
   - transit_pass_subsidy
+  - potential_metra_user
   
 LOGSUM_SETTINGS: tour_mode_choice.yaml
 

@@ -30,3 +30,5 @@ work_zone_area_type,work_zone_area_type,"reindex(land_use.areatype, persons.work
 ,work_auto_savings,"np.where(persons.is_worker, _min_work_walk_transit - roundtrip_auto_time_to_work, 0)"
 #,,auto savings over walk or transit capped at 120 and normalized to unity
 ,work_auto_savings_ratio,"(work_auto_savings / 120.0).clip(-1.0, 1.0)"
+#,,transit_to_work_includes_metra
+,potential_metra_user,"(skim_dict.lookup(persons.home_zone_id, persons.workplace_zone_id, ('METRARAILIVTT_PNROUT_H', 'AM')) > 0) + (skim_dict.lookup(persons.workplace_zone_id, persons.home_zone_id, ('METRARAILIVTT_PNRIN_H', 'PM')) > 0)"

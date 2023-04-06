@@ -101,3 +101,9 @@ util_Duration_Constant_12_hours,Duration Constant: 12 hours,duration==24,coef_Du
 util_Duration_Constant_Longer_than_12_hrs,Duration Constant: Longer than 12 hrs,duration>24,coef_Duration_Constant_Longer_than_12_hrs
 util_Duration_Constant_Shift_for_every_30_minutes_more_than_12_hrs,Duration Constant: Shift for every 30 minutes more than 12 hrs - Linear,"@((df.duration>24) * (df.duration-24))",coef_Duration_Constant_Shift_for_every_30_minutes_more_than_12_hrs
 util_Calibration_constant_Duration_0,Calibration constant: Duration = 0,duration == 0,coef_Calibration_constant_Duration_0
+#util_Departure_Constant_AM_PNR_Available,Departure Constant: 06:00 AM - 09:30 AM (7-12) ,"@(df.start>=7) & (df.start <=12) & (df.pt_metrarail_ivt_skims_out_am > 0)",coef_Departure_Constant_06_AM_09_AM_7_12
+#util_Arrival_Constant_PM_PNR_Available,Arrival Constant: 04:00 PM - 06:00 PM (27-30) ,"@(df.end>=27) & (df.end<=30) & (df.pt_metrarail_ivt_skims_inb_pm > 0)",coef_Arrival_Constant_04_PM_06_PM_27_30
+util_Departure_Constant_AM_PNR_Available,Departure Constant: 06:00 AM - 09:30 AM (7-12) ,"@(df.start>=7) & (df.start <=12) & df.potential_metra_user",coef_Departure_Constant_06_AM_09_AM_7_12
+util_Arrival_Constant_PM_PNR_Available,Arrival Constant: 04:00 PM - 06:00 PM (27-30) ,"@(df.end>=27) & (df.end<=30) & df.potential_metra_user",coef_Arrival_Constant_04_PM_06_PM_27_30
+#util_Departure_Constant_AM_PNR_Available,Departure Constant: 06:00 AM - 09:30 AM (7-12) ,"@(df.start>=7) & (df.start <=12)",coef_Departure_Constant_06_AM_09_AM_7_12
+#util_Arrival_Constant_PM_PNR_Available,Arrival Constant: 04:00 PM - 06:00 PM (27-30) ,"@(df.end>=27) & (df.end<=30)",coef_Arrival_Constant_04_PM_06_PM_27_30
