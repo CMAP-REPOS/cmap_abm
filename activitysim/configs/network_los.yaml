@@ -11,7 +11,9 @@ read_skim_cache: False
 write_skim_cache: True
 
 taz_skims:
-  - COUNTY.omx
+  - AREATYPE.omx
+  - dest_chicago.omx
+  - COUNTY.omx  
   - taz_skims.omx
 
 maz: maz.csv
