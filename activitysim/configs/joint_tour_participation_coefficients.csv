@@ -62,7 +62,5 @@ coef_adult_log_of_max_window_overlap_with_an_adult_adult_only_party,0.8436,F
 coef_adult_log_of_max_window_overlap_with_a_child_mixed,2.189,F
 coef_child_log_of_max_window_overlap_with_an_adult_mixed,1.538,F
 coef_child_log_of_max_window_overlap_with_a_child_child,1.296,F
-
-
-
-
+# Calibration,,
+ASC_calib_not_participate,1.166955,F

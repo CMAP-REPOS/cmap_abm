@@ -65,3 +65,5 @@ util_if_only_two_available_adults_both_must_participate_in_adult_only_tour,"If o
 util_if_only_one_available_adult_traveler_must_participate_in_mixed_tour,"If only one available adult, traveler must participate in mixed tour",adult & travel_active & tour_composition_is_mixed & (num_travel_active_adults<2),,coef_unavailable
 util_if_only_two_available_children_both_must_participate_in_child_only_tour,"If only two available children, both must participate in child-only tour",~adult & travel_active & tour_composition_is_children & (num_travel_active_children<3),,coef_unavailable
 util_if_only_one_available_child_traveler_must_participate_in_mixed_tour,"If only one available child, traveler must participate in mixed tour",~adult & travel_active & tour_composition_is_mixed & (num_travel_active_children<2),,coef_unavailable
+# Calibration,,,,
+util_calib,Calibration Constant,1,,ASC_calib_not_participate
