@@ -1,505 +1,505 @@
 grouped_tour_mode,auto_suff,tours,purpose
-DRIVEALONE,0,26153.0,Total
-SHARED2,0,45701.0,Total
+DRIVEALONE,0,25817.0,Total
+SHARED2,0,45509.0,Total
 SHARED3,0,47415.0,Total
-WALK,0,248935.0,Total
-BIKE,0,36352.0,Total
-WALK-TRANSIT,0,168669.0,Total
-PNR-TRANSIT,0,2168.0,Total
-KNR-TRANSIT,0,6069.0,Total
-TNC-TRANSIT,0,2178.0,Total
+WALK,0,246925.0,Total
+BIKE,0,35987.0,Total
+WALK-TRANSIT,0,188224.0,Total
+PNR-TRANSIT,0,2472.0,Total
+KNR-TRANSIT,0,7012.0,Total
+TNC-TRANSIT,0,2511.0,Total
 TAXI,0,10736.0,Total
 TNC-REG,0,19618.0,Total
 TNC-SHARED,0,16666.0,Total
 SCHOOLBUS,0,15083.0,Total
-All,0,645743.0,Total
-DRIVEALONE,1,368704.0,Total
-SHARED2,1,297316.0,Total
-SHARED3,1,221931.0,Total
-WALK,1,190574.0,Total
-BIKE,1,36753.0,Total
-WALK-TRANSIT,1,118564.0,Total
-PNR-TRANSIT,1,8631.0,Total
-KNR-TRANSIT,1,11236.0,Total
-TNC-TRANSIT,1,1554.0,Total
+All,0,663975.0,Total
+DRIVEALONE,1,358784.0,Total
+SHARED2,1,294817.0,Total
+SHARED3,1,220679.0,Total
+WALK,1,187291.0,Total
+BIKE,1,36509.0,Total
+WALK-TRANSIT,1,132574.0,Total
+PNR-TRANSIT,1,9779.0,Total
+KNR-TRANSIT,1,13122.0,Total
+TNC-TRANSIT,1,1840.0,Total
 TAXI,1,7655.0,Total
-TNC-REG,1,20018.0,Total
+TNC-REG,1,19956.0,Total
 TNC-SHARED,1,6607.0,Total
-SCHOOLBUS,1,51056.0,Total
-All,1,1340599.0,Total
-DRIVEALONE,2,4626358.0,Total
-SHARED2,2,2392675.0,Total
-SHARED3,2,1795174.0,Total
-WALK,2,793075.0,Total
-BIKE,2,85751.0,Total
-WALK-TRANSIT,2,181428.0,Total
-PNR-TRANSIT,2,86591.0,Total
-KNR-TRANSIT,2,29418.0,Total
-TNC-TRANSIT,2,3975.0,Total
-TAXI,2,35955.0,Total
-TNC-REG,2,36058.0,Total
+SCHOOLBUS,1,40293.0,Total
+All,1,1329906.0,Total
+DRIVEALONE,2,4534743.0,Total
+SHARED2,2,2389273.0,Total
+SHARED3,2,1794385.0,Total
+WALK,2,781502.0,Total
+BIKE,2,85561.0,Total
+WALK-TRANSIT,2,205672.0,Total
+PNR-TRANSIT,2,94634.0,Total
+KNR-TRANSIT,2,32884.0,Total
+TNC-TRANSIT,2,4528.0,Total
+TAXI,2,35479.0,Total
+TNC-REG,2,35526.0,Total
 TNC-SHARED,2,17997.0,Total
 SCHOOLBUS,2,363663.0,Total
-All,2,10448118.0,Total
-DRIVEALONE,All,5021214.0,Total
-SHARED2,All,2735691.0,Total
-SHARED3,All,2064521.0,Total
-WALK,All,1232583.0,Total
-BIKE,All,158856.0,Total
-WALK-TRANSIT,All,468661.0,Total
-PNR-TRANSIT,All,97390.0,Total
-KNR-TRANSIT,All,46723.0,Total
-TNC-TRANSIT,All,7707.0,Total
-TAXI,All,54347.0,Total
-TNC-REG,All,75694.0,Total
+All,2,10375847.0,Total
+DRIVEALONE,All,4919343.0,Total
+SHARED2,All,2729599.0,Total
+SHARED3,All,2062479.0,Total
+WALK,All,1215717.0,Total
+BIKE,All,158057.0,Total
+WALK-TRANSIT,All,526471.0,Total
+PNR-TRANSIT,All,106885.0,Total
+KNR-TRANSIT,All,53018.0,Total
+TNC-TRANSIT,All,8879.0,Total
+TAXI,All,53870.0,Total
+TNC-REG,All,75100.0,Total
 TNC-SHARED,All,41269.0,Total
-SCHOOLBUS,All,429802.0,Total
-All,All,12434458.0,Total
-DRIVEALONE,0,7189.0,Work
+SCHOOLBUS,All,419038.0,Total
+All,All,12369725.0,Total
+DRIVEALONE,0,7228.0,Work
 SHARED2,0,6084.0,Work
 SHARED3,0,2625.0,Work
 WALK,0,24737.0,Work
-BIKE,0,10144.0,Work
-WALK-TRANSIT,0,94734.0,Work
-PNR-TRANSIT,0,1717.0,Work
-KNR-TRANSIT,0,3783.0,Work
-TNC-TRANSIT,0,1314.0,Work
+BIKE,0,10165.0,Work
+WALK-TRANSIT,0,103588.0,Work
+PNR-TRANSIT,0,1848.0,Work
+KNR-TRANSIT,0,4289.0,Work
+TNC-TRANSIT,0,1552.0,Work
 TAXI,0,407.0,Work
 TNC-REG,0,5811.0,Work
 TNC-SHARED,0,6474.0,Work
 SCHOOLBUS,0,0.0,Work
-All,0,165019.0,Work
-DRIVEALONE,1,171970.0,Work
-SHARED2,1,88688.0,Work
-SHARED3,1,40481.0,Work
+All,0,174808.0,Work
+DRIVEALONE,1,171616.0,Work
+SHARED2,1,86190.0,Work
+SHARED3,1,42119.0,Work
 WALK,1,18968.0,Work
-BIKE,1,12599.0,Work
-WALK-TRANSIT,1,80763.0,Work
-PNR-TRANSIT,1,7584.0,Work
-KNR-TRANSIT,1,8072.0,Work
-TNC-TRANSIT,1,1010.0,Work
+BIKE,1,12615.0,Work
+WALK-TRANSIT,1,92086.0,Work
+PNR-TRANSIT,1,8525.0,Work
+KNR-TRANSIT,1,9468.0,Work
+TNC-TRANSIT,1,1186.0,Work
 TAXI,1,1965.0,Work
 TNC-REG,1,6847.0,Work
 TNC-SHARED,1,1964.0,Work
 SCHOOLBUS,1,0.0,Work
-All,1,440911.0,Work
-DRIVEALONE,2,1793023.0,Work
-SHARED2,2,393532.0,Work
-SHARED3,2,176517.0,Work
+All,1,453549.0,Work
+DRIVEALONE,2,1800723.0,Work
+SHARED2,2,396638.0,Work
+SHARED3,2,177976.0,Work
 WALK,2,20156.0,Work
 BIKE,2,15513.0,Work
-WALK-TRANSIT,2,110285.0,Work
-PNR-TRANSIT,2,77955.0,Work
-KNR-TRANSIT,2,21365.0,Work
-TNC-TRANSIT,2,2559.0,Work
+WALK-TRANSIT,2,125779.0,Work
+PNR-TRANSIT,2,84147.0,Work
+KNR-TRANSIT,2,23701.0,Work
+TNC-TRANSIT,2,2903.0,Work
 TAXI,2,3557.0,Work
-TNC-REG,2,7368.0,Work
+TNC-REG,2,6836.0,Work
 TNC-SHARED,2,1346.0,Work
 SCHOOLBUS,2,0.0,Work
-All,2,2623176.0,Work
-DRIVEALONE,All,1972182.0,Work
-SHARED2,All,488304.0,Work
-SHARED3,All,219623.0,Work
+All,2,2659275.0,Work
+DRIVEALONE,All,1979567.0,Work
+SHARED2,All,488912.0,Work
+SHARED3,All,222720.0,Work
 WALK,All,63860.0,Work
-BIKE,All,38256.0,Work
-WALK-TRANSIT,All,285782.0,Work
-PNR-TRANSIT,All,87257.0,Work
-KNR-TRANSIT,All,33219.0,Work
-TNC-TRANSIT,All,4883.0,Work
+BIKE,All,38293.0,Work
+WALK-TRANSIT,All,321453.0,Work
+PNR-TRANSIT,All,94520.0,Work
+KNR-TRANSIT,All,37458.0,Work
+TNC-TRANSIT,All,5641.0,Work
 TAXI,All,5928.0,Work
-TNC-REG,All,20026.0,Work
+TNC-REG,All,19494.0,Work
 TNC-SHARED,All,9784.0,Work
 SCHOOLBUS,All,0.0,Work
-All,All,3229104.0,Work
+All,All,3287630.0,Work
 DRIVEALONE,0,0.0,University
 SHARED2,0,394.0,University
 SHARED3,0,1253.0,University
 WALK,0,6155.0,University
 BIKE,0,779.0,University
-WALK-TRANSIT,0,14144.0,University
-PNR-TRANSIT,0,71.0,University
-KNR-TRANSIT,0,432.0,University
-TNC-TRANSIT,0,119.0,University
+WALK-TRANSIT,0,15804.0,University
+PNR-TRANSIT,0,84.0,University
+KNR-TRANSIT,0,513.0,University
+TNC-TRANSIT,0,129.0,University
 TAXI,0,262.0,University
 TNC-REG,0,767.0,University
 TNC-SHARED,0,0.0,University
 SCHOOLBUS,0,0.0,University
-All,0,24376.0,University
+All,0,26140.0,University
 DRIVEALONE,1,6242.0,University
 SHARED2,1,4309.0,University
 SHARED3,1,1007.0,University
 WALK,1,2806.0,University
 BIKE,1,219.0,University
-WALK-TRANSIT,1,7577.0,University
-PNR-TRANSIT,1,326.0,University
-KNR-TRANSIT,1,668.0,University
-TNC-TRANSIT,1,40.0,University
+WALK-TRANSIT,1,8051.0,University
+PNR-TRANSIT,1,386.0,University
+KNR-TRANSIT,1,740.0,University
+TNC-TRANSIT,1,56.0,University
 TAXI,1,0.0,University
 TNC-REG,1,318.0,University
 TNC-SHARED,1,0.0,University
 SCHOOLBUS,1,0.0,University
-All,1,23512.0,University
-DRIVEALONE,2,87718.0,University
-SHARED2,2,29734.0,University
+All,1,24134.0,University
+DRIVEALONE,2,87901.0,University
+SHARED2,2,30346.0,University
 SHARED3,2,9844.0,University
 WALK,2,16245.0,University
 BIKE,2,1240.0,University
-WALK-TRANSIT,2,13762.0,University
-PNR-TRANSIT,2,2115.0,University
-KNR-TRANSIT,2,1794.0,University
-TNC-TRANSIT,2,235.0,University
+WALK-TRANSIT,2,15490.0,University
+PNR-TRANSIT,2,2546.0,University
+KNR-TRANSIT,2,2022.0,University
+TNC-TRANSIT,2,267.0,University
 TAXI,2,285.0,University
 TNC-REG,2,106.0,University
 TNC-SHARED,2,785.0,University
 SCHOOLBUS,2,0.0,University
-All,2,163863.0,University
-DRIVEALONE,All,93960.0,University
-SHARED2,All,34437.0,University
+All,2,167077.0,University
+DRIVEALONE,All,94143.0,University
+SHARED2,All,35048.0,University
 SHARED3,All,12105.0,University
 WALK,All,25206.0,University
 BIKE,All,2238.0,University
-WALK-TRANSIT,All,35483.0,University
-PNR-TRANSIT,All,2512.0,University
-KNR-TRANSIT,All,2894.0,University
-TNC-TRANSIT,All,394.0,University
+WALK-TRANSIT,All,39346.0,University
+PNR-TRANSIT,All,3016.0,University
+KNR-TRANSIT,All,3274.0,University
+TNC-TRANSIT,All,452.0,University
 TAXI,All,547.0,University
 TNC-REG,All,1191.0,University
 TNC-SHARED,All,785.0,University
 SCHOOLBUS,All,0.0,University
-All,All,211752.0,University
+All,All,217351.0,University
 DRIVEALONE,0,0.0,School
 SHARED2,0,357.0,School
 SHARED3,0,4482.0,School
 WALK,0,10172.0,School
 BIKE,0,3399.0,School
-WALK-TRANSIT,0,3799.0,School
+WALK-TRANSIT,0,4202.0,School
 PNR-TRANSIT,0,3.0,School
 KNR-TRANSIT,0,117.0,School
-TNC-TRANSIT,0,38.0,School
+TNC-TRANSIT,0,34.0,School
 TAXI,0,119.0,School
 TNC-REG,0,0.0,School
 TNC-SHARED,0,0.0,School
 SCHOOLBUS,0,15083.0,School
-All,0,37569.0,School
+All,0,37968.0,School
 DRIVEALONE,1,5027.0,School
 SHARED2,1,17653.0,School
 SHARED3,1,33781.0,School
 WALK,1,22692.0,School
 BIKE,1,1713.0,School
-WALK-TRANSIT,1,6088.0,School
-PNR-TRANSIT,1,44.0,School
-KNR-TRANSIT,1,618.0,School
-TNC-TRANSIT,1,6.0,School
+WALK-TRANSIT,1,5773.0,School
+PNR-TRANSIT,1,41.0,School
+KNR-TRANSIT,1,652.0,School
+TNC-TRANSIT,1,8.0,School
 TAXI,1,516.0,School
 TNC-REG,1,1147.0,School
 TNC-SHARED,1,0.0,School
-SCHOOLBUS,1,51056.0,School
-All,1,140341.0,School
-DRIVEALONE,2,36186.0,School
-SHARED2,2,166407.0,School
+SCHOOLBUS,1,40293.0,School
+All,1,129296.0,School
+DRIVEALONE,2,36003.0,School
+SHARED2,2,165795.0,School
 SHARED3,2,345308.0,School
 WALK,2,118627.0,School
 BIKE,2,10531.0,School
-WALK-TRANSIT,2,11529.0,School
-PNR-TRANSIT,2,461.0,School
-KNR-TRANSIT,2,2209.0,School
-TNC-TRANSIT,2,128.0,School
+WALK-TRANSIT,2,11418.0,School
+PNR-TRANSIT,2,521.0,School
+KNR-TRANSIT,2,2406.0,School
+TNC-TRANSIT,2,142.0,School
 TAXI,2,3229.0,School
 TNC-REG,2,1079.0,School
 TNC-SHARED,2,0.0,School
 SCHOOLBUS,2,363663.0,School
-All,2,1059357.0,School
-DRIVEALONE,All,41213.0,School
-SHARED2,All,184416.0,School
+All,2,1058722.0,School
+DRIVEALONE,All,41030.0,School
+SHARED2,All,183804.0,School
 SHARED3,All,383571.0,School
 WALK,All,151491.0,School
 BIKE,All,15644.0,School
-WALK-TRANSIT,All,21416.0,School
-PNR-TRANSIT,All,508.0,School
-KNR-TRANSIT,All,2944.0,School
-TNC-TRANSIT,All,171.0,School
+WALK-TRANSIT,All,21394.0,School
+PNR-TRANSIT,All,565.0,School
+KNR-TRANSIT,All,3175.0,School
+TNC-TRANSIT,All,184.0,School
 TAXI,All,3864.0,School
 TNC-REG,All,2226.0,School
 TNC-SHARED,All,0.0,School
-SCHOOLBUS,All,429802.0,School
-All,All,1237266.0,School
-DRIVEALONE,0,2172.0,Work sub-tour
-SHARED2,0,1056.0,Work sub-tour
+SCHOOLBUS,All,419038.0,School
+All,All,1225986.0,School
+DRIVEALONE,0,1797.0,Work sub-tour
+SHARED2,0,864.0,Work sub-tour
 SHARED3,0,143.0,Work sub-tour
-WALK,0,26785.0,Work sub-tour
-BIKE,0,1495.0,Work sub-tour
-WALK-TRANSIT,0,3660.0,Work sub-tour
-PNR-TRANSIT,0,58.0,Work sub-tour
-KNR-TRANSIT,0,104.0,Work sub-tour
-TNC-TRANSIT,0,51.0,Work sub-tour
+WALK,0,24776.0,Work sub-tour
+BIKE,0,1108.0,Work sub-tour
+WALK-TRANSIT,0,4252.0,Work sub-tour
+PNR-TRANSIT,0,60.0,Work sub-tour
+KNR-TRANSIT,0,94.0,Work sub-tour
+TNC-TRANSIT,0,46.0,Work sub-tour
 TAXI,0,305.0,Work sub-tour
 TNC-REG,0,261.0,Work sub-tour
 TNC-SHARED,0,0.0,Work sub-tour
 SCHOOLBUS,0,0.0,Work sub-tour
-All,0,36090.0,Work sub-tour
-DRIVEALONE,1,33653.0,Work sub-tour
+All,0,33706.0,Work sub-tour
+DRIVEALONE,1,24180.0,Work sub-tour
 SHARED2,1,5405.0,Work sub-tour
-SHARED3,1,8178.0,Work sub-tour
-WALK,1,34355.0,Work sub-tour
-BIKE,1,1505.0,Work sub-tour
-WALK-TRANSIT,1,2397.0,Work sub-tour
-PNR-TRANSIT,1,310.0,Work sub-tour
-KNR-TRANSIT,1,255.0,Work sub-tour
-TNC-TRANSIT,1,109.0,Work sub-tour
+SHARED3,1,6012.0,Work sub-tour
+WALK,1,31072.0,Work sub-tour
+BIKE,1,1245.0,Work sub-tour
+WALK-TRANSIT,1,2825.0,Work sub-tour
+PNR-TRANSIT,1,349.0,Work sub-tour
+KNR-TRANSIT,1,329.0,Work sub-tour
+TNC-TRANSIT,1,106.0,Work sub-tour
 TAXI,1,1980.0,Work sub-tour
-TNC-REG,1,135.0,Work sub-tour
+TNC-REG,1,73.0,Work sub-tour
 TNC-SHARED,1,1050.0,Work sub-tour
 SCHOOLBUS,1,0.0,Work sub-tour
-All,1,89332.0,Work sub-tour
-DRIVEALONE,2,318212.0,Work sub-tour
-SHARED2,2,42812.0,Work sub-tour
-SHARED3,2,19087.0,Work sub-tour
-WALK,2,89651.0,Work sub-tour
-BIKE,2,2830.0,Work sub-tour
-WALK-TRANSIT,2,5050.0,Work sub-tour
-PNR-TRANSIT,2,2203.0,Work sub-tour
-KNR-TRANSIT,2,652.0,Work sub-tour
-TNC-TRANSIT,2,171.0,Work sub-tour
-TAXI,2,2131.0,Work sub-tour
+All,1,74626.0,Work sub-tour
+DRIVEALONE,2,223631.0,Work sub-tour
+SHARED2,2,38791.0,Work sub-tour
+SHARED3,2,18292.0,Work sub-tour
+WALK,2,78078.0,Work sub-tour
+BIKE,2,2640.0,Work sub-tour
+WALK-TRANSIT,2,6352.0,Work sub-tour
+PNR-TRANSIT,2,2492.0,Work sub-tour
+KNR-TRANSIT,2,743.0,Work sub-tour
+TNC-TRANSIT,2,170.0,Work sub-tour
+TAXI,2,1655.0,Work sub-tour
 TNC-REG,2,406.0,Work sub-tour
 TNC-SHARED,2,0.0,Work sub-tour
 SCHOOLBUS,2,0.0,Work sub-tour
-All,2,483205.0,Work sub-tour
-DRIVEALONE,All,354037.0,Work sub-tour
-SHARED2,All,49272.0,Work sub-tour
-SHARED3,All,27408.0,Work sub-tour
-WALK,All,150791.0,Work sub-tour
-BIKE,All,5830.0,Work sub-tour
-WALK-TRANSIT,All,11107.0,Work sub-tour
-PNR-TRANSIT,All,2571.0,Work sub-tour
-KNR-TRANSIT,All,1010.0,Work sub-tour
-TNC-TRANSIT,All,331.0,Work sub-tour
-TAXI,All,4416.0,Work sub-tour
-TNC-REG,All,802.0,Work sub-tour
+All,2,373250.0,Work sub-tour
+DRIVEALONE,All,249608.0,Work sub-tour
+SHARED2,All,45059.0,Work sub-tour
+SHARED3,All,24447.0,Work sub-tour
+WALK,All,133926.0,Work sub-tour
+BIKE,All,4994.0,Work sub-tour
+WALK-TRANSIT,All,13430.0,Work sub-tour
+PNR-TRANSIT,All,2901.0,Work sub-tour
+KNR-TRANSIT,All,1167.0,Work sub-tour
+TNC-TRANSIT,All,322.0,Work sub-tour
+TAXI,All,3940.0,Work sub-tour
+TNC-REG,All,740.0,Work sub-tour
 TNC-SHARED,All,1050.0,Work sub-tour
 SCHOOLBUS,All,0.0,Work sub-tour
-All,All,608625.0,Work sub-tour
+All,All,481584.0,Work sub-tour
 DRIVEALONE,0,9193.0,Ind-Maintenance
 SHARED2,0,25077.0,Ind-Maintenance
 SHARED3,0,24568.0,Ind-Maintenance
 WALK,0,89810.0,Ind-Maintenance
 BIKE,0,10754.0,Ind-Maintenance
-WALK-TRANSIT,0,32656.0,Ind-Maintenance
-PNR-TRANSIT,0,297.0,Ind-Maintenance
-KNR-TRANSIT,0,787.0,Ind-Maintenance
-TNC-TRANSIT,0,399.0,Ind-Maintenance
+WALK-TRANSIT,0,38329.0,Ind-Maintenance
+PNR-TRANSIT,0,456.0,Ind-Maintenance
+KNR-TRANSIT,0,1007.0,Ind-Maintenance
+TNC-TRANSIT,0,438.0,Ind-Maintenance
 TAXI,0,7549.0,Ind-Maintenance
 TNC-REG,0,8571.0,Ind-Maintenance
 TNC-SHARED,0,4767.0,Ind-Maintenance
 SCHOOLBUS,0,0.0,Ind-Maintenance
-All,0,214428.0,Ind-Maintenance
-DRIVEALONE,1,95417.0,Ind-Maintenance
+All,0,220519.0,Ind-Maintenance
+DRIVEALONE,1,95323.0,Ind-Maintenance
 SHARED2,1,85916.0,Ind-Maintenance
-SHARED3,1,90144.0,Ind-Maintenance
+SHARED3,1,89419.0,Ind-Maintenance
 WALK,1,45624.0,Ind-Maintenance
 BIKE,1,9052.0,Ind-Maintenance
-WALK-TRANSIT,1,10011.0,Ind-Maintenance
-PNR-TRANSIT,1,191.0,Ind-Maintenance
-KNR-TRANSIT,1,592.0,Ind-Maintenance
-TNC-TRANSIT,1,182.0,Ind-Maintenance
+WALK-TRANSIT,1,10787.0,Ind-Maintenance
+PNR-TRANSIT,1,235.0,Ind-Maintenance
+KNR-TRANSIT,1,720.0,Ind-Maintenance
+TNC-TRANSIT,1,212.0,Ind-Maintenance
 TAXI,1,1671.0,Ind-Maintenance
 TNC-REG,1,6958.0,Ind-Maintenance
 TNC-SHARED,1,2214.0,Ind-Maintenance
 SCHOOLBUS,1,0.0,Ind-Maintenance
-All,1,347972.0,Ind-Maintenance
-DRIVEALONE,2,1422077.0,Ind-Maintenance
-SHARED2,2,933642.0,Ind-Maintenance
-SHARED3,2,694283.0,Ind-Maintenance
+All,1,348131.0,Ind-Maintenance
+DRIVEALONE,2,1421768.0,Ind-Maintenance
+SHARED2,2,932335.0,Ind-Maintenance
+SHARED3,2,693649.0,Ind-Maintenance
 WALK,2,248279.0,Ind-Maintenance
 BIKE,2,24706.0,Ind-Maintenance
-WALK-TRANSIT,2,21656.0,Ind-Maintenance
-PNR-TRANSIT,2,2221.0,Ind-Maintenance
-KNR-TRANSIT,2,2183.0,Ind-Maintenance
-TNC-TRANSIT,2,500.0,Ind-Maintenance
+WALK-TRANSIT,2,24198.0,Ind-Maintenance
+PNR-TRANSIT,2,2668.0,Ind-Maintenance
+KNR-TRANSIT,2,2459.0,Ind-Maintenance
+TNC-TRANSIT,2,575.0,Ind-Maintenance
 TAXI,2,18113.0,Ind-Maintenance
 TNC-REG,2,9927.0,Ind-Maintenance
 TNC-SHARED,2,5286.0,Ind-Maintenance
 SCHOOLBUS,2,0.0,Ind-Maintenance
-All,2,3382873.0,Ind-Maintenance
-DRIVEALONE,All,1526686.0,Ind-Maintenance
-SHARED2,All,1044635.0,Ind-Maintenance
-SHARED3,All,808995.0,Ind-Maintenance
+All,2,3383963.0,Ind-Maintenance
+DRIVEALONE,All,1526284.0,Ind-Maintenance
+SHARED2,All,1043328.0,Ind-Maintenance
+SHARED3,All,807637.0,Ind-Maintenance
 WALK,All,383712.0,Ind-Maintenance
 BIKE,All,44513.0,Ind-Maintenance
-WALK-TRANSIT,All,64323.0,Ind-Maintenance
-PNR-TRANSIT,All,2709.0,Ind-Maintenance
-KNR-TRANSIT,All,3562.0,Ind-Maintenance
-TNC-TRANSIT,All,1081.0,Ind-Maintenance
+WALK-TRANSIT,All,73314.0,Ind-Maintenance
+PNR-TRANSIT,All,3360.0,Ind-Maintenance
+KNR-TRANSIT,All,4185.0,Ind-Maintenance
+TNC-TRANSIT,All,1226.0,Ind-Maintenance
 TAXI,All,27333.0,Ind-Maintenance
 TNC-REG,All,25456.0,Ind-Maintenance
 TNC-SHARED,All,12267.0,Ind-Maintenance
 SCHOOLBUS,All,0.0,Ind-Maintenance
-All,All,3945272.0,Ind-Maintenance
+All,All,3952615.0,Ind-Maintenance
 DRIVEALONE,0,7599.0,Ind-Discretionary
 SHARED2,0,12733.0,Ind-Discretionary
 SHARED3,0,13030.0,Ind-Discretionary
 WALK,0,83404.0,Ind-Discretionary
 BIKE,0,9529.0,Ind-Discretionary
-WALK-TRANSIT,0,16325.0,Ind-Discretionary
-PNR-TRANSIT,0,21.0,Ind-Discretionary
-KNR-TRANSIT,0,696.0,Ind-Discretionary
-TNC-TRANSIT,0,208.0,Ind-Discretionary
+WALK-TRANSIT,0,18336.0,Ind-Discretionary
+PNR-TRANSIT,0,19.0,Ind-Discretionary
+KNR-TRANSIT,0,810.0,Ind-Discretionary
+TNC-TRANSIT,0,265.0,Ind-Discretionary
 TAXI,0,2094.0,Ind-Discretionary
 TNC-REG,0,3946.0,Ind-Discretionary
 TNC-SHARED,0,4154.0,Ind-Discretionary
 SCHOOLBUS,0,0.0,Ind-Discretionary
-All,0,153739.0,Ind-Discretionary
+All,0,155919.0,Ind-Discretionary
 DRIVEALONE,1,56396.0,Ind-Discretionary
 SHARED2,1,48457.0,Ind-Discretionary
 SHARED3,1,40182.0,Ind-Discretionary
 WALK,1,57861.0,Ind-Discretionary
 BIKE,1,11463.0,Ind-Discretionary
-WALK-TRANSIT,1,8866.0,Ind-Discretionary
-PNR-TRANSIT,1,163.0,Ind-Discretionary
-KNR-TRANSIT,1,813.0,Ind-Discretionary
-TNC-TRANSIT,1,158.0,Ind-Discretionary
+WALK-TRANSIT,1,9851.0,Ind-Discretionary
+PNR-TRANSIT,1,229.0,Ind-Discretionary
+KNR-TRANSIT,1,959.0,Ind-Discretionary
+TNC-TRANSIT,1,221.0,Ind-Discretionary
 TAXI,1,1438.0,Ind-Discretionary
 TNC-REG,1,3586.0,Ind-Discretionary
 TNC-SHARED,1,1305.0,Ind-Discretionary
 SCHOOLBUS,1,0.0,Ind-Discretionary
-All,1,230688.0,Ind-Discretionary
-DRIVEALONE,2,969142.0,Ind-Discretionary
-SHARED2,2,405284.0,Ind-Discretionary
-SHARED3,2,366476.0,Ind-Discretionary
+All,1,231948.0,Ind-Discretionary
+DRIVEALONE,2,964717.0,Ind-Discretionary
+SHARED2,2,404104.0,Ind-Discretionary
+SHARED3,2,365656.0,Ind-Discretionary
 WALK,2,275705.0,Ind-Discretionary
 BIKE,2,28482.0,Ind-Discretionary
-WALK-TRANSIT,2,15668.0,Ind-Discretionary
-PNR-TRANSIT,2,1374.0,Ind-Discretionary
-KNR-TRANSIT,2,793.0,Ind-Discretionary
-TNC-TRANSIT,2,289.0,Ind-Discretionary
+WALK-TRANSIT,2,18409.0,Ind-Discretionary
+PNR-TRANSIT,2,1911.0,Ind-Discretionary
+KNR-TRANSIT,2,982.0,Ind-Discretionary
+TNC-TRANSIT,2,365.0,Ind-Discretionary
 TAXI,2,7337.0,Ind-Discretionary
 TNC-REG,2,16394.0,Ind-Discretionary
 TNC-SHARED,2,9062.0,Ind-Discretionary
 SCHOOLBUS,2,0.0,Ind-Discretionary
-All,2,2096006.0,Ind-Discretionary
-DRIVEALONE,All,1033136.0,Ind-Discretionary
-SHARED2,All,466474.0,Ind-Discretionary
-SHARED3,All,419688.0,Ind-Discretionary
+All,2,2093124.0,Ind-Discretionary
+DRIVEALONE,All,1028711.0,Ind-Discretionary
+SHARED2,All,465294.0,Ind-Discretionary
+SHARED3,All,418868.0,Ind-Discretionary
 WALK,All,416970.0,Ind-Discretionary
 BIKE,All,49474.0,Ind-Discretionary
-WALK-TRANSIT,All,40859.0,Ind-Discretionary
-PNR-TRANSIT,All,1558.0,Ind-Discretionary
-KNR-TRANSIT,All,2302.0,Ind-Discretionary
-TNC-TRANSIT,All,656.0,Ind-Discretionary
+WALK-TRANSIT,All,46597.0,Ind-Discretionary
+PNR-TRANSIT,All,2159.0,Ind-Discretionary
+KNR-TRANSIT,All,2752.0,Ind-Discretionary
+TNC-TRANSIT,All,851.0,Ind-Discretionary
 TAXI,All,10869.0,Ind-Discretionary
 TNC-REG,All,23925.0,Ind-Discretionary
 TNC-SHARED,All,14520.0,Ind-Discretionary
 SCHOOLBUS,All,0.0,Ind-Discretionary
-All,All,2480431.0,Ind-Discretionary
+All,All,2480990.0,Ind-Discretionary
 DRIVEALONE,0,0.0,Joint-Maintenance
 SHARED2,0,0.0,Joint-Maintenance
 SHARED3,0,0.0,Joint-Maintenance
 WALK,0,4753.0,Joint-Maintenance
 BIKE,0,87.0,Joint-Maintenance
-WALK-TRANSIT,0,1856.0,Joint-Maintenance
+WALK-TRANSIT,0,2051.0,Joint-Maintenance
 PNR-TRANSIT,0,1.0,Joint-Maintenance
-KNR-TRANSIT,0,39.0,Joint-Maintenance
-TNC-TRANSIT,0,25.0,Joint-Maintenance
+KNR-TRANSIT,0,47.0,Joint-Maintenance
+TNC-TRANSIT,0,23.0,Joint-Maintenance
 TAXI,0,0.0,Joint-Maintenance
 TNC-REG,0,0.0,Joint-Maintenance
 TNC-SHARED,0,0.0,Joint-Maintenance
 SCHOOLBUS,0,0.0,Joint-Maintenance
-All,0,6761.0,Joint-Maintenance
+All,0,6962.0,Joint-Maintenance
 DRIVEALONE,1,0.0,Joint-Maintenance
 SHARED2,1,25295.0,Joint-Maintenance
 SHARED3,1,3495.0,Joint-Maintenance
 WALK,1,3398.0,Joint-Maintenance
 BIKE,1,201.0,Joint-Maintenance
-WALK-TRANSIT,1,1206.0,Joint-Maintenance
+WALK-TRANSIT,1,1285.0,Joint-Maintenance
 PNR-TRANSIT,1,6.0,Joint-Maintenance
-KNR-TRANSIT,1,95.0,Joint-Maintenance
-TNC-TRANSIT,1,16.0,Joint-Maintenance
+KNR-TRANSIT,1,106.0,Joint-Maintenance
+TNC-TRANSIT,1,20.0,Joint-Maintenance
 TAXI,1,0.0,Joint-Maintenance
 TNC-REG,1,0.0,Joint-Maintenance
 TNC-SHARED,1,0.0,Joint-Maintenance
 SCHOOLBUS,1,0.0,Joint-Maintenance
-All,1,33712.0,Joint-Maintenance
+All,1,33806.0,Joint-Maintenance
 DRIVEALONE,2,0.0,Joint-Maintenance
 SHARED2,2,219809.0,Joint-Maintenance
 SHARED3,2,85378.0,Joint-Maintenance
 WALK,2,7992.0,Joint-Maintenance
 BIKE,2,947.0,Joint-Maintenance
-WALK-TRANSIT,2,1770.0,Joint-Maintenance
-PNR-TRANSIT,2,91.0,Joint-Maintenance
-KNR-TRANSIT,2,225.0,Joint-Maintenance
-TNC-TRANSIT,2,21.0,Joint-Maintenance
+WALK-TRANSIT,2,2076.0,Joint-Maintenance
+PNR-TRANSIT,2,109.0,Joint-Maintenance
+KNR-TRANSIT,2,298.0,Joint-Maintenance
+TNC-TRANSIT,2,29.0,Joint-Maintenance
 TAXI,2,386.0,Joint-Maintenance
 TNC-REG,2,0.0,Joint-Maintenance
 TNC-SHARED,2,269.0,Joint-Maintenance
 SCHOOLBUS,2,0.0,Joint-Maintenance
-All,2,316888.0,Joint-Maintenance
+All,2,317293.0,Joint-Maintenance
 DRIVEALONE,All,0.0,Joint-Maintenance
 SHARED2,All,245105.0,Joint-Maintenance
 SHARED3,All,88873.0,Joint-Maintenance
 WALK,All,16143.0,Joint-Maintenance
 BIKE,All,1235.0,Joint-Maintenance
-WALK-TRANSIT,All,4831.0,Joint-Maintenance
-PNR-TRANSIT,All,98.0,Joint-Maintenance
-KNR-TRANSIT,All,359.0,Joint-Maintenance
-TNC-TRANSIT,All,62.0,Joint-Maintenance
+WALK-TRANSIT,All,5413.0,Joint-Maintenance
+PNR-TRANSIT,All,116.0,Joint-Maintenance
+KNR-TRANSIT,All,451.0,Joint-Maintenance
+TNC-TRANSIT,All,72.0,Joint-Maintenance
 TAXI,All,386.0,Joint-Maintenance
 TNC-REG,All,0.0,Joint-Maintenance
 TNC-SHARED,All,269.0,Joint-Maintenance
 SCHOOLBUS,All,0.0,Joint-Maintenance
-All,All,357361.0,Joint-Maintenance
+All,All,358063.0,Joint-Maintenance
 DRIVEALONE,0,0.0,Joint-Discretionary
 SHARED2,0,0.0,Joint-Discretionary
 SHARED3,0,1313.0,Joint-Discretionary
 WALK,0,3118.0,Joint-Discretionary
 BIKE,0,166.0,Joint-Discretionary
-WALK-TRANSIT,0,1495.0,Joint-Discretionary
+WALK-TRANSIT,0,1661.0,Joint-Discretionary
 PNR-TRANSIT,0,0.0,Joint-Discretionary
-KNR-TRANSIT,0,111.0,Joint-Discretionary
-TNC-TRANSIT,0,25.0,Joint-Discretionary
+KNR-TRANSIT,0,135.0,Joint-Discretionary
+TNC-TRANSIT,0,24.0,Joint-Discretionary
 TAXI,0,0.0,Joint-Discretionary
 TNC-REG,0,263.0,Joint-Discretionary
 TNC-SHARED,0,1272.0,Joint-Discretionary
 SCHOOLBUS,0,0.0,Joint-Discretionary
-All,0,7763.0,Joint-Discretionary
+All,0,7952.0,Joint-Discretionary
 DRIVEALONE,1,0.0,Joint-Discretionary
 SHARED2,1,21594.0,Joint-Discretionary
 SHARED3,1,4665.0,Joint-Discretionary
 WALK,1,4871.0,Joint-Discretionary
 BIKE,1,0.0,Joint-Discretionary
-WALK-TRANSIT,1,1657.0,Joint-Discretionary
-PNR-TRANSIT,1,6.0,Joint-Discretionary
-KNR-TRANSIT,1,124.0,Joint-Discretionary
+WALK-TRANSIT,1,1914.0,Joint-Discretionary
+PNR-TRANSIT,1,7.0,Joint-Discretionary
+KNR-TRANSIT,1,148.0,Joint-Discretionary
 TNC-TRANSIT,1,32.0,Joint-Discretionary
 TAXI,1,86.0,Joint-Discretionary
 TNC-REG,1,1026.0,Joint-Discretionary
 TNC-SHARED,1,73.0,Joint-Discretionary
 SCHOOLBUS,1,0.0,Joint-Discretionary
-All,1,34134.0,Joint-Discretionary
+All,1,34416.0,Joint-Discretionary
 DRIVEALONE,2,0.0,Joint-Discretionary
 SHARED2,2,201455.0,Joint-Discretionary
 SHARED3,2,98282.0,Joint-Discretionary
 WALK,2,16420.0,Joint-Discretionary
 BIKE,2,1501.0,Joint-Discretionary
-WALK-TRANSIT,2,1708.0,Joint-Discretionary
-PNR-TRANSIT,2,171.0,Joint-Discretionary
-KNR-TRANSIT,2,198.0,Joint-Discretionary
-TNC-TRANSIT,2,72.0,Joint-Discretionary
+WALK-TRANSIT,2,1949.0,Joint-Discretionary
+PNR-TRANSIT,2,239.0,Joint-Discretionary
+KNR-TRANSIT,2,272.0,Joint-Discretionary
+TNC-TRANSIT,2,76.0,Joint-Discretionary
 TAXI,2,918.0,Joint-Discretionary
 TNC-REG,2,778.0,Joint-Discretionary
 TNC-SHARED,2,1249.0,Joint-Discretionary
 SCHOOLBUS,2,0.0,Joint-Discretionary
-All,2,322752.0,Joint-Discretionary
+All,2,323139.0,Joint-Discretionary
 DRIVEALONE,All,0.0,Joint-Discretionary
 SHARED2,All,223049.0,Joint-Discretionary
 SHARED3,All,104259.0,Joint-Discretionary
 WALK,All,24409.0,Joint-Discretionary
 BIKE,All,1667.0,Joint-Discretionary
-WALK-TRANSIT,All,4860.0,Joint-Discretionary
-PNR-TRANSIT,All,177.0,Joint-Discretionary
-KNR-TRANSIT,All,433.0,Joint-Discretionary
-TNC-TRANSIT,All,129.0,Joint-Discretionary
+WALK-TRANSIT,All,5525.0,Joint-Discretionary
+PNR-TRANSIT,All,246.0,Joint-Discretionary
+KNR-TRANSIT,All,555.0,Joint-Discretionary
+TNC-TRANSIT,All,132.0,Joint-Discretionary
 TAXI,All,1004.0,Joint-Discretionary
 TNC-REG,All,2067.0,Joint-Discretionary
 TNC-SHARED,All,2594.0,Joint-Discretionary
 SCHOOLBUS,All,0.0,Joint-Discretionary
-All,All,364648.0,Joint-Discretionary
+All,All,365507.0,Joint-Discretionary
