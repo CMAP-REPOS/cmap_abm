@@ -29,8 +29,8 @@ popsim_folder_nirpc: 'C:/projects/cmap_activitysim/cmap_abm/survey_data_prep/nir
 
 obs_dir: 'C:/projects/cmap_activitysim/cmap_abm/obs_processing'
 
-abm_inputs: 'C:/projects/cmap_activitysim/cmap_abm/model_runs/2019_base/inputs'
-abm_dir: 'C:/projects/cmap_activitysim/cmap_abm/model_runs/2019_base/outputs'
+abm_inputs: 'C:/projects/cmap_activitysim/cmap_abm/activitysim_inputs'
+abm_dir: 'C:/projects/cmap_activitysim/cmap_abm/activitysim_outputs'
 abm_summaries_dir: 'C:/projects/cmap_activitysim/cmap_abm/survey_data_prep/Visualizer/data/calibration_runs/summarized'
 
 R_LIBRARY: "C:/Users/%USERNAME%/r_library"
