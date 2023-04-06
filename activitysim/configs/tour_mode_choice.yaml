@@ -65,9 +65,7 @@ LOGSUM_CHOOSER_COLUMNS:
   - number_of_participants
   - tour_category
   - num_workers
-  - value_of_time
   - free_parking_at_work
-  - income_segment
   - income
   - time_factor_work
   - time_factor_nonwork
