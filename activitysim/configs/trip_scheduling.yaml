@@ -8,7 +8,7 @@ MAX_ITERATIONS: 5
 FAILFIX: choose_most_initial
 
 # --- relative trip scheduling settings
-PROBS_SPEC: trip_scheduling_probs_wide.csv
+PROBS_SPEC: trip_scheduling_probs_purpose_stops.csv
 
 scheduling_mode: relative
 
@@ -16,6 +16,8 @@ probs_join_cols:
   - periods_left_min
   - periods_left_max
   - outbound
+  - tour_purpose_grouped
+  - half_tour_stops_remaining_grouped  
 
 preprocessor:
   SPEC: trip_scheduling_preprocessor
