@@ -75,7 +75,7 @@ class CMapMatrix(_m.Tool()):
         exportOMX = _m.Modeller().tool("inro.emme.data.matrix.export_to_omx")
         skimList = []        
         skim_matrices = ["FIRSTWAIT", "XFERWAIT", "FARE", "XFERS", "ACC", "XFERWALK", "EGR", 
-                            "BUSLOCIVTT", "BUSEXPIVTT", "CTARAILIVTT", "METRARAILIVTT", "CROWD", "CAPPEN"]
+                            "CTABUSLOCIVTT", "PACEBUSLOCIVTT", "BUSEXPIVTT", "CTARAILIVTT", "METRARAILIVTT", "CROWD", "CAPPEN"]
         access_modes = ["WALK", "PNROUT", "PNRIN", "KNROUT", "KNRIN"]
         user_classes = ["L","M","H"]
         for amode in access_modes:

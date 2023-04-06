@@ -42,7 +42,7 @@ for s in scens:
     to_att = "ul2"
     from_scen = _m.Modeller().emmebank.scenario(s['periodNum'])
     if not from_scen.has_traffic_results:
-        raise Exception("missing traffic assignment results for scenario %s" % (str(scen-200)))
+        raise Exception("missing traffic assignment results for scenario %s" % (str(s['periodNum'])))
     copy_att(from_attribute_name=from_att,
             to_attribute_name=to_att,
             from_scenario=from_scen)
