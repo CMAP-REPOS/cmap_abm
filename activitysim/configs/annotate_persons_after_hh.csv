@@ -1,8 +1,5 @@
 Description,Target,Expression
 #,, annotate persons table after annotate_households
-#,, adults get full hh_value_of_time and children get 60%
-,_hh_vot,"reindex(households.hh_value_of_time, persons.household_id)"
-,value_of_time,"_hh_vot.where(persons.age>=18, _hh_vot * 0.667)"
 # Added for TC Model...
 ,_hh_income,"reindex(households.income, persons.household_id)"
 ,_num_adults,"reindex(households.num_adults, persons.household_id)"
@@ -22,3 +19,4 @@ Presence of predrive child in HHs,is_pre_drive_child_in_HH,_num_predrive_child>0
 has_young_children,has_young_children,_has_young_children>0
 has_children_6_to_12,has_children_6_to_12,_has_children_6_to_12>0
 home_county,home_county,"reindex(households.home_county, persons.household_id)"
+home_in_chicago,home_in_chicago,"reindex(households.home_in_chicago, persons.household_id)"
