@@ -640,11 +640,7 @@ Chart Column 1 {data-width=300}
 ```{r Chart_Auto_Ownership}
 if(IS_BASE_SURVEY=="Yes"){
   #cat("Census source: ", AO_CENSUS_LONG)
-  # [3/31/2020] DH No census data used for SEMCOG
-  census_df <- base_data[[which(base_csv_names=="autoOwnershipCensus")]]
-  # base_df <- base_data[[which(base_csv_names=="autoOwnership")]]
-  base_df <- base_data[[which(base_csv_names=="autoOwnership")]]
-
+  base_df <- base_data[[which(base_csv_names=="autoOwnershipCensus")]]
 }else{
   base_df <- base_data[[which(base_csv_names=="autoOwnership")]]
 }
@@ -1096,7 +1092,7 @@ Description {.sidebar data-width=175}
 
 Compares number of zero auto households.
 
-Census Data is from 2017 five year ACS.
+Census Data is from 2019 five year ACS.
 
 Only for build scenario.
 
@@ -2023,7 +2019,10 @@ Chart Column 2{.tabset}
 ggplot(hnet[hnet$DY_CNT > 0,], aes(x = DY_CNT, y = DY_ASN)) + geom_point() +
 	geom_abline(slope = 1, intercept = 0, color = "red") +
 	scale_x_continuous("Daily Count", labels = comma) +
-	scale_y_continuous("Daily Assignment", labels = comma)
+	scale_y_continuous("Daily Assignment", labels = comma) + 
+  coord_fixed() + 
+  xlim(0,max(max(hnet[!(is.na(hnet$DY_CNT)),]$DY_CNT),max(hnet[!(is.na(hnet$DY_ASN)),]$DY_ASN))) + 
+  ylim(0,max(max(hnet[!(is.na(hnet$DY_CNT)),]$DY_CNT),max(hnet[!(is.na(hnet$DY_ASN)),]$DY_ASN)))
 ```
 
 ### RMSE Statistics{data-height=575}
@@ -2068,7 +2067,10 @@ Chart Column 2{.tabset}
 ggplot(hnet[hnet$NT_CNT > 0,], aes(x = NT_CNT, y = NT_ASN)) + geom_point() +
 	geom_abline(slope = 1, intercept = 0, color = "red") +
 	scale_x_continuous("Night Count", labels = comma) +
-	scale_y_continuous("Night Assignment", labels = comma)
+	scale_y_continuous("Night Assignment", labels = comma) + 
+  coord_fixed() + 
+  xlim(0,max(max(hnet[(!(is.na(hnet$NT_CNT)))&(!(is.na(hnet$NT_ASN))),]$NT_CNT),max(hnet[(!(is.na(hnet$NT_CNT)))&(!(is.na(hnet$NT_ASN))),]$NT_ASN))) + 
+  ylim(0,max(max(hnet[(!(is.na(hnet$NT_CNT)))&(!(is.na(hnet$NT_ASN))),]$NT_CNT),max(hnet[(!(is.na(hnet$NT_CNT)))&(!(is.na(hnet$NT_ASN))),]$NT_ASN)))
 ```
 
 ### RMSE Statistics{data-height=575}
@@ -2113,7 +2115,10 @@ Chart Column 2{.tabset}
 ggplot(hnet[hnet$EA_CNT > 0,], aes(x = EA_CNT, y = EA_ASN)) + geom_point() +
 	geom_abline(slope = 1, intercept = 0, color = "red") +
 	scale_x_continuous("Early Morning Count", labels = comma) +
-	scale_y_continuous("Early Morning Assignment", labels = comma)
+	scale_y_continuous("Early Morning Assignment", labels = comma) + 
+  coord_fixed() + 
+  xlim(0,max(max(hnet[!(is.na(hnet$EA_CNT)),]$EA_CNT),max(hnet[!(is.na(hnet$EA_ASN)),]$EA_ASN))) + 
+  ylim(0,max(max(hnet[!(is.na(hnet$EA_CNT)),]$EA_CNT),max(hnet[!(is.na(hnet$EA_ASN)),]$EA_ASN)))
 ```
 
 ### RMSE Statistics{data-height=575}
@@ -2158,7 +2163,10 @@ Chart Column 2{.tabset}
 ggplot(hnet[hnet$AM_CNT > 0,], aes(x = AM_CNT, y = AM_ASN)) + geom_point() +
 	geom_abline(slope = 1, intercept = 0, color = "red") +
 	scale_x_continuous("AM Peak Count", labels = comma) +
-	scale_y_continuous("AM Peak Assignment", labels = comma)
+	scale_y_continuous("AM Peak Assignment", labels = comma) + 
+  coord_fixed() + 
+  xlim(0,max(max(hnet[!(is.na(hnet$AM_CNT)),]$AM_CNT),max(hnet[!(is.na(hnet$AM_ASN)),]$AM_ASN))) + 
+  ylim(0,max(max(hnet[!(is.na(hnet$AM_CNT)),]$AM_CNT),max(hnet[!(is.na(hnet$AM_ASN)),]$AM_ASN)))
 ```
 
 ### RMSE Statistics{data-height=575}
@@ -2203,7 +2211,10 @@ Chart Column 2{.tabset}
 ggplot(hnet[hnet$MM_CNT > 0,], aes(x = MM_CNT, y = MM_ASN)) + geom_point() +
 	geom_abline(slope = 1, intercept = 0, color = "red") +
 	scale_x_continuous("Mid Morning Count", labels = comma) +
-	scale_y_continuous("Mid Morning Assignment", labels = comma)
+	scale_y_continuous("Mid Morning Assignment", labels = comma) + 
+  coord_fixed() + 
+  xlim(0,max(max(hnet[!(is.na(hnet$MM_CNT)),]$MM_CNT),max(hnet[!(is.na(hnet$MM_ASN)),]$MM_ASN))) + 
+  ylim(0,max(max(hnet[!(is.na(hnet$MM_CNT)),]$MM_CNT),max(hnet[!(is.na(hnet$MM_ASN)),]$MM_ASN)))
 ```
 
 ### RMSE Statistics{data-height=575}
@@ -2248,7 +2259,10 @@ Chart Column 2{.tabset}
 ggplot(hnet[hnet$MD_CNT > 0,], aes(x = MD_CNT, y = MD_ASN)) + geom_point() +
 	geom_abline(slope = 1, intercept = 0, color = "red") +
 	scale_x_continuous("Midday Count", labels = comma) +
-	scale_y_continuous("Midday Assignment", labels = comma)
+	scale_y_continuous("Midday Assignment", labels = comma) + 
+  coord_fixed() + 
+  xlim(0,max(max(hnet[!(is.na(hnet$MD_CNT)),]$MD_CNT),max(hnet[!(is.na(hnet$MD_ASN)),]$MD_ASN))) + 
+  ylim(0,max(max(hnet[!(is.na(hnet$MD_CNT)),]$MD_CNT),max(hnet[!(is.na(hnet$MD_ASN)),]$MD_ASN)))
 ```
 
 ### RMSE Statistics{data-height=575}
@@ -2293,7 +2307,10 @@ Chart Column 2{.tabset}
 ggplot(hnet[hnet$AF_CNT > 0,], aes(x = AF_CNT, y = AF_ASN)) + geom_point() +
 	geom_abline(slope = 1, intercept = 0, color = "red") +
 	scale_x_continuous("Afternoon Count", labels = comma) +
-	scale_y_continuous("Afternoon Assignment", labels = comma)
+	scale_y_continuous("Afternoon Assignment", labels = comma) + 
+  coord_fixed() + 
+  xlim(0,max(max(hnet[!(is.na(hnet$AF_CNT)),]$AF_CNT),max(hnet[!(is.na(hnet$AF_ASN)),]$AF_ASN))) + 
+  ylim(0,max(max(hnet[!(is.na(hnet$AF_CNT)),]$AF_CNT),max(hnet[!(is.na(hnet$AF_ASN)),]$AF_ASN)))
 ```
 
 ### RMSE Statistics{data-height=575}
@@ -2338,7 +2355,10 @@ Chart Column 2{.tabset}
 ggplot(hnet[hnet$PM_CNT > 0,], aes(x = PM_CNT, y = PM_ASN)) + geom_point() +
 	geom_abline(slope = 1, intercept = 0, color = "red") +
 	scale_x_continuous("PM Peak Count", labels = comma) +
-	scale_y_continuous("PM Peak Assignment", labels = comma)
+	scale_y_continuous("PM Peak Assignment", labels = comma) + 
+  coord_fixed() + 
+  xlim(0,max(max(hnet[!(is.na(hnet$PM_CNT)),]$PM_CNT),max(hnet[!(is.na(hnet$PM_ASN)),]$PM_ASN))) + 
+  ylim(0,max(max(hnet[!(is.na(hnet$PM_CNT)),]$PM_CNT),max(hnet[!(is.na(hnet$PM_ASN)),]$PM_ASN)))
 ```
 
 ### RMSE Statistics{data-height=575}
@@ -2383,7 +2403,10 @@ Chart Column 2{.tabset}
 ggplot(hnet[hnet$EV_CNT > 0,], aes(x = EV_CNT, y = EV_ASN)) + geom_point() +
 	geom_abline(slope = 1, intercept = 0, color = "red") +
 	scale_x_continuous("Evening Count", labels = comma) +
-	scale_y_continuous("Evening Assignment", labels = comma)
+	scale_y_continuous("Evening Assignment", labels = comma) + 
+  coord_fixed() + 
+  xlim(0,max(max(hnet[!(is.na(hnet$EV_CNT)),]$EV_CNT),max(hnet[!(is.na(hnet$EV_ASN)),]$EV_ASN))) + 
+  ylim(0,max(max(hnet[!(is.na(hnet$EV_CNT)),]$EV_CNT),max(hnet[!(is.na(hnet$EV_ASN)),]$EV_ASN)))
 ```
 
 ### RMSE Statistics{data-height=575}

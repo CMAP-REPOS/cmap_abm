@@ -188,6 +188,9 @@ trips[trip_weights, adj_weight := i.trip_weight,
 
 trips[, avg_tour_weight := mean(adj_weight), by = .(HH_ID, PER_ID, TOUR_ID)]
 tours[trips, adj_weight := i.avg_tour_weight, on = .(HH_ID, PER_ID, TOUR_ID)]
+jtours[tours, adj_weight := i.adj_weight, on = .(HH_ID, JTOUR_ID)]
+jtours[tours, ORIG_TAZ := i.ORIG_TAZ, on = .(HH_ID, JTOUR_ID)]
+jtours[tours, DEST_TAZ := i.DEST_TAZ, on = .(HH_ID, JTOUR_ID)]
 
 # Join county name
 county_fips_lookup = fread(file.path(settings$proj_dir, 'county_lookup.csv'))
@@ -219,7 +222,7 @@ processedPerson$finalweight = processedPerson$PER_WEIGHT
 
 trips$finalweight = trips$adj_weight
 tours$finalweight = tours$adj_weight
-jtours$finalweight = jtours$HH_WEIGHT 
+jtours$finalweight = jtours$adj_weight 
 
 
 names(processedPerson)[names(processedPerson)=="HH_ID"] = "HHID"
@@ -287,6 +290,27 @@ students = na.omit(students)
 workers$distbin = cut(workers$WDIST, breaks = c(seq(0,50, by=1), 9999), labels = F, right = F)
 students$distbin = cut(students$SDIST, breaks = c(seq(0,50, by=1), 9999), labels = F, right = F)
 
+workers_cbd <- subset(workers, PER_WK_ZONE_ID <= 47)
+workers_cbd$distbin = cut(workers_cbd$WDIST, breaks = c(seq(0,100, by=1), 9999), labels = F, right = F)
+distBinCat_cbd = data.frame(distbin = seq(1,101, by=1))
+tlfd_work_cbd = ddply(workers_cbd[,c("HDISTRICT", "distbin", "finalweight")], c("HDISTRICT", "distbin"), summarise, work = sum(finalweight))
+tlfd_work_cbd = reshape::cast(tlfd_work_cbd, distbin ~ HDISTRICT, value = "work", sum)
+tlfd_work_cbd$Total = rowSums(tlfd_work_cbd[,!colnames(tlfd_work_cbd) %in% c("distbin")])
+tlfd_work_cbd_df = merge(x = distBinCat_cbd, y = tlfd_work_cbd, by = "distbin", all.x = TRUE)
+tlfd_work_cbd_df[is.na(tlfd_work_cbd_df)] = 0
+write.csv(workers_cbd, "workers_cbd.csv", row.names = F)
+write.csv(tlfd_work_cbd_df, "work_cbd_TLFD.csv", row.names = F)
+
+workers_chicago <- subset(workers, PER_WK_ZONE_ID <= 717)
+workers_chicago$distbin = cut(workers_chicago$WDIST, breaks = c(seq(0,100, by=1), 9999), labels = F, right = F)
+distBinCat_chicago = data.frame(distbin = seq(1,101, by=1))
+tlfd_work_chicago = ddply(workers_chicago[,c("HDISTRICT", "distbin", "finalweight")], c("HDISTRICT", "distbin"), summarise, work = sum(finalweight))
+tlfd_work_chicago = reshape::cast(tlfd_work_chicago, distbin ~ HDISTRICT, value = "work", sum)
+tlfd_work_chicago$Total = rowSums(tlfd_work_chicago[,!colnames(tlfd_work_chicago) %in% c("distbin")])
+tlfd_work_chicago_df = merge(x = distBinCat_chicago, y = tlfd_work_chicago, by = "distbin", all.x = TRUE)
+tlfd_work_chicago_df[is.na(tlfd_work_chicago_df)] = 0
+write.csv(workers_chicago, "workers_chicago.csv", row.names = F)
+write.csv(tlfd_work_chicago_df, "work_chicago_TLFD.csv", row.names = F)
 # alternate distbin profile for workers
 #workers$distbin = cut(workers$WDIST, breaks = c(0, 3, 5, 10, 15, 20, 30, 40, 50, 60, 9999), labels = F, right = F)
 
@@ -457,7 +481,7 @@ tours$TOURMODE[tours$TOURMODE_ORIG == 2] = 2  #HOV2
 tours$TOURMODE[tours$TOURMODE_ORIG == 3] = 3  #HOV3
 tours$TOURMODE[tours$TOURMODE_ORIG == 4] = 4  #Walk
 tours$TOURMODE[tours$TOURMODE_ORIG == 5] = 5  #Bike
-tours$TOURMODE[tours$TOURMODE_ORIG == 6]  = 6  #WT
+tours$TOURMODE[tours$TOURMODE_ORIG == 6] = 6  #WT
 tours$TOURMODE[tours$TOURMODE_ORIG == 8] = 7  #PNR
 tours$TOURMODE[tours$TOURMODE_ORIG == 7] = 8  #KNR
 tours$TOURMODE[tours$TOURMODE_ORIG == 9] = 9  #TNR
@@ -1461,6 +1485,36 @@ tourDistProfile = data.frame(tourdist4$counts, tourdisti56$counts, tourdisti789$
 colnames(tourDistProfile) = c("esco", "imain", "idisc", "jmain", "jdisc", "atwork")
 write.csv(tourDistProfile, "nonMandTourDistProfile.csv")
 
+tours_orig_chicago <- subset(tours, ORIG_TAZ <= 717)
+jtours_orig_chicago <- subset(jtours, ORIG_TAZ <= 717)
+
+# Non-mandatory tour distance profile for tours originating in Chicago
+tourdistchiorig4 = wtd.hist(tours_orig_chicago$SKIMDIST[tours_orig_chicago$TOURPURP==4 & tours_orig_chicago$IS_SUBTOUR == 0 & !(is.na(tours_orig_chicago$SKIMDIST))], breaks = c(seq(0,40, by=1), 9999), freq = NULL, right=FALSE, weight = tours_orig_chicago$finalweight[tours_orig_chicago$TOURPURP==4 & tours_orig_chicago$IS_SUBTOUR == 0 & !(is.na(tours_orig_chicago$SKIMDIST))])
+tourdistchiorigi56 = wtd.hist(tours_orig_chicago$SKIMDIST[tours_orig_chicago$TOURPURP>=5 & tours_orig_chicago$TOURPURP<=6 & tours_orig_chicago$IS_SUBTOUR == 0 & tours_orig_chicago$FULLY_JOINT==0 & !(is.na(tours_orig_chicago$SKIMDIST))], breaks = c(seq(0,40, by=1), 9999), freq = NULL, right=FALSE, weight = tours_orig_chicago$finalweight[tours_orig_chicago$TOURPURP>=5 & tours_orig_chicago$TOURPURP<=6 & tours_orig_chicago$IS_SUBTOUR == 0 & tours_orig_chicago$FULLY_JOINT==0 & !(is.na(tours_orig_chicago$SKIMDIST))])
+tourdistchiorigi789 = wtd.hist(tours_orig_chicago$SKIMDIST[tours_orig_chicago$TOURPURP>=7 & tours_orig_chicago$TOURPURP<=9 & tours_orig_chicago$IS_SUBTOUR == 0 & tours_orig_chicago$FULLY_JOINT==0 & !(is.na(tours_orig_chicago$SKIMDIST))], breaks = c(seq(0,40, by=1), 9999), freq = NULL, right=FALSE, weight = tours_orig_chicago$finalweight[tours_orig_chicago$TOURPURP>=7 & tours_orig_chicago$TOURPURP<=9 & tours_orig_chicago$IS_SUBTOUR == 0 & tours_orig_chicago$FULLY_JOINT==0 & !(is.na(tours_orig_chicago$SKIMDIST))])
+tourdistchiorigj56 = wtd.hist(jtours_orig_chicago$SKIMDIST[jtours_orig_chicago$JOINT_PURP>=5 & jtours_orig_chicago$JOINT_PURP<=6 & !(is.na(jtours_orig_chicago$SKIMDIST))], breaks = c(seq(0,40, by=1), 9999), freq = NULL, right=FALSE, weight = jtours_orig_chicago$finalweight[jtours_orig_chicago$JOINT_PURP>=5 & jtours_orig_chicago$JOINT_PURP<=6 & !(is.na(jtours_orig_chicago$SKIMDIST))])
+tourdistchiorigj789 = wtd.hist(jtours_orig_chicago$SKIMDIST[jtours_orig_chicago$JOINT_PURP>=7 & jtours_orig_chicago$JOINT_PURP<=9 & !(is.na(jtours_orig_chicago$SKIMDIST))], breaks = c(seq(0,40, by=1), 9999), freq = NULL, right=FALSE, weight = jtours_orig_chicago$finalweight[jtours_orig_chicago$JOINT_PURP>=7 & jtours_orig_chicago$JOINT_PURP<=9 & !(is.na(jtours_orig_chicago$SKIMDIST))])
+tourdistchiorig10 = wtd.hist(tours_orig_chicago$SKIMDIST[tours_orig_chicago$IS_SUBTOUR == 1 & !(is.na(tours_orig_chicago$SKIMDIST))], breaks = c(seq(0,40, by=1), 9999), freq = NULL, right=FALSE, weight = tours_orig_chicago$finalweight[tours_orig_chicago$IS_SUBTOUR == 1 & !(is.na(tours_orig_chicago$SKIMDIST))])
+
+tourDistChiOrigProfile = data.frame(tourdistchiorig4$counts, tourdistchiorigi56$counts, tourdistchiorigi789$counts, tourdistchiorigj56$counts, tourdistchiorigj789$counts, tourdistchiorig10$counts)
+colnames(tourDistChiOrigProfile) = c("esco", "imain", "idisc", "jmain", "jdisc", "atwork")
+write.csv(tourDistChiOrigProfile, "nonMandTourDistChiOrigProfile.csv")
+
+tours_dest_chicago <- subset(tours, DEST_TAZ <= 717)
+jtours_dest_chicago <- subset(jtours, DEST_TAZ <= 717)
+
+# Non-mandatory tour distance profile for tours destined in Chicago
+tourdistchidest4 = wtd.hist(tours_dest_chicago$SKIMDIST[tours_dest_chicago$TOURPURP==4 & tours_dest_chicago$IS_SUBTOUR == 0 & !(is.na(tours_dest_chicago$SKIMDIST))], breaks = c(seq(0,40, by=1), 9999), freq = NULL, right=FALSE, weight = tours_dest_chicago$finalweight[tours_dest_chicago$TOURPURP==4 & tours_dest_chicago$IS_SUBTOUR == 0 & !(is.na(tours_dest_chicago$SKIMDIST))])
+tourdistchidesti56 = wtd.hist(tours_dest_chicago$SKIMDIST[tours_dest_chicago$TOURPURP>=5 & tours_dest_chicago$TOURPURP<=6 & tours_dest_chicago$IS_SUBTOUR == 0 & tours_dest_chicago$FULLY_JOINT==0 & !(is.na(tours_dest_chicago$SKIMDIST))], breaks = c(seq(0,40, by=1), 9999), freq = NULL, right=FALSE, weight = tours_dest_chicago$finalweight[tours_dest_chicago$TOURPURP>=5 & tours_dest_chicago$TOURPURP<=6 & tours_dest_chicago$IS_SUBTOUR == 0 & tours_dest_chicago$FULLY_JOINT==0 & !(is.na(tours_dest_chicago$SKIMDIST))])
+tourdistchidesti789 = wtd.hist(tours_dest_chicago$SKIMDIST[tours_dest_chicago$TOURPURP>=7 & tours_dest_chicago$TOURPURP<=9 & tours_dest_chicago$IS_SUBTOUR == 0 & tours_dest_chicago$FULLY_JOINT==0 & !(is.na(tours_dest_chicago$SKIMDIST))], breaks = c(seq(0,40, by=1), 9999), freq = NULL, right=FALSE, weight = tours_dest_chicago$finalweight[tours_dest_chicago$TOURPURP>=7 & tours_dest_chicago$TOURPURP<=9 & tours_dest_chicago$IS_SUBTOUR == 0 & tours_dest_chicago$FULLY_JOINT==0 & !(is.na(tours_dest_chicago$SKIMDIST))])
+tourdistchidestj56 = wtd.hist(jtours_dest_chicago$SKIMDIST[jtours_dest_chicago$JOINT_PURP>=5 & jtours_dest_chicago$JOINT_PURP<=6 & !(is.na(jtours_dest_chicago$SKIMDIST))], breaks = c(seq(0,40, by=1), 9999), freq = NULL, right=FALSE, weight = jtours_dest_chicago$finalweight[jtours_dest_chicago$JOINT_PURP>=5 & jtours_dest_chicago$JOINT_PURP<=6 & !(is.na(jtours_dest_chicago$SKIMDIST))])
+tourdistchidestj789 = wtd.hist(jtours_dest_chicago$SKIMDIST[jtours_dest_chicago$JOINT_PURP>=7 & jtours_dest_chicago$JOINT_PURP<=9 & !(is.na(jtours_dest_chicago$SKIMDIST))], breaks = c(seq(0,40, by=1), 9999), freq = NULL, right=FALSE, weight = jtours_dest_chicago$finalweight[jtours_dest_chicago$JOINT_PURP>=7 & jtours_dest_chicago$JOINT_PURP<=9 & !(is.na(jtours_dest_chicago$SKIMDIST))])
+tourdistchidest10 = wtd.hist(tours_dest_chicago$SKIMDIST[tours_dest_chicago$IS_SUBTOUR == 1 & !(is.na(tours_dest_chicago$SKIMDIST))], breaks = c(seq(0,40, by=1), 9999), freq = NULL, right=FALSE, weight = tours_dest_chicago$finalweight[tours_dest_chicago$IS_SUBTOUR == 1 & !(is.na(tours_dest_chicago$SKIMDIST))])
+
+tourDistChiDestProfile = data.frame(tourdistchidest4$counts, tourdistchidesti56$counts, tourdistchidesti789$counts, tourdistchidestj56$counts, tourdistchidestj789$counts, tourdistchidest10$counts)
+colnames(tourDistChiDestProfile) = c("esco", "imain", "idisc", "jmain", "jdisc", "atwork")
+write.csv(tourDistChiDestProfile, "nonMandTourDistChiDestProfile.csv")
+
 #prepare input for visualizer
 tourDistProfile_vis = tourDistProfile
 tourDistProfile_vis$id = row.names(tourDistProfile_vis)
@@ -2180,9 +2234,9 @@ temp$tourmode[temp$tourmode=="tourmode5"] = 'Bike/Moped'
 temp$tourmode[temp$tourmode=="tourmode6"] = 'Walk-Transit'
 temp$tourmode[temp$tourmode=="tourmode7"] = 'PNR-Transit'
 temp$tourmode[temp$tourmode=="tourmode8"] = 'KNR-Transit'
-temp$tourmode[temp$tourmode=="tourmode9"] = 'TNR-Transit'
-temp$tourmode[temp$tourmode=="tourmode10"] = 'Taxi'
-temp$tourmode[temp$tourmode=="tourmode11"] = 'School Bus'
+temp$tourmode[temp$tourmode=="tourmode9"] = 'TNC-Transit'
+temp$tourmode[temp$tourmode=="tourmode10"] = 'School Bus'
+temp$tourmode[temp$tourmode=="tourmode11"] = 'Ridehail'
 
 colnames(temp) = c("tripmode","tourmode","purpose","value","grp_var")
 
@@ -2216,6 +2270,11 @@ totals_val = c(total_population,total_households, total_tours, total_trips, tota
 totals_df = data.frame(name = totals_var, value = totals_val)
 
 write.csv(totals_df, "totals.csv", row.names = F)
+write.csv(hh, "households_df.csv", row.names = F)
+write.csv(per, "persons_df.csv", row.names = F)
+write.csv(tours, "tours_df.csv", row.names = F)
+write.csv(jtours, "jtours_df.csv", row.names = F)
+write.csv(stops, "stops_df.csv", row.names = F)
 
 # HH Size distribution
 hhSizeDist = plyr::count(hh[!is.na(hh$HHSIZE),], c("HHSIZE"), "finalweight")
@@ -2273,7 +2332,7 @@ trips_sample = trips_sample[trips_sample$tour_purpose != "Other",]
 trips_sample = trips_sample[trips_sample$OCOUNTY!="Missing" & trips_sample$DCOUNTY!="Missing",]
 trips_sample = trips_sample[trips_sample$TRIPMODE>0 & trips_sample$TRIPMODE<10,]
 
-tripModeNames = c('Auto SOV','Auto 2 Person','Auto 3+ Person','Walk','Bike/Moped','Walk-Transit','PNR-Transit','KNR-Transit','TNR-Transit', 'Taxi/TNC', 'School Bus')
+tripModeNames = c('Auto SOV','Auto 2 Person','Auto 3+ Person','Walk','Bike/Moped','Walk-Transit','PNR-Transit','KNR-Transit','TNC-Transit', 'School Bus', 'Ridehail')
 tripModeCodes = c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11)
 tripMode_df = data.frame(tripModeCodes, tripModeNames)
 trips_sample$trip_mode = tripMode_df$tripModeNames[match(trips_sample$TRIPMODE, tripMode_df$tripModeCodes)]

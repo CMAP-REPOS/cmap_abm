@@ -93,7 +93,7 @@ county_flows_matrix = county_flows_matrix[c(1:7, 10, 12, 8, 9, 11, 13:22), c(1:8
 
 
 
-fwrite(county_flows_matrix, file.path(settings$visualizer_summaries, 'countyFlowsCensus.csv'))
+#fwrite(county_flows_matrix, file.path(settings$visualizer_summaries, 'countyFlowsCensus.csv'))
 
 # use this as a way to get county name table
 
@@ -124,10 +124,13 @@ auto_ownership = dcast(acs_veh[variable %in% c('B08201_002', 'B08201_003', 'B082
                        COUNTY + variable ~ '', value.var = 'estimate', fun = sum )
 
 setnames(auto_ownership, c('COUNTY','variable', '.'), 
-         c('COUNTY', 'HHVEH', 'freq'))
+         c('HDISTRICT', 'HHVEH', 'freq'))
 
 auto_ownership[, HHVEH := as.numeric(gsub('B08201_00', '', HHVEH)) - 2]
-auto_ownership = auto_ownership[HHVEH <= 4]
+auto_ownership$HHVEH[auto_ownership$HHVEH > 4] = 4
+auto_ownershipT = plyr::count(auto_ownership, c("HHVEH"), "freq")
+auto_ownershipT$HDISTRICT = "Total"
+auto_ownership = rbind(auto_ownership, auto_ownershipT)
 
 acs_veh_t = dcast(acs_veh, GEOID + NAME ~ variable, value.var = 'estimate', fun.aggregate = sum)
 

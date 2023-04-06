@@ -131,10 +131,10 @@ ct_zero_auto_shp <- shapefile(CT_ZERO_AUTO_FILE_NAME)
 ct_zero_auto_shp <- spTransform(ct_zero_auto_shp, CRS("+proj=longlat +ellps=GRS80"))
 
 if(ASSIGNED==1){
-	vgsum = read.csv(paste(VIS_SUMMARY_DIR, "hassign_vgsum.csv", sep = '/'), stringsAsFactors = FALSE)
-	hnet = read.csv(paste(VIS_SUMMARY_DIR, "hnetcnt.csv", sep = '/'), stringsAsFactors = FALSE)
-	vmtsum = read.csv(paste(VIS_SUMMARY_DIR, "asnvmt.csv", sep = '/'), stringsAsFactors = FALSE)
-	vmtcomp = read.csv(paste(VIS_SUMMARY_DIR, "hassign_vmtcomp.csv", sep = '/'), stringsAsFactors = FALSE)
+	vgsum = read.csv(paste(BUILD_SUMMARY_DIR, "hassign_vgsum.csv", sep = '/'), stringsAsFactors = FALSE)
+	hnet = read.csv(paste(BUILD_SUMMARY_DIR, "hnetcnt.csv", sep = '/'), stringsAsFactors = FALSE)
+	vmtsum = read.csv(paste(BUILD_SUMMARY_DIR, "asnvmt.csv", sep = '/'), stringsAsFactors = FALSE)
+	vmtcomp = read.csv(paste(BUILD_SUMMARY_DIR, "hassign_vmtcomp.csv", sep = '/'), stringsAsFactors = FALSE)
 }else{
 	vgsum = data.frame()
 	hnet = data.frame()

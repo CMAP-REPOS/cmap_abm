@@ -1,10 +1,14 @@
 summaryFile
+asnvmt.csv
 autoOwnership.csv
 avgStopOutofDirectionDist_vis.csv
 countyFlows.csv
 dapSummary_vis.csv
+hassign_vgsum.csv
+hassign_vmtcomp.csv
 hhSizeDist.csv
 hhsizeJoint.csv
+hnetcnt.csv
 inmSummary_vis.csv
 jointComp.csv
 jointCompPartySize.csv
@@ -14,6 +18,7 @@ jtf.csv
 mandTourLengths.csv
 mtfSummary_vis.csv
 nm_tour_rates.csv
+nonMandTourDistProfile.csv
 nonMandTourLengths.csv
 pertypeDistbn.csv
 stopDC_vis.csv
@@ -37,3 +42,4 @@ workers_per_co.csv
 workers_per_taz.csv
 employees_per_taz.csv
 employees_per_co.csv
+work_cbd_TLFD.csv

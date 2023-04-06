@@ -76,7 +76,7 @@ ECHO IS_BASE_SURVEY,%IS_BASE_SURVEY% >> %PARAMETERS_FILE%
 
 %R_SCRIPT% %WORKING_DIR%\scripts\settings_to_parameters_csv.R %SETTINGS_FILE%
 
-SET EMME_OUTPUT=%CMAP_ABM_DIR%\emme\emme_outputs
+SET EMME_OUTPUT=%CMAP_ABM_DIR%\emme_outputs
 SET ANACONDA=C:\Users\%USERNAME%\.conda\envs\cmapasim
 SET ANACONDA_DIR=C:\ProgramData\Anaconda3
 SET CONDA_ACT=%ANACONDA_DIR%\scripts\activate.bat

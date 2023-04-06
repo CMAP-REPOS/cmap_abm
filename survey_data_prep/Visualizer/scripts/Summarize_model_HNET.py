@@ -16,7 +16,7 @@ import os
 import numpy as np
 
 model_path = os.environ['EMME_OUTPUT']
-vis_path = os.environ['WORKING_DIR'] + os.sep + "data" + os.sep + "base"
+vis_path = os.environ['WORKING_DIR'] + os.sep + "data" + os.sep + "calibration_runs" + os.sep + "summarized"
 net_in_path = os.environ['WORKING_DIR'] + os.sep + "data" + os.sep + "counts"
 print(f"Reading Highway Loading Results from {model_path}")
 
@@ -39,7 +39,7 @@ countsfile_AADT = "AADT2019.csv"
 
 # NOTE: ftCol is the name of the facility type column, check code if it's "FTYPE". ftTrans needs to match _SYSTEM_VARIABLES.R hnet_ft
 ftCol = "VDF"
-ftTrans = {1: "Arterial", 2: "Freeway",  3: "Freeway",4: "Expressway", 5: "Freeway", 6: "Connector", 7: "Freeway", 8: "Freeway"}
+ftTrans = {1: "Arterial", 2: "Freeway",  3: "Freeway",4: "Freeway", 5: "Freeway", 6: "Local", 7: "Freeway", 8: "Freeway"}
 countyColumn = "COUNTY"
 lengthColumn = "LENGTH"
 distMult = 1.0 # in case the distance needs to be converted to another unit
@@ -47,9 +47,11 @@ distMult = 1.0 # in case the distance needs to be converted to another unit
 # each period (scenario) has a dbf network; import first network and merge other networks 
 scen_path = os.path.join(model_path, "scen01")
 hnet_TOD = Dbf5(os.path.join(scen_path, hnetfile)).to_dataframe()
-hnet_TOD['NT_ASN'] = hnet_TOD['VOLAU'] - (hnet_TOD['@trk_b'] + hnet_TOD['@trk_l'] + hnet_TOD['@trk_m'] + hnet_TOD['@trk_h'])
+hnet_TOD['NT_ASN_PV'] = hnet_TOD['VOLAU'] - (hnet_TOD['@trk_m'] / 2 + hnet_TOD['@trk_h'] / 3)
+hnet_TOD['NT_ASN_MH_TRK'] = hnet_TOD['@trk_m'] / 2 + hnet_TOD['@trk_h'] / 3
+hnet_TOD['NT_ASN'] = hnet_TOD['NT_ASN_PV'] + hnet_TOD['NT_ASN_MH_TRK']
 #hnet_TOD['DY_ASN'] = hnet_TOD['NT_ASN']
-hnet = hnet_TOD[['ID', 'INODE', 'JNODE', 'LENGTH', 'VDF', 'NT_ASN']].copy()
+hnet = hnet_TOD[['ID', 'INODE', 'JNODE', 'LENGTH', 'VDF', 'NT_ASN_PV', 'NT_ASN_MH_TRK', 'NT_ASN']].copy()
 hnet.fillna(0, inplace=True)
 for scen_num in range(2, len(periods_labels)):
     scen_path = os.path.join(model_path, "scen0" + str(scen_num))
@@ -59,17 +61,23 @@ for scen_num in range(2, len(periods_labels)):
         hnet_TOD = pd.read_csv(os.path.join(scen_path, hnetfile))
     else:
         raise ValueError('hnet_TOD File is not supported')
-    TOD_header = periods[str(scen_num)] + '_ASN'        
-    hnet_TOD[TOD_header] = hnet_TOD['VOLAU'] - (hnet_TOD['@trk_b'] + hnet_TOD['@trk_l'] + hnet_TOD['@trk_m'] + hnet_TOD['@trk_h'])
-    hnet = pd.merge(hnet, hnet_TOD[['ID', 'INODE', 'JNODE', TOD_header, 'LENGTH', 'VDF']],
+    TOD_header = periods[str(scen_num)] + '_ASN'
+    TOD_PV_header = periods[str(scen_num)] + '_ASN_PV'
+    hnet_TOD[TOD_header + '_PV'] = hnet_TOD['VOLAU'] - (hnet_TOD['@trk_m'] / 2 + hnet_TOD['@trk_h'] / 3)
+    hnet_TOD[TOD_header + '_MH_TRK'] = hnet_TOD['@trk_m'] / 2 + hnet_TOD['@trk_h'] / 3
+    hnet_TOD[TOD_header] = hnet_TOD[TOD_header + '_PV'] + hnet_TOD[TOD_header + '_MH_TRK']
+    hnet = pd.merge(hnet, hnet_TOD[['ID', 'INODE', 'JNODE', TOD_header, TOD_PV_header, TOD_header + '_MH_TRK', 'LENGTH', 'VDF']],
                  on = ['ID', 'INODE', 'JNODE', 'LENGTH', 'VDF'], how='outer')
     hnet.fillna(0, inplace=True)
-    #hnet['DY_ASN'] += hnet[TOD_header]
+# sum across all periods to calculate daily assigned volumes
+hnet['DY_ASN_PV'] = 0
+hnet['DY_ASN_MH_TRK'] = 0
 hnet['DY_ASN'] = 0
 for scen_num in range(1, len(periods_labels)):
+    hnet['DY_ASN_PV'] += hnet[periods[str(scen_num)] + '_ASN_PV']
+    hnet['DY_ASN_MH_TRK'] += hnet[periods[str(scen_num)] + '_ASN_MH_TRK']
     hnet['DY_ASN'] += hnet[periods[str(scen_num)] + '_ASN']
-#hnet = pd.read_csv("hnet.csv")
-
+# import traffic counts
 if countsfile[-4:].lower() == ".dbf":
     counts = Dbf5(os.path.join(net_in_path, countsfile)).to_dataframe()
 elif countsfile[-4:].lower() == ".csv":
@@ -88,29 +96,43 @@ elif countsfile_AADT[-4:].lower() == ".csv":
     counts_AADT = pd.read_csv(os.path.join(net_in_path, countsfile_AADT), encoding='cp1252')
 else:
     raise ValueError('counts_AADT file is not supported')
+# calculate med/hvy truck pct from AADT and merge to TOD counts
 counts_AADT['hvy_pct'] = np.where((counts_AADT['AADT19adj'] == 0), 0, counts_AADT['HCAADT19adj'] / counts_AADT['AADT19adj'])
 counts = counts.merge(counts_AADT[['Anode', 'Bnode', 'hvy_pct']], on = ['Anode', 'Bnode'], how = 'left')
 counts['hvy_pct'].fillna(0, inplace = True)
 for per in range(1,len(periods_labels)):
     TOD_counts = counts[counts["TOD"] == per].copy()
     TOD_counts.rename(columns={'Anode': 'INODE', 'Bnode': 'JNODE'}, inplace=True)
-    TOD_counts['AADT'] = TOD_counts['AADT'] * (1 - TOD_counts['hvy_pct'])
+    TOD_counts['AADT_PV'] = TOD_counts['AADT'] * (1 - TOD_counts['hvy_pct'])
+    TOD_counts['AADT_MH_TRK'] = TOD_counts['AADT'] * TOD_counts['hvy_pct']
     #hnet = hnet.merge(TOD_counts[['INODE', 'JNODE', 'AADT']], on = ['INODE', 'JNODE'], how = 'left')
     #hnet.rename(columns={'AADT': 'COUNTS_' + periods[str(per)]}, inplace=True)
     TOD_counts_Toll = counts_Toll[counts_Toll["TOD"] == per].copy()
     TOD_counts_Toll.rename(columns={'Anode': 'INODE', 'Bnode': 'JNODE'}, inplace=True)
-    TOD_counts_Toll['AADT'] = TOD_counts_Toll['AADT'] * TOD_counts_Toll['tier1_percent']
-    TOD_counts_all = pd.concat([TOD_counts[['INODE', 'JNODE', 'AADT']], TOD_counts_Toll[['INODE', 'JNODE', 'AADT']]])
-    hnet = hnet.merge(TOD_counts_all[['INODE', 'JNODE', 'AADT']], on = ['INODE', 'JNODE'], how = 'left')
-    hnet.rename(columns={'AADT': periods[str(per)] + '_CNT'}, inplace=True)
+    TOD_counts_Toll['AADT_PV'] = TOD_counts_Toll['AADT'] * (TOD_counts_Toll['tier1_percent'] + TOD_counts_Toll['tier2_percent'])
+    TOD_counts_Toll['AADT_MH_TRK'] = TOD_counts_Toll['AADT'] - TOD_counts_Toll['AADT_PV']
+    TOD_counts_all = pd.concat([TOD_counts[['INODE', 'JNODE', 'AADT_PV', 'AADT_MH_TRK', 'AADT']], TOD_counts_Toll[['INODE', 'JNODE', 'AADT_PV', 'AADT_MH_TRK', 'AADT']]])
+    hnet = hnet.merge(TOD_counts_all[['INODE', 'JNODE', 'AADT_PV', 'AADT_MH_TRK', 'AADT']], on = ['INODE', 'JNODE'], how = 'left')
+    hnet.rename(columns={'AADT_PV': periods[str(per)] + '_CNT_PV', 'AADT_MH_TRK': periods[str(per)] + '_CNT_MH_TRK', 'AADT': periods[str(per)] + '_CNT'}, inplace=True)
+# sum across all periods to calculate daily counts
+hnet['DY_CNT_PV'] = 0
+hnet['DY_CNT_MH_TRK'] = 0
 hnet['DY_CNT'] = 0
 for per in range(1, len(periods_labels)):
+    hnet['DY_CNT_PV'] += hnet[ periods[str(per)] + '_CNT_PV']
+    hnet['DY_CNT_MH_TRK'] += hnet[ periods[str(per)] + '_CNT_MH_TRK']
     hnet['DY_CNT'] += hnet[ periods[str(per)] + '_CNT']
+# Use daily AADT counts if TOD counts not available
 counts_AADT.rename(columns={'Anode': 'INODE', 'Bnode': 'JNODE'}, inplace=True)
-counts_AADT['AADT_CNT'] = (counts_AADT['AADT19adj'] - counts_AADT['HCAADT19adj']).clip(lower=0)
-hnet = hnet.merge(counts_AADT[['INODE', 'JNODE', 'AADT_CNT']], on = ['INODE', 'JNODE'], how = 'left')
+#counts_AADT['AADT_CNT_PV'] = (counts_AADT['AADT19adj'] - counts_AADT['HCAADT19adj']).clip(lower=0)
+counts_AADT['AADT_CNT_PV'] = np.where((counts_AADT['AADT19adj'] < counts_AADT['HCAADT19adj']), 0, counts_AADT['AADT19adj'] - counts_AADT['HCAADT19adj'])
+counts_AADT['AADT_CNT_MH_TRK'] = np.where((counts_AADT['AADT19adj'] < counts_AADT['HCAADT19adj']), 0, counts_AADT['HCAADT19adj'])
+counts_AADT['AADT_CNT'] = counts_AADT['AADT_CNT_PV'] + counts_AADT['AADT_CNT_MH_TRK']
+hnet = hnet.merge(counts_AADT[['INODE', 'JNODE', 'AADT_CNT_PV', 'AADT_CNT_MH_TRK', 'AADT_CNT']], on = ['INODE', 'JNODE'], how = 'left')
+hnet['DY_CNT_PV'] = np.where(np.isnan(hnet['DY_CNT_PV']), hnet['AADT_CNT_PV'], hnet['DY_CNT_PV'])
+hnet['DY_CNT_MH_TRK'] = np.where(np.isnan(hnet['DY_CNT_MH_TRK']), hnet['AADT_CNT_MH_TRK'], hnet['DY_CNT_MH_TRK'])
 hnet['DY_CNT'] = np.where(np.isnan(hnet['DY_CNT']), hnet['AADT_CNT'], hnet['DY_CNT'])
-hnet.drop(columns=['AADT_CNT'], inplace=True)
+hnet.drop(columns=['AADT_CNT_PV', 'AADT_CNT_MH_TRK', 'AADT_CNT'], inplace=True)
 
 print(f"Counted Daily VMT: {(hnet[count_fields['DAILY']] * hnet_TOD[lengthColumn] * distMult).sum()}")
 

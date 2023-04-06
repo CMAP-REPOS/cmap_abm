@@ -205,6 +205,28 @@ students <- per[per$school_zone_id > 0 & per$is_student == "True",]
 workers$distbin <- cut(workers$distance_to_work, breaks = c(seq(0,50, by=1), 9999), labels = F, right = F)
 students$distbin <- cut(students$distance_to_school, breaks = c(seq(0,50, by=1), 9999), labels = F, right = F)
 
+workers_cbd <- subset(workers, worktaz <= 47, select = c("person_id", "distance_to_work", "HDISTRICT", "WDISTRICT", "worktaz", "distbin", "finalweight"))
+workers_cbd$distbin <- cut(workers_cbd$distance_to_work, breaks = c(seq(0,100, by=1), 9999), labels = F, right = F)
+distBinCat_cbd <- data.frame(distbin = seq(1,101, by=1))
+tlfd_work_cbd <- ddply(workers_cbd[,c("HDISTRICT", "distbin", "finalweight")], c("HDISTRICT", "distbin"), summarise, work = sum(finalweight))
+tlfd_work_cbd <- cast(tlfd_work_cbd, distbin~HDISTRICT, value = "work", sum)
+tlfd_work_cbd$Total <- rowSums(tlfd_work_cbd[,!colnames(tlfd_work_cbd) %in% c("distbin")])
+tlfd_work_cbd_df <- merge(x = distBinCat_cbd, y = tlfd_work_cbd, by = "distbin", all.x = TRUE)
+tlfd_work_cbd_df[is.na(tlfd_work_cbd_df)] <- 0
+write.csv(workers_cbd, "workers_cbd.csv", row.names = F)
+write.csv(tlfd_work_cbd_df, "work_cbd_TLFD.csv", row.names = F)
+
+workers_chicago <- subset(workers, worktaz <= 717, select = c("person_id", "distance_to_work", "HDISTRICT", "WDISTRICT", "worktaz", "distbin", "finalweight"))
+workers_chicago$distbin <- cut(workers_chicago$distance_to_work, breaks = c(seq(0,100, by=1), 9999), labels = F, right = F)
+distBinCat_chicago <- data.frame(distbin = seq(1,101, by=1))
+tlfd_work_chicago <- ddply(workers_chicago[,c("HDISTRICT", "distbin", "finalweight")], c("HDISTRICT", "distbin"), summarise, work = sum(finalweight))
+tlfd_work_chicago <- cast(tlfd_work_chicago, distbin~HDISTRICT, value = "work", sum)
+tlfd_work_chicago$Total <- rowSums(tlfd_work_chicago[,!colnames(tlfd_work_chicago) %in% c("distbin")])
+tlfd_work_chicago_df <- merge(x = distBinCat_chicago, y = tlfd_work_chicago, by = "distbin", all.x = TRUE)
+tlfd_work_chicago_df[is.na(tlfd_work_chicago_df)] <- 0
+write.csv(workers_chicago, "workers_chicago.csv", row.names = F)
+write.csv(tlfd_work_chicago_df, "work_chicago_TLFD.csv", row.names = F)
+
 distBinCat <- data.frame(distbin = seq(1,51, by=1))
 
 # compute TLFDs by district and total
@@ -473,7 +495,9 @@ all_trips$depart_hour_orig = all_trips$depart_hour
 
 all_trips$depart_hour = all_trips$DEP_BIN_RECODE
 
-
+# append orig and dest taz to tours
+all_tours$orig_taz = tazdat$zone[match(all_tours$origin,tazdat$subzone)]
+all_tours$dest_taz = tazdat$zone[match(all_tours$destination,tazdat$subzone)]
 
 # Separate all_trips and all_tours into indiv and joint
 # ----------------------------------------------------
@@ -1214,6 +1238,38 @@ tourDistProfile <- data.frame(tourdist4$counts, tourdisti56$counts, tourdisti789
 colnames(tourDistProfile) <- c("esco", "imain", "idisc", "jmain", "jdisc", "atwork")
 
 write.csv(tourDistProfile, "nonMandTourDistProfile.csv")
+
+tours_orig_chicago <- subset(tours, orig_taz <= 717)
+unique_joint_tours_orig_chicago <- subset(unique_joint_tours, orig_taz <= 717)
+
+tourdistchiorig4    <- wtd.hist(tours_orig_chicago$SKIMDIST[tours_orig_chicago$TOURPURP==4], breaks = c(seq(0,40, by=1), 9999), freq = NULL, right=FALSE, weight = tours_orig_chicago$finalweight[tours_orig_chicago$TOURPURP==4])
+tourdistchiorigi56  <- wtd.hist(tours_orig_chicago$SKIMDIST[tours_orig_chicago$TOURPURP>=5 & tours_orig_chicago$TOURPURP<=6], breaks = c(seq(0,40, by=1), 9999), freq = NULL, right=FALSE, weight = tours_orig_chicago$finalweight[tours_orig_chicago$TOURPURP>=5 & tours_orig_chicago$TOURPURP<=6])
+tourdistchiorigi789 <- wtd.hist(tours_orig_chicago$SKIMDIST[tours_orig_chicago$TOURPURP>=7 & tours_orig_chicago$TOURPURP<=9], breaks = c(seq(0,40, by=1), 9999), freq = NULL, right=FALSE, weight = tours_orig_chicago$finalweight[tours_orig_chicago$TOURPURP>=7 & tours_orig_chicago$TOURPURP<=9])
+tourdistchiorigj56  <- wtd.hist(unique_joint_tours_orig_chicago$SKIMDIST[unique_joint_tours_orig_chicago$JOINT_PURP>=5 & unique_joint_tours_orig_chicago$JOINT_PURP<=6], breaks = c(seq(0,40, by=1), 9999), freq = NULL, right=FALSE, weight = unique_joint_tours_orig_chicago$numberhh_wgt[unique_joint_tours_orig_chicago$JOINT_PURP>=5 & unique_joint_tours_orig_chicago$JOINT_PURP<=6])
+tourdistchiorigj789 <- wtd.hist(unique_joint_tours_orig_chicago$SKIMDIST[unique_joint_tours_orig_chicago$JOINT_PURP>=7 & unique_joint_tours_orig_chicago$JOINT_PURP<=9], breaks = c(seq(0,40, by=1), 9999), freq = NULL, right=FALSE, weight = unique_joint_tours_orig_chicago$numberhh_wgt[unique_joint_tours_orig_chicago$JOINT_PURP>=7 & unique_joint_tours_orig_chicago$JOINT_PURP<=9])
+tourdistchiorig10   <- wtd.hist(tours_orig_chicago$SKIMDIST[tours_orig_chicago$TOURPURP==10], breaks = c(seq(0,40, by=1), 9999), freq = NULL, right=FALSE, weight = tours_orig_chicago$finalweight[tours_orig_chicago$TOURPURP==10])
+
+tourDistChiOrigProfile <- data.frame(tourdistchiorig4$counts, tourdistchiorigi56$counts, tourdistchiorigi789$counts, tourdistchiorigj56$counts, tourdistchiorigj789$counts, tourdistchiorig10$counts)
+
+colnames(tourDistChiOrigProfile) <- c("esco", "imain", "idisc", "jmain", "jdisc", "atwork")
+
+write.csv(tourDistChiOrigProfile, "nonMandTourDistChiOrigProfile.csv")
+
+tours_dest_chicago <- subset(tours, dest_taz <= 717)
+unique_joint_tours_dest_chicago <- subset(unique_joint_tours, dest_taz <= 717)
+
+tourdistchidest4    <- wtd.hist(tours_dest_chicago$SKIMDIST[tours_dest_chicago$TOURPURP==4], breaks = c(seq(0,40, by=1), 9999), freq = NULL, right=FALSE, weight = tours_dest_chicago$finalweight[tours_dest_chicago$TOURPURP==4])
+tourdistchidesti56  <- wtd.hist(tours_dest_chicago$SKIMDIST[tours_dest_chicago$TOURPURP>=5 & tours_dest_chicago$TOURPURP<=6], breaks = c(seq(0,40, by=1), 9999), freq = NULL, right=FALSE, weight = tours_dest_chicago$finalweight[tours_dest_chicago$TOURPURP>=5 & tours_dest_chicago$TOURPURP<=6])
+tourdistchidesti789 <- wtd.hist(tours_dest_chicago$SKIMDIST[tours_dest_chicago$TOURPURP>=7 & tours_dest_chicago$TOURPURP<=9], breaks = c(seq(0,40, by=1), 9999), freq = NULL, right=FALSE, weight = tours_dest_chicago$finalweight[tours_dest_chicago$TOURPURP>=7 & tours_dest_chicago$TOURPURP<=9])
+tourdistchidestj56  <- wtd.hist(unique_joint_tours_dest_chicago$SKIMDIST[unique_joint_tours_dest_chicago$JOINT_PURP>=5 & unique_joint_tours_dest_chicago$JOINT_PURP<=6], breaks = c(seq(0,40, by=1), 9999), freq = NULL, right=FALSE, weight = unique_joint_tours_dest_chicago$numberhh_wgt[unique_joint_tours_dest_chicago$JOINT_PURP>=5 & unique_joint_tours_dest_chicago$JOINT_PURP<=6])
+tourdistchidestj789 <- wtd.hist(unique_joint_tours_dest_chicago$SKIMDIST[unique_joint_tours_dest_chicago$JOINT_PURP>=7 & unique_joint_tours_dest_chicago$JOINT_PURP<=9], breaks = c(seq(0,40, by=1), 9999), freq = NULL, right=FALSE, weight = unique_joint_tours_dest_chicago$numberhh_wgt[unique_joint_tours_dest_chicago$JOINT_PURP>=7 & unique_joint_tours_dest_chicago$JOINT_PURP<=9])
+tourdistchidest10   <- wtd.hist(tours_dest_chicago$SKIMDIST[tours_dest_chicago$TOURPURP==10], breaks = c(seq(0,40, by=1), 9999), freq = NULL, right=FALSE, weight = tours_dest_chicago$finalweight[tours_dest_chicago$TOURPURP==10])
+
+tourDistChiDestProfile <- data.frame(tourdistchidest4$counts, tourdistchidesti56$counts, tourdistchidesti789$counts, tourdistchidestj56$counts, tourdistchidestj789$counts, tourdistchidest10$counts)
+
+colnames(tourDistChiDestProfile) <- c("esco", "imain", "idisc", "jmain", "jdisc", "atwork")
+
+write.csv(tourDistChiDestProfile, "nonMandTourDistChiDestProfile.csv")
 
 #prepare input for visualizer
 tourDistProfile_vis <- tourDistProfile
@@ -1964,9 +2020,9 @@ temp$tourmode[temp$tourmode=="tourmode5"] <- 'Bike/Moped'
 temp$tourmode[temp$tourmode=="tourmode6"] <- 'Walk-Transit'
 temp$tourmode[temp$tourmode=="tourmode7"] <- 'PNR-Transit'
 temp$tourmode[temp$tourmode=="tourmode8"] <- 'KNR-Transit'
-temp$tourmode[temp$tourmode=="tourmode9"] <- 'TNR-Transit'
+temp$tourmode[temp$tourmode=="tourmode9"] <- 'TNC-Transit'
 temp$tourmode[temp$tourmode=="tourmode10"] <- 'School Bus'
-temp$tourmode[temp$tourmode=="tourmode11"] <- 'Ride Hail'
+temp$tourmode[temp$tourmode=="tourmode11"] <- 'Ridehail'
 
 colnames(temp) <- c("tripmode","tourmode","purpose","value","grp_var")
 
