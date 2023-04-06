@@ -8,3 +8,14 @@ util_dist_15_up,"Distance, piecewise linear for 15+ miles",@(_DIST-15.0).clip(0)
 util_size_variable,Size variable,@(df['size_term'] * df['shadow_price_size_term_adjustment']).apply(np.log1p),1,1,1
 util_utility_adjustment,utility adjustment,@df['shadow_price_utility_adjustment'],1,1,1
 util_no_attractions,No attractions,@df['size_term']==0,-999,-999,-999
+# distance calibration,,,,,
+util_dist_0_3_cook_asc,Distance constants Cook County 0-3 miles,@(_DIST > 0) & (_DIST <= 3) & (df['home_county']==17031),,dist_0_3_Cook_ASC,dist_0_3_Cook_ASC
+util_dist_3_5_cook_asc,Distance constants Cook County 3-5 miles,@(_DIST > 3) & (_DIST <= 5) & (df['home_county']==17031),,dist_3_5_Cook_ASC,dist_3_5_Cook_ASC
+util_dist_5_7_cook_asc,Distance constants Cook County 5-7 miles,@(_DIST > 5) & (_DIST <= 7) & (df['home_county']==17031),,dist_5_7_Cook_ASC,dist_5_7_Cook_ASC
+util_dist_7_25_cook_asc,Distance constants Cook County 7-25 miles,@(_DIST > 7) & (_DIST <= 25) & (df['home_county']==17031),,dist_7_25_Cook_ASC,dist_7_25_Cook_ASC
+util_dist_25_up_cook_asc,Distance constants Cook County 25+ miles,@(_DIST > 25) & (df['home_county']==17031),,dist_25_up_Cook_ASC,dist_25_up_Cook_ASC
+util_dist_0_3_non_cook_asc,Distance constants Non-Cook County 0-3 miles,@(_DIST > 0) & (_DIST <= 3) & (df['home_county']!=17031),,dist_0_3_Non_Cook_ASC,dist_0_3_Non_Cook_ASC
+util_dist_3_5_non_cook_asc,Distance constants Non-Cook County 3-5 miles,@(_DIST > 3) & (_DIST <= 5) & (df['home_county']!=17031),,dist_3_5_Non_Cook_ASC,dist_3_5_Non_Cook_ASC
+util_dist_5_7_non_cook_asc,Distance constants Non-Cook County 5-7 miles,@(_DIST > 5) & (_DIST <= 7) & (df['home_county']!=17031),,dist_5_7_Non_Cook_ASC,dist_5_7_Non_Cook_ASC
+util_dist_7_25_non_cook_asc,Distance constants Non-Cook County 7-25 miles,@(_DIST > 7) & (_DIST <= 25) & (df['home_county']!=17031),,dist_7_25_Non_Cook_ASC,dist_7_25_Non_Cook_ASC
+util_dist_25_up_non_cook_asc,Distance constants Non-Cook County 25+ miles,@(_DIST > 25) & (df['home_county']!=17031),,dist_25_up_Non_Cook_ASC,dist_25_up_Non_Cook_ASC

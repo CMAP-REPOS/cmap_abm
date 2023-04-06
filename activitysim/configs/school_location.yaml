@@ -4,6 +4,7 @@ SIMULATE_CHOOSER_COLUMNS:
   - home_zone_id
   - school_segment
   - household_id
+  - home_county
 
 # model-specific logsum-related settings
 CHOOSER_ORIG_COL_NAME: home_zone_id
