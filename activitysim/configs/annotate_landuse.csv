@@ -10,6 +10,7 @@ Adjusted fire employment,ADJ_fire,emp_adjust * land_use.fire
 Adjusted service employment,ADJ_service,emp_adjust * land_use.service
 Adjusted govt employment,ADJ_govt,emp_adjust * land_use.govt
 Adjusted agnr employment,ADJ_agnr,emp_adjust * land_use.agnr
+Adjusted total employment,ADJ_TOTEMP,emp_adjust * land_use.TOTEMP
 household_density,household_density,land_use.TOTHH / (land_use.acres.clip(lower=1))
 employment_density,employment_density,land_use.TOTEMP / (land_use.acres.clip(lower=1))
 density_index,density_index,(household_density *employment_density) / (household_density + employment_density).clip(lower=1)

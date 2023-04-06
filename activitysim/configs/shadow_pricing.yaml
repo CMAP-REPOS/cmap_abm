@@ -4,31 +4,57 @@ shadow_pricing_models:
 
 # global switch to enable/disable loading of saved shadow prices
 # (ignored if global use_shadow_pricing switch is False)
+# (warm start not available for shadow price simulation method)
 LOAD_SAVED_SHADOW_PRICES: False
 
+SCALE_SIZE_TABLE: False
+
+# write out choices by iteration to trace folder
+WRITE_ITERATION_CHOICES: False
+
 # number of shadow price iterations for cold start
-MAX_ITERATIONS: 5
+MAX_ITERATIONS: 10
 
 # number of shadow price iterations for warm start (after loading saved shadow_prices)
-MAX_ITERATIONS_SAVED: 1
+#MAX_ITERATIONS_SAVED: 1
 
 # ignore criteria for zones smaller than size_threshold
 SIZE_THRESHOLD: 10
+
+# simulation method: ignore criteria for zones smaller than target_threshold (total employmnet or enrollment)
+TARGET_THRESHOLD: 20
 
 # zone passes if modeled is within percent_tolerance of  predicted_size
 PERCENT_TOLERANCE: 5
 
 # max percentage of zones allowed to fail
-FAIL_THRESHOLD: 10
+FAIL_THRESHOLD: 1
 
-# CTRAMP or daysim
-SHADOW_PRICE_METHOD: ctramp
+# shadow pricing method
+SHADOW_PRICE_METHOD: simulation
+#SHADOW_PRICE_METHOD: ctramp
 #SHADOW_PRICE_METHOD: daysim
 
-# ctramp-style shadow_pricing_method parameters
-DAMPING_FACTOR: 1
+# simulation method: total employment/enrollment fields in land_use.csv
+# apply different targets for each segment specified in destination_size_terms.csv
+school_segmentation_targets:
+  # format is segment: land_use_column
+  university: univ
+  highschool: highschool_enroll
+  gradeschool: k8_enroll
 
-# daysim-style shadow_pricing_method parameters
-# FIXME should these be the same as PERCENT_TOLERANCE and FAIL_THRESHOLD above?
-DAYSIM_ABSOLUTE_TOLERANCE: 50
-DAYSIM_PERCENT_TOLERANCE: 10
+# if target names are the same, they will be combined together
+workplace_segmentation_targets:
+  # using total employment scaled to remove external workers. see annotate_landuse.csv
+  work_low: ADJ_TOTEMP
+  work_med: ADJ_TOTEMP
+  work_high: ADJ_TOTEMP
+
+
+## ctramp-style shadow_pricing_method parameters
+#DAMPING_FACTOR: 1
+#
+## daysim-style shadow_pricing_method parameters
+## FIXME should these be the same as PERCENT_TOLERANCE and FAIL_THRESHOLD above?
+#DAYSIM_ABSOLUTE_TOLERANCE: 50
+#DAYSIM_PERCENT_TOLERANCE: 10
