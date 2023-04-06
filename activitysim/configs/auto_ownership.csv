@@ -19,8 +19,8 @@ util_auto_time_saving_per_worker,Auto time savings per worker to work,"@np.where
 util_univ_students_GQ,University Students living in GQ households,(num_college_age > 0) & ((HHT == 5) | (HHT == 7)),,coef_cars1_univ_GQ,coef_unavailable,coef_unavailable,coef_unavailable
 util_constants,Alternative-specific constants,1,,coef_cars1,coef_cars2,coef_cars3,coef_cars4
 #,,,,,,,
-calib_constant,calibration constant,1,coef_cars0_asc,coef_cars1_asc,coef_cars2_asc,coef_cars3_asc,coef_cars4_asc
 util_boone,Boone County Resident,@df.home_county == 17007,coef_cars0_boone,,,,
+util_cook,Cook County Resident,@df.home_county == 17031,coef_cars0_cook,,,,
 util_dekalb,DeKalb County Resident,@df.home_county == 17037,coef_cars0_dekalb,,,,
 util_grundy,Grundy County Resident,@df.home_county == 17063,coef_cars0_grundy,,,,
 util_kankakee,Kankakee County Resident,@df.home_county == 17091,coef_cars0_kankakee,,,,
