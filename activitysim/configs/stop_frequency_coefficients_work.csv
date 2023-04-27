@@ -24,8 +24,7 @@ dummy for distance less than 20 Miles,-0.22,coef_dummy_for_distance_less_than_20
 dummy for distance in miles,0.01,coef_dummy_for_distance_in_miles
 No stops if tour mode is driveTransit,-999,coef_no_stops_if_tour_mode_is_drivetransit
 Number of subtours in the tour,0.19,coef_number_of_subtours_in_the_tour
-Alternative specific constant for the total number of stops,0,coef_alternative_specific_constant_for_the_total_number_of_stops_0out_2in
-Alternative specific constant for the total number of stops,0.695,coef_alternative_specific_constant_for_the_total_number_of_stops_2out_3in
+Alternative specific constant for the total number of stops 5+,0.695,coef_asc_total_stops_5_up
 ASC for 1 inbound stop,0.286328944,coef_asc_1in
 ASC for 2 inbound stop,-0.732273256,coef_asc_2in
 ASC for 3 inbound stop,-1.278945311,coef_asc_3in

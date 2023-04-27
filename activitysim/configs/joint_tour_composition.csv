@@ -1,5 +1,5 @@
 Label,Description,Expression,adults,children,mixed
-util_asc,Alternative-specific constant,1,,coef_asc_children,coef_asc_mixed
+util_asc,Alternative-specific constant,1,,asc_children,asc_mixed
 util_tour_purpose_is_eating_out,Joint tour purpose is eating out (dummy),tour_type=='eat',,coef_tour_purpose_is_eating_out_children,coef_tour_purpose_is_eating_out_mixed
 util_tour_purpose_is_discretionary,Joint tour purpose is discretionary (dummy),tour_type=='disc',coef_tour_purpose_is_discretionary_adults,coef_tour_purpose_is_discretionary_children,
 util_number_of_full_time_workers,Number of Full-Time Workers in the household,num_full_max3,coef_number_of_full_time_workers_adults,,coef_number_of_full_time_workers_mixed
@@ -16,9 +16,7 @@ util_household_in_urban_area,Household is located in an urban area type (dummy),
 util_household_in_suburban_area,Household is located in a suburban area type (dummy),~(home_is_urban | home_is_rural),coef_household_in_suburban_area_adults,,coef_household_in_suburban_area_mixed
 util_log_max_overlap_of_adults_time_windows,Log of max pair-wise overlap of household adults time windows,log_time_window_overlap_adult,coef_log_max_overlap_of_adults_time_windows,,
 util_log_max_overlap_of_childrens_time_windows,Log of max pair-wise overlap of household childrens time windows,log_time_window_overlap_child,,coef_log_max_overlap_of_childrens_time_windows,
-util_log_max_overlap_of_time_windows,Log of max pair-wise overlap of household adults and childrens time windows,log_time_window_overlap_adult_child,,,coef_log_max_overlap_of_time_windows
+util_log_max_overlap_of_time_windows,Log of max pair-wise overlap of household adults and childrens time windows,log_time_window_overlap_adult_child,,,coef_log_max_overlap_of_mixed_time_windows
 util_two_acive_adults,Two adults must have Mand or Non Mand activity patterns to have adult-only joint travel,num_travel_active_adults<2,coef_unavailable,,
 util_two_active_children,Two children must have Mand or Non Mand activity patterns to have children-only joint travel,num_travel_active_children<2,,coef_unavailable,
 util_travel_active_adult,At least one adult and at least one child must have Mand or Non Mand activity patterns to have adult/child joint travel,(num_travel_active_adults == 0) | (num_travel_active_children == 0),,,coef_unavailable
-#,,,,,
-util_calib,calibration cte,1,,asc_calib_children,asc_calib_mixed

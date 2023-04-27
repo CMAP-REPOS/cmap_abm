@@ -9,9 +9,8 @@ Arrival later than 17:00.,0.389,coef_arrival_later_than_17_00_
 Dummy for the duration of the tour being equal or greater than or equal to 9 hours ,0.8434,coef_dummy_for_the_duration_of_the_tour_being_equal_or_greater_than_or_equal_to_9_hours_
 HH accesibility for inbound tours. Interaction,0.2481,coef_hh_accesibility_for_inbound_tours_interaction
 No stops if tour mode is driveTransit,-999,coef_no_stops_if_tour_mode_is_drivetransit
-Alternative specific constant for the total number of stops,0,coef_alternative_specific_constant_for_the_total_number_of_stops_0out_2in
-Alternative specific constant for the total number of stops,1.272,coef_alternative_specific_constant_for_the_total_number_of_stops_1out_3in
-Alternative specific constant for the total number of stops,1.871,coef_alternative_specific_constant_for_the_total_number_of_stops_2out_3in
+Alternative specific constant for the total number of stops 4,1.272,coef_asc_total_stops_4
+Alternative specific constant for the total number of stops 5+,1.871,coef_asc_total_stops_5_up
 ASC for 1 inbound stop,-1.35790909,coef_asc_1in
 ASC for 2 inbound stop,-2.699307849,coef_asc_2in
 ASC for 3 inbound stop,-2.932709152,coef_asc_3in

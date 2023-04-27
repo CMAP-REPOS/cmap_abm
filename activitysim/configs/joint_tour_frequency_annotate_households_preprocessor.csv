@@ -25,7 +25,6 @@ Description,Target,Expression
 ,cdap_mand_nondriving_child_max3,"_2_PTYPE_CDAP_PATTERN_COUNT(7, 8, 'M', households, persons).clip(0,3)"
 ,income_between_50_and_100,(households.income > 50000) & (households.income <= 100000)
 ,income_greater_than_100,households.income > 100000
-,income_missing,0
 logTimeWindowOverlapAdult,log_time_window_overlap_adult,np.log1p(time_window_overlap_adult)
 logTimeWindowOverlapChild,log_time_window_overlap_child,np.log1p(time_window_overlap_child)
 logTimeWindowOverlapAdultChild,log_time_window_overlap_adult_child,np.log1p(time_window_overlap_adult_child)

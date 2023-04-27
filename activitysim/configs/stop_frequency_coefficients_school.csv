@@ -10,9 +10,8 @@ Arrival later than 17:00.,1.8377,coef_arrival_later_than_17_00_
 Dummy for the duration of the tour being equal or greater than or equal to 9 hours ,0.9549,coef_dummy_for_the_duration_of_the_tour_being_equal_or_greater_than_or_equal_to_9_hours_
 dummy for distance in miles,0.0438,coef_dummy_for_distance_in_miles
 No stops if tour mode is driveTransit,-999,coef_no_stops_if_tour_mode_is_drivetransit
-Alternative specific constant for the total number of stops,0,coef_alternative_specific_constant_for_the_total_number_of_stops_0out_2in
-Alternative specific constant for the total number of stops,0.701,coef_alternative_specific_constant_for_the_total_number_of_stops_1out_3in
-Alternative specific constant for the total number of stops,1.135,coef_alternative_specific_constant_for_the_total_number_of_stops_2out_3in
+Alternative specific constant for the total number of stops,0.701,coef_asc_total_stops_4
+Alternative specific constant for the total number of stops,1.135,coef_asc_total_stops_5_up
 ASC for 1 inbound stop,-1.081944324,coef_asc_1in
 ASC for 2 inbound stop,-2.366634157,coef_asc_2in
 ASC for 3 inbound stop,-3.103356543,coef_asc_3in

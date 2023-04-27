@@ -1,12 +1,4 @@
 coefficient_name,value,constrain
-# asc,,
-coef_asc_0_tours,0,T
-coef_asc_1_Shop,-6.0149,F
-coef_asc_1_Main,-5.7389,F
-coef_asc_1_Eat,-6.3757,F
-coef_asc_1_Visit,-5.8818,F
-coef_asc_1_Disc,-5.4806,F
-coef_asc_2_tours,-14.4576,F
 # zero_tours,,
 coef_fullTimeHomeMaxThree_zero_tours,1.175,F
 coef_partTimeHomeMaxThree_zero_tours,1.447,F
@@ -52,7 +44,6 @@ coef_logTimeWindowOverlapAdult_eatout,0.4856,F
 coef_logTimeWindowOverlapAdultChild_eatout,0.0921,F
 coef_incomeBetween50And100_eatout,0.2977,F
 coef_incomeGreaterThan100_eatout,0.4492,F
-coef_incomeMissing_dummy_always_zero_eatout,0.278,F
 coef_moreCarsThanWorkers_eatout,0.3825,F
 coef_walkRetailAccessibility_eatout,0.062,F
 # visiting,,
@@ -80,27 +71,26 @@ coef_logTimeWindowOverlapChild_disc,0.1162,F
 coef_logTimeWindowOverlapAdultChild_disc,0.2212,F
 coef_incomeBetween50And100_disc,0.3167,F
 coef_incomeGreaterThan100_disc,0.486,F
-coef_incomeMissing_dummy_always_zero_disc,0.3723,F
 coef_zeroAutomobiles_disc,-0.909,F
-#Phase1_Calibration,,
-asc_calib_0_tours,0,T
-asc_calib_1_Disc,-0.169197,F
-asc_calib_1_Eat,0.217703,F
-asc_calib_1_Main,0.20544,F
-asc_calib_1_Shop,0.040456,F
-asc_calib_1_Visit,-1.696067,F
-asc_calib_2_DD,0.605193,F
-asc_calib_2_ED,2.616886,F
-asc_calib_2_EE,2.384229,F
-asc_calib_2_EV,-0.318838,F
-asc_calib_2_MD,1.991904,F
-asc_calib_2_ME,2.431681,F
-asc_calib_2_MM,1.477506,F
-asc_calib_2_MV,-1.772132,F
-asc_calib_2_SD,2.224376,F
-asc_calib_2_SE,0.064007,F
-asc_calib_2_SM,2.137769,F
-asc_calib_2_SS,1.69105,F
-asc_calib_2_SV,-1.123184,F
-asc_calib_2_VD,1.202442,F
-asc_calib_2_VV,-2.862625,F
+# ASC,,
+asc_0_tours,0,T
+asc_1_Disc,-5.649797,F
+asc_1_Eat,-6.157997,F
+asc_1_Main,-5.53346,F
+asc_1_Shop,-5.974444,F
+asc_1_Visit,-7.577867,F
+asc_2_DD,-13.852407,F
+asc_2_ED,-11.840714,F
+asc_2_EE,-12.073371,F
+asc_2_EV,-14.776438,F
+asc_2_MD,-12.465696,F
+asc_2_ME,-12.025919,F
+asc_2_MM,-12.980094,F
+asc_2_MV,-16.229732,F
+asc_2_SD,-12.233224,F
+asc_2_SE,-14.393593,F
+asc_2_SM,-12.319831,F
+asc_2_SS,-12.76655,F
+asc_2_SV,-15.580784,F
+asc_2_VD,-13.255158,F
+asc_2_VV,-17.320225,F

@@ -1,7 +1,7 @@
 coefficient_name,value,constrain
 coef_unavailable,-999,T
-coef_asc_children,5.3517,F
-coef_asc_mixed,5.6290,fF
+asc_children,-30,F
+asc_mixed,-1.65077,F
 coef_tour_purpose_is_eating_out_children,-0.9678,F
 coef_tour_purpose_is_eating_out_mixed,-0.8027,F
 coef_tour_purpose_is_discretionary_adults,0.7648,F
@@ -29,6 +29,4 @@ coef_household_in_suburban_area_adults,0.5105,F
 coef_household_in_suburban_area_mixed,0.1283,F
 coef_log_max_overlap_of_adults_time_windows,1.192,F
 coef_log_max_overlap_of_childrens_time_windows,1.841,F
-coef_log_max_overlap_of_time_windows,1.958,F
-asc_calib_children,-50,F
-asc_calib_mixed,-6.999770,F
+coef_log_max_overlap_of_mixed_time_windows,1.958,F

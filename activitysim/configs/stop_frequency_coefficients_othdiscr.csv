@@ -10,24 +10,22 @@ Dummy for the duration of the tour being equal or greater than or equal to 9 hou
 dummy for distance less than 10 Miles ,0.3756,coef_dummy_for_distance_less_than_10_miles_
 dummy for distance in miles,-0.0225,coef_dummy_for_distance_in_miles
 No stops if tour mode is driveTransit,-999,coef_no_stops_if_tour_mode_is_drivetransit
-Alternative specific constant for return  stops on joint tours,-1.329,coef_alternative_specific_constant_for_return_stops_on_joint_tours_0out_1in
-Alternative specific constant for the total number of stops,0,coef_alternative_specific_constant_for_the_total_number_of_stops_0out_2in
-Alternative specific constant for return  stops on joint tours,-2.796,coef_alternative_specific_constant_for_return_stops_on_joint_tours_0out_2in
-Alternative specific constant for the total number of stops on joint tours,0,coef_alternative_specific_constant_for_the_total_number_of_stops_on_joint_tours_0out_2in
-Alternative specific constant for return  stops on joint tours,-3.379,coef_alternative_specific_constant_for_return_stops_on_joint_tours_0out_3in
-Alternative specific constant for outbound stops on joint tours,-1.783,coef_alternative_specific_constant_for_outbound_stops_on_joint_tours_1out_0in
-Alternative specific constant for the total number of stops,0.863,coef_alternative_specific_constant_for_the_total_number_of_stops_1out_3in
-Alternative specific constant for the total number of stops on joint tours,0.518,coef_alternative_specific_constant_for_the_total_number_of_stops_on_joint_tours_1out_3in
-Alternative specific constant for outbound stops on joint tours,-4.067,coef_alternative_specific_constant_for_outbound_stops_on_joint_tours_2out_0in
-Alternative specific constant for the total number of stops,0.939,coef_alternative_specific_constant_for_the_total_number_of_stops_2out_3in
-Alternative specific constant for the total number of stops on joint tours,1.497,coef_alternative_specific_constant_for_the_total_number_of_stops_on_joint_tours_2out_3in
-Alternative specific constant for outbound stops on joint tours,-4.998,coef_alternative_specific_constant_for_outbound_stops_on_joint_tours_3out_0in
+Alternative specific constant for return  stops on joint tours,-1.329,coef_asc_joint_1in
+Alternative specific constant for return  stops on joint tours,-2.796,coef_asc_joint_2in
+Alternative specific constant for return  stops on joint tours,-3.379,coef_asc_joint_3in
+Alternative specific constant for outbound stops on joint tours,-1.783,coef_asc_joint_1out
+Alternative specific constant for outbound stops on joint tours,-4.067,coef_asc_joint_2out
+Alternative specific constant for outbound stops on joint tours,-4.998,coef_asc_joint_3out
+Alternative specific constant for the total number of stops on joint tours,0.518,coef_asc_joint_total_stops_4
+Alternative specific constant for the total number of stops on joint tours,1.497,coef_asc_joint_total_stops_5_up
 ASC for 1 inbound stop,-0.548709823,coef_asc_1in
 ASC for 2 inbound stop,-1.947383516,coef_asc_2in
 ASC for 3 inbound stop,-2.274773757,coef_asc_3in
 ASC for 1 outbound stop,-1.168131981,coef_asc_1out
 ASC for 2 outbound stop,-2.394361889,coef_asc_2out
 ASC for 3 outbound stop,-3.087678389,coef_asc_3out
+Alternative specific constant for the total number of stops,0.863,coef_asc_total_stops_4
+Alternative specific constant for the total number of stops,0.939,coef_asc_total_stops_5_up
 ,-0.126,coef_telecommute1_2
 ,-0.301,coef_telecommute1_3
 ,-0.301,coef_telecommute1_4
