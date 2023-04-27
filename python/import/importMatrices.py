@@ -65,19 +65,19 @@ for scen in HSCENS:
     spec2 = {
         "type": "MATRIX_CALCULATION",
         "result": "SOV_TR_TOT_L_%s"%period,
-        "expression": "SOV_TR_L_%s+0.1*extAuto_%s+0.1*extAP_%s"%(period, period, period),
+        "expression": "SOV_TR_L_%s+0.1*extAuto_%s+0.1*extAP_%s+visitor_SOV_L_%s"%(period, period, period, period),
     }
 
     spec3 = {
         "type": "MATRIX_CALCULATION",
         "result": "HOV2_TOT_L_%s"%period,
-        "expression": "HOV2_L_%s"%period,
+        "expression": "HOV2_L_%s+visitor_HOV2_L_%s"%(period,period),
     }
     
     spec4 = {
         "type": "MATRIX_CALCULATION",
         "result": "HOV3_TOT_L_%s"%period,
-        "expression": "HOV3_L_%s"%period,
+        "expression": "HOV3_L_%s+visitor_HOV3_L_%s"%(period,period),
     }
     
     # Prepare matrices for assignment - Mid VoT
@@ -90,19 +90,19 @@ for scen in HSCENS:
     spec6 = {
         "type": "MATRIX_CALCULATION",
         "result": "SOV_TR_TOT_M_%s"%period,
-        "expression": "SOV_TR_M_%s+0.45*extAuto_%s+0.45*extAP_%s"%(period, period, period),
+        "expression": "SOV_TR_M_%s+0.45*extAuto_%s+0.45*extAP_%s+visitor_SOV_M_%s"%(period, period, period, period),
     }
     
     spec7 = {
         "type": "MATRIX_CALCULATION",
         "result": "HOV2_TOT_M_%s"%period,
-        "expression": "HOV2_M_%s"%period,
+        "expression": "HOV2_M_%s+visitor_HOV2_M_%s"%(period,period),
     }
     
     spec8 = {
         "type": "MATRIX_CALCULATION",
         "result": "HOV3_TOT_M_%s"%period,
-        "expression": "HOV3_M_%s"%period,
+        "expression": "HOV3_M_%s+visitor_HOV3_H_%s"%(period,period),
     }
     
     # Prepare matrices for assignment - High VoT
@@ -115,19 +115,19 @@ for scen in HSCENS:
     spec10 = {
         "type": "MATRIX_CALCULATION",
         "result": "SOV_TR_TOT_H_%s"%period,
-        "expression": "SOV_TR_H_%s+0.45*extAuto_%s+0.45*extAP_%s"%(period, period, period),
+        "expression": "SOV_TR_H_%s+0.45*extAuto_%s+0.45*extAP_%s+visitor_SOV_H_%s"%(period, period, period, period),
     }
     
     spec11 = {
         "type": "MATRIX_CALCULATION",
         "result": "HOV2_TOT_H_%s"%period,
-        "expression": "HOV2_H_%s"%period,
+        "expression": "HOV2_H_%s+visitor_HOV2_H_%s"%(period,period),
     }
     
     spec12 = {
         "type": "MATRIX_CALCULATION",
         "result": "HOV3_TOT_H_%s"%period,
-        "expression": "HOV3_H_%s"%period,
+        "expression": "HOV3_H_%s+visitor_HOV3_H_%s"%(period,period),
     }
     
     computeMatrix([spec1, spec2, spec3, spec4, spec5, spec6, spec7, spec8, 
@@ -242,7 +242,7 @@ for scen in TSCENS:
                 "TRN_KNRIN_%s_%s"%(V,period): "mf%s%s"%(scen-200, 269 + 7 * vint), 
                 "TRN_TNCOUT_%s_%s"%(V,period): "mf%s%s"%(scen-200, 270 + 7 * vint), 
                 "TRN_TNCIN_%s_%s"%(V,period): "mf%s%s"%(scen-200, 271 + 7 * vint)                
-        }    
+            }
         
         importOMX(file_path = "%s\\trn_%s_taz.omx"%(ASIM_OUTPUT, period), 
                     matrices = trnMatsToImport, 
@@ -271,7 +271,15 @@ for scen in TSCENS:
             "expression": "0",
         }        
         computeMatrix([spec1, spec2, spec3, spec4])
-        
+
+        # combine visitor WALK transit into resident WALK transit
+        spec1 = {
+            "type": "MATRIX_CALCULATION",
+            "result": "TRN_WALK_%s_%s"%(V,period),
+            "expression": "TRN_WALK_%s_%s + visitor_TRN_WALK_%s_%s"%(V,period,V,period),
+        }
+        computeMatrix(spec1)
+
         if summary:
             # export max, average, sum for each transit skim matrix
             data = []
@@ -361,25 +369,25 @@ for scen in TSCENS:
             df = pd.DataFrame(data, columns=['Demand', 'Max', 'Max orig', 'Max dest', 'Avg', 'Sum'])
             filename = "%s\\metra_PHT_iter%s_%s.csv"%(EMME_OUTPUT, msa_iteration, datetime.date.today())
             df.to_csv(filename, mode='a', index=False, header=not os.path.exists(filename), line_terminator='\n')   
-            # export total boardings
-            data = []
-            matrices = ["WALK", "PNROUT", "PNRIN", "KNROUT", "KNRIN"]
-            for name in matrices:
-                demand_name = "TRN_%s_%s_%s" % (name, V, period)
-                metra_demand_name = "(mfXFERS_%s_%s__%s+1)*mfTRN_%s_%s_%s" % (name, V, period, name, V, period)
-                spec_sum={
-                    "expression": metra_demand_name,
-                    "result": "msTEMP_SUM",
-                    "aggregation": {
-                        "origins": "+",
-                        "destinations": "+"
-                    },
-                    "type": "MATRIX_CALCULATION"
-                }
-                report = computeMatrix(spec_sum) 
-                data.append([demand_name, report["maximum"], report["maximum_at"]["origin"], report["maximum_at"]["destination"], 
-                            report["average"], report["sum"]])
-            df = pd.DataFrame(data, columns=['Demand', 'Max', 'Max orig', 'Max dest', 'Avg', 'Sum'])
-            filename = "%s\\trn_boardings_iter%s_%s.csv"%(EMME_OUTPUT, msa_iteration, datetime.date.today())
-            df.to_csv(filename, mode='a', index=False, header=not os.path.exists(filename), line_terminator='\n') 
+            ## export total boardings
+            #data = []
+            #matrices = ["WALK", "PNROUT", "PNRIN", "KNROUT", "KNRIN"]
+            #for name in matrices:
+            #    demand_name = "TRN_%s_%s_%s" % (name, V, period)
+            #    metra_demand_name = "(mfXFERS_%s_%s__%s+1)*mfTRN_%s_%s_%s" % (name, V, period, name, V, period)
+            #    spec_sum={
+            #        "expression": metra_demand_name,
+            #        "result": "msTEMP_SUM",
+            #        "aggregation": {
+            #            "origins": "+",
+            #            "destinations": "+"
+            #        },
+            #        "type": "MATRIX_CALCULATION"
+            #    }
+            #    report = computeMatrix(spec_sum) 
+            #    data.append([demand_name, report["maximum"], report["maximum_at"]["origin"], report["maximum_at"]["destination"], 
+            #                report["average"], report["sum"]])
+            #df = pd.DataFrame(data, columns=['Demand', 'Max', 'Max orig', 'Max dest', 'Avg', 'Sum'])
+            #filename = "%s\\trn_boardings_iter%s_%s.csv"%(EMME_OUTPUT, msa_iteration, datetime.date.today())
+            #df.to_csv(filename, mode='a', index=False, header=not os.path.exists(filename), line_terminator='\n') 
 print("Completed importing matrices at %s"%(datetime.datetime.now()))

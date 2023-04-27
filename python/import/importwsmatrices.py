@@ -65,7 +65,7 @@ for scen in HSCENS:
     scenario = databank.scenario(scen)
     desktop.data_explorer().replace_primary_scenario(scenario)
     period = per[scen]
-    for skid in list(range(300, 316)) + list(range(101, 126)) + list(range(262, 286)):
+    for skid in list(range(300, 316)) + list(range(101, 129)) + list(range(262, 289)):
         try:
             deleteMatrix(matrix = databank.matrix("mf%s%s"%(scen, skid)))
         except:
@@ -94,7 +94,20 @@ for scen in HSCENS:
             "extAuto_%s"%period: "mf%s%s"%(scen, 117), # -> SOV TR L/M/H
             "extTRK_H_%s"%period: "mf%s%s"%(scen, 118), ## -> TRK_H
             "extAP_%s"%period: "mf%s%s"%(scen, 119) # -> SOV TR L/M/H
-        }          
+        }
+
+    visitorMatsToImport = {
+            "visitor_SOV_L_%s"%period: "mf%s%s"%(scen, 120),
+            "visitor_SOV_M_%s"%period: "mf%s%s"%(scen, 121),
+            "visitor_SOV_H_%s"%period: "mf%s%s"%(scen, 122),
+            "visitor_HOV2_L_%s"%period: "mf%s%s"%(scen, 123),
+            "visitor_HOV2_M_%s"%period: "mf%s%s"%(scen, 124),
+            "visitor_HOV2_H_%s"%period: "mf%s%s"%(scen, 125),
+            "visitor_HOV3_L_%s"%period: "mf%s%s"%(scen, 126),
+            "visitor_HOV3_M_%s"%period: "mf%s%s"%(scen, 127),
+            "visitor_HOV3_H_%s"%period: "mf%s%s"%(scen, 128)
+        }       
+
     scenario = databank.scenario(scen)    
     for n, m in autoMatsToImport.items():
         createMatrix(matrix_id = m, matrix_name = n, scenario = scenario, overwrite = True)
@@ -102,6 +115,10 @@ for scen in HSCENS:
 
     for n, m in auxMatsToImport.items():
         createMatrix(matrix_id = m, matrix_name = n, scenario = scenario, overwrite = True)
+
+    for n, m in visitorMatsToImport.items():
+        createMatrix(matrix_id = m, matrix_name = n, scenario = scenario, overwrite = True)
+    importOMX(file_path = "%s\\visitor_%s_taz.omx"%(WORK_FOLDER, period), matrices = visitorMatsToImport, scenario = scenario)
 
     for n, m in finalAssnMats.items():
         createMatrix(matrix_id = "mf%s%s"%(scen, n), matrix_name = "%s_%s"%(m, period), scenario = scenario, overwrite = True)
@@ -154,19 +171,19 @@ for scen in HSCENS:
     spec2 = {
         "type": "MATRIX_CALCULATION",
         "result": "SOV_TR_TOT_L_%s"%period,
-        "expression": "SOV_TR_L_%s+0.1*extAuto_%s+0.1*extAP_%s"%(period, period, period),
+        "expression": "SOV_TR_L_%s+0.1*extAuto_%s+0.1*extAP_%s+visitor_SOV_L_%s"%(period, period, period, period),
     }
 
     spec3 = {
         "type": "MATRIX_CALCULATION",
         "result": "HOV2_TOT_L_%s"%period,
-        "expression": "HOV2_L_%s"%period,
+        "expression": "HOV2_L_%s+visitor_HOV2_L_%s"%(period,period),
     }
     
     spec4 = {
         "type": "MATRIX_CALCULATION",
         "result": "HOV3_TOT_L_%s"%period,
-        "expression": "HOV3_L_%s"%period,
+        "expression": "HOV3_L_%s+visitor_HOV3_L_%s"%(period,period),
     }
     
     # Prepare matrices for assignment - Mid VoT
@@ -179,19 +196,19 @@ for scen in HSCENS:
     spec6 = {
         "type": "MATRIX_CALCULATION",
         "result": "SOV_TR_TOT_M_%s"%period,
-        "expression": "SOV_TR_M_%s+0.45*extAuto_%s+0.45*extAP_%s"%(period, period, period),
+        "expression": "SOV_TR_M_%s+0.45*extAuto_%s+0.45*extAP_%s+visitor_SOV_M_%s"%(period, period, period, period),
     }
     
     spec7 = {
         "type": "MATRIX_CALCULATION",
         "result": "HOV2_TOT_M_%s"%period,
-        "expression": "HOV2_M_%s"%period,
+        "expression": "HOV2_M_%s+visitor_HOV2_M_%s"%(period,period),
     }
     
     spec8 = {
         "type": "MATRIX_CALCULATION",
         "result": "HOV3_TOT_M_%s"%period,
-        "expression": "HOV3_M_%s"%period,
+        "expression": "HOV3_M_%s+visitor_HOV3_H_%s"%(period,period),
     }
     
     # Prepare matrices for assignment - High VoT
@@ -204,19 +221,19 @@ for scen in HSCENS:
     spec10 = {
         "type": "MATRIX_CALCULATION",
         "result": "SOV_TR_TOT_H_%s"%period,
-        "expression": "SOV_TR_H_%s+0.45*extAuto_%s+0.45*extAP_%s"%(period, period, period),
+        "expression": "SOV_TR_H_%s+0.45*extAuto_%s+0.45*extAP_%s+visitor_SOV_H_%s"%(period, period, period, period),
     }
     
     spec11 = {
         "type": "MATRIX_CALCULATION",
         "result": "HOV2_TOT_H_%s"%period,
-        "expression": "HOV2_H_%s"%period,
+        "expression": "HOV2_H_%s+visitor_HOV2_H_%s"%(period,period),
     }
     
     spec12 = {
         "type": "MATRIX_CALCULATION",
         "result": "HOV3_TOT_H_%s"%period,
-        "expression": "HOV3_H_%s"%period,
+        "expression": "HOV3_H_%s+visitor_HOV3_H_%s"%(period,period),
     }
     
     # Prepare truck matrices
@@ -280,9 +297,9 @@ for scen in HSCENS:
             }
             report = computeMatrix(spec_sum) 
             data.append([demand_name, report["maximum"], report["maximum_at"]["origin"], report["maximum_at"]["destination"], 
-                        report["average"], report["sum"]])                                  
+                        report["average"], report["sum"]])                            
         df = pd.DataFrame(data, columns=['Demand', 'Max', 'Max orig', 'Max dest', 'Avg', 'Sum'])
-        filename = "%s\\auto_matrix_list_iter0_%s.csv"%(EMME_OUTPUT, datetime.date.today())
+        filename = "%s\\hwy_demand_iter0_%s.csv"%(EMME_OUTPUT, datetime.date.today())
         df.to_csv(filename, mode='a', index=False, header=not os.path.exists(filename), line_terminator='\n')
 
 # Import Transit Warm Start    
@@ -309,6 +326,17 @@ for scen in TSCENS:
                     zone_mapping='TAZ',                    
                     scenario = scenario)
 
+        visitorTrnMatsToImport = {
+                "visitor_TRN_WALK_%s_%s"%(V,period): "mf%s%s"%(scen-200, 286 + vint),
+            }
+        
+        for n, m in visitorTrnMatsToImport.items():
+            createMatrix(matrix_id = m, matrix_name = n, scenario = scenario, overwrite = True)
+        importOMX(file_path = "%s\\visitor_trn_%s_taz.omx"%(WORK_FOLDER, period), 
+                    matrices = visitorTrnMatsToImport, 
+                    #zone_mapping='TAZ',
+                    scenario = scenario)
+        
         # Combine KNR transit and TNC transit into KNR transit
         spec1 = {
             "type": "MATRIX_CALCULATION",
@@ -331,11 +359,19 @@ for scen in TSCENS:
             "expression": "0",
         }        
         computeMatrix([spec1, spec2, spec3, spec4])
-        
+
+        # combine visitor WALK transit into resident WALK transit
+        spec1 = {
+            "type": "MATRIX_CALCULATION",
+            "result": "TRN_WALK_%s_%s"%(V,period),
+            "expression": "TRN_WALK_%s_%s + visitor_TRN_WALK_%s_%s"%(V,period,V,period),
+        }
+        computeMatrix(spec1)
+
         if summary:
             # export max, average, sum for each transit skim matrix
             data = []
-            matrices = ["TOT", "WALK", "PNROUT", "PNRIN", "KNROUT", "KNRIN", "TNCOUT", "TNCIN"]
+            matrices = ["WALK", "PNROUT", "PNRIN", "KNROUT", "KNRIN"]
             for name in matrices:
                 demand_name = "TRN_%s_%s_%s" % (name, V, period)
                 spec_sum={
