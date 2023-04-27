@@ -1,10 +1,8 @@
 ::@ECHO OFF
 set ITERATION=%1
 SETLOCAL EnableDelayedExpansion
-::SET ANACONDA=C:\Users\%USERNAME%\.conda\envs\cmapasim\python.exe
 SET ANACONDA_DIR=C:\ProgramData\Anaconda3
 SET PATH=%ANACONDA_DIR%\Library\bin;%PATH%
-::SET PYTHONPATH="C:\Users\%USERNAME%\.conda\envs\cmapasim\lib"
 
 :: setup paths to Python application, Conda script, etc.
 SET CONDA_ACT=%ANACONDA_DIR%\scripts\activate.bat
@@ -13,7 +11,7 @@ SET CONDA_DEA=%ANACONDA_DIR%\Scripts\deactivate.bat
 :: Run ActivitySim
 ECHO Activate ActivitySim Environment....
 ::CD /d %ANACONDA_DIR%\Scripts
-CALL %CONDA_ACT% cmapasim
+CALL %CONDA_ACT% cmapasim12
 
 set MKL_NUM_THREADS=1
 

@@ -77,11 +77,11 @@ ECHO IS_BASE_SURVEY,%IS_BASE_SURVEY% >> %PARAMETERS_FILE%
 %R_SCRIPT% %WORKING_DIR%\scripts\settings_to_parameters_csv.R %SETTINGS_FILE%
 
 SET EMME_OUTPUT=%CMAP_ABM_DIR%\emme_outputs
-SET ANACONDA=C:\Users\%USERNAME%\.conda\envs\cmapasim
 SET ANACONDA_DIR=C:\ProgramData\Anaconda3
+SET PATH=%ANACONDA_DIR%\Library\bin;%PATH%
 SET CONDA_ACT=%ANACONDA_DIR%\scripts\activate.bat
-CALL %CONDA_ACT% cmapasim
-%ANACONDA%\python.exe %WORKING_DIR%\scripts\Summarize_model_HNET.py
+CALL %CONDA_ACT% cmapasim12
+python %WORKING_DIR%\scripts\Summarize_model_HNET.py
 
 :: Create calibration output directory
 :: ############################################################################
