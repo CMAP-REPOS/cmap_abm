@@ -5,7 +5,6 @@ coef_female_worker,-0.347009,F
 coef_female_worker_preschool_child,0.572657,F
 coef_access_to_workplaces,-0.140426,F
 coef_non_working_adult_in_hh,-0.372481,F
-#coef_education_ba_plus,0.284678,F
 coef_low_income,-0.393068,F
 coef_age_lt_35,-0.573545,F
 coef_age_35_to_45,0.0,F
@@ -13,7 +12,6 @@ coef_age_45_to_55,0.21438,F
 coef_age_55_to_65,0.451657,F
 coef_age_65_plus,0.583518,F
 #calibration,,
-#coef_calibration,-1.1346996,T
 coef_boone,-1.3837263275405929,T
 coef_cook,-1.0264466251467048,T
 coef_dekalb,-1.348712731384336,T
