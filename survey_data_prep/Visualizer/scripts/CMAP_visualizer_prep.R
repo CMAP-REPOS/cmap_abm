@@ -1,7 +1,7 @@
 #######################################################
 ### Script for summarizing CMAP HTS
 ### Author: Binny M Paul, binny.paul@rsginc.com; Leah Flake
-### March 2021
+### Last Modified By: Ted Lin, April 2023
 ### Copied from previous processing scripts
 #######################################################
 args = commandArgs(trailingOnly = TRUE)
@@ -274,8 +274,6 @@ per$empl_loc_type = per$PER_EMPLY_LOC_TYPE
 per$empl_loc_type[is.na(per$empl_loc_type)] = 0
 workers = per[PER_WK_ZONE_ID > 0 & (PERTYPE<=3 | PERTYPE==6) & empl_loc_type!=2, c("SAMPN", "PERNO", "hhtaz", "PER_WK_ZONE_ID", "empl_loc_type","PERTYPE", "HDISTRICT", "WDISTRICT", "finalweight")]
 
-# todo: replace when have skims
-
 #workers$WDIST = 0
 workers$WDIST = DST_SKM$dist[match(paste(workers$hhtaz, workers$PER_WK_ZONE_ID, sep = "-"), paste(DST_SKM$o, DST_SKM$d, sep = "-"))]
 workers = na.omit(workers)
@@ -489,8 +487,6 @@ tours$TOURMODE[tours$TOURMODE_ORIG == 13] = 10  #SchoolBus
 tours$TOURMODE[tours$TOURMODE_ORIG %in% c(10:12)] = 11 # taxi
 tours$TOURMODE[tours$TOURMODE_ORIG %in% c(14)] = 12 #Other
 
-# Removing Other modes
-# todo: taxi/tnc?
 #tours = subset(tours, TOURMODE <= 9)
 
 # Recode Duration Bins

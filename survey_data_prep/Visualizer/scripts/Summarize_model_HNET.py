@@ -1,14 +1,12 @@
 #
 # Summarize_model_HNET.py - file to do some reading and summarizing of loaded highway networks (as dbf or csv)
 # 
-# Andrew Rohne RSG 3/2022
-#
-# Reads network DBF files (AM, PM, MD, EV, ON), compiles data for ActivitySim Visualizer
+# Andrew Rohne RSG March 2022
+# Last Modified By: Ted Lin, April 2023
+# Reads network DBF files (NT, EA, AM, MM, MD, AF, PM, EV) from Emme and traffic count csv files, and
+# Compiles data for ActivitySim Visualizer and assignment summary
 # Assumes that this is run within the model stream - uses environment variables setup by
 # the model batch file.
-#
-# NOT FULLY TESTED - Works with Metropolitan Council data, but did not test if it would 
-# work with added period labels, etc.
 
 import pandas as pd
 from simpledbf import Dbf5

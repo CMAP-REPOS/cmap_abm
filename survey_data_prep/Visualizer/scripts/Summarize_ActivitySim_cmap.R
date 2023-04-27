@@ -1,6 +1,6 @@
 ###################################################################################
-### Script for summarizing MetCouncil ActivitySim Output 
-### Edited: July 2021
+### Script for summarizing CMAP ActivitySim Output 
+### Last Modified By: Ted Lin, April 2023
 ###################################################################################
 
 start_time <- Sys.time()
