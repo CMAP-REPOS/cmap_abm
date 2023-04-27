@@ -192,7 +192,7 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
         self.xfer_walk_percep = "2"
         self.acc_spd_fac = {"WALK": "3.0", "PNROUT": "25.0", "PNRIN": "3.0", "KNROUT": "25.0", "KNRIN": "3.0"}
         self.egr_spd_fac = {"WALK": "3.0", "PNROUT": "3.0", "PNRIN": "25.0", "KNROUT": "3.0", "KNRIN": "25.0"}
-        self.xfer_penalty = "10.0"
+        self.xfer_penalty = "15.0"
         self.skim_matrices = ["GENCOST", "FIRSTWAIT", "XFERWAIT", "TOTALWAIT", "FARE", "XFERS", "ACC", "XFERWALK", "EGR", 
                                 "TOTALAUX", "TOTALIVTT", "DWELLTIME", "CTABUSLOCIVTT", "PACEBUSLOCIVTT", "BUSEXPIVTT", "CTARAILIVTT", "METRARAILIVTT", 
                                 "CROWD", "CAPPEN"] # "LINKREL", "EAWT"
@@ -270,8 +270,10 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
             create_extra('TRANSIT_SEGMENT', '@hdwef', 'Effective hdwy for capacity constraint', overwrite=True, scenario=scenario)
             self.calculate_default_eff_headway()
             create_extra('LINK', '@aperf', 'auxiliary transit perception factor', overwrite=True, scenario=scenario)
-            create_extra('NODE', '@perbf', 'Final boarding time perception factor', 2.0, overwrite=True, scenario=scenario)
+            create_extra('NODE', '@perbf', 'Final boarding time perception factor', 1.0, overwrite=True, scenario=scenario)
             create_extra('TRANSIT_LINE', '@easbp', 'Ease of boarding penalty', overwrite=True, scenario=scenario)
+            create_extra('TRANSIT_LINE', '@pctab', 'boarding penalty CTA bus only transfer', overwrite=True, scenario=scenario)
+            create_extra('TRANSIT_LINE', '@pctar', 'boarding penalty CTA rail only transfer', overwrite=True, scenario=scenario)            
             easbp={
                 "result": "@easbp",
                 "expression": "(3-@easeb).max.0",
@@ -293,7 +295,44 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
                 },
                 "type": "NETWORK_CALCULATION"
             }
-            netcalc(bpPace)           
+            netcalc(bpPace)
+            bp={
+                "result": "@pctab",
+                "expression": "@easbp+5",
+                "aggregation": None,
+                "selections": {
+                    "transit_line": "mode=CMPLQ"
+                },
+                "type": "NETWORK_CALCULATION"
+            }
+            pctab={
+                "result": "@pctab",
+                "expression": "@easbp",
+                "aggregation": None,
+                "selections": {
+                    "transit_line": "mode=BE"
+                },
+                "type": "NETWORK_CALCULATION"
+            }
+            bp2={
+                "result": "@pctar",
+                "expression": "@easbp+5",
+                "aggregation": None,
+                "selections": {
+                    "transit_line": "mode=BEMPLQ"
+                },
+                "type": "NETWORK_CALCULATION"
+            }            
+            pctar={
+                "result": "@pctar",
+                "expression": "@easbp",
+                "aggregation": None,
+                "selections": {
+                    "transit_line": "mode=C"
+                },
+                "type": "NETWORK_CALCULATION"
+            }
+            netcalc([bp ,pctab, bp2, pctar])                    
             create_extra('NODE', '@wconf', 'Wait convenience final factor', overwrite=True, scenario=scenario)
             wconf_bus={
                 "result": "@wconf",
@@ -812,7 +851,7 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
                         "perception_factor": "@perbf"
                     },
                     "on_lines": {
-                        "penalty": "@easbp",
+                        "penalty": "@pctar",
                         "perception_factor": 1
                     },
                     "on_segments": None
@@ -872,7 +911,7 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
                         "perception_factor": "@perbf"
                     },
                     "on_lines": {
-                        "penalty": "@easbp",
+                        "penalty": "@pctab",
                         "perception_factor": 1
                     },
                     "on_segments": None
@@ -1801,7 +1840,26 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
             header.extend(modes)
             df = pd.DataFrame([data], columns=header)
             filename = "%s\\transit_mode_OD_summary_%s.csv"%(EMME_OUTPUT, datetime.date.today())
-            df.to_csv(filename, mode='a', index=False, header=not os.path.exists(filename), line_terminator='\n')            
+            df.to_csv(filename, mode='a', index=False, header=not os.path.exists(filename), line_terminator='\n')
+            # export total boardings
+            data = []
+            demand_name = "TRN_%s_%s_%s" % (amode, self.user_class_labels[uc], self.periodLabel[int(period)])
+            metra_demand_name = "(mfXFERS_%s_%s__%s+1)*mfTRN_%s_%s_%s" % (amode, self.user_class_labels[uc], self.periodLabel[int(period)], amode, self.user_class_labels[uc], self.periodLabel[int(period)])
+            spec_sum={
+                "expression": metra_demand_name,
+                "result": "msTEMP_SUM",
+                "aggregation": {
+                    "origins": "+",
+                    "destinations": "+"
+                },
+                "type": "MATRIX_CALCULATION"
+            }
+            report = compute_matrix(spec_sum)
+            data.append([demand_name, report["maximum"], report["maximum_at"]["origin"], report["maximum_at"]["destination"], 
+                        report["average"], report["sum"]])
+            df = pd.DataFrame(data, columns=['Demand', 'Max', 'Max orig', 'Max dest', 'Avg', 'Sum'])
+            filename = "%s\\trn_boardings_%s.csv"%(EMME_OUTPUT, datetime.date.today())
+            df.to_csv(filename, mode='a', index=False, header=not os.path.exists(filename), line_terminator='\n')
         return
 
     def define_aux_perception(self, amode):
@@ -2031,7 +2089,7 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
                         class_name = "TRN_%s_%s_%s" % (amode, self.user_class_labels[int(uc)], period)
                         demand_matrix = "mf%s" % (class_name)
                         output_file_name = "%s_station_to_station_%s_%s.txt" % (op, amode, period)
-                        print(class_name, demand_matrix, output_file_name)
+                        #print(class_name, demand_matrix, output_file_name)
 
                         sta2sta_spec['transit_line_selections']['first_boarding'] = cut
                         sta2sta_spec['transit_line_selections']['last_alighting'] = cut
