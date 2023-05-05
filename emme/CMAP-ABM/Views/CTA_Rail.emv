@@ -1,0 +1,27 @@
+BE1EDF10-2EAD-462F-8D9D-01D816FE2C10 07B0F5AD-A2A7-4B4E-B4A9-06EB441586D6 2 0 0
+# Emme View file generated on Thu Mar 31 06:06:59 2022
+# File: C:/Projects/cmap_activitysim/cmap_abm/CMAP-ABM/Views/CTA_Rail.emv
+#
+# String Name: user definable name of configurable object (tr)
+Name = CTA_Rail
+# String IncomingSyncs: regular expression to filter incoming sync signals
+IncomingSyncs = .
+# String OutgoingSyncs: regular expression to filter outgoing sync signals
+OutgoingSyncs = .
+# String File: Full file path (ro,subst,nosave)
+File : (0x80)
+# Click Delete: Delete file (nosave)
+Delete : (0x80)
+# String FileType: File type (ro,nosave)
+FileType : (0x80)
+# Float XMin: X-coordinate of lower left corner of the view
+XMin = 565047.0625
+# Float YMin: Y-coordinate of lower left corner of the view
+YMin = 1831550.125
+# Float XMax: X-coordinate of upper right corner of the view
+XMax = 767047.0625
+# Float YMax: Y-coordinate of upper right corner of the view
+YMax = 1978458.25
+# Box ViewBox: box defining the view (nosave)
+ViewBox : (0x80)
+

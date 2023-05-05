@@ -1,0 +1,897 @@
+D2461A6A-1F51-4A2C-87AC-6C3C49AA9DF7 07B0F5AD-A2A7-4B4E-B4A9-06EB441586D6 2 4 0
+# Emme worksheet generated on Fri Jan 20 08:02:23 2023
+# File: C:/Projects/cmap_activitysim/cmap_abm/emme/CMAP-ABM/Worksheets/Travel_time_contour.emw
+#
+# String Name: name of worksheet (tr,subst)
+Name : PlotName
+Name = Travel_time_contour
+# Text Description: description of worksheet (tr,subst)
+Description : (0x800)
+Description = <h2>O-D pair values by zone</h2>\
+This worksheet can be used to display:\
+<ul>\
+<li>Symbols representing O-D pair values for a single origin or destination zone:\
+(layer <i>O-D pair values</i>).\
+<li>Shapefile representing the zone boundaries\
+(<i>Zone boundaries</i> layer).\
+<li>The selected origin or destination, using a user specific symbol\
+(layer <i>Node symbol</i>).\
+<li>The base network, for a subset of links\
+(layer <i>Link base</i>).\
+<li>Node boxes and numbers, for a subset of nodes\
+(layer <i>Node box</i>).\
+</ul>\
+<b>Using this worksheet</b>\
+<ul>\
+<li>Enter the desired O-D pair value expression in the <i>Values</i> field\
+of the <i>O-D pair values</i> layer.\
+Up to 12 values can be entered (for example, <b>mf1</b> or <b>mf4,mf5</b>).\
+<li>To select the zone, left double-click on the desired zone on the map\
+or on the desired row in the associated zone table.\
+<li>To consider the zone as an origin or as a destination and change the orientation of the values, \
+select <i>FROM ORIGIN</i> -or- <i>TO DESTINATION</i> in the <i>Position</i> field of the <i>O-D pair values</i> layer.\
+<li>By default the values are displayed as circles, but other symbols may be selected in the <i>Symbol</i> field.\
+To display the values on the zone boundaries, browse to the polygon shapefile in the <i>Zone boundaries</i> layer.\
+The derived attributes <i>lca_ODvalues_p</i> (or <i>lca_ODvalues_q</i>) are also used\
+in the <i>Index</i> field to color the polygons by the vector value.\
+<li>Initially, the selected zone is displayed using the <i>Star</i> symbol.\
+This can be changed in the <i>Origin/Destination zone symbol</i> layer.\
+<li>A node tip displays zone numbers.\
+</ul>\
+<p><small>Copyright &copy; 2019, INRO. All rights reserved.</small>\
+<p>
+# Flags Flags: worksheet configuration flags
+Flags = 0x8
+# String Active: name of currently active layer
+Active = 
+# Float TransformationMatrix: coordinate transformation matrix
+TransformationMatrix : (0x200) /TransformationMatrix!/$WorksheetLoaded
+TransformationMatrix[] = 0
+TransformationMatrix[] = 0
+TransformationMatrix[] = 1
+TransformationMatrix[] = 1
+TransformationMatrix[] = 0
+TransformationMatrix[] = 0
+TransformationMatrix[] = 0
+TransformationMatrix[] = 0
+
+[Configurable attribute list]
+# String IncomingSyncs: regular expression to filter incoming sync signals
+IncomingSyncs = [^$].
+# String OutgoingSyncs: regular expression to filter outgoing sync signals
+OutgoingSyncs = [^$].
+
+[Configurable attribute]
+# String Name: configurable attribute name
+Name = lca_ODvalues_q
+# Text Description: description of configurable attribute (tr,subst)
+Description = Values from one origin to all destinations
+# Flags Flags: bit pattern containing object flags
+Flags = 0x1
+# String ExpressionType: domain of expression
+ExpressionType = O-D pairs
+# Expression Expression: expression for computing attribute values (tr,o-d,string)
+Expression : SymbolValue
+Expression = mfMETRARAILIVTT_PNROUT_H__AM
+# Filter Filter: filter used to compute attribute values (tr,o-d,string)
+Filter : @Selector
+Filter = [Destination] q==23
+# String AggregationPointer: pointer from expression to result element
+AggregationPointer = Pq
+# String AggregationOperator: aggregation operator for computing result value
+AggregationOperator = +
+
+[Configurable attribute]
+# String Name: configurable attribute name
+Name = lca_ODvalues_p
+# Text Description: description of configurable attribute (tr,subst)
+Description = Values from all origins to one destination
+# Flags Flags: bit pattern containing object flags
+Flags = 0x1
+# String ExpressionType: domain of expression
+ExpressionType = O-D pairs
+# Expression Expression: expression for computing attribute values (tr,o-d,string)
+Expression : SymbolValue
+Expression = mfMETRARAILIVTT_PNROUT_H__AM
+# Filter Filter: filter used to compute attribute values (tr,o-d,string)
+Filter : @Selector
+Filter = [Destination] q==23
+# String AggregationPointer: pointer from expression to result element
+AggregationPointer = Pp
+# String AggregationOperator: aggregation operator for computing result value
+AggregationOperator = +
+
+[Background]
+# String Name: layer name that appears on layer control tab (tr,subst)
+Name = Background color
+# Bool CFlag: display layer controls
+CFlag = 1
+# Bool SFlag: display layer on screen
+SFlag : ShowBackColor
+SFlag = 1
+# Bool MFlag: display layer under the magnifier
+MFlag : /ShowBackColor
+MFlag = 1
+# Bool LFlag: include layer in the legend window
+LFlag = 1
+# Bool IFlag: allow interactive input
+IFlag = 0
+# Style Style: style for filling background when no wallpaper is used
+Style : (0x200) /BackgroundColor!/$WorksheetLoaded
+Style = 0x00000000 0x01f4f4f4 0x00000000 0x00000000
+
+[Inclusion]
+# String Name: layer name that appears on layer control tab (tr,subst)
+Name = Background layer(s)
+# Text Description: user definable layer description (tr,subst)
+Description = Includes user defined layers (in application mode,\
+control shown only if a file is specified and control is substituted)
+# Flags Flags: bit pattern containing layer flags
+Flags = 0xb800000
+# Bool CFlag: display layer controls
+CFlag = 1
+# Bool SFlag: display layer on screen
+SFlag : ShowBackInclusion
+SFlag = 1
+# Bool MFlag: display layer under the magnifier
+MFlag : /ShowBackInclusion
+MFlag = 1
+# Bool LFlag: include layer in the legend window
+LFlag = 1
+# Bool IFlag: allow interactive input
+IFlag = 0
+# Bool TFlag: provide tips
+TFlag = 1
+# Bool AFlag: set active flag of filtered elements
+AFlag = 0
+# Bool BFlag: include bounding box in full view
+BFlag = 0
+# Bool EnableObjects: enable included objects
+EnableObjects = 1
+# Bool SubstituteControl: display control of first visible included layer instead of inclusion layer's control
+SubstituteControl = 1
+# Bool AutoHideControl: hide unsubstituted layer control
+AutoHideControl = 1
+# String ConfigurationFile: file containing configuration to include (subst)
+ConfigurationFile : (0x200) /UserBack!/$WorksheetLoaded
+ConfigurationFile = %<$EmmePath>%/common/default_web_basemap.eml
+
+[Link base]
+# Flags Flags: bit pattern containing layer flags
+Flags = 0xbd90000
+# Bool CFlag: display layer controls
+CFlag = 1
+# Bool SFlag: display layer on screen
+SFlag : ShowLinkBase
+SFlag = 0
+# Bool MFlag: display layer under the magnifier
+MFlag : /ShowLinkBase
+MFlag = 0
+# Bool LFlag: include layer in the legend window
+LFlag : /ShowLinkBase
+LFlag = 0
+# Bool IFlag: allow interactive input
+IFlag = 0
+# Bool TFlag: provide tips
+TFlag = 0
+# Bool AFlag: set active flag of filtered elements
+AFlag = 0
+# Bool BFlag: include bounding box in full view
+BFlag : /ShowLinkBase
+BFlag = 0
+# Float Offset: link thickness (pixels)
+Offset = 0
+# Filter LinkFilter: expression for link filtering [,link iterator] (tr,link,string,max. 2 values)
+LinkFilter = [no connectors] not(isConnector)
+# Integer HighligthedVertex: highlight vertex (-1 == none)
+HighligthedVertex : HighligthedVertex
+HighligthedVertex = 0
+# Style Style: style for link outline and fill properties
+Style : (0x200) /Basenet!/$WorksheetLoaded
+Style[] = 0x207b7f6b 0x01d6d4b8 0x00000000 0x00000000
+Style[] = 0x20d6d4b8 0x01ffffff 0x00000000 0x00000000
+Style[] = 0x209c4d3d 0x01ff6b4c 0x00000000 0x00000000
+Style[] = 0x209c6e3d 0x01ffa94c 0x00000000 0x00000000
+Style[] = 0x209c803d 0x01ffcb4c 0x00000000 0x00000000
+Style[] = 0x20646464 0x01969696 0x00000000 0x00000000
+Style[] = 0x2096ab59 0x01c3de73 0x00000000 0x00000000
+# Expression StyleIndex: expression for link style index (tr,link,string)
+StyleIndex = [connector flag] isConnector
+
+[Node polygon]
+# String Name: layer name that appears on layer control tab (tr,subst)
+Name = Zone boundaries
+# Bool CFlag: display layer controls
+CFlag = 1
+# Bool SFlag: display layer on screen
+SFlag : /ShowPolygons
+SFlag = 1
+# Bool MFlag: display layer under the magnifier
+MFlag : /SFlag
+MFlag = 1
+# Bool LFlag: include layer in the legend window
+LFlag : /ShowPolygons
+LFlag = 1
+# Bool TFlag: provide tips
+TFlag = 0
+# Bool AFlag: set active flag of filtered elements
+AFlag = 0
+# Bool BFlag: include bounding box in full view
+BFlag = 1
+# Style LegendDefaultFrameStyle: default frame style of legend
+LegendDefaultFrameStyle = 0x20000000 0x01ffffff 0x00000000 0x00fe0500
+# Style LegendDefaultTextStyle: default text frame of legend
+LegendDefaultTextStyle[] = 0x00000000 0x00000000 0x28000000 0x00000000
+LegendDefaultTextStyle[] = 0x00000000 0x00000000 0x00000000 0x00000000
+# Style LegendFrameStyle0: frame and background style of legend 0
+LegendFrameStyle0 = 0x20000000 0x01ffffff 0x00000000 0x00fe0500
+# Style LegendFrameStyle1: frame and background style of legend 1
+LegendFrameStyle1 = 0x20000000 0x01ffffff 0x00000000 0x00fe0500
+# Style LegendFrameStyle2: frame and background style of legend 2
+LegendFrameStyle2 = 0x20000000 0x01ffffff 0x00000000 0x00fe0500
+# Style LegendTextStyle0: text style of legend 0 (0: title, 1: other text)
+LegendTextStyle0[] = 0x00000000 0x00000000 0x28000000 0x00000000
+LegendTextStyle0[] = 0x00000000 0x00000000 0x00000000 0x00000000
+# Style LegendTextStyle1: text style of legend 1 (0: title, 1: other text)
+LegendTextStyle1[] = 0x00000000 0x00000000 0x28000000 0x00000000
+LegendTextStyle1[] = 0x00000000 0x00000000 0x00000000 0x00000000
+# Style LegendTextStyle2: text style of legend 2 (0: title, 1: other text)
+LegendTextStyle2[] = 0x00000000 0x00000000 0x28000000 0x00000000
+LegendTextStyle2[] = 0x00000000 0x00000000 0x00000000 0x00000000
+# Bool NodeValues: display node values numerically
+NodeValues = 0
+# Bool SepValueLayer: display numeric values in separate layer on top of polygons
+SepValueLayer = 1
+# Expression NodeValue: expression for node value (tr,node,string,max. 6 values)
+NodeValue : (0x131) //SymbolPosition
+NodeValue[] = [TO DESTINATION] lca_ODvalues_p
+NodeValue[] = [FROM ORIGIN] lca_ODvalues_q
+NodeValue[] = [TO DESTINATION] lca_ODvalues_p
+# Break Breaks: exclusive upper bound to select style based on the index value
+Breaks[] = 0.00;
+Breaks[] = 0.01;
+Breaks[] = 10.00;
+Breaks[] = 20.00;
+Breaks[] = 30.00;
+Breaks[] = 40.00;
+Breaks[] = 50.00;
+Breaks[] = 60.00;
+Breaks[] = 1000;
+# Bool UseBreaks: use breaks
+UseBreaks = 1
+# Style Style: style for polygon outline, fill and text properties
+Style : /Shapes!/$WorksheetLoaded
+Style[] = 0x00063328 0x01dfdfdf 0x00000000 0x00000020
+Style[] = 0x00063328 0x010a6e3b 0x00000000 0x00000020
+Style[] = 0x005c835c 0x0180b676 0x00000000 0x00000020
+Style[] = 0x00a7aa84 0x01c3e799 0x00000000 0x00000020
+Style[] = 0x00c8c48d 0x01fbf6b2 0x00000000 0x00000020
+Style[] = 0x00c4a594 0x01f6cfba 0x00000000 0x00000020
+Style[] = 0x00b25d4e 0x01e36e6e 0x00000000 0x00000020
+Style[] = 0x008b191c 0x01c8161c 0x00000000 0x00000020
+# Expression StyleIndex: node expression for style index (tr,node)
+StyleIndex : (0x130) //SymbolPosition
+StyleIndex[] = [column values] lca_ODvalues_p
+StyleIndex[] = [row values] lca_ODvalues_q
+StyleIndex[] = [column values] lca_ODvalues_p
+# Expression NodeID: polygon expression for corresponding node identifier (tr)
+NodeID = [zones17 #1 Integer10 ] zone17
+# String PolygonFile: file containing node polygons (subst)
+PolygonFile = C:/Projects/cmap_activitysim/cmap_abm/emme/CMAP-ABM/Media/zones17/zones17.shp
+# String Dataset: Dataset used from data source for drawing
+Dataset = zones17
+
+[Transit line]
+# String Name: layer name that appears on layer control tab (tr,subst)
+Name = Metra Rail Lines
+# Bool CFlag: display layer controls
+CFlag = 1
+# Bool SFlag: display layer on screen
+SFlag : SFlag/
+SFlag = 1
+# Bool MFlag: display layer under the magnifier
+MFlag : /SFlag
+MFlag = 1
+# Bool LFlag: include layer in the legend window
+LFlag = 1
+# Bool AFlag: set active flag of filtered elements
+AFlag = 0
+# Bool BFlag: include bounding box in full view
+BFlag = 1
+# Bool ShowTransitStops: show transit stops along the transit line as small circles
+ShowTransitStops = 1
+# Float SegmentOffset: offset between transit segments on same link
+SegmentOffset = 0
+# Float TextSize: text size on transit segments and stops
+TextSize = 14
+# Float PenWidth: minimum pen width used to draw transit segments and stops
+PenWidth = 1
+# Float StopWidth: size of transit stops and layovers
+StopWidth = -0.01
+# Float LineEndOffset: longitudinal offset of line ends
+LineEndOffset = -0.01
+# Style Style: style used to display transit line itineraries
+Style = 0x200053a3 0x01ffffff 0x00000000 0x00000400
+# Filter LineFilter: expression for transit line filtering [,transit line iterator] (tr,line,string,max. 2 values)
+LineFilter = mode=="M"
+
+[Transit line]
+# String Name: layer name that appears on layer control tab (tr,subst)
+Name = CTA Rail Lines
+# Flags Flags: bit pattern containing layer flags
+Flags = 0x9c90000
+# Bool CFlag: display layer controls
+CFlag = 1
+# Bool SFlag: display layer on screen
+SFlag : SFlag/
+SFlag = 0
+# Bool MFlag: display layer under the magnifier
+MFlag : /SFlag
+MFlag = 0
+# Bool LFlag: include layer in the legend window
+LFlag = 1
+# Bool AFlag: set active flag of filtered elements
+AFlag = 0
+# Bool BFlag: include bounding box in full view
+BFlag = 1
+# Bool ShowTransitStops: show transit stops along the transit line as small circles
+ShowTransitStops = 1
+# Float SegmentOffset: offset between transit segments on same link
+SegmentOffset = 0
+# Float StopWidth: size of transit stops and layovers
+StopWidth = -0.01
+# Float LineEndOffset: longitudinal offset of line ends
+LineEndOffset = -0.01
+# Style Style: style used to display transit line itineraries
+Style = 0x20cc22c9 0x01ffffff 0x00000000 0x00000400
+# Filter LineFilter: expression for transit line filtering [,transit line iterator] (tr,line,string,max. 2 values)
+LineFilter = mode=="C"
+
+[Node box]
+# Flags Flags: bit pattern containing layer flags
+Flags = 0x9d00000
+# Bool CFlag: display layer controls
+CFlag = 1
+# Bool SFlag: display layer on screen
+SFlag : ShowNodeBoxes
+SFlag = 1
+# Bool MFlag: display layer under the magnifier
+MFlag : /ShowNodeBoxes
+MFlag = 1
+# Bool LFlag: include layer in the legend window
+LFlag = 0
+# Bool IFlag: allow interactive input
+IFlag = 0
+# Bool TFlag: provide tips
+TFlag = 0
+# Bool AFlag: set active flag of filtered elements
+AFlag = 0
+# Bool BFlag: include bounding box in full view
+BFlag : /ShowNodeBoxes
+BFlag = 1
+# Float NodeBoxWidth: width of node box in pixels
+NodeBoxWidth = 2
+# Float NodeBoxHeight: height of node box in pixels
+NodeBoxHeight = 2
+# Filter NodeFilter: expression for node filtering [,node iterator] (tr,node,string,max. 2 values)
+NodeFilter = i>40000&&@rspac==0&&label!="DUMY"
+# Bool NodeNumbers: display node numbers in node box
+NodeNumbers = 0
+# Style Style: style for node box outline, fill and text properties
+Style : (0x200) /Nodes!/$WorksheetLoaded
+Style[] = 0x2088896d 0x01fffddb 0x00000000 0x00000000
+Style[] = 0x20ff5c0a 0x01ffe4d7 0x00000000 0x00000000
+Style[] = 0x2000665f 0x01bef9be 0x00000000 0x00000000
+Style[] = 0x2000647f 0x01afdbdc 0x00000000 0x00000000
+Style[] = 0x207e5f08 0x01b5a57c 0x00000000 0x00000000
+# Expression StyleIndex: node expression for style index (tr,node,string)
+StyleIndex[] = 1
+StyleIndex[] = ga==1
+
+[Node box]
+# String Name: layer name that appears on layer control tab (tr,subst)
+Name = Zone picker
+# Flags Flags: bit pattern containing layer flags
+Flags = 0xf3b0000
+# Bool CFlag: display layer controls
+CFlag = 0
+# Bool SFlag: display layer on screen
+SFlag : SFlag/
+SFlag = 0
+# Bool MFlag: display layer under the magnifier
+MFlag : /SFlag
+MFlag = 0
+# Bool LFlag: include layer in the legend window
+LFlag = 0
+# Bool IFlag: allow interactive input
+IFlag = 1
+# Bool XFlag: intercept all graphic input
+XFlag = 1
+# Bool TFlag: provide tips
+TFlag = 1
+# Bool AFlag: set active flag of filtered elements
+AFlag = 0
+# Bool BFlag: include bounding box in full view
+BFlag = 0
+# Bool SendMarkingSignals: send out signals when nodes are marked
+SendMarkingSignals = 1
+# Bool ReceiveMarkingSignals: mark nodes upon receiving external marking signals
+ReceiveMarkingSignals = 1
+# Bool ShowStatusMessage: show identifier of focused node on status bar
+ShowStatusMessage = 1
+# String MarkedNode: identifier of last marked node (nosave)
+MarkedNode : (0x80) MarkedNode
+# String MarkedNodeFilter: filter for marked nodes (ro,nosave)
+MarkedNodeFilter : MarkedNodeSelector
+# Filter NodeFilter: expression for node filtering [,node iterator] (tr,node,string,max. 2 values)
+NodeFilter = isZone
+# Style Style: style for node box outline, fill and text properties
+Style = 0x20000000 0x01ffff7f 0x00000000 0x00000000
+
+[OD-pair symbol]
+# String Name: layer name that appears on layer control tab (tr,subst)
+Name = O-D pair values
+# Text Description: user definable layer description (tr,subst)
+Description = Enter O-D pair values and select direction:\
+FROM ORIGIN ZONE\
+-or-\
+TO DESTINATION ZONE
+# Flags Flags: bit pattern containing layer flags
+Flags = 0xbd90000
+# String IncomingSyncs: regular expression to filter incoming sync signals
+IncomingSyncs = .
+# String OutgoingSyncs: regular expression to filter outgoing sync signals
+OutgoingSyncs = ^(?!SFlag$)
+# String TranslationContext: context for translations of configuration texts (subst)
+TranslationContext = 
+# Integer NetworkIndex: index of network accessed by this layer
+NetworkIndex = 1
+# Float ViewScaleThreshold: upper [,lower] view scale threshold (network units/pixel)
+ViewScaleThreshold = 0
+# Bool CFlag: display layer controls
+CFlag = 1
+# Bool SFlag: display layer on screen
+SFlag : ShowODSymbols
+SFlag = 0
+# Bool MFlag: display layer under the magnifier
+MFlag : /ShowODSymbols
+MFlag = 0
+# Bool LFlag: include layer in the legend window
+LFlag : /ShowODSymbols
+LFlag = 0
+# Bool IFlag: allow interactive input
+IFlag = 0
+# Bool XFlag: intercept all graphic input
+XFlag = 0
+# Bool TFlag: provide tips
+TFlag = 0
+# Bool AFlag: set active flag of filtered elements
+AFlag = 0
+# Bool BFlag: include bounding box in full view
+BFlag : /ShowODSymbols
+BFlag = 0
+# Bool LegendVisibility: control if legend is rendered or not
+LegendVisibility[] = 0
+LegendVisibility[] = 0
+LegendVisibility[] = 0
+# String LegendTitle: title of legend (subst)
+LegendTitle[] = 
+LegendTitle[] = 
+LegendTitle[] = 
+# Float LegendTextSize: legend text size
+LegendTextSize[] = 10
+LegendTextSize[] = 10
+LegendTextSize[] = 10
+# Float LegendXPos: horizontal offset (in pixels) relative to the anchor position
+LegendXPos[] = 0
+LegendXPos[] = 0
+LegendXPos[] = 0
+# Float LegendYPos: vertical offset (in pixels) relative to the anchor position
+LegendYPos[] = 0
+LegendYPos[] = 0
+LegendYPos[] = 0
+# String LegendAnchorPoint: reference point of the legend
+LegendAnchorPoint[] = top-left
+LegendAnchorPoint[] = top-left
+LegendAnchorPoint[] = top-left
+# String LegendFrameShape: shape of legend frame
+LegendFrameShape[] = no frame
+LegendFrameShape[] = no frame
+LegendFrameShape[] = no frame
+# String LegendTextAlign: alignment of text in legend
+LegendTextAlign[] = center
+LegendTextAlign[] = center
+LegendTextAlign[] = center
+# Style LegendDefaultFrameStyle: default frame style of legend
+LegendDefaultFrameStyle = 0x20000000 0x01ffffff 0x00000000 0x00fe0500
+# Style LegendDefaultTextStyle: default text frame of legend
+LegendDefaultTextStyle[] = 0x00000000 0x00000000 0x28000000 0x00000000
+LegendDefaultTextStyle[] = 0x00000000 0x00000000 0x00000000 0x00000000
+# Float LegendHorMagin: horizontal margin in pixels
+LegendHorMagin[] = 5
+LegendHorMagin[] = 5
+LegendHorMagin[] = 5
+# Float LegendVerMagin: vertical margin in pixels
+LegendVerMagin[] = 5
+LegendVerMagin[] = 5
+LegendVerMagin[] = 5
+# Float LegendStyleWidth: width of shapes in pixels
+LegendStyleWidth[] = 20
+LegendStyleWidth[] = 20
+LegendStyleWidth[] = 20
+# Float LegendStyleHeight: height of shapes in pixels
+LegendStyleHeight[] = 12
+LegendStyleHeight[] = 12
+LegendStyleHeight[] = 12
+# Float LegendStyleSpacing: space between shapes in pixels
+LegendStyleSpacing[] = 2
+LegendStyleSpacing[] = 2
+LegendStyleSpacing[] = 2
+# String LegendTextPlacement: position of text of style legend
+LegendTextPlacement[] = right of style
+LegendTextPlacement[] = right of style
+LegendTextPlacement[] = right of style
+# String LegendStyleShape: shape used to display style elements
+LegendStyleShape[] = box
+LegendStyleShape[] = box
+LegendStyleShape[] = box
+# String LegendTitlePosition: legend title position
+LegendTitlePosition[] = text above
+LegendTitlePosition[] = text above
+LegendTitlePosition[] = text above
+# Bool LegendHideExpression: hide legend expression
+LegendHideExpression[] = 0
+LegendHideExpression[] = 0
+LegendHideExpression[] = 0
+# Bool LegendShowStyleTextFormat: show text format as 'A' on style
+LegendShowStyleTextFormat[] = 0
+LegendShowStyleTextFormat[] = 0
+LegendShowStyleTextFormat[] = 0
+# Style LegendFrameStyle0: frame and background style of legend 0
+LegendFrameStyle0 = 0x20000000 0x01ffffff 0x00000000 0x00fe0500
+# Style LegendFrameStyle1: frame and background style of legend 1
+LegendFrameStyle1 = 0x20000000 0x01ffffff 0x00000000 0x00fe0500
+# Style LegendFrameStyle2: frame and background style of legend 2
+LegendFrameStyle2 = 0x20000000 0x01ffffff 0x00000000 0x00fe0500
+# Style LegendTextStyle0: text style of legend 0 (0: title, 1: other text)
+LegendTextStyle0[] = 0x00000000 0x00000000 0x28000000 0x00000000
+LegendTextStyle0[] = 0x00000000 0x00000000 0x00000000 0x00000000
+# Style LegendTextStyle1: text style of legend 1 (0: title, 1: other text)
+LegendTextStyle1[] = 0x00000000 0x00000000 0x28000000 0x00000000
+LegendTextStyle1[] = 0x00000000 0x00000000 0x00000000 0x00000000
+# Style LegendTextStyle2: text style of legend 2 (0: title, 1: other text)
+LegendTextStyle2[] = 0x00000000 0x00000000 0x28000000 0x00000000
+LegendTextStyle2[] = 0x00000000 0x00000000 0x00000000 0x00000000
+# Bool DisplayShapes: display shapes
+DisplayShapes = 1
+# Bool NumericValues: display numeric/string values
+NumericValues = 0
+# Bool PropToArea: apply the scale factor to the area, not to the diameter
+PropToArea = 0
+# Bool SepValueLayer: display numeric values in separate layer on top of shapes
+SepValueLayer = 0
+# Bool AutoScaleButton: display auto scale button in scale field
+AutoScaleButton = 1
+# Bool AutoFlip: flip text to read from left to right
+AutoFlip = 0
+# Bool HorizontalText: always keep symbol texts horizontal
+HorizontalText = 0
+# Float TextSize: text size for values
+TextSize = 10
+# Integer Decimals: number of decimals in numeric values
+Decimals = 0
+# String Symbol: Symbol used for drawing values
+Symbol = Square
+# String Alignment: Alignment used for shapes
+Alignment = Center
+# Float Scale: value scale for shapes (units/pixel)
+Scale : (0x4000)
+Scale = 2
+# Float AutoScaleSize: target maximum symbol size for automatic scale (pixels)
+AutoScaleSize = 0
+# Float XOffset: horizontal offset from specified position
+XOffset = 0
+# Float YOffset: vertical offset from specified position
+YOffset = 0
+# Float Width: width of bars and arrows (pixels)
+Width = 10
+# Float ArrowHead: factors for length [0] and width [1] of arrowhead
+ArrowHead[] = 1
+ArrowHead[] = 1.2
+# Break Breaks: exclusive upper bound to select style based on the index value
+Breaks[] = 0.00;
+Breaks[] = 0.01;
+Breaks[] = 20.00;
+Breaks[] = 30.00;
+Breaks[] = 40.00;
+Breaks[] = 50.00;
+Breaks[] = 60.00;
+Breaks[] = 1000.00;
+# Bool UseBreaks: use breaks
+UseBreaks = 1
+# Integer BreakDecimals: break decimals
+BreakDecimals = 2
+# String BreakMethod: break compute method
+BreakMethod = Linear
+# Bool DecreasingBreaks: decreasing breaks
+DecreasingBreaks = 0
+# Bool DiscreteBreaks: discrete breaks
+DiscreteBreaks = 0
+# Style Style: style for symbol outline, fill and text properties
+Style : /MultiBars!/$WorksheetLoaded
+Style[] = 0x20063328 0x014f4f4f 0x00000000 0x00000020
+Style[] = 0x20063328 0x010a6e3b 0x00000000 0x00000020
+Style[] = 0x205c835c 0x0180b676 0x00000000 0x00000020
+Style[] = 0x20a7aa84 0x01c3e799 0x00000000 0x00000020
+Style[] = 0x20c8c48d 0x01fbf6b2 0x00000000 0x00000020
+Style[] = 0x20c4a594 0x01f6cfba 0x00000000 0x00000020
+Style[] = 0x20b25d4e 0x01e36e6e 0x00000000 0x00000020
+Style[] = 0x208b191c 0x01c8161c 0x00000000 0x00000020
+# Expression SymbolPosition: symbol position x, y [,angle [,shapeval]] (tr,o-d,max. 4 values)
+SymbolPosition : (0x170) SymbolPosition
+SymbolPosition[] = [TO DESTINATION] Pp->xi, Pp->yi
+SymbolPosition[] = [FROM ORIGIN] Pq->xi, Pq->yi
+SymbolPosition[] = [TO DESTINATION] Pp->xi, Pp->yi
+# Expression Value: expression for up to 12 values (tr,o-d,string,max. 12 values)
+Value : SymbolValue
+Value = mfMETRARAILIVTT_PNROUT_H__AM
+# Float DefaultValue: numeric default value(s) used for string-valued expressions
+DefaultValue = 0
+# Filter Filter: expression for element filtering [, iterator] (tr,o-d,string)
+Filter : (0x1) @Selector
+Filter = [Destination] q==23
+# Expression StyleIndex: expression for style index (tr,o-d)
+StyleIndex = mfMETRARAILIVTT_PNROUT_H__AM
+# Expression TipExpression: expression for network tip (tr,o-d,string,max. 6 values)
+TipExpression = 
+
+[Parameter conversion]
+# String Name: layer name that appears on layer control tab (tr,subst)
+Name = Origin/Destination selector
+# Flags Flags: bit pattern containing layer flags
+Flags = 0xbfb0000
+# Bool CFlag: display layer controls
+CFlag = 0
+# Bool SFlag: display layer on screen
+SFlag : SFlag/
+SFlag = 0
+# Bool MFlag: display layer under the magnifier
+MFlag : /SFlag
+MFlag = 0
+# Integer IA: integer parameter IA
+IA : (0x100) //SymbolPosition
+IA = 2
+# String SA: string parameter SA (subst)
+SA : /MarkedNodeSelector
+SA = i==23
+# Expression Expression: expression for parameter conversion (tr,string,max. 12 values)
+Expression = if(IA==2,"["+tr("Destination")+"] q","["+tr("Origin")+"] p")+right(SA,length(SA)-1)
+# String SR: string result
+SR : @Selector
+SR = [Destination] q==23
+
+[Node symbol]
+# String Name: layer name that appears on layer control tab (tr,subst)
+Name = Origin/Destination zone symbol
+# Flags Flags: bit pattern containing layer flags
+Flags = 0xbc00000
+# Bool CFlag: display layer controls
+CFlag = 1
+# Bool SFlag: display layer on screen
+SFlag : ShowNodeSymbol
+SFlag = 1
+# Bool MFlag: display layer under the magnifier
+MFlag : /ShowNodeSymbol
+MFlag = 1
+# Bool LFlag: include layer in the legend window
+LFlag : /ShowNodeSymbol
+LFlag = 1
+# Bool TFlag: provide tips
+TFlag = 0
+# Bool AFlag: set active flag of filtered elements
+AFlag = 0
+# Bool BFlag: include bounding box in full view
+BFlag = 0
+# Bool NumericValues: display numeric/string values
+NumericValues : (0x2)
+NumericValues = 0
+# Bool PropToArea: apply the scale factor to the area, not to the diameter
+PropToArea : (0x2)
+PropToArea = 0
+# Bool SepValueLayer: display numeric values in separate layer on top of shapes
+SepValueLayer : (0x2)
+SepValueLayer = 0
+# Bool HorizontalText: always keep symbol texts horizontal
+HorizontalText : (0x2)
+HorizontalText = 0
+# Float TextSize: text size for values
+TextSize : (0x2)
+TextSize = 10
+# Integer Decimals: number of decimals in numeric values
+Decimals : (0x2)
+Decimals = 0
+# String Symbol: Symbol used for drawing values
+Symbol = Star
+# Float Scale: value scale for shapes (units/pixel)
+Scale = 4
+# Float Width: width of bars and arrows (pixels)
+Width : (0x2)
+Width = 10
+# Style Style: style for symbol outline, fill and text properties
+Style : (0x200) /NodeSelectStyle!/$WorksheetLoaded
+Style = 0x211818af 0x013737ff 0x00ffffff 0x00000000
+# Expression SymbolPosition: symbol position x, y [,angle [,shapeval]] (tr,node,max. 4 values)
+SymbolPosition : (0x2)
+SymbolPosition = xi,yi
+# Expression Value: expression for up to 12 values (tr,node,string,max. 12 values)
+Value : (0x2)
+Value = 40
+# Filter Filter: expression for element filtering [, iterator] (tr,node,string,max. 2 values)
+Filter : (0x2) MarkedNodeSelector
+Filter = i==23
+
+[Parameter conversion]
+# String Name: layer name that appears on layer control tab (tr,subst)
+Name = Legend text
+# Flags Flags: bit pattern containing layer flags
+Flags = 0xbfb0000
+# Bool CFlag: display layer controls
+CFlag = 0
+# Bool SFlag: display layer on screen
+SFlag : SFlag/
+SFlag = 0
+# Bool MFlag: display layer under the magnifier
+MFlag : /SFlag
+MFlag = 0
+# String SA: string parameter SA (subst)
+SA : /@Selector
+SA = [Destination] q==23
+# Expression Expression: expression for parameter conversion (tr,string,max. 12 values)
+Expression = comment(SA)+" "+right(SA,length(SA)-index(SA,"=")-1)
+# String SR: string result
+SR : SelectedNode/
+SR = Destination 23
+
+[Legend]
+# Flags Flags: bit pattern containing layer flags
+Flags = 0x3c00000
+# Bool CFlag: display layer controls
+CFlag = 1
+# Bool SFlag: display layer on screen
+SFlag : ShowLegend
+SFlag = 1
+# Bool MFlag: display layer under the magnifier
+MFlag : /ShowLegend
+MFlag = 1
+# Bool LFlag: include layer in the legend window
+LFlag : /ShowLegend
+LFlag = 1
+# Bool IFlag: allow interactive input
+IFlag = 0
+# Bool BFlag: include bounding box in full view
+BFlag = 0
+# Float TextSize: text size for scales and symbols
+TextSize[] = 10
+TextSize[] = 10
+# Float TextXPos: horizontal position of text anchor
+TextXPos[] = 10
+TextXPos[] = 10
+# Float TextYPos: vertical position of text anchor
+TextYPos[] = 142
+TextYPos[] = 10
+# Float StyleIndex: style index used for frame and text of item
+StyleIndex[] = 1
+StyleIndex[] = 1
+# Float GraphicStyleIncrement: style index increment used for graphic part of item
+GraphicStyleIncrement[] = 0
+GraphicStyleIncrement[] = 1
+# Float ImageSizeFactor: size factor for scaling images
+ImageSizeFactor[] = 1
+ImageSizeFactor[] = 1
+# Integer TextLayout: layout definition
+TextLayout[] = 459408
+TextLayout[] = 459156
+# Text TextString: text that appears in item (tr,subst)
+TextString[] = Scenario %<$ScenarioNumber>%\
+Time To %<SR:SelectedNode>%\
+METRARAILIVTT_PNROUT_H__AM
+TextString[] = Not Available\
+0-10 minutes\
+10-20 minutes\
+20-30 minutes\
+30-40 minutes\
+40-50 minutes\
+50-60 minutes\
+>60 minutes\
+
+# Style FrameStyle: style used for text and frame of items
+FrameStyle : (0x200) /LegendFrameStyle!/$WorksheetLoaded
+FrameStyle[] = 0x00000000 0x01ffffff 0x00000000 0x00000000
+FrameStyle[] = 0x20000000 0x01ffffff 0x08000000 0x00000000
+FrameStyle[] = 0x20000000 0x01ffffff 0x03000000 0x00000000
+FrameStyle[] = 0x20ff0000 0x01ffffff 0x08ff0000 0x00000000
+# Style SymbolStyle: style used for graphic part of items
+SymbolStyle[] = 0x00063328 0x01dfdfdf 0x00000000 0x00000020
+SymbolStyle[] = 0x00063328 0x010a6e3b 0x00000000 0x00000020
+SymbolStyle[] = 0x005c835c 0x0180b676 0x00000000 0x00000020
+SymbolStyle[] = 0x00a7aa84 0x01c3e799 0x00000000 0x00000020
+SymbolStyle[] = 0x00c8c48d 0x01fbf6b2 0x00000000 0x00000020
+SymbolStyle[] = 0x00c4a594 0x01f6cfba 0x00000000 0x00000020
+SymbolStyle[] = 0x00b25d4e 0x01e36e6e 0x00000000 0x00000020
+SymbolStyle[] = 0x008b191c 0x01c8161c 0x00000000 0x00000020
+
+[Inclusion]
+# String Name: layer name that appears on layer control tab (tr,subst)
+Name = Foreground layer(s)
+# Text Description: user definable layer description (tr,subst)
+Description = Includes user defined layers (in application mode,\
+control shown only if a file is specified and control is substituted)
+# Flags Flags: bit pattern containing layer flags
+Flags = 0xb800000
+# Bool CFlag: display layer controls
+CFlag = 1
+# Bool SFlag: display layer on screen
+SFlag : ShowFrontInclusion
+SFlag = 1
+# Bool MFlag: display layer under the magnifier
+MFlag : /ShowFrontInclusion
+MFlag = 1
+# Bool LFlag: include layer in the legend window
+LFlag = 1
+# Bool IFlag: allow interactive input
+IFlag = 0
+# Bool TFlag: provide tips
+TFlag = 1
+# Bool AFlag: set active flag of filtered elements
+AFlag = 0
+# Bool BFlag: include bounding box in full view
+BFlag = 0
+# Bool EnableObjects: enable included objects
+EnableObjects = 1
+# Bool SubstituteControl: display control of first visible included layer instead of inclusion layer's control
+SubstituteControl = 1
+# Bool AutoHideControl: hide unsubstituted layer control
+AutoHideControl = 1
+# String ConfigurationFile: file containing configuration to include (subst)
+ConfigurationFile : (0x200) /UserFront!/$WorksheetLoaded
+ConfigurationFile = 
+
+[Inclusion]
+# String Name: layer name that appears on layer control tab (tr,subst)
+Name = Other inclusion
+# Text Description: user definable layer description (tr,subst)
+Description = Includes user defined layers (in application mode,\
+control shown only if a file is specified and control is substituted)
+# Flags Flags: bit pattern containing layer flags
+Flags = 0xb800000
+# Bool CFlag: display layer controls
+CFlag = 1
+# Bool SFlag: display layer on screen
+SFlag : ShowOtherInclusion
+SFlag = 1
+# Bool MFlag: display layer under the magnifier
+MFlag : /ShowOtherInclusion
+MFlag = 1
+# Bool LFlag: include layer in the legend window
+LFlag = 1
+# Bool IFlag: allow interactive input
+IFlag = 0
+# Bool TFlag: provide tips
+TFlag = 1
+# Bool AFlag: set active flag of filtered elements
+AFlag = 0
+# Bool BFlag: include bounding box in full view
+BFlag = 0
+# Bool EnableObjects: enable included objects
+EnableObjects = 1
+# Bool SubstituteControl: display control of first visible included layer instead of inclusion layer's control
+SubstituteControl = 1
+# Bool AutoHideControl: hide unsubstituted layer control
+AutoHideControl = 1
+# String ConfigurationFile: file containing configuration to include (subst)
+ConfigurationFile : (0x200) /UserConf!/$WorksheetLoaded
+ConfigurationFile[] = 
+ConfigurationFile[] = 
+ConfigurationFile[] = %<$ProjectPath>%/Worksheets/prnlegend.eml
+ConfigurationFile[] = %<$EmmePath>%/common/transform.eml
+
