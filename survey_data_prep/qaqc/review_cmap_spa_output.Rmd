@@ -87,7 +87,7 @@ tripmode_value_labels = data.table(variable = rep('TRIPMODE', 15), value = c(1:1
                                                                                                     'WALK-TRANSIT',
                                                                                                     'PNR-TRANSIT', 
                                                                                                     'KNR-TRANSIT', 
-                                                                                                    'TNR-TRANSIT', 
+                                                                                                    'TNC-TRANSIT', 
                                                                                                     'TAXI', 
                                                                                                     'TNC-SINGLE', 
                                                                                                     'TNC-POOL', 
@@ -105,7 +105,7 @@ tourmode_value_labels = data.table(variable = rep('TOURMODE', 15), value = c(1:1
                                                                                                     'WALK-TRANSIT',
                                                                                                     'PNR-TRANSIT', 
                                                                                                     'KNR-TRANSIT', 
-                                                                                                    'TNR-TRANSIT', 
+                                                                                                    'TNC-TRANSIT', 
                                                                                                     'TAXI', 
                                                                                                     'TNC-SINGLE', 
                                                                                                     'TNC-POOL', 
@@ -169,20 +169,20 @@ format_crosstab_table(trip_tour_mode_tab_w)
 
 trip_tour_mode_tab_w[is.na(trip_tour_mode_tab_w)] = ""
 trip_tour_mode_tab_w_count = trip_tour_mode_tab_w[, c(1:15)]
-setcolorder(trip_tour_mode_tab_w_count, c('TRIPMODE', "1 - SOV", "2 - HOV2", "3 - HOV3","4 - WALK", "5 - BIKE", "6 - WALK-TRANSIT", "7 - PNR-TRANSIT" , "8 - KNR-TRANSIT",  "9 - TNR-TRANSIT" , "10 - TAXI", "11 - TNC-SINGLE", "12 - TNC-POOL" ,  "13 - SCHOOLBUS", "14 - OTHER"))
+setcolorder(trip_tour_mode_tab_w_count, c('TRIPMODE', "1 - SOV", "2 - HOV2", "3 - HOV3","4 - WALK", "5 - BIKE", "6 - WALK-TRANSIT", "7 - PNR-TRANSIT" , "8 - KNR-TRANSIT",  "9 - TNC-TRANSIT" , "10 - TAXI", "11 - TNC-SINGLE", "12 - TNC-POOL" ,  "13 - SCHOOLBUS", "14 - OTHER"))
 
 trip_tour_mode_tab_w_pct = trip_tour_mode_tab_w[, c(1, 16:29)]
-setcolorder(trip_tour_mode_tab_w_pct, c('TRIPMODE', "1 - SOV", "2 - HOV2", "3 - HOV3","4 - WALK", "5 - BIKE", "6 - WALK-TRANSIT", "7 - PNR-TRANSIT" , "8 - KNR-TRANSIT",  "9 - TNR-TRANSIT" , "10 - TAXI", "11 - TNC-SINGLE", "12 - TNC-POOL" ,  "13 - SCHOOLBUS", "14 - OTHER"))
+setcolorder(trip_tour_mode_tab_w_pct, c('TRIPMODE', "1 - SOV", "2 - HOV2", "3 - HOV3","4 - WALK", "5 - BIKE", "6 - WALK-TRANSIT", "7 - PNR-TRANSIT" , "8 - KNR-TRANSIT",  "9 - TNC-TRANSIT" , "10 - TAXI", "11 - TNC-SINGLE", "12 - TNC-POOL" ,  "13 - SCHOOLBUS", "14 - OTHER"))
 
 trip_tour_mode_tab_uw = cross_tab(spa_trip, variable_labels, value_labels, variables = 'TRIPMODE', tab_by = 'TOURMODE')
 format_crosstab_table(trip_tour_mode_tab_uw)
 trip_tour_mode_tab_uw[is.na(trip_tour_mode_tab_uw)] = ""
 
 trip_tour_mode_tab_uw_count = trip_tour_mode_tab_uw[, c(1:15)]
-setcolorder(trip_tour_mode_tab_uw_count, c('TRIPMODE', "1 - SOV", "2 - HOV2", "3 - HOV3","4 - WALK", "5 - BIKE", "6 - WALK-TRANSIT", "7 - PNR-TRANSIT" , "8 - KNR-TRANSIT",  "9 - TNR-TRANSIT" , "10 - TAXI", "11 - TNC-SINGLE", "12 - TNC-POOL" ,  "13 - SCHOOLBUS", "14 - OTHER"))
+setcolorder(trip_tour_mode_tab_uw_count, c('TRIPMODE', "1 - SOV", "2 - HOV2", "3 - HOV3","4 - WALK", "5 - BIKE", "6 - WALK-TRANSIT", "7 - PNR-TRANSIT" , "8 - KNR-TRANSIT",  "9 - TNC-TRANSIT" , "10 - TAXI", "11 - TNC-SINGLE", "12 - TNC-POOL" ,  "13 - SCHOOLBUS", "14 - OTHER"))
 
 trip_tour_mode_tab_uw_pct = trip_tour_mode_tab_uw[, c(1, 16:29)]
-setcolorder(trip_tour_mode_tab_uw_pct, c('TRIPMODE', "1 - SOV", "2 - HOV2", "3 - HOV3","4 - WALK", "5 - BIKE", "6 - WALK-TRANSIT", "7 - PNR-TRANSIT" , "8 - KNR-TRANSIT",  "9 - TNR-TRANSIT" , "10 - TAXI", "11 - TNC-SINGLE", "12 - TNC-POOL" ,  "13 - SCHOOLBUS", "14 - OTHER"))
+setcolorder(trip_tour_mode_tab_uw_pct, c('TRIPMODE', "1 - SOV", "2 - HOV2", "3 - HOV3","4 - WALK", "5 - BIKE", "6 - WALK-TRANSIT", "7 - PNR-TRANSIT" , "8 - KNR-TRANSIT",  "9 - TNC-TRANSIT" , "10 - TAXI", "11 - TNC-SINGLE", "12 - TNC-POOL" ,  "13 - SCHOOLBUS", "14 - OTHER"))
 
 
 trip_mode_tab_w = cross_tab(spa_trip, variable_labels ,value_labels, variables = 'TRIPMODE', weight_column = "PEREXPFACT")

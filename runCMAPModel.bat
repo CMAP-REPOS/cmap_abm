@@ -30,8 +30,10 @@ SET PYTHONPATH="C:\Program Files\INRO\Emme\Emme 4\Emme-4.6.1\Python37\Lib"
 %EMMEPY% %BASE_PATH%\python\import\importwsmatrices.py
 %EMMEPY% %BASE_PATH%\python\import\importTransitConnectors.py
 
-:: Create an OMX stating work county for each work zone
-::%EMMEPY% %BASE_PATH%\python\County_script.py
+:: Create OMX files stating work county for each work zone, and destination MAZ in Chicago flag
+%EMMEPY% %BASE_PATH%\python\County_script.py
+%EMMEPY% %BASE_PATH%\python\dest_chicago_script.py
+%EMMEPY% %BASE_PATH%\python\areatype_script.py
 
 :: Iteration 0
 :: Skim highway and transit for ActivitySim
@@ -57,14 +59,9 @@ copy %ASIM_INPUT%\taz_skims.omx %ASIM_INPUT%\taz_skims_iter1.omx
 %EMMEPY% %BASE_PATH%\python\cmap_transit_assignment_runner.py 2
 
 :: OUTPUTS
-
-::#TODO: copy outputs to destination folder
-
-::#TODO: run visualizer, send to output folder
+:: Run visualizer
 cd survey_data_prep
 CALL run_data_prep_scripts.bat
-cd .. 
-:: export skims maps from Emme
-::%EMMEPY% %BASE_PATH%\python\export_trn_los_maps.py
 
-::#TODO: cleanup
+:: export skims maps from Emme
+%EMMEPY% %BASE_PATH%\python\export_trn_los_maps.py

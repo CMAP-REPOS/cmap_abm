@@ -27,5 +27,7 @@ python SPA\__init__.py %SETTINGS_FILE%
 %R_SCRIPT% Visualizer\scripts\Summarize_ActivitySim_cmap.R %SETTINGS_FILE%
 
 call Visualizer\generateDashboard_cmap_model_vs_cmap.bat
+cd .. 
+python python\assignment_summary.py
 cmd /k 
 :: Then edit/run the visualizer .bat
