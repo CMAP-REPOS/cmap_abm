@@ -12,6 +12,7 @@ change_scenario = _m.Modeller().tool("inro.emme.data.scenario.change_primary_sce
 
 TSCENS = [203]#[201,203,205,207]
 period = ["AM"]#["NT", "AM", "MD", "PM"]
+print('Exporting transit LOS maps')
 for scen, per in zip(TSCENS,period): 
     change_scenario(scenario=scen)
     #root = desktop.root_worksheet_folder()
@@ -43,7 +44,7 @@ for scen, per in zip(TSCENS,period):
 
     for matrix in time_matrix_list:
         OD_layer.par("Value").set("mf" + matrix)
-        print(OD_layer.par("Value").get())
+        #print(OD_layer.par("Value").get())
         cta_rail_layer = ws.layer(layer_name="CTA Rail Lines")
         if "METRARAIL" in matrix:
             cta_rail_layer.par("SFlag").set(False)
@@ -68,7 +69,7 @@ for scen, per in zip(TSCENS,period):
     OD_layer = ws.layer(layer_name="O-D pair values")    
     for matrix in fare_matrix_list:
         OD_layer.par("Value").set("mf" + matrix)
-        print(OD_layer.par("Value").get())
+        #print(OD_layer.par("Value").get())
         legend_layer = ws.layer(layer_name="Legend")
         title = "Scenario %<$ScenarioNumber>% \nTime To %<SR:SelectedNode>% \n" + matrix
         legend_layer.par("TextString").set(title)
@@ -83,7 +84,7 @@ for scen, per in zip(TSCENS,period):
     OD_layer = ws.layer(layer_name="O-D pair values")
     for matrix in xfer_matrix_list:
         OD_layer.par("Value").set("mf" + matrix + "-(mfTOTALIVTT" + matrix[5:] + "==0)*100")
-        print(OD_layer.par("Value").get())
+        #print(OD_layer.par("Value").get())
         legend_layer = ws.layer(layer_name="Legend")
         title = "Scenario %<$ScenarioNumber>% \nTime To %<SR:SelectedNode>% \n" + matrix
         legend_layer.par("TextString").set(title)

@@ -59,9 +59,9 @@ copy %ASIM_INPUT%\taz_skims.omx %ASIM_INPUT%\taz_skims_iter1.omx
 %EMMEPY% %BASE_PATH%\python\cmap_transit_assignment_runner.py 2
 
 :: OUTPUTS
+:: export skims maps from Emme
+%EMMEPY% %BASE_PATH%\python\export_trn_los_maps.py
+
 :: Run visualizer
 cd survey_data_prep
 CALL run_data_prep_scripts.bat
-
-:: export skims maps from Emme
-%EMMEPY% %BASE_PATH%\python\export_trn_los_maps.py
