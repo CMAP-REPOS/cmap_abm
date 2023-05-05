@@ -15,6 +15,8 @@ import json as _json
 import inro.emme.desktop.app as _app
 import datetime
 
+print("Starting importing scenarios at %s"%(datetime.datetime.now()))
+
 HSCENS = [1,2,3,4,5,6,7,8]
 TSCENS = [201,203,205,207]
 TPERIODS = [1,2,3,4]
@@ -50,7 +52,7 @@ impFunc(transaction_file  = WORK_FOLDER + os.sep + "functions.in", throw_on_erro
 
 for scen in HSCENS:
     print("Importing Highway Scenario %s"%scen)
-    createScenario(scenario_id = int(scen), scenario_title = scen_desc[str(scen)], overwrite = True, set_as_primary = True) # TODO uncomment
+    createScenario(scenario_id = int(scen), scenario_title = scen_desc[str(scen)], overwrite = True, set_as_primary = True)
     # Import highway mode table    
     impModes(transaction_file = autoFolder + os.sep + "modes.in", revert_on_error = False)
     # Import highway net 

@@ -2075,7 +2075,6 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
             "analyzed_demand": None,
         }
 
-        # FIXME these expressions need to be more flexible if fares are applied
         operator_dict = {
         # mode: network_selection
             'METRARail': "mode=M",

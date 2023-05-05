@@ -40,8 +40,6 @@ class CMapMatrix(_m.Tool()):
         """
         exportOMX = _m.Modeller().tool("inro.emme.data.matrix.export_to_omx")
         skimList = []
-        #TODO: below is a copy/paste from the assignment script, it would be better to set
-        # this up somewhere else so it's not here twice
         classes = [
                 {"name": 'SOV_NT_L', "skims": ["TIME", "DIST", "TOLLCOST.SOV"]},
                 {"name": 'SOV_TR_L', "skims": ["TIME", "DIST", "TOLLCOST.SOV"]},
