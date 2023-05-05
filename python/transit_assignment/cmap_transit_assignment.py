@@ -1858,7 +1858,7 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
             data.append([demand_name, report["maximum"], report["maximum_at"]["origin"], report["maximum_at"]["destination"], 
                         report["average"], report["sum"]])
             df = pd.DataFrame(data, columns=['Demand', 'Max', 'Max orig', 'Max dest', 'Avg', 'Sum'])
-            filename = "%s\\trn_boardings_%s.csv"%(EMME_OUTPUT, datetime.date.today())
+            filename = "%s\\trn_boardings.csv"%(EMME_OUTPUT)
             df.to_csv(filename, mode='a', index=False, header=not os.path.exists(filename), line_terminator='\n')
         return
 

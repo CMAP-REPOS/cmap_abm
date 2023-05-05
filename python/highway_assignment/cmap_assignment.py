@@ -11,12 +11,14 @@ import array
 import os
 import json as _json
 import general as gen_utils
+import pandas as pd
 
 try:
     basestring
 except NameError:
     basestring = str
 
+EMME_OUTPUT = os.environ["EMME_OUTPUT"]
 class TrafficAssignment(_m.Tool()):
     __MODELLER_NAMESPACE__ = "cmap"
     period = _m.Attribute(str)
@@ -28,6 +30,7 @@ class TrafficAssignment(_m.Tool()):
     raise_zero_dist = _m.Attribute(bool)
     stochastic = _m.Attribute(bool)
     input_directory = _m.Attribute(str)
+    matrix_summary = _m.Attribute(bool)    
     tool_run_msg = ""
     timeFactors = {}
     
@@ -49,7 +52,8 @@ class TrafficAssignment(_m.Tool()):
         self._stats = {}
         
     
-    def __call__(self, period, msa_iteration, relative_gap, max_iterations, num_processors, scenario, select_link=[], raise_zero_dist=True, stochastic=False, input_directory=None):        
+    def __call__(self, period, msa_iteration, relative_gap, max_iterations, num_processors, scenario, select_link=[], 
+                 raise_zero_dist=True, stochastic=False, input_directory=None, matrix_summary=True):        
         self._skim_classes_separately = False
         select_link = _json.loads(select_link) if isinstance(select_link, basestring) else select_link
         attrs = {
@@ -63,6 +67,7 @@ class TrafficAssignment(_m.Tool()):
             "raise_zero_dist": raise_zero_dist,
             "stochastic": stochastic,
             "input_directory": input_directory,
+            "matrix_summary": matrix_summary,
             "self": str(self)
         }
         
@@ -136,13 +141,37 @@ class TrafficAssignment(_m.Tool()):
                 ]
             if msa_iteration == 0: # 0 is initial network skimming
                 self.prepOutputTables(period, scenario, classes)
-
+            if matrix_summary:
+                create_matrix = _m.Modeller().tool("inro.emme.data.matrix.create_matrix")           
+                temp_matrix = create_matrix(matrix_id = "ms1", matrix_name = "TEMP_SUM", matrix_description = "temp mf sum", default_value = 0, overwrite = True)
             self.run_assignment(period, relative_gap, max_iterations, num_processors, scenario, classes, select_link)
 
             self.calc_network_results(period, num_processors, scenario)
 
-            if msa_iteration <= 4:
+            if msa_iteration <= 2:
                 self.run_skims(period, num_processors, scenario, classes)
+                if matrix_summary:
+                    compute_matrix = _m.Modeller().tool("inro.emme.matrix_calculation.matrix_calculator")
+                    VMT = []        
+                    matrices = ["SOV_NT", "SOV_TR", "HOV2", "HOV3"]
+                    for V in ['L', 'M', 'H']:        
+                        for name in matrices:
+                            vmt_name = "%s_%s_%s*mf%s_%s_DIST__%s" % (name, V, period, name, V, period)
+                            spec_sum={
+                                "expression": vmt_name,
+                                "result": "msTEMP_SUM",
+                                "aggregation": {
+                                    "origins": "+",
+                                    "destinations": "+"
+                                },
+                                "type": "MATRIX_CALCULATION"
+                            }
+                            report = compute_matrix(spec_sum) 
+                            VMT.append([vmt_name, report["maximum"], report["maximum_at"]["origin"], report["maximum_at"]["destination"], 
+                                        report["average"], report["sum"]])                           
+                    df = pd.DataFrame(VMT, columns=['VMT', 'Max', 'Max orig', 'Max dest', 'Avg', 'Sum'])
+                    filename = "%s\\hwy_vmt_iter%s.csv"%(EMME_OUTPUT, msa_iteration)
+                    df.to_csv(filename, mode='a', index=False, header=not os.path.exists(filename), line_terminator='\n')                    
                 #self.report(period, scenario, classes)
                 # Check that the distance matrix is valid (no disconnected zones)
                 if raise_zero_dist:
