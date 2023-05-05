@@ -20,8 +20,8 @@ IF %ITERATION% EQU 1 (
     python python\prepAsim.py
 )
 
-:: Crop files for testing ActivitySim
-python python\crop.py little
+:: Crop files for testing ActivitySim, not needed for production runs
+::python python\crop.py little
 
 :: Run ActivitySim
 python %ASIM%\simulation.py -c %ASIM%\configs -o %ASIM_OUTPUT% -d %ASIM_INPUT%
