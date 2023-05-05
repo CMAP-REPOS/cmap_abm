@@ -1,0 +1,45 @@
+~/Defining data base dimensions.............................................0.01
+18 / scenarios
+6000 / centroids
+60000 / nodes
+300000 / links
+480000 / turns
+40 / transit vehicles
+24000 / transit lines
+960000 / line segments
+9999,9999,9999,9999 / matrices (mf,mo,md[,ms])
+99 / functions per class
+5000 / operators per class
+5000 / log book size
+100 / demarcation size
+62000000 / extra network attributes
+yes / node labels
+yes / user data on transit line segments
+yes / work file to save class specific auto volumes
+ ~/ database title
+CMAP Activitysim
+yes / confirm dimensions
+~/Reading device table......................................................0.02
+7 / terminal type (here Non graphic report /401)
+1 / printer type
+1 / plot file type (here GPL/GPR plot file, color)
+TL   / initials
+~/Creating scenario 1.......................................................1.22
+9999 / scenario to be created
+ ~/ scenario title
+For skimming
+~/Modifying units...........................................................1.23
+m=1.23
+3 / unit of length
+'mi'
+4 / unit of cost
+'$'
+5 / unit of energy
+'MJ'
+6 / length of coordinate unit
+0.000189
+7 / node number digits
+6 / number of digits for node number
+~/CREATION_FINISHED_TAG (do not remove this comment)
+q
+q
