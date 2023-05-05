@@ -102,8 +102,8 @@ schbusSpeed: 20.00
 #drvtrn_distpen_0_multiplier: 270
 wlktrn_distpen_max: 15
 drvtrn_distpen_max: 15
-#busl_ivt_factor: 1.0
-#buse_ivt_factor: 1.0
+busl_ivt_factor: 1.0
+buse_ivt_factor: 1.0
 cta_rail_ivt_factor: 0.9
 metra_rail_ivt_factor: 0.65
 # RIDEHAIL Settings

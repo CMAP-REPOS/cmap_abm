@@ -54,8 +54,7 @@ CHOOSER_SEGMENT_COLUMN_NAME: income_segment
 # boolean column to filter choosers (True means keep)
 CHOOSER_FILTER_COLUMN_NAME: is_out_of_home_worker
 
-# FIXME - these are assigned to persons in annotate_persons. we need a better way to manage this
-# FIXME - these are not needed for this model and should be re/factored out
+# assigned to persons in annotate_persons
 SEGMENT_IDS:
   work_low: 1  # INCOME_SEGMENT_LOW
   work_med: 2  # INCOME_SEGMENT_MED

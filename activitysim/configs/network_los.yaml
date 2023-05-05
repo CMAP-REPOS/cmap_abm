@@ -37,9 +37,8 @@ skim_time_periods:
     period_minutes: 30
     #Index is 3 AM! 
     periods: [0, 6, 8, 12, 14, 22, 26, 30, 34, 48]
-    # TODO old labels: &skim_time_period_labels ['VE', 'EA', 'AM', 'MM', 'MD', 'AF', 'PM', 'EV', 'NT']
     labels: &skim_time_period_labels ['NT', 'EA', 'AM', 'MM', 'MD', 'AF', 'PM', 'EV', 'NT']
-    # VE = 3a - 6a (same skim data as NT)
+    # NT = 3a - 6a
     # EA = 6a - 7a
     # AM = 7a - 9a
     # MM = 9a - 10a
@@ -48,8 +47,3 @@ skim_time_periods:
     # PM = 4p - 6p
     # EV = 6p - 8p
     # NT = 8p - 3a
-
-demographic_segments: &demographic_segments
-  - &low_income_segment_id 0
-  - &mid_income_segment_id 1
-  - &high_income_segment_id 2

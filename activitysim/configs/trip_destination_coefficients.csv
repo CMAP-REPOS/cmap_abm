@@ -3,8 +3,8 @@ coef_UNAVAILABLE,-999,T
 coef_one,1,T
 coef_mode_choice_logsum,1.821,F
 coef_distance_joint,-0.119676377,F
-coef_util_distance_work_outbound,-0.03170928,F
-coef_util_distance_work_inbound,0.147813279,F
+coef_util_distance_work_inbound,-0.03170928,F
+coef_util_distance_work_outbound,0.147813279,F
 coef_util_distance_univ,-0.06831085,F
 coef_util_distance_school,-0.065223529,F
 coef_util_distance_escort,-0.108901471,F

@@ -1,4 +1,5 @@
 coefficient_name,eatout,escort,othdiscr,othmaint,school,shopping,social,univ,work,atwork
+coef_unavailable,,,,,,,,,,
 coef_one,coef_one,coef_one,coef_one,coef_one,coef_one,coef_one,coef_one,coef_one,coef_one,coef_one
 coef_nest_root,coef_nest_root,coef_nest_root,coef_nest_root,coef_nest_root,coef_nest_root,coef_nest_root,coef_nest_root,coef_nest_root,coef_nest_root,coef_nest_root
 coef_nest_AUTO,coef_nest_AUTO,coef_nest_AUTO,coef_nest_AUTO,coef_nest_AUTO,coef_nest_AUTO,coef_nest_AUTO,coef_nest_AUTO,coef_nest_AUTO,coef_nest_AUTO,coef_nest_AUTO

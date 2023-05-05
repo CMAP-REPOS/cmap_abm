@@ -52,7 +52,6 @@ coef_home_urban_work2,0.2308,F
 coef_home_urban_school1,-0.1361,F
 coef_home_urban_school2,0.317,F
 coef_home_urban_work_and_school,-0.3509,F
-TODO,0,F
 coef_univ_worker_non_family_work1,0,F
 coef_univ_worker_family_work1,0,F
 coef_univ_worker_GQ_work1,0,F
