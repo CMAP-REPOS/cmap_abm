@@ -408,22 +408,6 @@ countyFlows = xtabs(finalweight~HDISTRICT+WDISTRICT, data = countyFlowWorkers)
 countyFlows[is.na(countyFlows)] = 0
 countyFlows = addmargins(as.table(countyFlows))
 
-# countyFlows = as.data.frame.matrix(countyFlows)
-# colnames(countyFlows)[colnames(countyFlows)=="Sum"] = "Total"
-# rownames(countyFlows)[rownames(countyFlows)=="Sum"] = "Total"
-# 
-# countyFlows$order = c(1:7, 10, 12, 8:9, 11, 13) #FIXME: Breaks here
-# setDT(countyFlows, keep.rownames = TRUE)
-# setcolorder(countyFlows,  c("rn", "Cook",     "DeKalb",   "DuPage",   
-#                             "Grundy" ,  "Kane" ,  "Kendall", "Lake, IL",
-#                             "McHenry"  , "Will"   , "Lake, IN",  "LaPorte",   "Porter" , "Total"   ))
-# countyFlows = countyFlows[order(order)]
-# setnames(countyFlows, "rn", "X")
-# 
-# write.csv(countyFlows, "countyFlows.csv", row.names = F)
-
-# wplace_employed = count(countyFlowWorkers, vars='WPLACE', wt_var='finalweight')  # what is WPLACE?
-
 #Workers in the HH
 workersHH = plyr::count(per[!is.na(per$pwtaz) & !is.na(per$PERTYPE) & !is.na(per$empl_loc_type),], c("SAMPN"), "(per$PERTYPE<=2) | (per$PERTYPE==3 & per$pwtaz>0)")
 hh$WORKERS = workersHH$freq[match(hh$SAMPN, workersHH$SAMPN)]

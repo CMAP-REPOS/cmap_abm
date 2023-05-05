@@ -11,7 +11,6 @@
 #############################################################################################################################
 library(Rcpp)
 ### Read Command Line Arguments
-#FIXME: Redo this, it should be reading the commandArgs, ASR commented to run in RStudio
 #args                <- commandArgs(trailingOnly = TRUE)
 #Parameters_File     <- args[1]
 Parameters_File <- "C:\\projects\\cmap_activitysim\\cmap_abm\\survey_data_prep\\Visualizer\\runtime\\parameters.csv"

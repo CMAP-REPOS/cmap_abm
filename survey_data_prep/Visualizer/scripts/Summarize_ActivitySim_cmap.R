@@ -72,13 +72,13 @@ pertypeCodes <- data.frame(code = c(1,2,3,4,5,6,7,8,"All"),
 purposeCodes <- data.frame(code = c(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
                            name = c("Home", "work", "univ", "school", "escort", "shopping", "othmaint", "eatout", "social", "othdiscr", "atwork"))
 
-# fixme: Confirm text/numeric correspond to CMAP model output modes
+# CMAP model output modes
 modeCodes <- data.frame(code = c(1, 1, 2, 2, 3, 3, 4, 5, 6, 7, 8, 9, 10, 11, 11, 11),
                         name = c("DRIVEALONE", "DRIVEALONEPAY", "SHAREDRIDE2", "SHARED2PAY",
                                  "SHAREDRIDE3","SHARED3PAY", "WALK", "BIKE",
                                  "WALK_TRANSIT", "PNR_TRANSIT", "KNR_TRANSIT", "TNC_TRANSIT",
-                                 "SCHBUS",                        # 9 = School Bus
-                                 "TAXI", "TNC_SINGLE", "TNC_SHARED")) #10 = Ride hail
+                                 "SCHBUS",                            #10 = School Bus
+                                 "TAXI", "TNC_SINGLE", "TNC_SHARED")) #11 = Ride hail
 
 tourcatCodes <- data.frame(code = c(0,1,3),
                            name = c("mandatory", "non-mandatory", "atwork"))
@@ -964,7 +964,6 @@ jointCompPartySize$tour_composition[jointCompPartySize$tour_composition==3] <- "
 jointCompPartySizeProp <- xtabs(freq~tour_composition+NUMBER_HH, jointCompPartySize)
 jointCompPartySizeProp <- addmargins(as.table(jointCompPartySizeProp))
 # jointCompPartySizeProp <- jointCompPartySizeProp[1:(nrow(jointCompPartySizeProp) - 1),]  #remove last row 
-# fixme: above line was removing totals in this case, which are used in the visualization - may need to edit with full sample?
 jointCompPartySizeProp <- prop.table(jointCompPartySizeProp, margin = 1)
 jointCompPartySizeProp <- as.data.frame.matrix(jointCompPartySizeProp)
 jointCompPartySizeProp <- jointCompPartySizeProp*100
