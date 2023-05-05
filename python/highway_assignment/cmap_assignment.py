@@ -70,51 +70,51 @@ class TrafficAssignment(_m.Tool()):
         with _m.logbook_trace("Traffic assignment for period %s" % period, attributes=attrs):
             classes = [
                 {   # 0
-                    "name": 'SOV_NT_L', "mode": 'S', "PCE": 1, "VOT": 5.41, "toll": "@toll",
+                    "name": 'SOV_NT_L', "mode": 'S', "PCE": 1, "VOT": 13.59, "toll": "@toll",
                     "skims": ["TIME", "DIST", "FTIME", "TOLLCOST.SOV", "TOLLDIST"]
                 },
                 {   # 1
-                    "name": 'SOV_TR_L', "mode": 'S', "PCE": 1, "VOT": 5.41, "toll": "@toll",
+                    "name": 'SOV_TR_L', "mode": 'S', "PCE": 1, "VOT": 13.59, "toll": "@toll",
                     "skims": ["TIME", "DIST", "FTIME", "TOLLCOST.SOV", "TOLLDIST"]
                 },
                 {   # 2
-                    "name": 'HOV2_L', "mode": 'H', "PCE": 1, "VOT": 9.02, "toll": "@toll",
+                    "name": 'HOV2_L', "mode": 'H', "PCE": 1, "VOT": 22.65, "toll": "@toll",
                     "skims": ["TIME", "DIST", "FTIME", "TOLLCOST.HOV2", "TOLLDIST", "HOVDIST"]
                 },
                 {   # 3
-                    "name": 'HOV3_L', "mode": 'H', "PCE": 1, "VOT": 13.53, "toll": "@toll",
+                    "name": 'HOV3_L', "mode": 'H', "PCE": 1, "VOT": 33.98, "toll": "@toll",
                     "skims": ["TIME", "DIST", "FTIME", "TOLLCOST.HOV3", "TOLLDIST", "HOVDIST"]
                 },
                 {   # 4
-                    "name": 'SOV_NT_M', "mode": 'S', "PCE": 1, "VOT": 11.42, "toll": "@toll",
+                    "name": 'SOV_NT_M', "mode": 'S', "PCE": 1, "VOT": 28.43, "toll": "@toll",
                     "skims": ["TIME", "DIST", "FTIME", "TOLLCOST.SOV", "TOLLDIST"]
                 },
                 {   # 5
-                    "name": 'SOV_TR_M', "mode": 'S', "PCE": 1, "VOT": 11.42, "toll": "@toll",
+                    "name": 'SOV_TR_M', "mode": 'S', "PCE": 1, "VOT": 28.43, "toll": "@toll",
                     "skims": ["TIME", "DIST", "FTIME", "TOLLCOST.SOV", "TOLLDIST"]
                 },
                 {   # 6
-                    "name": 'HOV2_M', "mode": 'H', "PCE": 1, "VOT": 19.03, "toll": "@toll",
+                    "name": 'HOV2_M', "mode": 'H', "PCE": 1, "VOT": 47.38, "toll": "@toll",
                     "skims": ["TIME", "DIST", "FTIME", "TOLLCOST.HOV2", "TOLLDIST", "HOVDIST"]
                 },
                 {   # 7
-                    "name": 'HOV3_M', "mode": 'H', "PCE": 1, "VOT": 28.55, "toll": "@toll",
+                    "name": 'HOV3_M', "mode": 'H', "PCE": 1, "VOT": 71.08, "toll": "@toll",
                     "skims": ["TIME", "DIST", "FTIME", "TOLLCOST.HOV3", "TOLLDIST", "HOVDIST"]
                 },
                 {   # 8
-                    "name": 'SOV_NT_H', "mode": 'S', "PCE": 1, "VOT": 46.27, "toll": "@toll",
+                    "name": 'SOV_NT_H', "mode": 'S', "PCE": 1, "VOT": 75.05, "toll": "@toll",
                     "skims": ["TIME", "DIST", "FTIME", "TOLLCOST.SOV", "TOLLDIST"]
                 },
                 {   # 9
-                    "name": 'SOV_TR_H', "mode": 'S', "PCE": 1, "VOT": 46.27, "toll": "@toll",
+                    "name": 'SOV_TR_H', "mode": 'S', "PCE": 1, "VOT": 75.05, "toll": "@toll",
                     "skims": ["TIME", "DIST", "FTIME", "TOLLCOST.SOV", "TOLLDIST"]
                 },
                 {   # 10
-                    "name": 'HOV2_H', "mode": 'H', "PCE": 1, "VOT": 77.12, "toll": "@toll",
+                    "name": 'HOV2_H', "mode": 'H', "PCE": 1, "VOT": 125.08, "toll": "@toll",
                     "skims": ["TIME", "DIST", "FTIME", "TOLLCOST.HOV2", "TOLLDIST", "HOVDIST"]
                 },
                 {   # 11
-                    "name": 'HOV3_H', "mode": 'H', "PCE": 1, "VOT": 115.68, "toll": "@toll",
+                    "name": 'HOV3_H', "mode": 'H', "PCE": 1, "VOT": 187.63, "toll": "@toll",
                     "skims": ["TIME", "DIST", "FTIME", "TOLLCOST.HOV3", "TOLLDIST", "HOVDIST"]
                 },
                 {   # 12
@@ -126,11 +126,11 @@ class TrafficAssignment(_m.Tool()):
                     "skims": ["TIME", "DIST", "TOLLCOST.TRK_L", "TOLLDIST"]
                 },
                 {   # 14
-                    "name": 'TRK_M', "mode": 'm', "PCE": 1.5, "VOT": 60, "toll": "@toll3",
+                    "name": 'TRK_M', "mode": 'm', "PCE": 2.0, "VOT": 60, "toll": "@toll3",
                     "skims": ["TIME", "DIST", "TOLLCOST.TRK_M", "TOLLDIST"]
                 },
                 {   # 15
-                    "name": 'TRK_H', "mode": 'h', "PCE": 2.5, "VOT": 100, "toll": "@toll4",
+                    "name": 'TRK_H', "mode": 'h', "PCE": 3.0, "VOT": 100, "toll": "@toll4",
                     "skims": ["TIME", "DIST", "TOLLCOST.TRK_H", "TOLLDIST"]
                 }
                 ]
@@ -453,7 +453,6 @@ class TrafficAssignment(_m.Tool()):
         -------
         int_var_name : type
         """
-        #TODO: Changed background to False
         base_spec = {
             "type": "SOLA_TRAFFIC_ASSIGNMENT",
             "background_traffic": None,
