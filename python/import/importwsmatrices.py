@@ -111,14 +111,19 @@ for scen in HSCENS:
     scenario = databank.scenario(scen)    
     for n, m in autoMatsToImport.items():
         createMatrix(matrix_id = m, matrix_name = n, scenario = scenario, overwrite = True)
-    importOMX(file_path = "%s\\trips_%s_taz.omx"%(WORK_FOLDER, period), matrices = autoMatsToImport, scenario = scenario)
+    importOMX(file_path = "%s\\trips_%s_taz.omx"%(WORK_FOLDER, period), 
+                matrices = autoMatsToImport, 
+                zone_mapping='TAZ', 
+                scenario = scenario)
 
     for n, m in auxMatsToImport.items():
         createMatrix(matrix_id = m, matrix_name = n, scenario = scenario, overwrite = True)
 
     for n, m in visitorMatsToImport.items():
         createMatrix(matrix_id = m, matrix_name = n, scenario = scenario, overwrite = True)
-    importOMX(file_path = "%s\\visitor_%s_taz.omx"%(WORK_FOLDER, period), matrices = visitorMatsToImport, scenario = scenario)
+    importOMX(file_path = "%s\\visitor_%s_taz.omx"%(WORK_FOLDER, period), 
+                matrices = visitorMatsToImport, 
+                scenario = scenario)
 
     for n, m in finalAssnMats.items():
         createMatrix(matrix_id = "mf%s%s"%(scen, n), matrix_name = "%s_%s"%(m, period), scenario = scenario, overwrite = True)
@@ -333,8 +338,7 @@ for scen in TSCENS:
         for n, m in visitorTrnMatsToImport.items():
             createMatrix(matrix_id = m, matrix_name = n, scenario = scenario, overwrite = True)
         importOMX(file_path = "%s\\visitor_trn_%s_taz.omx"%(WORK_FOLDER, period), 
-                    matrices = visitorTrnMatsToImport, 
-                    #zone_mapping='TAZ',
+                    matrices = visitorTrnMatsToImport,
                     scenario = scenario)
         
         # Combine KNR transit and TNC transit into KNR transit
