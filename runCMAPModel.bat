@@ -1,7 +1,7 @@
 :: This is the entire CMAP model runner script.
 ::
 :: Ted Lin, RSG
-
+:: Last Modified: May 2023
 :: READ FIRST: cmap_abm\README.md
 
 @ECHO OFF
@@ -29,11 +29,6 @@ SET PYTHONPATH="C:\Program Files\INRO\Emme\Emme 4\Emme-4.6.1\Python37\Lib"
 %EMMEPY% %BASE_PATH%\python\import\importScalars.py
 %EMMEPY% %BASE_PATH%\python\import\importwsmatrices.py
 %EMMEPY% %BASE_PATH%\python\import\importTransitConnectors.py
-
-:: Create OMX files stating work county for each work zone, and destination MAZ in Chicago flag
-%EMMEPY% %BASE_PATH%\python\County_script.py
-%EMMEPY% %BASE_PATH%\python\dest_chicago_script.py
-%EMMEPY% %BASE_PATH%\python\areatype_script.py
 
 :: Iteration 0
 :: Skim highway and transit for ActivitySim

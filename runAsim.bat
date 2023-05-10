@@ -18,6 +18,7 @@ set MKL_NUM_THREADS=1
 :: Prepare files for ActivitySim
 IF %ITERATION% EQU 1 (
     python python\prepAsim.py
+    python python\area_lookup_omx.py
 )
 
 :: Crop files for testing ActivitySim, not needed for production runs
