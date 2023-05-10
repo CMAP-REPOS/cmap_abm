@@ -159,6 +159,7 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
     __MODELLER_NAMESPACE__ = "cmap"
     #period = _m.Attribute(str)
     #scenario =  _m.Attribute(_m.InstanceType)
+    msa_iteration = _m.Attribute(int)
     assignment_only = _m.Attribute(bool)
     skims_only = _m.Attribute(bool)
     matrix_summary = _m.Attribute(bool)
@@ -173,14 +174,13 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
         #self.assignment_only = False
         self.scenario = _m.Modeller().scenario
         self.num_processors = "MAX-1"
-        #self.attributes = ["period", "scenario", "assignment_only", "skims_only",  "num_processors"]
+        #self.attributes = ["period", "msa_iteration", "scenario", "assignment_only", "skims_only",  "num_processors"]
         self._dt_db = _m.Modeller().desktop.project.data_tables()
         self._matrix_cache = {}  # used to hold data for reporting and post-processing of skims
         #for initializing matrices
         self._all_periods = ["1", "3", "5", "7"]
         self.periodLabel = {1: "NT", 3: "AM", 5: "MD", 7: "PM"}
         self.periods = self._all_periods[:]
-        #self.attributes = ["components", "periods", "delete_all_existing"]
         self._matrices = {}
         self._count = {}
         self.user_classes = ["1","2","3"]
@@ -199,10 +199,11 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
         self.basematrixnumber = 500
 
 
-    def __call__(self, period, matrix_count, scenario, assignment_only=False, skims_only=False, matrix_summary=True,
+    def __call__(self, period, msa_iteration, scenario, assignment_only=False, skims_only=False, matrix_summary=True,
                  export_boardings = True, ccr_periods="AM,PM", num_processors="MAX-1"):
         attrs = {
             "period": period,
+            "msa_iteration": msa_iteration,            
             "scenario": scenario.id,
             "assignment_only": assignment_only,
             "skims_only": skims_only,
@@ -389,10 +390,10 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
                         class_name = "TRN_%s_%s_%s"%(amode, self.user_class_labels[int(uc)], self.periodLabel[int(period)])
                         #if scenario.emmebank.matrix(class_name).get_numpy_data(scenario.id).sum() == 0:
                         #    continue   # don't include if no demand
-                        self.run_skims(period, amode, int(uc), regional_pass, skims_only, matrix_summary, num_processors, network, use_ccr)
+                        self.run_skims(period, msa_iteration, amode, int(uc), regional_pass, skims_only, matrix_summary, num_processors, network, use_ccr)
             if export_boardings:
-                self.output_transit_boardings(desktop = _m.Modeller().desktop, use_ccr = use_ccr, 
-                                                output_location = EMME_OUTPUT, period = self.periodLabel[int(period)])
+                self.output_transit_boardings(desktop = _m.Modeller().desktop, use_ccr = use_ccr, output_location = EMME_OUTPUT, 
+                                                period = self.periodLabel[int(period)], msa_iteration = msa_iteration)
 
     @_context.contextmanager
     def setup(self, attrs):
@@ -1403,7 +1404,7 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
                     add_volumes = True
 
     #@_m.logbook_trace("Extract skims", save_arguments=True)
-    def run_skims(self, period, amode, uc, max_fare, skims_only, matrix_summary, num_processors, network, use_ccr):
+    def run_skims(self, period, msa_iteration, amode, uc, max_fare, skims_only, matrix_summary, num_processors, network, use_ccr):
         modeller = _m.Modeller()
         scenario = self.scenario
         #emmebank = scenario.emmebank
@@ -1811,7 +1812,7 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
                 data.append([skim_name, report["maximum"], report["maximum_at"]["origin"], report["maximum_at"]["destination"], 
                             report["average"], report["sum"]])
             df = pd.DataFrame(data, columns=['Skim', 'Max', 'Max orig', 'Max dest', 'Avg', 'Sum'])
-            filename = "%s\\trn_skim_list_%s.csv"%(EMME_OUTPUT, datetime.date.today())
+            filename = "%s\\trn_skim_list_%s.csv"%(EMME_OUTPUT, msa_iteration)
             df.to_csv(filename, mode='a', index=False, header=not os.path.exists(filename), line_terminator='\n')
             # export number of OD pairs with non-zero in-vehicle time by transit mode
             data = [self.periodLabel[int(period)], amode, self.user_class_labels[uc]]
@@ -1839,7 +1840,7 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
             header = ["Period", "Access Mode", "User Class"]
             header.extend(modes)
             df = pd.DataFrame([data], columns=header)
-            filename = "%s\\transit_mode_OD_summary_%s.csv"%(EMME_OUTPUT, datetime.date.today())
+            filename = "%s\\transit_mode_OD_summary_%s.csv"%(EMME_OUTPUT, msa_iteration)
             df.to_csv(filename, mode='a', index=False, header=not os.path.exists(filename), line_terminator='\n')
             # export total boardings
             data = []
@@ -1858,7 +1859,7 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
             data.append([demand_name, report["maximum"], report["maximum_at"]["origin"], report["maximum_at"]["destination"], 
                         report["average"], report["sum"]])
             df = pd.DataFrame(data, columns=['Demand', 'Max', 'Max orig', 'Max dest', 'Avg', 'Sum'])
-            filename = "%s\\trn_boardings.csv"%(EMME_OUTPUT)
+            filename = "%s\\trn_boardings_%s.csv"%(EMME_OUTPUT, msa_iteration)
             df.to_csv(filename, mode='a', index=False, header=not os.path.exists(filename), line_terminator='\n')
         return
 
@@ -2101,12 +2102,12 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
                                 class_name=class_name)
 
 
-    def output_transit_boardings(self, desktop, use_ccr, output_location, period):
+    def output_transit_boardings(self, desktop, use_ccr, output_location, period, msa_iteration):
         desktop.data_explorer().replace_primary_scenario(self.scenario)
-        output_transit_boardings_file = os.path.join(output_location, "boardings_by_line_{}.csv".format(period))
+        output_transit_boardings_file = os.path.join(output_location, "boardings_by_line_{per}_{iter}.csv".format(per=period, iter=msa_iteration))
         self.export_boardings_by_line(desktop, output_transit_boardings_file)
 
-        output_transit_segments_file = os.path.join(output_location, "boardings_by_segment_{}.csv".format(period))
+        output_transit_segments_file = os.path.join(output_location, "boardings_by_segment_{per}_{iter}.csv".format(per=period, iter=msa_iteration))
         self.export_boardings_by_segment(desktop, use_ccr, output_transit_segments_file)
 
         output_station_to_station_folder = os.path.join(output_location)
