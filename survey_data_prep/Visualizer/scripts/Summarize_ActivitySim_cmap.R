@@ -17,13 +17,7 @@ SYSTEM_REPORT_PKGS <- c("data.table", "plyr", "weights", "reshape", "stringr", "
 lib_sink <- suppressWarnings(suppressMessages(lapply(SYSTEM_REPORT_PKGS, library, character.only = TRUE))) 
 
 args = commandArgs(trailingOnly = TRUE)
-
-if(length(args) > 0){
-  settings_file = args[1]
-} else {
-  settings_file = 'C:\\projects\\cmap_activitysim\\cmap_abm\\survey_data_prep\\cmap_inputs.yml'
-}
-
+settings_file = args[1]
 settings = yaml.load_file(settings_file)
 
 # User Inputs

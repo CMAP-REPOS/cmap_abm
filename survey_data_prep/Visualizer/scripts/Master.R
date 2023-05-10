@@ -11,9 +11,8 @@
 #############################################################################################################################
 library(Rcpp)
 ### Read Command Line Arguments
-#args                <- commandArgs(trailingOnly = TRUE)
-#Parameters_File     <- args[1]
-Parameters_File <- "C:\\projects\\cmap_activitysim\\cmap_abm\\survey_data_prep\\Visualizer\\runtime\\parameters.csv"
+args                <- commandArgs(trailingOnly = TRUE)
+Parameters_File     <- args[1]
 #Run_switch          <- "FULL"
 
 ### Read parameters from Parameters_File

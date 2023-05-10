@@ -3,12 +3,7 @@
 library(yaml)
 
 args = commandArgs(trailingOnly = TRUE)
-
-if(length(args) > 0){
-  settings_file = args[1]
-} else {
-  settings_file = 'C:\\projects\\cmap_activitysim\\cmap_abm\\survey_data_prep\\cmap_inputs.yml'
-}
+settings_file = args[1]
 
 print(paste("Using Settings file at", settings_file))
 

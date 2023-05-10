@@ -1,6 +1,6 @@
 :: Run data preparation scripts
 
-SET SETTINGS_FILE="C:\projects\cmap_activitysim\cmap_abm\survey_data_prep\cmap_inputs.yml"
+SET SETTINGS_FILE=%BASE_PATH%\survey_data_prep\cmap_inputs.yml
 
 @echo off
 

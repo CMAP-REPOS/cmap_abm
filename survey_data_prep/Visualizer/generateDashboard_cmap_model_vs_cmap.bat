@@ -10,7 +10,7 @@
 :: #    with appropriate Census sources names wherever applicable
 :: ############################################################################
 @ECHO off
-SET CMAP_ABM_DIR=C:\projects\cmap_activitysim\cmap_abm
+SET CMAP_ABM_DIR=%BASE_PATH%
 SET WORKING_DIR=%CMAP_ABM_DIR%\survey_data_prep\Visualizer
 
 :: User Inputs
@@ -36,22 +36,6 @@ SET BASE_SAMPLE_RATE=1.0
 SET BUILD_SAMPLE_RATE=1.0
 
 SET CT_ZERO_AUTO_FILE_NAME=ct_zero_auto.shp
-
-
-:: Set paths
-:: Commented out -- get from R script that uses settings file instead
-:: SET PROJECT_DIR= "N:\Projects\CMAP_Activitysim\cmap_abm_lf\survey_data_prep\Visualizer"
-:: REM SET ABM_DIR=E:\Projects\Clients\SEMCOG\SNABM\2015_TM151_PPA_V1
-:: SET ABM_SUMMARY_DIR="N:\Projects\CMAP_Activitysim\cmap_abm_lf\survey_data_prep\Visualizer\data\calibration_runs\summarized"
-:: REM SET BASE_SUMMARY_DIR_SUBSET=E:\Projects\Clients\SEMCOG\Data\CHTS\CHTS_Summaries_TM1format_SN
-:: SET BASE_SUMMARY_DIR="N:\Projects\CMAP_Activitysim\cmap_abm_lf\survey_data_prep\Visualizer\summaries"
-:: SET BUILD_SUMMARY_DIR="N:\Projects\CMAP_Activitysim\cmap_abm_lf\survey_data_prep\Visualizer\data\calibration_runs\summarized"
-:: SET CENSUS_DIR="N:\Projects\CMAP_Activitysim\cmap_abm_lf\survey_data_prep\Visualizer\data\census"
-:: SET CENSUS_SUMMARY_DIR="N:\Projects\CMAP_Activitysim\cmap_abm_lf\survey_data_prep\Visualizer\data\census\summarized"
-:: SET CALIBRATION_DIR="N:\Projects\CMAP_Activitysim\cmap_abm_lf\survey_data_prep\Visualizer\data\calibration_targets"
-:: SET SHP_FILE_NAME=zones17.shp
-
-
 
 ECHO Key,Value > %PARAMETERS_FILE%
 REM ECHO WORKING_DIR,%WORKING_DIR% >> %PARAMETERS_FILE%

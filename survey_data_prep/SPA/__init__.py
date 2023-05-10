@@ -16,10 +16,11 @@ from datetime import timedelta
 from collections import defaultdict
 import os as os
 import yaml as yaml
+import sys
 
 ################## definitions defined for the application ##########################################
-
-with open(r'C:\projects\cmap_activitysim\cmap_abm\survey_data_prep\cmap_inputs.yml') as file:
+settings_file = sys.argv[1]
+with open(settings_file) as file:
     settings = yaml.full_load(file)
 
 os.chdir(settings['SPA_code_dir']) # be sure we're in this directory
