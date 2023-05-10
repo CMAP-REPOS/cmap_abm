@@ -5,13 +5,7 @@
 ### Copied from previous processing scripts
 #######################################################
 args = commandArgs(trailingOnly = TRUE)
-
-if(length(args) > 0){
-  settings_file = args[1]
-} else {
-  settings_file = 'C:\\projects\\cmap_activitysim\\cmap_abm\\survey_data_prep\\cmap_inputs.yml'
-}
-
+settings_file = args[1]
 library(yaml)
 settings = yaml.load_file(settings_file)
 
@@ -400,6 +394,15 @@ totalwfh        = data.frame("Total", sum((per$worker==1)*per$finalweight), sum(
 colnames(totalwfh) = colnames(wfh_summary)
 wfh_summary = rbind(wfh_summary, totalwfh)
 #write.csv(wfh_summary, "wfh_summary.csv", row.names = F) # use Census wfh summary instead
+
+# Telecommute Frequency
+per$telecommute_frequency[(per$worker==1) & (per$wfh==0)] <- "No_Telecommute" #all workers are counted this way
+per$telecommute_frequency[(per$TELECOMM_FREQ == 0) & (per$worker==1) & (per$wfh==0)] <- "No_Telecommute"
+per$telecommute_frequency[(per$TELECOMM_FREQ == 1) & (per$worker==1) & (per$wfh==0)] <- "1_day_week"
+per$telecommute_frequency[((per$TELECOMM_FREQ == 2) | (per$TELECOMM_FREQ == 3)) & (per$worker==1) & (per$wfh==0)] <- "2_3_days_week"
+per$telecommute_frequency[(per$TELECOMM_FREQ >= 4) & (per$worker==1) & (per$wfh==0)] <- "4_days_week"
+telecommuteFrequency <- count(per[!is.na(per$telecommute_frequency),], c("telecommute_frequency"), "finalweight")
+write.csv(telecommuteFrequency, "telecommuteFrequency.csv", row.names = TRUE)
 
 # County-County Flows
 countyFlowWorkers = per[per$PER_WK_ZONE_ID > 0 & per$PER_WK_ZONE_ID < 9999 & per$EMPLY<3,] 

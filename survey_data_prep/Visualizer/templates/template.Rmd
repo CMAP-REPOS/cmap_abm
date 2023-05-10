@@ -636,7 +636,7 @@ Distribution of workers by distance between home and usual work place, and stude
 
 Chart Column 1 {data-width=300}
 --------------------------------------------
-### Auto Ownership{data-height=265}
+### Auto Ownership{data-height=220}
 ```{r Chart_Auto_Ownership}
 if(IS_BASE_SURVEY=="Yes"){
   #cat("Census source: ", AO_CENSUS_LONG)
@@ -670,13 +670,18 @@ bscols(widths=c(3,9),
 #p
 ```
 
-### {data-height=140}
-```{r Gauge_WFH1}
-
+### Telecommute Frequency{data-height=220}
+```{r Telecommute Frequency}
+base_df <- base_data[[which(base_csv_names=="telecommuteFrequency")]]
+build_df <- build_data[[which(build_csv_names=="telecommuteFrequency")]]
+colnames(build_df) <- colnames(base_df)
+std_DF <- get_standardDF(data_df1 = base_df, data_df2 = build_df, x = "telecommute_frequency", y = c("freq"))
+p <- plotly_bar_plotter(data = std_DF, xlabel = "Telecommute Frequency", ylabel = "Percent", ynames = c(BASE_SCENARIO_NAME, BUILD_SCENARIO_NAME), percent = T, height = 225, tickangle = -30, bottom_offset = 50)
+p
 
 ```
 
-### Percentage Working From Home{data-height=250}
+### Percentage Working From Home{data-height=215}
 ```{r Chart_WFH}
 base_df <- base_data[[which(base_csv_names=="wfh_summary")]]
 base_df$share <- base_df$WFH/base_df$Workers
