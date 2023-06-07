@@ -1,5 +1,5 @@
 Label,Description,Expression,coefficient
-local_dist,,"_DIST@skims['SOV_NT_M_DIST','MD']",1
+local_dist,,"_DIST@skims['SOV_TR_M_DIST','MD']",1
 dest_county,,_COUNTY@skims['COUNTY'],1
 dest_areatype,,_AREATYPE@skims['AREATYPE'],1
 util_dist_0_1,"Distance, piecewise linear from 0 to 1 miles","@_DIST.clip(0,1)",coef_dist_0_1

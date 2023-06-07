@@ -6,7 +6,7 @@ Description,Target,Expression
 ,primary_purpose,"df.tour_type.where((df.tour_type != 'school') | ~df.is_university, 'univ')"
 ,primary_purpose,"primary_purpose.where(df.tour_category!='atwork', 'atwork')"
 #,,
-,distance_in_miles,"od_skims[('SOV_NT_M_DIST', 'MD')]"
+,distance_in_miles,"od_skims[('SOV_TR_M_DIST', 'MD')]"
 #,,
 ,is_joint,df.tour_category=='joint'
 ,_HH_PERSON_COUNT,"lambda exp, persons: persons.query(exp).groupby('household_id').size()"
