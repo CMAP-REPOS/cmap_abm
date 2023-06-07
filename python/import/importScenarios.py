@@ -61,7 +61,7 @@ for scen in HSCENS:
     import_link_shape(transaction_file = WORK_FOLDER + os.sep + 'linkshape_100.in', revert_on_error = False)
     # import extra attributes and tolls
     node_att = ['@zone', '@atype', '@imarea']
-    node_att_def = ['CMAP Zone', 'IM area flag', 'cycle length at node in minutes']
+    node_att_def = ['CMAP Zone', 'areatype', 'IM area flag']
     node_labels={0: 'i_node'}
     for i, att, att_def in zip(range(len(node_att)), node_att, node_att_def):
         create_extra('NODE', att, att_def, 0.0, overwrite = True)
