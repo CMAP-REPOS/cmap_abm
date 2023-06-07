@@ -110,10 +110,10 @@ util_KNR_TRANSIT_Destination_zone_densityIndex,KNR_TRANSIT - Destination zone de
 util_KNR_TRANSIT_Person_is_less_than_10_years_old,KNR_TRANSIT - Person is less than 10 years old,@(df.age < 10),,,,,,,,coef_age010_trn,,,,,
 util_KNR_TRANSIT_outbound_Unavailable,KNR_TRANSIT outbound - Unavailable,knr_transit_out_available == False,,,,,,,,coef_unavailable,,,,,
 #util_KNR_TRANSIT_outbound_In_vehicle_time,KNR_TRANSIT outbound - In-vehicle time,@df.kt_ivt_skims_out * df.time_factor * df.outbound,,,,,,,,coef_ivt,,,,,
-util_KNR_TRANSIT_outbound_Bus_loc_in_vehicle_time,KNR_TRANSIT outbound - Bus loc in-vehicle time,@df.kt_busloc_ivt_skims_out * busl_ivt_factor * df.time_factor * df.outbound,,,,,,,coef_ivt,,,,,,
-util_KNR_TRANSIT_outbound_Bus_exp_in_vehicle_time,KNR_TRANSIT outbound - Bus exp in-vehicle time,@df.kt_busexp_ivt_skims_out * buse_ivt_factor * df.time_factor * df.outbound,,,,,,,coef_ivt,,,,,,
-util_KNR_TRANSIT_outbound_CTA_rail_in_vehicle_time,KNR_TRANSIT outbound - CTA rail in-vehicle time,@df.kt_ctarail_ivt_skims_out * cta_rail_ivt_factor * df.time_factor * df.outbound,,,,,,,coef_ivt,,,,,,
-util_KNR_TRANSIT_outbound_Metra_rail_in_vehicle_time,KNR_TRANSIT outbound - Metra rail in-vehicle time,@df.kt_metrarail_ivt_skims_out * metra_rail_ivt_factor * df.time_factor * df.outbound,,,,,,,coef_ivt,,,,,,
+util_KNR_TRANSIT_outbound_Bus_loc_in_vehicle_time,KNR_TRANSIT outbound - Bus loc in-vehicle time,@df.kt_busloc_ivt_skims_out * busl_ivt_factor * df.time_factor * df.outbound,,,,,,,,coef_ivt,,,,,
+util_KNR_TRANSIT_outbound_Bus_exp_in_vehicle_time,KNR_TRANSIT outbound - Bus exp in-vehicle time,@df.kt_busexp_ivt_skims_out * buse_ivt_factor * df.time_factor * df.outbound,,,,,,,,coef_ivt,,,,,
+util_KNR_TRANSIT_outbound_CTA_rail_in_vehicle_time,KNR_TRANSIT outbound - CTA rail in-vehicle time,@df.kt_ctarail_ivt_skims_out * cta_rail_ivt_factor * df.time_factor * df.outbound,,,,,,,,coef_ivt,,,,,
+util_KNR_TRANSIT_outbound_Metra_rail_in_vehicle_time,KNR_TRANSIT outbound - Metra rail in-vehicle time,@df.kt_metrarail_ivt_skims_out * metra_rail_ivt_factor * df.time_factor * df.outbound,,,,,,,,coef_ivt,,,,,
 util_KNR_TRANSIT_outbound_iwait_time,KNR_TRANSIT outbound - iwait time,@df.kt_iwait_skims_out * df.time_factor * df.outbound,,,,,,,,coef_iwait,,,,,
 util_KNR_TRANSIT_outbound_transfer_wait_time,KNR_TRANSIT outbound - transfer wait time,@df.kt_xwait_skims_out * df.time_factor * df.outbound,,,,,,,,coef_xwait,,,,,
 #util_KNR_TRANSIT_outbound_number_of_transfers,KNR_TRANSIT outbound - number of transfers,@(df.kt_xfers_skims_out).clip(0) * df.outbound,,,,,,,,coef_xfers,,,,,
@@ -126,10 +126,10 @@ util_KNR_TRANSIT_outbound_operating_cost,KNR_TRANSIT outbound - Operating cost,"
 #util_KNR_TRANSIT_outbound_Cappen,KNR_TRANSIT outbound - Capacity Penalties,@df.kt_cappen_skims_out * df.time_factor * df.outbound,,,,,,,,coef_cappen,,,,,
 util_KNR_TRANSIT_inbound_Unavailable,KNR_TRANSIT inbound - Unavailable,knr_transit_inb_available == False,,,,,,,,coef_unavailable,,,,,
 #util_KNR_TRANSIT_inbound_In_vehicle_time,KNR_TRANSIT inbound - In-vehicle time,@df.kt_ivt_skims_inb * df.time_factor * ~df.outbound,,,,,,,,coef_ivt,,,,,
-util_KNR_TRANSIT_inbound_Bus_loc_in_vehicle_time,KNR_TRANSIT inbound - Bus loc in-vehicle time,@df.kt_busloc_ivt_skims_inb * busl_ivt_factor * df.time_factor * ~df.outbound,,,,,,,coef_ivt,,,,,,
-util_KNR_TRANSIT_inbound_Bus_exp_in_vehicle_time,KNR_TRANSIT inbound - Bus exp in-vehicle time,@df.kt_busexp_ivt_skims_inb * buse_ivt_factor * df.time_factor * ~df.outbound,,,,,,,coef_ivt,,,,,,
-util_KNR_TRANSIT_inbound_CTA_rail_in_vehicle_time,KNR_TRANSIT inbound - CTA rail in-vehicle time,@df.kt_ctarail_ivt_skims_inb * cta_rail_ivt_factor * df.time_factor * ~df.outbound,,,,,,,coef_ivt,,,,,,
-util_KNR_TRANSIT_inbound_Metra_rail_in_vehicle_time,KNR_TRANSIT inbound - Metra rail in-vehicle time,@df.kt_metrarail_ivt_skims_inb * metra_rail_ivt_factor * df.time_factor * ~df.outbound,,,,,,,coef_ivt,,,,,,
+util_KNR_TRANSIT_inbound_Bus_loc_in_vehicle_time,KNR_TRANSIT inbound - Bus loc in-vehicle time,@df.kt_busloc_ivt_skims_inb * busl_ivt_factor * df.time_factor * ~df.outbound,,,,,,,,coef_ivt,,,,,
+util_KNR_TRANSIT_inbound_Bus_exp_in_vehicle_time,KNR_TRANSIT inbound - Bus exp in-vehicle time,@df.kt_busexp_ivt_skims_inb * buse_ivt_factor * df.time_factor * ~df.outbound,,,,,,,,coef_ivt,,,,,
+util_KNR_TRANSIT_inbound_CTA_rail_in_vehicle_time,KNR_TRANSIT inbound - CTA rail in-vehicle time,@df.kt_ctarail_ivt_skims_inb * cta_rail_ivt_factor * df.time_factor * ~df.outbound,,,,,,,,coef_ivt,,,,,
+util_KNR_TRANSIT_inbound_Metra_rail_in_vehicle_time,KNR_TRANSIT inbound - Metra rail in-vehicle time,@df.kt_metrarail_ivt_skims_inb * metra_rail_ivt_factor * df.time_factor * ~df.outbound,,,,,,,,coef_ivt,,,,,
 util_KNR_TRANSIT_inbound_iwait_time,KNR_TRANSIT inbound - iwait time,@df.kt_iwait_skims_inb * df.time_factor * ~df.outbound,,,,,,,,coef_iwait,,,,,
 util_KNR_TRANSIT_inbound_transfer_wait_time,KNR_TRANSIT inbound - transfer wait time,@df.kt_xwait_skims_inb * df.time_factor * ~df.outbound,,,,,,,,coef_xwait,,,,,
 #util_KNR_TRANSIT_inbound_number_of_transfers,KNR_TRANSIT inbound - number of transfers,@(df.kt_xfers_skims_inb).clip(0) * ~df.outbound,,,,,,,,coef_xfers,,,,,
@@ -147,10 +147,10 @@ util_TNC_TRANSIT_Destination_zone_densityIndex,TNC_TRANSIT - Destination zone de
 util_TNC_TRANSIT_Person_is_less_than_10_years_old,TNC_TRANSIT - Person is less than 10 years old,@(df.age < 10),,,,,,,,,coef_age010_trn,,,,
 util_TNC_TRANSIT_outbound_Unavailable,TNC_TRANSIT outbound - Unavailable,tnc_transit_out_available == False,,,,,,,,,coef_unavailable,,,,
 #util_TNC_TRANSIT_outbound_In_vehicle_time,TNC_TRANSIT outbound - In-vehicle time,@df.kt_ivt_skims_out * df.time_factor * df.outbound,,,,,,,,,coef_ivt,,,,
-util_TNC_TRANSIT_outbound_Bus_loc_in_vehicle_time,TNC_TRANSIT outbound - Bus loc in-vehicle time,@df.kt_busloc_ivt_skims_out * busl_ivt_factor * df.time_factor * df.outbound,,,,,,,coef_ivt,,,,,,
-util_TNC_TRANSIT_outbound_Bus_exp_in_vehicle_time,TNC_TRANSIT outbound - Bus exp in-vehicle time,@df.kt_busexp_ivt_skims_out * buse_ivt_factor * df.time_factor * df.outbound,,,,,,,coef_ivt,,,,,,
-util_TNC_TRANSIT_outbound_CTA_rail_in_vehicle_time,TNC_TRANSIT outbound - CTA rail in-vehicle time,@df.kt_ctarail_ivt_skims_out * cta_rail_ivt_factor * df.time_factor * df.outbound,,,,,,,coef_ivt,,,,,,
-util_TNC_TRANSIT_outbound_Metra_rail_in_vehicle_time,TNC_TRANSIT outbound - Metra rail in-vehicle time,@df.kt_metrarail_ivt_skims_out * metra_rail_ivt_factor * df.time_factor * df.outbound,,,,,,,coef_ivt,,,,,,
+util_TNC_TRANSIT_outbound_Bus_loc_in_vehicle_time,TNC_TRANSIT outbound - Bus loc in-vehicle time,@df.kt_busloc_ivt_skims_out * busl_ivt_factor * df.time_factor * df.outbound,,,,,,,,,coef_ivt,,,,
+util_TNC_TRANSIT_outbound_Bus_exp_in_vehicle_time,TNC_TRANSIT outbound - Bus exp in-vehicle time,@df.kt_busexp_ivt_skims_out * buse_ivt_factor * df.time_factor * df.outbound,,,,,,,,,coef_ivt,,,,
+util_TNC_TRANSIT_outbound_CTA_rail_in_vehicle_time,TNC_TRANSIT outbound - CTA rail in-vehicle time,@df.kt_ctarail_ivt_skims_out * cta_rail_ivt_factor * df.time_factor * df.outbound,,,,,,,,,coef_ivt,,,,
+util_TNC_TRANSIT_outbound_Metra_rail_in_vehicle_time,TNC_TRANSIT outbound - Metra rail in-vehicle time,@df.kt_metrarail_ivt_skims_out * metra_rail_ivt_factor * df.time_factor * df.outbound,,,,,,,,,coef_ivt,,,,
 util_TNC_TRANSIT_outbound_iwait_time,TNC_TRANSIT outbound - iwait time,@df.kt_iwait_skims_out * df.time_factor * df.outbound,,,,,,,,,coef_iwait,,,,
 util_TNC_TRANSIT_outbound_transfer_wait_time,TNC_TRANSIT outbound - transfer wait time,@df.kt_xwait_skims_out * df.time_factor * df.outbound,,,,,,,,,coef_xwait,,,,
 #util_TNC_TRANSIT_outbound_number_of_transfers,TNC_TRANSIT outbound - number of transfers,@(df.kt_xfers_skims_out).clip(0) * df.outbound,,,,,,,,,coef_xfers,,,,
@@ -163,10 +163,10 @@ util_TNC_TRANSIT_outbound_operating_cost,TNC_TRANSIT outbound - Operating cost,"
 #util_TNC_TRANSIT_outbound_Cappen,TNC_TRANSIT outbound - Capacity Penalties,@df.kt_cappen_skims_out * df.time_factor * df.outbound,,,,,,,,,coef_cappen,,,,
 util_TNC_TRANSIT_inbound_Unavailable,TNC_TRANSIT inbound - Unavailable,tnc_transit_inb_available == False,,,,,,,,,coef_unavailable,,,,
 #util_TNC_TRANSIT_inbound_In_vehicle_time,TNC_TRANSIT inbound - In-vehicle time,@df.kt_ivt_skims_inb * df.time_factor * ~df.outbound,,,,,,,,,coef_ivt,,,,
-util_TNC_TRANSIT_inbound_Bus_loc_in_vehicle_time,TNC_TRANSIT inbound - Bus loc in-vehicle time,@df.kt_busloc_ivt_skims_inb * busl_ivt_factor * df.time_factor * ~df.outbound,,,,,,,coef_ivt,,,,,,
-util_TNC_TRANSIT_inbound_Bus_exp_in_vehicle_time,TNC_TRANSIT inbound - Bus exp in-vehicle time,@df.kt_busexp_ivt_skims_inb * buse_ivt_factor * df.time_factor * ~df.outbound,,,,,,,coef_ivt,,,,,,
-util_TNC_TRANSIT_inbound_CTA_rail_in_vehicle_time,TNC_TRANSIT inbound - CTA rail in-vehicle time,@df.kt_ctarail_ivt_skims_inb * cta_rail_ivt_factor * df.time_factor * ~df.outbound,,,,,,,coef_ivt,,,,,,
-util_TNC_TRANSIT_inbound_Metra_rail_in_vehicle_time,TNC_TRANSIT inbound - Metra rail in-vehicle time,@df.kt_metrarail_ivt_skims_inb * metra_rail_ivt_factor * df.time_factor * ~df.outbound,,,,,,,coef_ivt,,,,,,
+util_TNC_TRANSIT_inbound_Bus_loc_in_vehicle_time,TNC_TRANSIT inbound - Bus loc in-vehicle time,@df.kt_busloc_ivt_skims_inb * busl_ivt_factor * df.time_factor * ~df.outbound,,,,,,,,,coef_ivt,,,,
+util_TNC_TRANSIT_inbound_Bus_exp_in_vehicle_time,TNC_TRANSIT inbound - Bus exp in-vehicle time,@df.kt_busexp_ivt_skims_inb * buse_ivt_factor * df.time_factor * ~df.outbound,,,,,,,,,coef_ivt,,,,
+util_TNC_TRANSIT_inbound_CTA_rail_in_vehicle_time,TNC_TRANSIT inbound - CTA rail in-vehicle time,@df.kt_ctarail_ivt_skims_inb * cta_rail_ivt_factor * df.time_factor * ~df.outbound,,,,,,,,,coef_ivt,,,,
+util_TNC_TRANSIT_inbound_Metra_rail_in_vehicle_time,TNC_TRANSIT inbound - Metra rail in-vehicle time,@df.kt_metrarail_ivt_skims_inb * metra_rail_ivt_factor * df.time_factor * ~df.outbound,,,,,,,,,coef_ivt,,,,
 util_TNC_TRANSIT_inbound_iwait_time,TNC_TRANSIT inbound - iwait time,@df.kt_iwait_skims_inb * df.time_factor * ~df.outbound,,,,,,,,,coef_iwait,,,,
 util_TNC_TRANSIT_inbound_transfer_wait_time,TNC_TRANSIT inbound - transfer wait time,@df.kt_xwait_skims_inb * df.time_factor * ~df.outbound,,,,,,,,,coef_xwait,,,,
 #util_TNC_TRANSIT_inbound_number_of_transfers,TNC_TRANSIT inbound - number of transfers,@(df.kt_xfers_skims_inb).clip(0) * ~df.outbound,,,,,,,,,coef_xfers,,,,
@@ -204,8 +204,8 @@ util_tour_mode_is_SR3,SR3 tour mode availability,tour_mode_is_SR3,,,,,coef_unava
 util_tour_mode_is_walk,Walk tour mode availability,tour_mode_is_walk,coef_unavailable,coef_unavailable,coef_unavailable,,coef_unavailable,coef_unavailable,coef_unavailable,coef_unavailable,coef_unavailable,coef_unavailable,coef_unavailable,coef_unavailable,coef_unavailable
 util_tour_mode_is_bike,Bike tour mode availability,tour_mode_is_bike,coef_unavailable,coef_unavailable,coef_unavailable,coef_unavailable,,coef_unavailable,coef_unavailable,coef_unavailable,coef_unavailable,coef_unavailable,coef_unavailable,coef_unavailable,coef_unavailable
 util_tour_mode_is_walk_transit,Walk Transit tour mode availability,tour_mode_is_walk_transit,coef_unavailable,coef_unavailable,coef_unavailable,,coef_unavailable,,coef_unavailable,coef_unavailable,coef_unavailable,,,,coef_unavailable
-util_tour_mode_is_pnr_transit,PNR Transit tour modes availability,tour_mode_is_pnr_transit,coef_unavailable,coef_unavailable,coef_unavailable,coef_unavailable,coef_unavailable,coef_unavailable,,coef_unavailable,coef_unavailable,-10,-10,-10,coef_unavailable
-util_tour_mode_is_knr_transit,KNR Transit tour modes availability,tour_mode_is_knr_transit,coef_unavailable,coef_unavailable,coef_unavailable,coef_unavailable,coef_unavailable,coef_unavailable,coef_unavailable,,coef_unavailable,-10,-10,-10,coef_unavailable
+util_tour_mode_is_pnr_transit,PNR Transit tour modes availability,tour_mode_is_pnr_transit,coef_unavailable,coef_unavailable,coef_unavailable,coef_unavailable,coef_unavailable,coef_unavailable,,coef_unavailable,coef_unavailable,-20,-20,-20,coef_unavailable
+util_tour_mode_is_knr_transit,KNR Transit tour modes availability,tour_mode_is_knr_transit,coef_unavailable,coef_unavailable,coef_unavailable,coef_unavailable,coef_unavailable,coef_unavailable,coef_unavailable,,coef_unavailable,-20,-20,-20,coef_unavailable
 util_tour_mode_is_tnc_transit,TNC Transit tour modes availability,tour_mode_is_tnc_transit,coef_unavailable,coef_unavailable,coef_unavailable,coef_unavailable,coef_unavailable,coef_unavailable,coef_unavailable,coef_unavailable,,,,,coef_unavailable
 util_tour_mode_is_ride_hail,Ride hail tour modes availability,@df.tour_mode_is_ride_hail,coef_unavailable,,,,coef_unavailable,coef_unavailable,coef_unavailable,coef_unavailable,coef_unavailable,,,,coef_unavailable
 util_tour_mode_is_SCHBUS,SCHBUS tour modes availability,tour_mode_is_schbus,coef_unavailable,,,,coef_unavailable,coef_unavailable,coef_unavailable,coef_unavailable,coef_unavailable,coef_unavailable,coef_unavailable,coef_unavailable,
