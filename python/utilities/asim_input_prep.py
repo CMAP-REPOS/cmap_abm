@@ -18,7 +18,10 @@ class ASimInputPrep():
         mazfile_name = parms['mazfile_name']
         mazid = parms['maz_shape_maz_id']
         tazid = parms['maz_shape_taz_id']
-        mazshapeSf = gpd.read_file(os.path.join(twozone_input, mazfile_name), engine = 'pyogrio')
+        try:
+            mazshapeSf = gpd.read_file(os.path.join(twozone_input, mazfile_name), engine = 'pyogrio')
+        except:
+            mazshapeSf = gpd.read_file(os.path.join(twozone_input, mazfile_name))
         mazshapeSf.rename(columns = {mazid: "MAZ", tazid: "TAZ"}, inplace = True)
         mazList = mazshapeSf[['MAZ', 'TAZ']]
         maxMAZ = mazList['MAZ'].max()

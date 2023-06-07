@@ -38,12 +38,18 @@ class CMapMazStop():
         max_maz_metra_rail_stop_walk_dist_feet = int(parms['mmms']['max_maz_metra_rail_stop_walk_dist_feet'])
 
         #walk_speed_mph = float(parms['mmms']["walk_speed_mph"])
-        print(f"{time.ctime()} Getting Nodes...")
-        nodes = self.getNodes(gpd.read_file(sf, engine = 'pyogrio'), parms)
-        print(f"{time.ctime()} Getting Links...")
-        links = self.getLinks(gpd.read_file(sf, engine = 'pyogrio'), parms)
+        print(f"{time.ctime()} Getting Nodes and Links...")
+        try: 
+            nodes = self.getNodes(gpd.read_file(sf, engine = 'pyogrio'), parms)
+            links = self.getLinks(gpd.read_file(sf, engine = 'pyogrio'), parms)
+        except: 
+            nodes = self.getNodes(gpd.read_file(sf), parms)
+            links = self.getLinks(gpd.read_file(sf), parms)
         print(f"{time.ctime()} Building MAZ Centroids...")
-        centroids = self.getCentroids(gpd.read_file(mazfile_name, engine = 'pyogrio'), parms)
+        try:
+            centroids = self.getCentroids(gpd.read_file(mazfile_name, engine = 'pyogrio'), parms)  
+        except:
+            centroids = self.getCentroids(gpd.read_file(mazfile_name), parms)
         print(f"{time.ctime()} Building Network...")
         net = pdna.Network(nodes["X"], nodes["Y"], links["FNODE"], links["TNODE"], links[["LENGTH"]], twoway=False)
         print(f"{time.ctime()} Assign Nearest Network Node to MAZs and stops")
