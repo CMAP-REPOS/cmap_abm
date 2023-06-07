@@ -67,10 +67,10 @@ for s in scens:
     netcalc([spec1,spec2])
 
     try:
-        cmap_transit_assignment.TransitAssignment().__call__(str(s['periodNum']), matrix_count, current_scenario, 
+        cmap_transit_assignment.TransitAssignment().__call__(str(s['periodNum']), msa_iteration, current_scenario, 
                                                             ccr_periods = "", num_processors = 27)
         if msa_iteration == 2:
-            cmap_network.CMapNetwork().__call__(databank.scenario(s['scenNum']), msa_iteration, runPrep = False, export = True, 
+            cmap_network.CMapNetwork().__call__(databank.scenario(s['scenNum']), runPrep = False, export = True, 
                                                 output_directory = "%s\\scen%s" % (EMME_OUTPUT, s['scenNum']))          
         print("Export transit matrices to OMX for time period " + s['period'])      
         cmap_matrix.CMapMatrix().outputTransitSkimsToOMX(s['period'], databank.scenario(s['periodNum']), 

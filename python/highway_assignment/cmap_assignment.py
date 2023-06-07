@@ -45,7 +45,7 @@ class TrafficAssignment(_m.Tool()):
         project_dir = os.path.dirname(_m.Modeller().desktop.project.path)
         self.input_directory = os.path.join(os.path.dirname(project_dir), "input")
         self.attributes = ["period", "msa_iteration", "relative_gap", "max_iterations",
-                           "num_processors", "select_link", "raise_zero_dist", "stochastic", "input_directory"]
+                           "num_processors", "select_link", "raise_zero_dist", "stochastic", "input_directory", "matrix_summary"]
         version = os.environ.get("EMMEPATH", "")
         self._version = version[-5:] if version else ""
         self._skim_classes_separately = True  # Used for debugging only
