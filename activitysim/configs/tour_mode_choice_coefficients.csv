@@ -500,12 +500,12 @@ wlktrn_metra_distpen_13_18_work,0,T
 drvtrn_distpen_13_18_work,0.9685,T
 wlktrn_metra_distpen_18_up_work,0,T
 drvtrn_distpen_18_up_work,1.6439,T
-knr_transit_ASC_auto_deficient_work,-2.593231316,F
-knr_transit_ASC_auto_sufficient_work,-2.539249442,F
-knr_transit_ASC_no_auto_work,4.248686341,F
+knr_transit_ASC_auto_deficient_work,-2.175986316,F
+knr_transit_ASC_auto_sufficient_work,-2.427854442,F
+knr_transit_ASC_no_auto_work,4.513019341,F
 knr_transit_CBD_ASC_work,2.491887847,F
-pnr_transit_ASC_auto_deficient_work,-2.684294292,F
-pnr_transit_ASC_auto_sufficient_work,-1.411461639,F
+pnr_transit_ASC_auto_deficient_work,-2.145888292,F
+pnr_transit_ASC_auto_sufficient_work,-0.978461639,F
 pnr_transit_ASC_no_auto_work,3.64328461,F
 pnr_transit_CBD_ASC_work,3.209201602,F
 sr2_ASC_auto_deficient_work,-0.53867085,F
@@ -524,7 +524,7 @@ tnc_single_ASC_auto_deficient_work,-2.110062851,F
 tnc_single_ASC_auto_sufficient_work,-4.2204669,F
 tnc_single_ASC_no_auto_work,4.367383417,F
 tnc_transit_ASC_auto_deficient_work,-2.989380984,F
-tnc_transit_ASC_auto_sufficient_work,-3.200447858,F
+tnc_transit_ASC_auto_sufficient_work,-2.700447858,F
 tnc_transit_ASC_no_auto_work,4.588497355,F
 tnc_transit_CBD_ASC_work,0,T
 walk_ASC_auto_deficient_work,1.520290976,F

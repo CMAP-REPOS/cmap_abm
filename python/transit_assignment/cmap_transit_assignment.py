@@ -174,7 +174,8 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
         #self.assignment_only = False
         self.scenario = _m.Modeller().scenario
         self.num_processors = "MAX-1"
-        #self.attributes = ["period", "msa_iteration", "scenario", "assignment_only", "skims_only",  "num_processors"]
+        self.attributes = ["period", "msa_iteration", "scenario", "assignment_only", "skims_only", "matrix_summary", 
+                           "export_boardings", "ccr_periods", "num_processors", ]
         self._dt_db = _m.Modeller().desktop.project.data_tables()
         self._matrix_cache = {}  # used to hold data for reporting and post-processing of skims
         #for initializing matrices
@@ -192,7 +193,7 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
         self.xfer_walk_percep = "2"
         self.acc_spd_fac = {"WALK": "3.0", "PNROUT": "25.0", "PNRIN": "3.0", "KNROUT": "25.0", "KNRIN": "3.0"}
         self.egr_spd_fac = {"WALK": "3.0", "PNROUT": "3.0", "PNRIN": "25.0", "KNROUT": "3.0", "KNRIN": "25.0"}
-        self.xfer_penalty = "15.0"
+        self.xfer_penalty = "0.0" # moved transfer penalty to boarding penalty to allow mode specific transfer penalty
         self.skim_matrices = ["GENCOST", "FIRSTWAIT", "XFERWAIT", "TOTALWAIT", "FARE", "XFERS", "ACC", "XFERWALK", "EGR", 
                                 "TOTALAUX", "TOTALIVTT", "DWELLTIME", "CTABUSLOCIVTT", "PACEBUSLOCIVTT", "BUSEXPIVTT", "CTARAILIVTT", "METRARAILIVTT", 
                                 "CROWD", "CAPPEN"] # "LINKREL", "EAWT"
@@ -273,11 +274,12 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
             create_extra('LINK', '@aperf', 'auxiliary transit perception factor', overwrite=True, scenario=scenario)
             create_extra('NODE', '@perbf', 'Final boarding time perception factor', 1.0, overwrite=True, scenario=scenario)
             create_extra('TRANSIT_LINE', '@easbp', 'Ease of boarding penalty', overwrite=True, scenario=scenario)
+            create_extra('TRANSIT_LINE', '@easbi', 'Ease of boarding penalty initial', overwrite=True, scenario=scenario)
             create_extra('TRANSIT_LINE', '@pctab', 'boarding penalty CTA bus only transfer', overwrite=True, scenario=scenario)
             create_extra('TRANSIT_LINE', '@pctar', 'boarding penalty CTA rail only transfer', overwrite=True, scenario=scenario)            
             easbp={
                 "result": "@easbp",
-                "expression": "(3-@easeb).max.0",
+                "expression": "(3-@easeb+20).max.0", # base transfer penalty of 20 minutes
                 "aggregation": None,
                 "selections": {
                     "transit_line": "all"
@@ -297,43 +299,65 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
                 "type": "NETWORK_CALCULATION"
             }
             netcalc(bpPace)
-            bp={
-                "result": "@pctab",
-                "expression": "@easbp+5",
+            # remove line transfer penalty for initial boarding 
+            bpi={
+                "result": "@easbi",
+                "expression": "@easbp-20",
                 "aggregation": None,
                 "selections": {
-                    "transit_line": "mode=CMPLQ"
+                    "transit_line": "all"
                 },
                 "type": "NETWORK_CALCULATION"
             }
-            pctab={
+            netcalc(bpi)
+            # no reduced transfer boarding penalty for boarding a bus            
+            pctab1={
                 "result": "@pctab",
+                "expression": "@easbp",
+                "aggregation": None,
+                "selections": {
+                    "transit_line": "mode=MPLQ"
+                },
+                "type": "NETWORK_CALCULATION"
+            }
+            pctab2={
+                "result": "@pctab",
+                "expression": "@easbp",
+                "aggregation": None,
+                "selections": {
+                    "transit_line": "mode=BEC"
+                },
+                "type": "NETWORK_CALCULATION"
+            }
+            # reduced transfer boarding penalty for CTA rail to CTA rail transfer
+            pctar1={
+                "result": "@pctar",
+                "expression": "@easbp",
+                "aggregation": None,
+                "selections": {
+                    "transit_line": "mode=MPLQ"
+                },
+                "type": "NETWORK_CALCULATION"
+            }
+            pctar2={
+                "result": "@pctar",
                 "expression": "@easbp",
                 "aggregation": None,
                 "selections": {
                     "transit_line": "mode=BE"
                 },
                 "type": "NETWORK_CALCULATION"
-            }
-            bp2={
+            }                        
+            pctar3={
                 "result": "@pctar",
-                "expression": "@easbp+5",
-                "aggregation": None,
-                "selections": {
-                    "transit_line": "mode=BEMPLQ"
-                },
-                "type": "NETWORK_CALCULATION"
-            }            
-            pctar={
-                "result": "@pctar",
-                "expression": "@easbp",
+                "expression": "@easbp-15",
                 "aggregation": None,
                 "selections": {
                     "transit_line": "mode=C"
                 },
                 "type": "NETWORK_CALCULATION"
             }
-            netcalc([bp ,pctab, bp2, pctar])                    
+            netcalc([pctab1 ,pctab2, pctar1, pctar2, pctar3])                 
             create_extra('NODE', '@wconf', 'Wait convenience final factor', overwrite=True, scenario=scenario)
             wconf_bus={
                 "result": "@wconf",
@@ -734,7 +758,7 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
                         "perception_factor": "@perbf"
                     },
                     "on_lines": {
-                        "penalty": "@easbp",
+                        "penalty": "@easbi",
                         "perception_factor": 1
                     },
                     "on_segments": None
@@ -1491,9 +1515,15 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
                     #spec = {
                     #    "type": "MATRIX_CALCULATION",
                     #    "constraint": None,
-                    #    "result": 'mf"TOTTRNDIST_%s_%s__%s"' % (amode, self.user_class_labels[uc], self.periodLabel[int(period)]),
-                    #    "expression": ('mf"CTABUSLOCDIST_{amode}_{uc}__{period}" + mf"PACEBUSLOCDIST_{amode}_{uc}__{period}" + mf"BUSEXPDIST_{amode}_{uc}__{period}" + mf"CTARAILDIST_{amode}_{uc}__{period}"'
-                    #                ' + mf"METRARAILDIST_{amode}_{uc}__{period}"').format(amode=amode, uc=self.user_class_labels[uc], period=self.periodLabel[int(period)]),
+                    #    "result": 'mf"GENCOST_%s_%s__%s"' % (amode, self.user_class_labels[uc], self.periodLabel[int(period)]),
+                    #    "expression": ("{xfer_wait} * TOTALWAIT_{amode}_{uc}__{period} "
+                    #                "- ({xfer_wait} - {init_wait}) * FIRSTWAIT_{amode}_{uc}__{period} "
+                    #                "+ 1.0 * TOTALIVTT_{amode}_{uc}__{period}"
+                    #                "+ {fare_percep} * FARE_{amode}_{uc}__{period}"
+                    #                "+ {xfers} *(XFERS_{amode}_{uc}__{period}.max.0) "
+                    #                "+ {access} * ACC_{amode}_{uc}__{period} "
+                    #                "+ {egress} * EGR_{amode}_{uc}__{period} "
+                    #                "+ {xfer_walk} * XFERWALK_{amode}_{uc}__{period}").format(**expr_params)
                     #}
                     #matrix_calc(spec, scenario=scenario, num_processors=num_processors)
         self.mask_highvalues_all(amode, self.user_class_labels[uc], self.periodLabel[int(period)], scenario, num_processors)
@@ -1812,7 +1842,7 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
                 data.append([skim_name, report["maximum"], report["maximum_at"]["origin"], report["maximum_at"]["destination"], 
                             report["average"], report["sum"]])
             df = pd.DataFrame(data, columns=['Skim', 'Max', 'Max orig', 'Max dest', 'Avg', 'Sum'])
-            filename = "%s\\trn_skim_list_%s.csv"%(EMME_OUTPUT, msa_iteration)
+            filename = "%s\\trn_skim_list_iter%s.csv"%(EMME_OUTPUT, msa_iteration)
             df.to_csv(filename, mode='a', index=False, header=not os.path.exists(filename), line_terminator='\n')
             # export number of OD pairs with non-zero in-vehicle time by transit mode
             data = [self.periodLabel[int(period)], amode, self.user_class_labels[uc]]
@@ -1840,7 +1870,7 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
             header = ["Period", "Access Mode", "User Class"]
             header.extend(modes)
             df = pd.DataFrame([data], columns=header)
-            filename = "%s\\transit_mode_OD_summary_%s.csv"%(EMME_OUTPUT, msa_iteration)
+            filename = "%s\\transit_mode_OD_summary_iter%s.csv"%(EMME_OUTPUT, msa_iteration)
             df.to_csv(filename, mode='a', index=False, header=not os.path.exists(filename), line_terminator='\n')
             # export total boardings
             data = []
@@ -1859,7 +1889,7 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
             data.append([demand_name, report["maximum"], report["maximum_at"]["origin"], report["maximum_at"]["destination"], 
                         report["average"], report["sum"]])
             df = pd.DataFrame(data, columns=['Demand', 'Max', 'Max orig', 'Max dest', 'Avg', 'Sum'])
-            filename = "%s\\trn_boardings_%s.csv"%(EMME_OUTPUT, msa_iteration)
+            filename = "%s\\trn_boardings_iter%s.csv"%(EMME_OUTPUT, msa_iteration)
             df.to_csv(filename, mode='a', index=False, header=not os.path.exists(filename), line_terminator='\n')
         return
 
@@ -2104,10 +2134,10 @@ class TransitAssignment(_m.Tool()): #, gen_utils.Snapshot
 
     def output_transit_boardings(self, desktop, use_ccr, output_location, period, msa_iteration):
         desktop.data_explorer().replace_primary_scenario(self.scenario)
-        output_transit_boardings_file = os.path.join(output_location, "boardings_by_line_{per}_{iter}.csv".format(per=period, iter=msa_iteration))
+        output_transit_boardings_file = os.path.join(output_location, "boardings_by_line_{per}_iter{iter}.csv".format(per=period, iter=msa_iteration))
         self.export_boardings_by_line(desktop, output_transit_boardings_file)
 
-        output_transit_segments_file = os.path.join(output_location, "boardings_by_segment_{per}_{iter}.csv".format(per=period, iter=msa_iteration))
+        output_transit_segments_file = os.path.join(output_location, "boardings_by_segment_{per}_iter{iter}.csv".format(per=period, iter=msa_iteration))
         self.export_boardings_by_segment(desktop, use_ccr, output_transit_segments_file)
 
         output_station_to_station_folder = os.path.join(output_location)
