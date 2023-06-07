@@ -8,7 +8,7 @@ use_shadow_pricing: True
 
 ## - example sample
 # households_sample_size: 2000 #2047214 # 50% sample
-chunk_size: 800_000_000_000
+chunk_size: 400_000_000_000
 
 # 100 percent sample full scale won't fit in 512GB with chunking disabled
 # so train with 100,000 HHs and then run production mode
