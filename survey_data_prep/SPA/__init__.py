@@ -82,7 +82,7 @@ if __name__ == "__main__":
             psn = Person(hh, pid, df_cur_per)
 
             num_places_for_person = len(df_psn_places)
-            print("No. of place entries for person "+str(pid)+" of household "+str(hhid)+": "+str(num_places_for_person))
+            #print("No. of place entries for person "+str(pid)+" of household "+str(hhid)+": "+str(num_places_for_person))
 
             #first make sure that the place entries are ordered by place number since they will be processed sequentially later
             df_psn_places = df_psn_places.sort_values(by='PLANO')
