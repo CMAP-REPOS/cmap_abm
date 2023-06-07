@@ -45,7 +45,7 @@ class CMapMatrix(_m.Tool()):
                 {"name": 'SOV_TR_L', "skims": ["TIME", "DIST", "TOLLCOST.SOV"]},
                 {"name": 'HOV2_L', "skims": ["TIME", "DIST", "TOLLCOST.HOV2"]},
                 {"name": 'HOV3_L', "skims": ["TIME", "DIST", "TOLLCOST.HOV3"]},
-                {"name": 'SOV_NT_M', "skims": ["TIME", "DIST", "FTIME", "TOLLCOST.SOV"]},
+                {"name": 'SOV_NT_M', "skims": ["TIME", "DIST", "TOLLCOST.SOV"]},
                 {"name": 'SOV_TR_M', "skims": ["TIME", "DIST", "TOLLCOST.SOV"]},
                 {"name": 'HOV2_M', "skims": ["TIME", "DIST", "TOLLCOST.HOV2"]},
                 {"name": 'HOV3_M', "skims": ["TIME", "DIST", "TOLLCOST.HOV3"]},
@@ -57,6 +57,8 @@ class CMapMatrix(_m.Tool()):
         for vehClass in classes:
             for skim in vehClass['skims']:
                 skimList.append("%s_%s__%s"%(vehClass['name'], skim.split(".")[0], period))
+        if period == "MD":
+            skimList.append("SOV_TR_M_FTIME__MD")
         exportOMX(matrices=skimList, export_file=outputfilename, append_to_file=True, omx_key = "NAME")
 
     def outputTransitSkimsToOMX(self, period, scenario, outputfilename):
