@@ -304,7 +304,7 @@ for scen in HSCENS:
             data.append([demand_name, report["maximum"], report["maximum_at"]["origin"], report["maximum_at"]["destination"], 
                         report["average"], report["sum"]])                            
         df = pd.DataFrame(data, columns=['Demand', 'Max', 'Max orig', 'Max dest', 'Avg', 'Sum'])
-        filename = "%s\\hwy_demand_iter0_%s.csv"%(EMME_OUTPUT, datetime.date.today())
+        filename = "%s\\hwy_demand_iter0.csv"%(EMME_OUTPUT)
         df.to_csv(filename, mode='a', index=False, header=not os.path.exists(filename), line_terminator='\n')
 
 # Import Transit Warm Start    
@@ -391,6 +391,26 @@ for scen in TSCENS:
                 data.append([demand_name, report["maximum"], report["maximum_at"]["origin"], report["maximum_at"]["destination"], 
                             report["average"], report["sum"]])
             df = pd.DataFrame(data, columns=['Demand', 'Max', 'Max orig', 'Max dest', 'Avg', 'Sum'])
-            filename = "%s\\trn_matrix_list_iter0_%s.csv"%(EMME_OUTPUT, datetime.date.today())
+            filename = "%s\\trn_matrix_list_iter0.csv"%(EMME_OUTPUT)
             df.to_csv(filename, mode='a', index=False, header=not os.path.exists(filename), line_terminator='\n')
+            # export max, average, sum for each transit demand matrix
+            data = []
+            matrices = ["WALK", "PNROUT", "PNRIN", "KNROUT", "KNRIN"]
+            for name in matrices:
+                demand_name = "TRN_%s_%s_%s" % (name, V, period)
+                spec_sum={
+                    "expression": demand_name,
+                    "result": "msTEMP_SUM",
+                    "aggregation": {
+                        "origins": "+",
+                        "destinations": "+"
+                    },
+                    "type": "MATRIX_CALCULATION"
+                }
+                report = computeMatrix(spec_sum) 
+                data.append([demand_name, report["maximum"], report["maximum_at"]["origin"], report["maximum_at"]["destination"], 
+                            report["average"], report["sum"]])
+            df = pd.DataFrame(data, columns=['Demand', 'Max', 'Max orig', 'Max dest', 'Avg', 'Sum'])
+            filename = "%s\\trn_demand_iter0.csv"%(EMME_OUTPUT)
+            df.to_csv(filename, mode='a', index=False, header=not os.path.exists(filename), line_terminator='\n')               
 print("Completed importing warmstart matrices at %s"%(datetime.datetime.now()))

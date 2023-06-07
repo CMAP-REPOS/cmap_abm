@@ -32,7 +32,7 @@ corridors_loc = count_data_loc + r"/counts/corridors.csv"
 metra_obs_loc = count_data_loc + r"/counts/metra_boarding_alighting.csv"
 ### Boardings and Trips Data
 model_trips_loc = board_dir + "/trn_demand_iter2.csv"
-model_boardings_loc = board_dir + "/trn_boardings.csv"
+model_boardings_loc = board_dir + "/trn_boardings_iter2.csv"
 ### County Name Dictionary
 county = {17007: 'Boone',
           17031: 'Cook',
@@ -253,10 +253,10 @@ tp_fac = {'AM': 0.25,
           'PM': 0.25, 
           'NT': 0.1}
 tp = "AM"
-boards = pd.read_csv(board_dir+"/boardings_by_line_"+tp+".csv", sep="\t")
+boards = pd.read_csv(board_dir+"/boardings_by_line_"+tp+"_iter2.csv", sep="\t")
 boards['time_period'] = tp
 for tp in ["MD", "NT", "PM"]:
-    df = pd.read_csv(board_dir+"/boardings_by_line_"+tp+".csv", sep="\t")
+    df = pd.read_csv(board_dir+"/boardings_by_line_"+tp+"_iter2.csv", sep="\t")
     df['time_period'] = tp
     boards = pd.concat([boards, df])
 boards = boards.drop(['c '], axis=1)
@@ -416,10 +416,10 @@ metra_obs['PM_total'] = metra_obs['PM_in_on'] + metra_obs['PM_out_off']
 metra_obs['NT_total'] = metra_obs['NT_in_on'] + metra_obs['NT_out_off']
 ### Combine all time periods
 tp = "AM"
-boards = pd.read_csv(board_dir+"/boardings_by_segment_"+tp+".csv", sep="\t")
+boards = pd.read_csv(board_dir+"/boardings_by_segment_"+tp+"_iter2.csv", sep="\t")
 boards['time_period'] = tp
 for tp in ["MD", "NT", "PM"]:
-    df = pd.read_csv(board_dir+"/boardings_by_segment_"+tp+".csv", sep="\t")
+    df = pd.read_csv(board_dir+"/boardings_by_segment_"+tp+"_iter2.csv", sep="\t")
     df['time_period'] = tp
     boards = pd.concat([boards, df])
 boards = boards.drop(['c '], axis=1)
@@ -740,6 +740,7 @@ worksheet.write_string(start-1, start_column, 'Observed Transfer Rate by Agency'
 agency_transfer_rate.set_index('Agency').to_excel(writer, sheet_name = title, startrow = start, startcol = start_column)
 # writer.save()
 writer.close()
+os.remove(summary_dir + '/metra_tlfd.png')
 end_time = datetime.datetime.now()
 print("Start Time:", start_time)
 print("End Time:", end_time)

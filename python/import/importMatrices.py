@@ -225,7 +225,7 @@ for scen in TSCENS:
         computeMatrix(spec1)
 
         if summary:
-            # export max, average, sum for each transit skim matrix
+            # export max, average, sum for each transit demand matrix
             data = []
             matrices = ["WALK", "PNROUT", "PNRIN", "KNROUT", "KNRIN"]
             for name in matrices:
@@ -264,6 +264,6 @@ for scen in TSCENS:
                 data.append([demand_name, report["maximum"], report["maximum_at"]["origin"], report["maximum_at"]["destination"], 
                             report["average"], report["sum"]])
             df = pd.DataFrame(data, columns=['Demand', 'Max', 'Max orig', 'Max dest', 'Avg', 'Sum'])
-            filename = "%s\\metra_PHT_iter%s_%s.csv"%(EMME_OUTPUT, msa_iteration, datetime.date.today())
+            filename = "%s\\metra_PHT_iter%s.csv"%(EMME_OUTPUT, msa_iteration)
             df.to_csv(filename, mode='a', index=False, header=not os.path.exists(filename), line_terminator='\n')   
 print("Completed importing matrices at %s"%(datetime.datetime.now()))
