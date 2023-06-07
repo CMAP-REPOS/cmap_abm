@@ -6,10 +6,10 @@
 # Leah Flake, March 2021
 ##########################################################################################################################
 
-if (!"data.table" %in% installed.packages()) install.packages("data.table")
-if (!"readxl" %in% installed.packages()) install.packages("readxl")
-if (!"magrittr" %in% installed.packages()) install.packages("magrittr")
-if (!"sf" %in% installed.packages()) install.packages("sf")
+if (!"data.table" %in% installed.packages()) install.packages("data.table", repos='http://cran.us.r-project.org')
+if (!"readxl" %in% installed.packages()) install.packages("readxl", repos='http://cran.us.r-project.org')
+if (!"magrittr" %in% installed.packages()) install.packages("magrittr", repos='http://cran.us.r-project.org')
+if (!"sf" %in% installed.packages()) install.packages("sf", repos='http://cran.us.r-project.org')
 
 # library(foreign)
 # library(dplyr)

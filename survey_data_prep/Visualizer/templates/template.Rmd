@@ -841,13 +841,11 @@ Description {.sidebar data-width=135}
 
 **Tour Productions by County**
 
-Comparison of work productions, model vs. ACS Journey-To-Work 2011-2015. NOTE: Other ACS data is 2017, this data is NOT adjusted for date, it is adjusted for work-from-home.
-
-Note: Districts can be Tract, County, District etc.
+Comparison of work productions, model vs. ACS Journey-To-Work 2015-2019. NOTE: this data is adjusted for work-from-home and incommuters.
 
 **Tour Attractions by County**
 
-Comparison of work attractions, model vs. ACS Journey-To-Work 2011-2015. NOTE: Other ACS data is 2017, this data is NOT adjusted for date, it is adjusted for work-from-home.
+Comparison of work attractions, model vs. ACS Journey-To-Work 2015-2019. NOTE: this data is adjusted for work-from-home and incommuters.
 
 Chart Column 1
 --------------------------------------------
