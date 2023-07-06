@@ -69,5 +69,5 @@ dependencies:
 
 - pip:
   - autodoc_pydantic
-  - activitysim=1.2.0  
+  - activitysim=1.2.1  
   - pandana
